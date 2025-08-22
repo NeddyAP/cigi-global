@@ -16,7 +16,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function AdminBusinessUnitsIndex({ businessUnits }: AdminBusinessUnitsIndexProps) {
     const handleDelete = (businessUnit: BusinessUnit) => {
         if (confirm(`Apakah Anda yakin ingin menghapus ${businessUnit.name}?`)) {
-            router.delete(route('admin.business-units.destroy', businessUnit.id));
+            router.delete(route('admin.business-units.destroy', businessUnit.slug));
         }
     };
 
@@ -95,13 +95,13 @@ export default function AdminBusinessUnitsIndex({ businessUnits }: AdminBusiness
                                         <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link
-                                                    href={route('admin.business-units.show', unit.id)}
+                                                    href={route('admin.business-units.show', unit.slug)}
                                                     className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
                                                 >
                                                     <Eye className="h-4 w-4" />
                                                 </Link>
                                                 <Link
-                                                    href={route('admin.business-units.edit', unit.id)}
+                                                    href={route('admin.business-units.edit', unit.slug)}
                                                     className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
                                                 >
                                                     <Edit className="h-4 w-4" />

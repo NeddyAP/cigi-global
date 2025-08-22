@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, News } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { Edit, Eye, Plus, Trash2, Star, Clock, Users } from 'lucide-react';
+import { Clock, Edit, Eye, Plus, Star, Trash2, Users } from 'lucide-react';
 
 interface AdminNewsIndexProps {
     news: {
@@ -20,17 +20,17 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function AdminNewsIndex({ news }: AdminNewsIndexProps) {
     const handleDelete = (newsItem: News) => {
         if (confirm(`Apakah Anda yakin ingin menghapus artikel "${newsItem.title}"?`)) {
-            router.delete(route('admin.news.destroy', newsItem.id));
+            router.delete(route('admin.news.destroy', newsItem.slug));
         }
     };
 
     const getCategoryColor = (category: string) => {
         const colors = {
-            'bisnis': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-            'komunitas': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-            'umum': 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
-            'pengumuman': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-            'acara': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+            bisnis: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+            komunitas: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+            umum: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
+            pengumuman: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+            acara: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
         };
         return colors[category as keyof typeof colors] || colors.umum;
     };
@@ -95,54 +95,50 @@ export default function AdminNewsIndex({ news }: AdminNewsIndexProps) {
                                         <td className="px-6 py-4">
                                             <div className="flex items-start">
                                                 {newsItem.featured_image && (
-                                                    <div className="h-12 w-16 flex-shrink-0 mr-4">
-                                                        <img 
-                                                            className="h-12 w-16 rounded object-cover" 
-                                                            src={`/${newsItem.featured_image}`} 
-                                                            alt={newsItem.title} 
+                                                    <div className="mr-4 h-12 w-16 flex-shrink-0">
+                                                        <img
+                                                            className="h-12 w-16 rounded object-cover"
+                                                            src={`/${newsItem.featured_image}`}
+                                                            alt={newsItem.title}
                                                         />
                                                     </div>
                                                 )}
                                                 <div className="min-w-0 flex-1">
                                                     <div className="flex items-center">
-                                                        <div className="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">
+                                                        <div className="line-clamp-2 text-sm font-medium text-gray-900 dark:text-white">
                                                             {newsItem.title}
                                                         </div>
-                                                        {newsItem.is_featured && (
-                                                            <Star className="ml-2 h-4 w-4 text-yellow-500 flex-shrink-0" />
-                                                        )}
+                                                        {newsItem.is_featured && <Star className="ml-2 h-4 w-4 flex-shrink-0 text-yellow-500" />}
                                                     </div>
                                                     {newsItem.excerpt && (
-                                                        <div className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
+                                                        <div className="mt-1 line-clamp-1 text-sm text-gray-500 dark:text-gray-400">
                                                             {newsItem.excerpt}
                                                         </div>
                                                     )}
-                                                    <div className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                                                        {newsItem.slug}
-                                                    </div>
+                                                    <div className="mt-1 text-xs text-gray-400 dark:text-gray-500">{newsItem.slug}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getCategoryColor(newsItem.category)}`}>
+                                            <span
+                                                className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getCategoryColor(newsItem.category)}`}
+                                            >
                                                 {newsItem.category}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm text-gray-900 dark:text-white">
-                                                {newsItem.author?.name || 'Unknown'}
-                                            </div>
+                                            <div className="text-sm text-gray-900 dark:text-white">{newsItem.author?.name || 'Unknown'}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 {newsItem.is_published ? (
                                                     <>
-                                                        <div className="h-2 w-2 rounded-full bg-green-400 mr-2"></div>
+                                                        <div className="mr-2 h-2 w-2 rounded-full bg-green-400"></div>
                                                         <span className="text-sm text-green-600 dark:text-green-400">Dipublikasi</span>
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <Clock className="h-4 w-4 text-yellow-500 mr-2" />
+                                                        <Clock className="mr-2 h-4 w-4 text-yellow-500" />
                                                         <span className="text-sm text-yellow-600 dark:text-yellow-400">Draft</span>
                                                     </>
                                                 )}
@@ -153,20 +149,20 @@ export default function AdminNewsIndex({ news }: AdminNewsIndexProps) {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                                <Users className="h-4 w-4 mr-1" />
+                                                <Users className="mr-1 h-4 w-4" />
                                                 {newsItem.views_count}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link
-                                                    href={route('admin.news.show', newsItem.id)}
+                                                    href={route('admin.news.show', newsItem.slug)}
                                                     className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
                                                 >
                                                     <Eye className="h-4 w-4" />
                                                 </Link>
                                                 <Link
-                                                    href={route('admin.news.edit', newsItem.id)}
+                                                    href={route('admin.news.edit', newsItem.slug)}
                                                     className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
                                                 >
                                                     <Edit className="h-4 w-4" />

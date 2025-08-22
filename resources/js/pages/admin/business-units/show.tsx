@@ -35,7 +35,7 @@ export default function ShowBusinessUnit({ businessUnit }: ShowBusinessUnitProps
                             </a>
                         </Button>
                         <Button asChild>
-                            <Link href={route('admin.business-units.edit', businessUnit.id)}>
+                            <Link href={route('admin.business-units.edit', businessUnit.slug)}>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Link>

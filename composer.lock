@@ -7250,16 +7250,16 @@
         },
         {
             "name": "pestphp/pest",
-            "version": "v4.0.0",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pestphp/pest.git",
-                "reference": "50960a96e94bdd2d42af82394e325d74be2a3ace"
+                "reference": "7f11ace329581ca168f99d9d7f70556c191d2be8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pestphp/pest/zipball/50960a96e94bdd2d42af82394e325d74be2a3ace",
-                "reference": "50960a96e94bdd2d42af82394e325d74be2a3ace",
+                "url": "https://api.github.com/repos/pestphp/pest/zipball/7f11ace329581ca168f99d9d7f70556c191d2be8",
+                "reference": "7f11ace329581ca168f99d9d7f70556c191d2be8",
                 "shasum": ""
             },
             "require": {
@@ -7268,8 +7268,8 @@
                 "nunomaduro/termwind": "^2.3.1",
                 "pestphp/pest-plugin": "^4.0.0",
                 "pestphp/pest-plugin-arch": "^4.0.0",
-                "pestphp/pest-plugin-mutate": "^4.0.0",
-                "pestphp/pest-plugin-profanity": "^4.0.0",
+                "pestphp/pest-plugin-mutate": "^4.0.1",
+                "pestphp/pest-plugin-profanity": "^4.0.1",
                 "php": "^8.3.0",
                 "phpunit/phpunit": "^12.3.5",
                 "symfony/process": "^7.3.0"
@@ -7282,8 +7282,8 @@
             },
             "require-dev": {
                 "pestphp/pest-dev-tools": "^4.0.0",
-                "pestphp/pest-plugin-browser": "^4.0.0",
-                "pestphp/pest-plugin-type-coverage": "^4.0.1",
+                "pestphp/pest-plugin-browser": "^4.0.2",
+                "pestphp/pest-plugin-type-coverage": "^4.0.2",
                 "psy/psysh": "^0.12.10"
             },
             "bin": [
@@ -7350,7 +7350,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pestphp/pest/issues",
-                "source": "https://github.com/pestphp/pest/tree/v4.0.0"
+                "source": "https://github.com/pestphp/pest/tree/v4.0.2"
             },
             "funding": [
                 {
@@ -7362,7 +7362,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-20T14:30:59+00:00"
+            "time": "2025-08-22T10:34:24+00:00"
         },
         {
             "name": "pestphp/pest-plugin",

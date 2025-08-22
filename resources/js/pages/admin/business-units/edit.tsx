@@ -16,7 +16,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin' },
         { title: 'Unit Bisnis', href: '/admin/business-units' },
-        { title: `Edit ${businessUnit.name}`, href: `/admin/business-units/${businessUnit.id}/edit` },
+        { title: `Edit ${businessUnit.name}`, href: `/admin/business-units/${businessUnit.slug}/edit` },
     ];
 
     const { data, setData, put, processing, errors } = useForm({
@@ -36,7 +36,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(route('admin.business-units.update', businessUnit.id));
+        put(route('admin.business-units.update', businessUnit.slug));
     };
 
     return (

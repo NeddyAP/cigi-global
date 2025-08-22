@@ -16,17 +16,17 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function AdminCommunityClubsIndex({ communityClubs }: AdminCommunityClubsIndexProps) {
     const handleDelete = (club: CommunityClub) => {
         if (confirm(`Apakah Anda yakin ingin menghapus ${club.name}?`)) {
-            router.delete(route('admin.community-clubs.destroy', club.id));
+            router.delete(route('admin.community-clubs.destroy', club.slug));
         }
     };
 
     const getTypeColor = (type: string) => {
         const colors = {
-            'Olahraga': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-            'Keagamaan': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-            'Lingkungan': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-            'Sosial': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-            'Budaya': 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200',
+            Olahraga: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+            Keagamaan: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+            Lingkungan: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+            Sosial: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+            Budaya: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200',
         };
         return colors[type as keyof typeof colors] || 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
     };
@@ -114,13 +114,13 @@ export default function AdminCommunityClubsIndex({ communityClubs }: AdminCommun
                                         <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link
-                                                    href={route('admin.community-clubs.show', club.id)}
+                                                    href={route('admin.community-clubs.show', club.slug)}
                                                     className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
                                                 >
                                                     <Eye className="h-4 w-4" />
                                                 </Link>
                                                 <Link
-                                                    href={route('admin.community-clubs.edit', club.id)}
+                                                    href={route('admin.community-clubs.edit', club.slug)}
                                                     className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
                                                 >
                                                     <Edit className="h-4 w-4" />
