@@ -7,10 +7,10 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('admin/dashboard');
+    })->name('admin.dashboard');
 });
 
 require __DIR__.'/settings.php';
