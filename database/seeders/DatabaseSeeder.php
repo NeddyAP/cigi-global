@@ -14,12 +14,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create admin user if it doesn't exist
+        if (! User::where('email', 'admin@cigiglobal.com')->exists()) {
+            User::factory()->create([
+                'name' => 'Admin Cigi Global',
+                'email' => 'admin@cigiglobal.com',
+                'password' => Hash::make('admin123'),
+            ]);
+        }
 
-        User::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@cigiglobal.com',
-            'password' => Hash::make('admin123'),
+        // Seed all data
+        $this->call([
+            GlobalVariableSeeder::class,
+            BusinessUnitSeeder::class,
+            CommunityClubSeeder::class,
         ]);
     }
 }

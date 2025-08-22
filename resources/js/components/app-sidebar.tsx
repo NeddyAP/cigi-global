@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, Building2, Folder, LayoutGrid, Settings, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -12,6 +12,26 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: '/admin',
         icon: LayoutGrid,
+    },
+    {
+        title: 'Business',
+        href: '/admin/business-units',
+        icon: Building2,
+    },
+    {
+        title: 'Community',
+        href: '/admin/community-clubs',
+        icon: Users,
+    },
+    {
+        title: 'News',
+        href: '/admin/news',
+        icon: BookOpen,
+    },
+    {
+        title: 'Global Variables',
+        href: '/admin/global-variables',
+        icon: Settings,
     },
 ];
 
