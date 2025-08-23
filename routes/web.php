@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tentang-kami', [PublicPageController::class, 'about'])->name('about');
 Route::get('/kontak', [PublicPageController::class, 'contact'])->name('contact');
+Route::post('/kontak', [PublicPageController::class, 'storeContactMessage'])->name('contact.store');
 
 // Navigation API
 Route::get('/api/navigation-data', [NavigationController::class, 'data'])->name('api.navigation-data');
@@ -40,6 +41,12 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('community-clubs', \App\Http\Controllers\Admin\CommunityClubController::class);
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
     Route::resource('global-variables', \App\Http\Controllers\Admin\GlobalVariableController::class);
+    Route::resource('contact-messages', \App\Http\Controllers\Admin\ContactMessageController::class)->only(['index', 'show', 'update', 'destroy']);
+
+    // Contact messages bulk actions
+    Route::post('contact-messages/mark-as-read', [\App\Http\Controllers\Admin\ContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-as-read');
+    Route::post('contact-messages/mark-as-archived', [\App\Http\Controllers\Admin\ContactMessageController::class, 'markAsArchived'])->name('contact-messages.mark-as-archived');
+    Route::post('contact-messages/bulk-delete', [\App\Http\Controllers\Admin\ContactMessageController::class, 'bulkDelete'])->name('contact-messages.bulk-delete');
 
     // Media Manager routes
     Route::resource('media', \App\Http\Controllers\Admin\MediaController::class);
@@ -53,5 +60,5 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('media-folders/tree', [\App\Http\Controllers\Admin\MediaFolderController::class, 'tree'])->name('media-folders.tree');
 });
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';

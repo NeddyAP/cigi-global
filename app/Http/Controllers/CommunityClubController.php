@@ -17,7 +17,7 @@ class CommunityClubController extends Controller
         // Group by type for better organization
         $clubsByType = $communityClubs->groupBy('type');
 
-        return Inertia::render('community-clubs/index', [
+        return Inertia::render('public/community-clubs/index', [
             'communityClubs' => $communityClubs,
             'clubsByType' => $clubsByType,
         ]);
@@ -30,7 +30,7 @@ class CommunityClubController extends Controller
         // Get related clubs of the same type
         $relatedClubs = $communityClub->getRelatedClubs(3);
 
-        return Inertia::render('community-clubs/show', [
+        return Inertia::render('public/community-clubs/show', [
             'communityClub' => $communityClub,
             'relatedClubs' => $relatedClubs,
         ]);

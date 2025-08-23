@@ -14,7 +14,7 @@ class BusinessUnitController extends Controller
             ->ordered()
             ->get();
 
-        return Inertia::render('business-units/index', [
+        return Inertia::render('public/business-units/index', [
             'businessUnits' => $businessUnits,
         ]);
     }
@@ -30,7 +30,7 @@ class BusinessUnitController extends Controller
             ->limit(3)
             ->get();
 
-        return Inertia::render('business-units/show', [
+        return Inertia::render('public/business-units/show', [
             'businessUnit' => $businessUnit,
             'relatedUnits' => $relatedUnits,
         ]);

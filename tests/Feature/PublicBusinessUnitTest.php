@@ -25,9 +25,10 @@ class PublicBusinessUnitTest extends TestCase
         $response = $this->get(route('business-units.index'));
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page->component('business-units/index')
-            ->has('businessUnits', 3) // Should only show active units
-            ->where('businessUnits.0.name', $activeUnits->first()->name)
+        $response->assertInertia(
+            fn ($page) => $page->component('public/business-units/index')
+                ->has('businessUnits', 3) // Should only show active units
+                ->where('businessUnits.0.name', $activeUnits->first()->name)
         );
     }
 
@@ -53,9 +54,10 @@ class PublicBusinessUnitTest extends TestCase
 
         $response = $this->get(route('business-units.index'));
 
-        $response->assertInertia(fn ($page) => $page->where('businessUnits.0.name', 'Unit A')
-            ->where('businessUnits.1.name', 'Unit B')
-            ->where('businessUnits.2.name', 'Unit C')
+        $response->assertInertia(
+            fn ($page) => $page->where('businessUnits.0.name', 'Unit A')
+                ->where('businessUnits.1.name', 'Unit B')
+                ->where('businessUnits.2.name', 'Unit C')
         );
     }
 
@@ -71,10 +73,11 @@ class PublicBusinessUnitTest extends TestCase
         $response = $this->get(route('business-units.show', 'test-unit'));
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page->component('business-units/show')
-            ->where('businessUnit.name', 'Test Unit')
-            ->where('businessUnit.description', 'Test description')
-            ->has('relatedUnits')
+        $response->assertInertia(
+            fn ($page) => $page->component('public/business-units/show')
+                ->where('businessUnit.name', 'Test Unit')
+                ->where('businessUnit.description', 'Test description')
+                ->has('relatedUnits')
         );
     }
 
@@ -103,10 +106,11 @@ class PublicBusinessUnitTest extends TestCase
 
         $response = $this->get(route('business-units.show', 'current-unit'));
 
-        $response->assertInertia(fn ($page) => $page->has('relatedUnits')
-            ->where('relatedUnits', function ($units) use ($currentUnit) {
-                return collect($units)->doesntContain('id', $currentUnit->id);
-            })
+        $response->assertInertia(
+            fn ($page) => $page->has('relatedUnits')
+                ->where('relatedUnits', function ($units) use ($currentUnit) {
+                    return collect($units)->doesntContain('id', $currentUnit->id);
+                })
         );
     }
 }

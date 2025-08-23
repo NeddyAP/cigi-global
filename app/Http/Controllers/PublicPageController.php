@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContactMessage;
 use App\Models\GlobalVariable;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -58,5 +61,28 @@ class PublicPageController extends Controller
         return Inertia::render('public/contact', [
             'globalVars' => $globalVars,
         ]);
+    }
+
+    /**
+     * Store a contact message.
+     */
+    public function storeContactMessage(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|max:5000',
+        ]);
+
+        // Add additional metadata
+        $validated['ip_address'] = $request->ip();
+        $validated['user_agent'] = $request->userAgent();
+
+        ContactMessage::create($validated);
+
+        return redirect()->back()
+            ->with('success', 'Pesan Anda telah berhasil dikirim. Kami akan segera menghubungi Anda.');
     }
 }

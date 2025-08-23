@@ -37,7 +37,7 @@ class NewsController extends Controller
             ->distinct()
             ->pluck('category');
 
-        return Inertia::render('news/index', [
+        return Inertia::render('public/news/index', [
             'news' => $news,
             'categories' => $categories,
             'filters' => $request->only(['category', 'search']),
@@ -63,7 +63,7 @@ class NewsController extends Controller
             ->take(4)
             ->get();
 
-        return Inertia::render('news/show', [
+        return Inertia::render('public/news/show', [
             'news' => $news,
             'relatedNews' => $relatedNews,
         ]);

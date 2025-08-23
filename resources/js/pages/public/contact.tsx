@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import PublicLayout from '@/layouts/public-layout';
 import { type GlobalVars } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { Clock, Facebook, Instagram, Linkedin, Mail, MapPin, MessageCircle, Phone, Send, Twitter } from 'lucide-react';
 import { useState } from 'react';
 
@@ -34,27 +34,25 @@ export default function Contact({ globalVars }: ContactProps) {
         e.preventDefault();
         setIsSubmitting(true);
 
-        try {
-            // Here you would typically submit the form to your backend
-            // For now, we'll just simulate a successful submission
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-
-            // Reset form
-            setFormData({
-                name: '',
-                email: '',
-                phone: '',
-                subject: '',
-                message: '',
-            });
-
-            // You could show a success message here
-            alert('Pesan Anda telah berhasil dikirim. Kami akan segera menghubungi Anda.');
-        } catch (error) {
-            alert('Terjadi kesalahan. Silakan coba lagi.');
-        } finally {
-            setIsSubmitting(false);
-        }
+        router.post(route('contact.store'), formData, {
+            onSuccess: () => {
+                // Reset form
+                setFormData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    subject: '',
+                    message: '',
+                });
+                setIsSubmitting(false);
+            },
+            onError: () => {
+                setIsSubmitting(false);
+            },
+            onFinish: () => {
+                setIsSubmitting(false);
+            },
+        });
     };
 
     return (

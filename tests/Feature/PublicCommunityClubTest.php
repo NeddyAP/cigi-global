@@ -26,15 +26,16 @@ class PublicCommunityClubTest extends TestCase
         $response = $this->get(route('community-clubs.index'));
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page->component('community-clubs/index')
-            ->has('communityClubs', 3) // Should only show active clubs
-            ->has('clubsByType')
-            ->where('communityClubs', function ($clubs) use ($activeClubs) {
-                $clubNames = collect($clubs)->pluck('name')->toArray();
-                $expectedNames = $activeClubs->pluck('name')->toArray();
+        $response->assertInertia(
+            fn ($page) => $page->component('public/community-clubs/index')
+                ->has('communityClubs', 3) // Should only show active clubs
+                ->has('clubsByType')
+                ->where('communityClubs', function ($clubs) use ($activeClubs) {
+                    $clubNames = collect($clubs)->pluck('name')->toArray();
+                    $expectedNames = $activeClubs->pluck('name')->toArray();
 
-                return count(array_intersect($clubNames, $expectedNames)) === 3;
-            })
+                    return count(array_intersect($clubNames, $expectedNames)) === 3;
+                })
         );
     }
 
@@ -52,12 +53,13 @@ class PublicCommunityClubTest extends TestCase
 
         $response = $this->get(route('community-clubs.index'));
 
-        $response->assertInertia(fn ($page) => $page->where('clubsByType.Professional', function ($clubs) {
-            return count($clubs) === 2;
-        })
-            ->where('clubsByType.Sports', function ($clubs) {
-                return count($clubs) === 3;
+        $response->assertInertia(
+            fn ($page) => $page->where('clubsByType.Professional', function ($clubs) {
+                return count($clubs) === 2;
             })
+                ->where('clubsByType.Sports', function ($clubs) {
+                    return count($clubs) === 3;
+                })
         );
     }
 
@@ -74,11 +76,12 @@ class PublicCommunityClubTest extends TestCase
         $response = $this->get(route('community-clubs.show', 'test-club'));
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) => $page->component('community-clubs/show')
-            ->where('communityClub.name', 'Test Club')
-            ->where('communityClub.description', 'Test description')
-            ->where('communityClub.type', 'Professional')
-            ->has('relatedClubs')
+        $response->assertInertia(
+            fn ($page) => $page->component('public/community-clubs/show')
+                ->where('communityClub.name', 'Test Club')
+                ->where('communityClub.description', 'Test description')
+                ->where('communityClub.type', 'Professional')
+                ->has('relatedClubs')
         );
     }
 
@@ -116,18 +119,19 @@ class PublicCommunityClubTest extends TestCase
 
         $response = $this->get(route('community-clubs.show', 'current-club'));
 
-        $response->assertInertia(fn ($page) => $page->has('relatedClubs')
-            ->where('relatedClubs', function ($clubs) use ($currentClub) {
-                $clubsCollection = collect($clubs);
+        $response->assertInertia(
+            fn ($page) => $page->has('relatedClubs')
+                ->where('relatedClubs', function ($clubs) use ($currentClub) {
+                    $clubsCollection = collect($clubs);
 
-                // Should not contain current club
-                $containsCurrent = $clubsCollection->contains('id', $currentClub->id);
+                    // Should not contain current club
+                    $containsCurrent = $clubsCollection->contains('id', $currentClub->id);
 
-                // Should only contain clubs of the same type
-                $allSameType = $clubsCollection->every(fn ($club) => $club['type'] === 'Professional');
+                    // Should only contain clubs of the same type
+                    $allSameType = $clubsCollection->every(fn ($club) => $club['type'] === 'Professional');
 
-                return ! $containsCurrent && $allSameType;
-            })
+                    return ! $containsCurrent && $allSameType;
+                })
         );
     }
 }

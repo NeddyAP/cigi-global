@@ -23,7 +23,7 @@ test('business units index page displays active units', function () {
 
     $response->assertSuccessful();
     $response->assertInertia(fn ($page) => $page
-        ->component('business-units/index')
+        ->component('public/business-units/index')
         ->has('businessUnits', 2)
     );
 });
@@ -35,7 +35,7 @@ test('business unit show page displays unit details', function () {
 
     $response->assertSuccessful();
     $response->assertInertia(fn ($page) => $page
-        ->component('business-units/show')
+        ->component('public/business-units/show')
         ->has('businessUnit')
         ->where('businessUnit.name', $businessUnit->name)
     );

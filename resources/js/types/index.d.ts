@@ -136,3 +136,25 @@ export interface Media {
     created_at: string;
     updated_at: string;
 }
+
+export interface ContactMessage {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+    subject: string;
+    message: string;
+    status: 'unread' | 'read' | 'archived';
+    read_at?: string;
+    ip_address?: string;
+    user_agent?: string;
+    created_at: string;
+    updated_at: string;
+    // Computed attributes
+    status_color?: string;
+    status_label?: string;
+    excerpt?: string;
+    is_unread?: boolean;
+    is_read?: boolean;
+    is_archived?: boolean;
+}
