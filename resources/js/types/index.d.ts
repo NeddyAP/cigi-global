@@ -127,7 +127,6 @@ export interface Media {
     title?: string;
     description?: string;
     caption?: string;
-    folder_id?: number;
     uploaded_by?: number;
     is_image?: boolean;
     human_size?: string;

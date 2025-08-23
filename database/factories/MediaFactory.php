@@ -30,7 +30,6 @@ class MediaFactory extends Factory
             'alt_text' => fake()->sentence(),
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
-            'folder_id' => null,
             'uploaded_by' => null,
             'metadata' => [],
         ];
