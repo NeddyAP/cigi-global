@@ -139,3 +139,227 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Glassmorph Design System */
+@utility glass-card {
+    @apply rounded-xl border border-white/20 shadow-xl backdrop-blur-md;
+    background-color: color-mix(in srgb, white 10%, transparent);
+}
+
+@utility glass-card-strong {
+    @apply rounded-xl border border-white/25 shadow-2xl backdrop-blur-lg;
+    background-color: color-mix(in srgb, white 15%, transparent);
+}
+
+@utility glass-header {
+    @apply border-b border-white/10 backdrop-blur-lg;
+    background-color: color-mix(in srgb, white 5%, transparent);
+}
+
+@utility glass-overlay {
+    @apply bg-gradient-to-r from-black/30 to-transparent backdrop-blur-sm;
+}
+
+@utility glass-button {
+    @apply rounded-lg border border-white/30 backdrop-blur-md transition-all duration-300;
+    background-color: color-mix(in srgb, white 20%, transparent);
+    
+    &:hover {
+        background-color: color-mix(in srgb, white 30%, transparent);
+    }
+}
+
+@utility glass-card-hover {
+    @apply glass-card cursor-pointer transition-all duration-300;
+    
+    &:hover {
+        @apply scale-105 shadow-2xl;
+        background-color: color-mix(in srgb, white 20%, transparent);
+    }
+}
+
+/* Dark mode variants */
+.dark {
+    .glass-card {
+        border-color: color-mix(in srgb, white 10%, transparent);
+        background-color: color-mix(in srgb, black 20%, transparent);
+    }
+
+    .glass-card-strong {
+        border-color: color-mix(in srgb, white 15%, transparent);
+        background-color: color-mix(in srgb, black 30%, transparent);
+    }
+
+    .glass-header {
+        border-color: color-mix(in srgb, white 5%, transparent);
+        background-color: color-mix(in srgb, black 10%, transparent);
+    }
+
+    .glass-overlay {
+        @apply bg-gradient-to-r from-black/50 to-transparent;
+    }
+
+    .glass-button {
+        border-color: color-mix(in srgb, white 20%, transparent);
+        background-color: color-mix(in srgb, black 30%, transparent);
+        
+        &:hover {
+            background-color: color-mix(in srgb, black 40%, transparent);
+        }
+    }
+
+    .glass-card-hover:hover {
+        background-color: color-mix(in srgb, black 40%, transparent);
+    }
+
+    /* Navigation Glass Effects */
+    .glass-nav {
+        @apply sticky top-0 z-50 border-b border-white/20 bg-white/10 backdrop-blur-lg;
+    }
+
+    .dark .glass-nav {
+        @apply border-white/10 bg-black/20;
+    }
+
+    .glass-dropdown {
+        @apply rounded-lg border border-white/20 bg-white/95 shadow-2xl backdrop-blur-xl;
+    }
+
+    .dark .glass-dropdown {
+        @apply border-white/10 bg-black/90;
+    }
+
+    /* Hero Section Glass Effects */
+    .glass-hero-overlay {
+        @apply bg-gradient-to-br from-indigo-500/20 via-purple-500/10 to-blue-500/20 backdrop-blur-sm;
+    }
+
+    .dark .glass-hero-overlay {
+        @apply from-indigo-900/30 via-purple-900/20 to-blue-900/30;
+    }
+
+    /* Gallery Glass Effects */
+    .glass-gallery-item {
+        @apply overflow-hidden rounded-lg border border-white/20 bg-white/10 backdrop-blur-md transition-all duration-300;
+    }
+
+    .glass-gallery-item:hover {
+        @apply scale-105 bg-white/20 shadow-2xl;
+    }
+
+    .dark .glass-gallery-item {
+        @apply bg-black/20;
+    }
+
+    .dark .glass-gallery-item:hover {
+        @apply bg-black/30;
+    }
+
+    /* Utility Classes */
+    .gradient-background {
+        @apply bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50;
+    }
+
+    .dark .gradient-background {
+        @apply from-slate-900 via-slate-800 to-indigo-900;
+    }
+
+    .text-shadow {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-shadow-lg {
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Mobile Optimizations */
+    .mobile-safe-area {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+
+    .mobile-touch-target {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .mobile-scroll-smooth {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    .mobile-no-bounce {
+        overscroll-behavior: none;
+    }
+
+    /* Mobile-specific glass effects */
+    @media (max-width: 768px) {
+        .glass-card {
+            @apply bg-white/15 backdrop-blur-sm;
+        }
+
+        .glass-header {
+            @apply bg-white/10 backdrop-blur-md;
+        }
+
+        .glass-nav {
+            @apply bg-white/15 backdrop-blur-md;
+        }
+
+        .dark .glass-card {
+            @apply bg-black/25;
+        }
+
+        .dark .glass-header {
+            @apply bg-black/15;
+        }
+
+        .dark .glass-nav {
+            @apply bg-black/25;
+        }
+    }
+
+    /* Performance optimizations */
+    .will-change-transform {
+        will-change: transform;
+    }
+
+    .hardware-accelerated {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+    }
+
+    /* Responsive text scaling */
+    @media (max-width: 640px) {
+        .text-responsive-sm {
+            font-size: 0.875rem;
+        }
+
+        .text-responsive-base {
+            font-size: 1rem;
+        }
+
+        .text-responsive-lg {
+            font-size: 1.125rem;
+        }
+
+        .text-responsive-xl {
+            font-size: 1.25rem;
+        }
+
+        .text-responsive-2xl {
+            font-size: 1.5rem;
+        }
+
+        .text-responsive-3xl {
+            font-size: 1.875rem;
+        }
+
+        .text-responsive-4xl {
+            font-size: 2.25rem;
+        }
+    }
+}

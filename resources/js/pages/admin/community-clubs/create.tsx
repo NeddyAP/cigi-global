@@ -1,7 +1,7 @@
+import ImageInput from '@/components/image-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Toggle } from '@/components/ui/toggle';
 import AppLayout from '@/layouts/app-layout';
@@ -56,7 +56,7 @@ export default function CreateCommunityClub() {
                 .replace(/[^a-z0-9\s-]/g, '')
                 .replace(/\s+/g, '-')
                 .replace(/-+/g, '-')
-                .trim('-');
+                .replace(/^-+|-+$/g, '');
             setData('slug', slug);
         }
     };
@@ -130,17 +130,16 @@ export default function CreateCommunityClub() {
                                     {errors.type && <p className="mt-1 text-sm text-red-600">{errors.type}</p>}
                                 </div>
 
-                                <div>
-                                    <Label htmlFor="image">Path Gambar</Label>
-                                    <Input
-                                        id="image"
-                                        value={data.image}
-                                        onChange={(e) => setData('image', e.target.value)}
-                                        placeholder="assets/community/pb-cigi.jpg"
-                                        className={errors.image ? 'border-red-500' : ''}
-                                    />
-                                    {errors.image && <p className="mt-1 text-sm text-red-600">{errors.image}</p>}
-                                </div>
+                                <ImageInput
+                                    label="Gambar Komunitas"
+                                    name="image"
+                                    value={data.image}
+                                    onChange={(value) => setData('image', value ? String(value) : '')}
+                                    placeholder="Pilih atau upload gambar komunitas"
+                                    error={errors.image}
+                                    showPreview={true}
+                                    autoUpload={true}
+                                />
                             </div>
 
                             <div>

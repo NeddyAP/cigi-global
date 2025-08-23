@@ -67,7 +67,7 @@ class CommunityClubController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:community_clubs,slug,' . $communityClub->id,
+            'slug' => 'nullable|string|max:255|unique:community_clubs,slug,'.$communityClub->id,
             'description' => 'nullable|string',
             'type' => 'required|string|max:255',
             'activities' => 'nullable|string',

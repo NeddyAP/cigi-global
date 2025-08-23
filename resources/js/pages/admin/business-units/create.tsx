@@ -1,3 +1,4 @@
+import ImageInput from '@/components/image-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -44,7 +45,7 @@ export default function CreateBusinessUnit() {
                 .replace(/[^a-z0-9\s-]/g, '')
                 .replace(/\s+/g, '-')
                 .replace(/-+/g, '-')
-                .trim('-');
+                .replace(/^-+|-+$/g, '');
             setData('slug', slug);
         }
     };
@@ -125,17 +126,16 @@ export default function CreateBusinessUnit() {
                                 {errors.services && <p className="mt-1 text-sm text-red-600">{errors.services}</p>}
                             </div>
 
-                            <div>
-                                <Label htmlFor="image">Path Gambar</Label>
-                                <Input
-                                    id="image"
-                                    value={data.image}
-                                    onChange={(e) => setData('image', e.target.value)}
-                                    placeholder="assets/business/cigi-net.jpg"
-                                    className={errors.image ? 'border-red-500' : ''}
-                                />
-                                {errors.image && <p className="mt-1 text-sm text-red-600">{errors.image}</p>}
-                            </div>
+                            <ImageInput
+                                label="Gambar Unit Bisnis"
+                                name="image"
+                                value={data.image}
+                                onChange={(value) => setData('image', value ? String(value) : '')}
+                                placeholder="Pilih atau upload gambar unit bisnis"
+                                error={errors.image}
+                                showPreview={true}
+                                autoUpload={true}
+                            />
                         </div>
                     </div>
 

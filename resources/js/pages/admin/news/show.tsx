@@ -252,7 +252,7 @@ export default function ShowNews({ news }: ShowNewsProps) {
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Kategori</label>
-                                    <p className="mt-1 text-sm text-gray-900 capitalize dark:text-white">{news.category}</p>
+                                    <p className="mt-1 text-sm capitalize text-gray-900 dark:text-white">{news.category}</p>
                                 </div>
 
                                 {news.published_at && (
@@ -284,7 +284,7 @@ export default function ShowNews({ news }: ShowNewsProps) {
                             <div className="space-y-4 px-6 py-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Slug URL</label>
-                                    <p className="mt-1 font-mono text-sm break-all text-gray-900 dark:text-white">{news.slug}</p>
+                                    <p className="mt-1 break-all font-mono text-sm text-gray-900 dark:text-white">{news.slug}</p>
                                 </div>
 
                                 <div>
@@ -295,7 +295,7 @@ export default function ShowNews({ news }: ShowNewsProps) {
                                 {news.featured_image && (
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Featured Image Path</label>
-                                        <p className="mt-1 font-mono text-sm break-all text-gray-900 dark:text-white">{news.featured_image}</p>
+                                        <p className="mt-1 break-all font-mono text-sm text-gray-900 dark:text-white">{news.featured_image}</p>
                                     </div>
                                 )}
                             </div>

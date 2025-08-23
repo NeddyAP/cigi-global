@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BusinessUnit;
 use App\Models\CommunityClub;
 use App\Models\GlobalVariable;
+use App\Models\Media;
 use App\Models\News;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -13,15 +14,9 @@ class HomeController extends Controller
 {
     public function index(): Response
     {
-        $businessUnits = BusinessUnit::where('is_active', true)
-            ->orderBy('sort_order')
-            ->take(4)
-            ->get();
-
-        $communityClubs = CommunityClub::where('is_active', true)
-            ->orderBy('sort_order')
-            ->take(4)
-            ->get();
+        // Use enhanced model methods
+        $businessUnits = BusinessUnit::getFeatured(4);
+        $communityClubs = CommunityClub::getFeatured(4);
 
         $featuredNews = News::published()
             ->featured()
@@ -45,8 +40,36 @@ class HomeController extends Controller
                 'contact_phone',
                 'contact_email',
                 'contact_whatsapp',
+                'home_gallery_ids',
             ])
             ->pluck('value', 'key');
+
+        // Get gallery media
+        $galleryMediaIds = $globalVars['home_gallery_ids'] ?? null;
+        $galleryMedia = collect();
+
+        if ($galleryMediaIds) {
+            $mediaIds = json_decode($galleryMediaIds, true);
+            if (is_array($mediaIds)) {
+                $galleryMedia = Media::whereIn('id', $mediaIds)
+                    ->orderBy('created_at', 'desc')
+                    ->limit(8)
+                    ->get();
+            }
+        }
+
+        // Get navigation data for header
+        $navBusinessUnits = BusinessUnit::active()
+            ->ordered()
+            ->limit(6)
+            ->get();
+
+        $navCommunityClubs = CommunityClub::active()
+            ->ordered()
+            ->limit(8)
+            ->get();
+
+        $clubTypes = CommunityClub::getTypes()->toArray();
 
         return Inertia::render('home', [
             'businessUnits' => $businessUnits,
@@ -54,6 +77,10 @@ class HomeController extends Controller
             'featuredNews' => $featuredNews,
             'latestNews' => $latestNews,
             'globalVars' => $globalVars,
+            'galleryMedia' => $galleryMedia,
+            'navBusinessUnits' => $navBusinessUnits,
+            'navCommunityClubs' => $navCommunityClubs,
+            'clubTypes' => $clubTypes,
         ]);
     }
 }

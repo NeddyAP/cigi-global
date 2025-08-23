@@ -1,3 +1,4 @@
+import ImageInput from '@/components/image-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -58,7 +59,7 @@ export default function CreateNews({ auth }: CreateNewsProps) {
                 .replace(/[^a-z0-9\s-]/g, '')
                 .replace(/\s+/g, '-')
                 .replace(/-+/g, '-')
-                .trim('-');
+                .replace(/^-+|-+$/g, '');
             setData('slug', slug);
         }
     };
@@ -94,7 +95,7 @@ export default function CreateNews({ auth }: CreateNewsProps) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                         {/* Main Content */}
-                        <div className="lg:col-span-2 space-y-6">
+                        <div className="space-y-6 lg:col-span-2">
                             <div className="rounded-lg bg-white shadow dark:bg-gray-800">
                                 <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
                                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">Konten Artikel</h3>
@@ -148,9 +149,7 @@ export default function CreateNews({ auth }: CreateNewsProps) {
                                             className={errors.content ? 'border-red-500' : ''}
                                         />
                                         {errors.content && <p className="mt-1 text-sm text-red-600">{errors.content}</p>}
-                                        <p className="mt-1 text-sm text-gray-500">
-                                            Tip: Gunakan markdown atau HTML untuk formatting yang lebih baik
-                                        </p>
+                                        <p className="mt-1 text-sm text-gray-500">Tip: Gunakan markdown atau HTML untuk formatting yang lebih baik</p>
                                     </div>
                                 </div>
                             </div>
@@ -197,9 +196,7 @@ export default function CreateNews({ auth }: CreateNewsProps) {
                                                 className={errors.published_at ? 'border-red-500' : ''}
                                             />
                                             {errors.published_at && <p className="mt-1 text-sm text-red-600">{errors.published_at}</p>}
-                                            <p className="mt-1 text-sm text-gray-500">
-                                                Kosongkan untuk menggunakan waktu sekarang
-                                            </p>
+                                            <p className="mt-1 text-sm text-gray-500">Kosongkan untuk menggunakan waktu sekarang</p>
                                         </div>
                                     )}
                                 </div>
@@ -248,33 +245,17 @@ export default function CreateNews({ auth }: CreateNewsProps) {
                                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">Gambar Unggulan</h3>
                                 </div>
                                 <div className="space-y-4 px-6 py-4">
-                                    <div>
-                                        <Label htmlFor="featured_image">Path Gambar</Label>
-                                        <Input
-                                            id="featured_image"
-                                            value={data.featured_image}
-                                            onChange={(e) => setData('featured_image', e.target.value)}
-                                            placeholder="assets/news/artikel-1.jpg"
-                                            className={errors.featured_image ? 'border-red-500' : ''}
-                                        />
-                                        {errors.featured_image && <p className="mt-1 text-sm text-red-600">{errors.featured_image}</p>}
-                                        <p className="mt-1 text-sm text-gray-500">
-                                            Gambar akan ditampilkan di halaman listing dan detail artikel
-                                        </p>
-                                    </div>
-
-                                    {data.featured_image && (
-                                        <div className="mt-4">
-                                            <img
-                                                src={`/${data.featured_image}`}
-                                                alt="Preview"
-                                                className="w-full h-32 object-cover rounded-lg"
-                                                onError={(e) => {
-                                                    e.currentTarget.style.display = 'none';
-                                                }}
-                                            />
-                                        </div>
-                                    )}
+                                    <ImageInput
+                                        label="Gambar Unggulan"
+                                        name="featured_image"
+                                        value={data.featured_image}
+                                        onChange={(value) => setData('featured_image', value ? String(value) : '')}
+                                        placeholder="Pilih atau upload gambar artikel"
+                                        error={errors.featured_image}
+                                        showPreview={true}
+                                        autoUpload={true}
+                                    />
+                                    <p className="text-sm text-gray-500">Gambar akan ditampilkan di halaman listing dan detail artikel</p>
                                 </div>
                             </div>
 

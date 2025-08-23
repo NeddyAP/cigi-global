@@ -7,8 +7,19 @@ import { Clock, Edit, Eye, Plus, Star, Trash2, Users } from 'lucide-react';
 interface AdminNewsIndexProps {
     news: {
         data: News[];
-        links: any;
-        meta: any;
+        links: {
+            prev: string | null;
+            next: string | null;
+            [key: string]: string | null | undefined;
+        };
+        meta: {
+            from: number;
+            to: number;
+            total: number;
+            current_page: number;
+            last_page: number;
+            [key: string]: number | string | unknown;
+        };
     };
 }
 
@@ -66,25 +77,25 @@ export default function AdminNewsIndex({ news }: AdminNewsIndexProps) {
                         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead className="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                         Artikel
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                         Kategori
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                         Penulis
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                         Status
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                         Tanggal
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                         Views
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                         Aksi
                                     </th>
                                 </tr>
@@ -119,17 +130,17 @@ export default function AdminNewsIndex({ news }: AdminNewsIndexProps) {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="whitespace-nowrap px-6 py-4">
                                             <span
                                                 className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getCategoryColor(newsItem.category)}`}
                                             >
                                                 {newsItem.category}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="whitespace-nowrap px-6 py-4">
                                             <div className="text-sm text-gray-900 dark:text-white">{newsItem.author?.name || 'Unknown'}</div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="whitespace-nowrap px-6 py-4">
                                             <div className="flex items-center">
                                                 {newsItem.is_published ? (
                                                     <>
@@ -144,16 +155,16 @@ export default function AdminNewsIndex({ news }: AdminNewsIndexProps) {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                                             {newsItem.published_at ? formatDate(newsItem.published_at) : formatDate(newsItem.created_at)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="whitespace-nowrap px-6 py-4">
                                             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                                                 <Users className="mr-1 h-4 w-4" />
                                                 {newsItem.views_count}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
+                                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link
                                                     href={route('admin.news.show', newsItem.slug)}
@@ -200,7 +211,7 @@ export default function AdminNewsIndex({ news }: AdminNewsIndexProps) {
                                 <div className="flex flex-1 justify-between sm:hidden">
                                     {news.links.prev && (
                                         <Link
-                                            href={news.links.prev}
+                                            href={news.links.prev || ''}
                                             className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                                         >
                                             Sebelumnya
@@ -208,7 +219,7 @@ export default function AdminNewsIndex({ news }: AdminNewsIndexProps) {
                                     )}
                                     {news.links.next && (
                                         <Link
-                                            href={news.links.next}
+                                            href={news.links.next || ''}
                                             className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                                         >
                                             Selanjutnya
@@ -226,7 +237,7 @@ export default function AdminNewsIndex({ news }: AdminNewsIndexProps) {
                                     <div className="flex space-x-1">
                                         {news.links.prev && (
                                             <Link
-                                                href={news.links.prev}
+                                                href={news.links.prev || ''}
                                                 className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
                                             >
                                                 ←
@@ -234,7 +245,7 @@ export default function AdminNewsIndex({ news }: AdminNewsIndexProps) {
                                         )}
                                         {news.links.next && (
                                             <Link
-                                                href={news.links.next}
+                                                href={news.links.next || ''}
                                                 className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
                                             >
                                                 →

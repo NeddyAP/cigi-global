@@ -10,8 +10,8 @@ class CommunityClubController extends Controller
 {
     public function index(): Response
     {
-        $communityClubs = CommunityClub::where('is_active', true)
-            ->orderBy('sort_order')
+        $communityClubs = CommunityClub::active()
+            ->ordered()
             ->get();
 
         // Group by type for better organization
@@ -27,8 +27,12 @@ class CommunityClubController extends Controller
     {
         abort_unless($communityClub->is_active, 404);
 
+        // Get related clubs of the same type
+        $relatedClubs = $communityClub->getRelatedClubs(3);
+
         return Inertia::render('community-clubs/show', [
             'communityClub' => $communityClub,
+            'relatedClubs' => $relatedClubs,
         ]);
     }
 }

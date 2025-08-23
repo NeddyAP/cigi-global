@@ -1,3 +1,4 @@
+import ImageInput from '@/components/image-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -122,7 +123,7 @@ export default function EditCommunityClub({ communityClub }: EditCommunityClubPr
                                         id="type"
                                         value={data.type}
                                         onChange={(e) => setData('type', e.target.value)}
-                                        className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white ${errors.type ? 'border-red-500' : ''}`}
+                                        className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white ${errors.type ? 'border-red-500' : ''}`}
                                     >
                                         <option value="">Pilih Tipe Komunitas</option>
                                         {clubTypes.map((type) => (
@@ -134,34 +135,17 @@ export default function EditCommunityClub({ communityClub }: EditCommunityClubPr
                                     {errors.type && <p className="mt-1 text-sm text-red-600">{errors.type}</p>}
                                 </div>
 
-                                <div>
-                                    <Label htmlFor="image">Path Gambar</Label>
-                                    <Input
-                                        id="image"
-                                        value={data.image}
-                                        onChange={(e) => setData('image', e.target.value)}
-                                        placeholder="assets/community/pb-cigi.jpg"
-                                        className={errors.image ? 'border-red-500' : ''}
-                                    />
-                                    {errors.image && <p className="mt-1 text-sm text-red-600">{errors.image}</p>}
-                                </div>
+                                <ImageInput
+                                    label="Gambar Komunitas"
+                                    name="image"
+                                    value={data.image}
+                                    onChange={(value) => setData('image', value?.toString() || '')}
+                                    placeholder="Pilih atau upload gambar komunitas"
+                                    error={errors.image}
+                                    showPreview={true}
+                                    autoUpload={true}
+                                />
                             </div>
-
-                            {data.image && (
-                                <div className="mt-4">
-                                    <Label>Preview Gambar</Label>
-                                    <div className="mt-2">
-                                        <img
-                                            src={`/${data.image}`}
-                                            alt="Preview"
-                                            className="h-32 w-48 rounded-lg object-cover"
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = 'none';
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            )}
 
                             <div>
                                 <Label htmlFor="description">Deskripsi</Label>

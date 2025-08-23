@@ -10,10 +10,10 @@ interface UserMenuContentProps {
 }
 
 export function UserMenuContent({ user }: UserMenuContentProps) {
-    const cleanup = useMobileNavigation();
+    const { closeMobileMenu } = useMobileNavigation();
 
     const handleLogout = () => {
-        cleanup();
+        closeMobileMenu();
         router.flushAll();
     };
 
@@ -27,7 +27,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                    <Link className="block w-full" href={route('profile.edit')} as="button" prefetch onClick={cleanup}>
+                    <Link className="block w-full" href={route('profile.edit')} as="button" prefetch onClick={() => closeMobileMenu()}>
                         <Settings className="mr-2" />
                         Settings
                     </Link>

@@ -3,11 +3,16 @@
 use App\Http\Controllers\BusinessUnitController;
 use App\Http\Controllers\CommunityClubController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\NewsController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Navigation API
+Route::get('/api/navigation-data', [NavigationController::class, 'data'])->name('api.navigation-data');
+Route::post('/api/navigation-cache/clear', [NavigationController::class, 'clearCache'])->name('api.navigation-cache.clear');
 
 // Business Units
 Route::get('/unit-bisnis', [BusinessUnitController::class, 'index'])->name('business-units.index');
@@ -32,6 +37,17 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('community-clubs', \App\Http\Controllers\Admin\CommunityClubController::class);
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
     Route::resource('global-variables', \App\Http\Controllers\Admin\GlobalVariableController::class);
+
+    // Media Manager routes
+    Route::resource('media', \App\Http\Controllers\Admin\MediaController::class);
+    Route::post('media/ajax-upload', [\App\Http\Controllers\Admin\MediaController::class, 'ajaxUpload'])->name('media.ajax-upload');
+    Route::get('media-picker', [\App\Http\Controllers\Admin\MediaController::class, 'picker'])->name('media.picker');
+    Route::post('media/bulk-delete', [\App\Http\Controllers\Admin\MediaController::class, 'bulkDelete'])->name('media.bulk-delete');
+    Route::post('media/bulk-move', [\App\Http\Controllers\Admin\MediaController::class, 'bulkMove'])->name('media.bulk-move');
+
+    // Media Folder routes
+    Route::resource('media-folders', \App\Http\Controllers\Admin\MediaFolderController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::get('media-folders/tree', [\App\Http\Controllers\Admin\MediaFolderController::class, 'tree'])->name('media-folders.tree');
 });
 
 require __DIR__.'/settings.php';

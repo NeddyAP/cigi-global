@@ -1,3 +1,4 @@
+import ImageInput from '@/components/image-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -215,7 +216,7 @@ export default function EditNews({ news, auth }: EditNewsProps) {
                                             id="category"
                                             value={data.category}
                                             onChange={(e) => setData('category', e.target.value)}
-                                            className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white ${errors.category ? 'border-red-500' : ''}`}
+                                            className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white ${errors.category ? 'border-red-500' : ''}`}
                                         >
                                             {newsCategories.map((category) => (
                                                 <option key={category.value} value={category.value}>
@@ -246,31 +247,17 @@ export default function EditNews({ news, auth }: EditNewsProps) {
                                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">Gambar Unggulan</h3>
                                 </div>
                                 <div className="space-y-4 px-6 py-4">
-                                    <div>
-                                        <Label htmlFor="featured_image">Path Gambar</Label>
-                                        <Input
-                                            id="featured_image"
-                                            value={data.featured_image}
-                                            onChange={(e) => setData('featured_image', e.target.value)}
-                                            placeholder="assets/news/artikel-1.jpg"
-                                            className={errors.featured_image ? 'border-red-500' : ''}
-                                        />
-                                        {errors.featured_image && <p className="mt-1 text-sm text-red-600">{errors.featured_image}</p>}
-                                        <p className="mt-1 text-sm text-gray-500">Gambar akan ditampilkan di halaman listing dan detail artikel</p>
-                                    </div>
-
-                                    {data.featured_image && (
-                                        <div className="mt-4">
-                                            <img
-                                                src={`/${data.featured_image}`}
-                                                alt="Preview"
-                                                className="h-32 w-full rounded-lg object-cover"
-                                                onError={(e) => {
-                                                    e.currentTarget.style.display = 'none';
-                                                }}
-                                            />
-                                        </div>
-                                    )}
+                                    <ImageInput
+                                        label="Gambar Unggulan"
+                                        name="featured_image"
+                                        value={data.featured_image}
+                                        onChange={(value) => setData('featured_image', value ? String(value) : '')}
+                                        placeholder="Pilih atau upload gambar artikel"
+                                        error={errors.featured_image}
+                                        showPreview={true}
+                                        autoUpload={true}
+                                    />
+                                    <p className="text-sm text-gray-500">Gambar akan ditampilkan di halaman listing dan detail artikel</p>
                                 </div>
                             </div>
 

@@ -113,3 +113,26 @@ export interface GlobalVariable {
 export interface GlobalVars {
     [key: string]: string;
 }
+
+export interface Media {
+    id: number;
+    filename: string;
+    original_filename: string;
+    mime_type: string;
+    size: number;
+    path: string;
+    url?: string;
+    thumbnail_url?: string;
+    alt_text?: string;
+    title?: string;
+    caption?: string;
+    folder_id?: number;
+    is_image?: boolean;
+    human_size?: string;
+    dimensions?: {
+        width: number;
+        height: number;
+    };
+    created_at: string;
+    updated_at: string;
+}

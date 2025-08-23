@@ -73,7 +73,7 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                         {Object.entries(variables).map(([category, categoryVariables]) => (
                             <div key={category} className="rounded-lg bg-white shadow dark:bg-gray-800">
                                 <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-                                    <h3 className="text-lg font-medium text-gray-900 capitalize dark:text-white">
+                                    <h3 className="text-lg font-medium capitalize text-gray-900 dark:text-white">
                                         {category === 'company' && 'Informasi Perusahaan'}
                                         {category === 'contact' && 'Informasi Kontak'}
                                         {category === 'social' && 'Media Sosial'}
@@ -85,19 +85,19 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                         <thead className="bg-gray-50 dark:bg-gray-700">
                                             <tr>
-                                                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                                     Kunci
                                                 </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                                     Nilai
                                                 </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                                     Tipe
                                                 </th>
-                                                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                                     Visibilitas
                                                 </th>
-                                                <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                                     Aksi
                                                 </th>
                                             </tr>
@@ -105,7 +105,7 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                                         <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
                                             {categoryVariables.map((variable) => (
                                                 <tr key={variable.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                    <td className="whitespace-nowrap px-6 py-4">
                                                         <div className="text-sm font-medium text-gray-900 dark:text-white">{variable.key}</div>
                                                         {variable.description && (
                                                             <div className="text-sm text-gray-500 dark:text-gray-400">{variable.description}</div>
@@ -130,14 +130,14 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                                                             )}
                                                         </div>
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                    <td className="whitespace-nowrap px-6 py-4">
                                                         <span
                                                             className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getTypeColor(variable.type)}`}
                                                         >
                                                             {variable.type}
                                                         </span>
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                    <td className="whitespace-nowrap px-6 py-4">
                                                         <div className="flex items-center">
                                                             {variable.is_public ? (
                                                                 <>
@@ -152,7 +152,7 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                                                             )}
                                                         </div>
                                                     </td>
-                                                    <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
+                                                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                                                         <div className="flex items-center justify-end space-x-2">
                                                             <Link
                                                                 href={route('admin.global-variables.show', variable.id)}

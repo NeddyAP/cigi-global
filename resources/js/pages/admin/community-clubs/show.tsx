@@ -116,7 +116,7 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
                                 {communityClub.description && (
                                     <div className="mt-6">
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi</label>
-                                        <p className="mt-1 text-sm whitespace-pre-wrap text-gray-900 dark:text-white">{communityClub.description}</p>
+                                        <p className="mt-1 whitespace-pre-wrap text-sm text-gray-900 dark:text-white">{communityClub.description}</p>
                                     </div>
                                 )}
                             </div>
@@ -135,7 +135,7 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
                                     <ul className="space-y-2">
                                         {formatActivities(communityClub.activities).map((activity, index) => (
                                             <li key={index} className="flex items-start">
-                                                <span className="mt-1.5 mr-2 h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
+                                                <span className="mr-2 mt-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
                                                 <span className="text-sm text-gray-900 dark:text-white">{activity}</span>
                                             </li>
                                         ))}
@@ -200,7 +200,7 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
                                     {communityClub.meeting_schedule && (
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Jadwal Pertemuan</label>
-                                            <p className="mt-1 text-sm whitespace-pre-wrap text-gray-900 dark:text-white">
+                                            <p className="mt-1 whitespace-pre-wrap text-sm text-gray-900 dark:text-white">
                                                 {communityClub.meeting_schedule}
                                             </p>
                                         </div>
@@ -208,10 +208,10 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
 
                                     {communityClub.location && (
                                         <div className="flex items-start">
-                                            <MapPin className="mt-1 mr-3 h-5 w-5 flex-shrink-0 text-gray-400" />
+                                            <MapPin className="mr-3 mt-1 h-5 w-5 flex-shrink-0 text-gray-400" />
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Lokasi</label>
-                                                <p className="mt-1 text-sm whitespace-pre-wrap text-gray-900 dark:text-white">
+                                                <p className="mt-1 whitespace-pre-wrap text-sm text-gray-900 dark:text-white">
                                                     {communityClub.location}
                                                 </p>
                                             </div>
