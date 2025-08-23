@@ -6,15 +6,12 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, News } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, Calendar, Clock, Edit, Eye, Plus, Star, Tag, Trash2, User, Users } from 'lucide-react';
-import React from 'react';
 
 interface ShowNewsProps {
     news: News;
 }
 
 export default function ShowNews({ news }: ShowNewsProps) {
-    const [deleting, setDeleting] = React.useState(false);
-
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin' },
         { title: 'Berita', href: '/admin/news' },
@@ -23,24 +20,7 @@ export default function ShowNews({ news }: ShowNewsProps) {
 
     const handleDelete = () => {
         if (confirm(`Apakah Anda yakin ingin menghapus artikel "${news.title}"?`)) {
-            setDeleting(true);
-            router.delete(route('admin.news.destroy', news.slug), {
-                onFinish: () => setDeleting(false),
-            });
-        }
-    };
-
-    const handleShare = async () => {
-        const url = route('news.show', news.slug);
-        if (navigator.share) {
-            await navigator.share({
-                title: news.title,
-                text: news.excerpt,
-                url: url,
-            });
-        } else {
-            await navigator.clipboard.writeText(url);
-            // Could add toast notification here
+            router.delete(route('admin.news.destroy', news.slug));
         }
     };
 

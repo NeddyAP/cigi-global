@@ -56,7 +56,7 @@ export default function AdminCommunityClubsIndex({ communityClubs, filters = {} 
             key: 'name',
             header: 'Komunitas',
             sortable: true,
-            render: (club: any) => (
+            render: (club: CommunityClub) => (
                 <div className="flex items-center">
                     {club.image && (
                         <div className="h-10 w-10 flex-shrink-0">
@@ -74,7 +74,7 @@ export default function AdminCommunityClubsIndex({ communityClubs, filters = {} 
             key: 'type',
             header: 'Tipe',
             sortable: true,
-            render: (club: any) => (
+            render: (club: CommunityClub) => (
                 <span className={`inline-flex rounded-full border px-2 py-1 text-xs font-semibold ${getTypeColor(club.type)}`}>{club.type}</span>
             ),
         },
@@ -82,7 +82,7 @@ export default function AdminCommunityClubsIndex({ communityClubs, filters = {} 
             key: 'contact_person',
             header: 'Kontak',
             sortable: true,
-            render: (club: any) => (
+            render: (club: CommunityClub) => (
                 <div>
                     <div className="text-sm text-white">{club.contact_person || '-'}</div>
                     <div className="text-sm text-zinc-400">{club.contact_phone || '-'}</div>
@@ -92,13 +92,13 @@ export default function AdminCommunityClubsIndex({ communityClubs, filters = {} 
         {
             key: 'location',
             header: 'Lokasi',
-            render: (club: any) => <div className="max-w-xs truncate text-sm text-zinc-300">{club.location || '-'}</div>,
+            render: (club: CommunityClub) => <div className="max-w-xs truncate text-sm text-zinc-300">{club.location || '-'}</div>,
         },
         {
             key: 'is_active',
             header: 'Status',
             sortable: true,
-            render: (club: any) => (
+            render: (club: CommunityClub) => (
                 <span
                     className={`inline-flex rounded-full border px-2 py-1 text-xs font-semibold ${
                         club.is_active ? 'border-green-500/30 bg-green-500/20 text-green-400' : 'border-red-500/30 bg-red-500/20 text-red-400'
@@ -113,13 +113,13 @@ export default function AdminCommunityClubsIndex({ communityClubs, filters = {} 
             header: 'Urutan',
             sortable: true,
             className: 'text-center',
-            render: (club: any) => <div className="text-center text-zinc-300">{club.sort_order}</div>,
+            render: (club: CommunityClub) => <div className="text-center text-zinc-300">{club.sort_order}</div>,
         },
         {
             key: 'actions',
             header: 'Aksi',
             className: 'text-right',
-            render: (club: any) => (
+            render: (club: CommunityClub) => (
                 <div className="flex items-center justify-end space-x-2">
                     <Link
                         href={route('admin.community-clubs.show', club.slug)}

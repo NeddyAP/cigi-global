@@ -95,7 +95,7 @@ class NewsController extends Controller
         }
 
         // Set published_at if publishing
-        if ($validated['is_published'] && !$validated['published_at']) {
+        if ($validated['is_published'] && ! $validated['published_at']) {
             $validated['published_at'] = now();
         }
 
@@ -133,7 +133,7 @@ class NewsController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:news,slug,' . $news->id,
+            'slug' => 'nullable|string|max:255|unique:news,slug,'.$news->id,
             'excerpt' => 'nullable|string',
             'content' => 'required|string',
             'featured_image' => 'nullable|string|max:255',
@@ -150,7 +150,7 @@ class NewsController extends Controller
         }
 
         // Set published_at if publishing for the first time
-        if ($validated['is_published'] && !$news->is_published && !$validated['published_at']) {
+        if ($validated['is_published'] && ! $news->is_published && ! $validated['published_at']) {
             $validated['published_at'] = now();
         }
 

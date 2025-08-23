@@ -46,7 +46,7 @@ export default function AdminBusinessUnitsIndex({ businessUnits, filters = {} }:
             header: 'Unit Bisnis',
             sortable: true,
             searchable: true,
-            render: (unit: any) => (
+            render: (unit: BusinessUnit) => (
                 <div className="flex items-center">
                     {unit.image && (
                         <div className="h-10 w-10 flex-shrink-0">
@@ -63,7 +63,7 @@ export default function AdminBusinessUnitsIndex({ businessUnits, filters = {} }:
         {
             key: 'contact_info',
             header: 'Kontak',
-            render: (unit: any) => (
+            render: (unit: BusinessUnit) => (
                 <div>
                     <div className="text-sm text-white">{unit.contact_phone || '-'}</div>
                     <div className="text-sm text-zinc-400">{unit.contact_email || '-'}</div>
@@ -74,7 +74,7 @@ export default function AdminBusinessUnitsIndex({ businessUnits, filters = {} }:
             key: 'is_active',
             header: 'Status',
             sortable: true,
-            render: (unit: any) => (
+            render: (unit: BusinessUnit) => (
                 <span
                     className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
                         unit.is_active
@@ -91,13 +91,13 @@ export default function AdminBusinessUnitsIndex({ businessUnits, filters = {} }:
             header: 'Urutan',
             sortable: true,
             className: 'text-center',
-            render: (unit: any) => <div className="text-center text-zinc-300">{unit.sort_order}</div>,
+            render: (unit: BusinessUnit) => <div className="text-center text-zinc-300">{unit.sort_order}</div>,
         },
         {
             key: 'created_at',
             header: 'Dibuat',
             sortable: true,
-            render: (unit: any) => (
+            render: (unit: BusinessUnit) => (
                 <div className="text-sm text-zinc-300">{unit.created_at ? new Date(unit.created_at).toLocaleDateString('id-ID') : '-'}</div>
             ),
         },
@@ -105,7 +105,7 @@ export default function AdminBusinessUnitsIndex({ businessUnits, filters = {} }:
             key: 'actions',
             header: 'Aksi',
             className: 'text-right',
-            render: (unit: any) => (
+            render: (unit: BusinessUnit) => (
                 <div className="flex items-center justify-end space-x-2">
                     <Link
                         href={route('admin.business-units.show', unit.slug)}

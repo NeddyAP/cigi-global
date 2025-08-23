@@ -73,7 +73,7 @@ class Media extends Model
             $bytes /= 1024;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
 
     /**
@@ -112,7 +112,7 @@ class Media extends Model
      */
     public function scopeOfType($query, string $type)
     {
-        return $query->where('mime_type', 'like', $type . '%');
+        return $query->where('mime_type', 'like', $type.'%');
     }
 
     /**
@@ -129,10 +129,10 @@ class Media extends Model
     public function scopeSearch($query, string $search)
     {
         return $query->where(function ($query) use ($search) {
-            $query->where('filename', 'like', '%' . $search . '%')
-                ->orWhere('original_filename', 'like', '%' . $search . '%')
-                ->orWhere('title', 'like', '%' . $search . '%')
-                ->orWhere('alt_text', 'like', '%' . $search . '%');
+            $query->where('filename', 'like', '%'.$search.'%')
+                ->orWhere('original_filename', 'like', '%'.$search.'%')
+                ->orWhere('title', 'like', '%'.$search.'%')
+                ->orWhere('alt_text', 'like', '%'.$search.'%');
         });
     }
 

@@ -4,7 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem, ContactMessage } from '@/types';
+import type { ContactMessage } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Archive, Eye, Inbox, Mail, MailCheck, MailOpen, Phone, Search, Send, Shield, Trash2, User } from 'lucide-react';
 import { useState } from 'react';
@@ -37,13 +37,8 @@ interface ContactMessagesIndexProps {
     };
 }
 
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/admin' },
-    { title: 'Message', href: '/admin/contact-messages' },
-];
-
 export default function ContactMessagesIndex({ contactMessages, stats, filters }: ContactMessagesIndexProps) {
-    const { flash } = usePage().props as any;
+    const { flash } = usePage().props as { flash?: { success?: string } };
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [searchTerm, setSearchTerm] = useState(filters.search || '');
     const [statusFilter, setStatusFilter] = useState(filters.status || 'all');

@@ -19,9 +19,9 @@ export interface FilterField {
 }
 
 export interface AdvancedFiltersProps {
-    filters: Record<string, any>;
+    filters: Record<string, unknown>;
     fields: FilterField[];
-    onFilterChange?: (filters: Record<string, any>) => void;
+    onFilterChange?: (filters: Record<string, unknown>) => void;
     routeName?: string;
     searchPlaceholder?: string;
     className?: string;
@@ -51,21 +51,27 @@ export function AdvancedFilters({
     const handleSearch = () => {
         const updatedFilters = {
             ...localFilters,
-            search: searchQuery.trim() || undefined,
+            search: String(searchQuery).trim() || undefined,
             page: 1, // Reset to first page on search
         };
         
         // Remove empty filters
-        Object.keys(updatedFilters).forEach((key) => {
-            if (!updatedFilters[key as keyof typeof updatedFilters]) {
-                delete (updatedFilters as any)[key];
-            }
-        });
+            Object.keys(updatedFilters).forEach((key) => {
+                if (!updatedFilters[key as keyof typeof updatedFilters]) {
+                    delete (updatedFilters as Record<string, unknown>)[key];
+                }
+            });
 
         if (onFilterChange) {
             onFilterChange(updatedFilters);
         } else if (routeName) {
-            router.get(route(routeName), updatedFilters, { 
+            const queryParams: Record<string, string> = {};
+            Object.entries(updatedFilters).forEach(([key, value]) => {
+                if (value !== null && value !== undefined && value !== '') {
+                    queryParams[key] = String(value);
+                }
+            });
+            router.get(route(routeName), queryParams, { 
                 preserveState,
                 preserveScroll: true,
             });
@@ -86,14 +92,14 @@ export function AdvancedFilters({
             onFilterChange(updatedFilters);
         } else if (routeName) {
             // Remove empty filters before sending to server
-            const cleanFilters = { ...updatedFilters };
-            Object.keys(cleanFilters).forEach((key) => {
-                if (!cleanFilters[key as keyof typeof cleanFilters]) {
-                    delete (cleanFilters as any)[key];
+            
+            const queryParams: Record<string, string> = {};
+            Object.entries(updatedFilters).forEach(([key, value]) => {
+                if (value !== null && value !== undefined && value !== '') {
+                    queryParams[key] = String(value);
                 }
             });
-            
-            router.get(route(routeName), cleanFilters, { 
+            router.get(route(routeName), queryParams, { 
                 preserveState,
                 preserveScroll: true,
             });
@@ -122,7 +128,7 @@ export function AdvancedFilters({
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
                     <Input
                         placeholder={searchPlaceholder}
-                        value={searchQuery}
+                        value={String(searchQuery)}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                         className="pl-10 bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-400"
@@ -182,7 +188,7 @@ export function AdvancedFilters({
                                 
                                 {field.type === 'select' && field.options ? (
                                     <Select
-                                        value={localFilters[field.key] || 'all'}
+                                        value={String(localFilters[field.key] || 'all')}
                                         onValueChange={(value) => handleFilterChange(field.key, value)}
                                     >
                                         <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
@@ -200,7 +206,7 @@ export function AdvancedFilters({
                                 ) : (
                                     <Input
                                         placeholder={field.placeholder || `Filter by ${field.label.toLowerCase()}`}
-                                        value={localFilters[field.key] || ''}
+                                        value={String(localFilters[field.key] || '')}
                                         onChange={(e) => handleFilterChange(field.key, e.target.value)}
                                         className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-400"
                                     />
@@ -218,7 +224,7 @@ export function AdvancedFilters({
                     
                     {searchQuery && (
                         <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 px-3 py-1 text-sm text-amber-400">
-                            Search: "{searchQuery}"
+                            Search: "{String(searchQuery)}"
                             <button
                                 onClick={() => {
                                     setSearchQuery('');
@@ -242,7 +248,7 @@ export function AdvancedFilters({
                                 key={key}
                                 className="inline-flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-sm text-blue-400"
                             >
-                                {field?.label}: {displayValue}
+                            {field?.label}: {String(displayValue)}
                                 <button
                                     onClick={() => handleFilterChange(key, '')}
                                     className="text-blue-400 hover:text-blue-300"

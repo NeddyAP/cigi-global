@@ -12,7 +12,7 @@ interface ContactMessageShowProps {
 }
 
 export default function ContactMessageShow({ contactMessage }: ContactMessageShowProps) {
-    const { flash } = usePage().props as any;
+    const { flash } = usePage().props as { flash?: { success?: string } };
     const [status, setStatus] = useState(contactMessage.status);
 
     const handleStatusChange = (newStatus: string) => {

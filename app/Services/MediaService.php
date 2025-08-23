@@ -68,7 +68,7 @@ class MediaService
      */
     public function processImage(Media $media): void
     {
-        if (!$media->is_image) {
+        if (! $media->is_image) {
             return;
         }
 
@@ -99,7 +99,7 @@ class MediaService
 
             // Ensure directory exists
             $thumbnailDir = dirname($fullThumbnailPath);
-            if (!is_dir($thumbnailDir)) {
+            if (! is_dir($thumbnailDir)) {
                 mkdir($thumbnailDir, 0755, true);
             }
 
@@ -110,7 +110,7 @@ class MediaService
             $media->update(['thumbnail_path' => $thumbnailPath]);
         } catch (\Exception $e) {
             // Log error but don't fail the upload
-            \Log::error('Failed to create thumbnail for media ID: ' . $media->id, ['error' => $e->getMessage()]);
+            \Log::error('Failed to create thumbnail for media ID: '.$media->id, ['error' => $e->getMessage()]);
         }
     }
 
@@ -129,7 +129,7 @@ class MediaService
                 $image->toJpeg(85)->save($path);
             }
         } catch (\Exception $e) {
-            \Log::error('Failed to optimize image: ' . $path, ['error' => $e->getMessage()]);
+            \Log::error('Failed to optimize image: '.$path, ['error' => $e->getMessage()]);
         }
     }
 
@@ -151,7 +151,7 @@ class MediaService
             // Delete database record
             return $media->delete();
         } catch (\Exception $e) {
-            \Log::error('Failed to delete media ID: ' . $media->id, ['error' => $e->getMessage()]);
+            \Log::error('Failed to delete media ID: '.$media->id, ['error' => $e->getMessage()]);
 
             return false;
         }
@@ -190,15 +190,15 @@ class MediaService
     {
         $query = Media::with(['uploader']);
 
-        if (!empty($criteria['search'])) {
+        if (! empty($criteria['search'])) {
             $query->search($criteria['search']);
         }
 
-        if (!empty($criteria['type'])) {
+        if (! empty($criteria['type'])) {
             $query->ofType($criteria['type']);
         }
 
-        if (!empty($criteria['uploader_id'])) {
+        if (! empty($criteria['uploader_id'])) {
             $query->where('uploaded_by', $criteria['uploader_id']);
         }
 
@@ -228,7 +228,7 @@ class MediaService
             throw new \Exception('File size exceeds 10MB limit.');
         }
 
-        if (!in_array($file->getMimeType(), $allowedMimes)) {
+        if (! in_array($file->getMimeType(), $allowedMimes)) {
             throw new \Exception('File type not allowed.');
         }
     }

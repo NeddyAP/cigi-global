@@ -24,6 +24,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Media Manager', href: '/admin/media' },
 ];
 
+interface PageLink {
+    url: string | null;
+    active: boolean;
+    label: string;
+}
+
 interface MediaPageProps {
     media: {
         data: Media[];
@@ -98,15 +104,6 @@ export default function MediaIndex({ media, filters }: MediaPageProps) {
                 },
             },
         );
-    };
-
-    const handleBulkMove = (folderId: string) => {
-        // Function removed - folder functionality disabled
-    };
-
-    const renderFolderBreadcrumbs = () => {
-        // Function removed - folder functionality disabled
-        return null;
     };
 
     return (

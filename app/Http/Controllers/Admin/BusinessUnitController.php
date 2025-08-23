@@ -88,7 +88,7 @@ class BusinessUnitController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:business_units,slug,' . $businessUnit->id,
+            'slug' => 'nullable|string|max:255|unique:business_units,slug,'.$businessUnit->id,
             'description' => 'nullable|string',
             'services' => 'nullable|string',
             'image' => 'nullable|string|max:255',

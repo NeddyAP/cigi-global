@@ -94,7 +94,7 @@ export default function AdminNewsIndex({ news, categories = [], filters = {} }: 
             key: 'title',
             header: 'Artikel',
             sortable: true,
-            render: (newsItem: any) => (
+            render: (newsItem: News) => (
                 <div className="flex items-start">
                     {newsItem.featured_image && (
                         <div className="mr-4 h-12 w-16 flex-shrink-0">
@@ -116,7 +116,7 @@ export default function AdminNewsIndex({ news, categories = [], filters = {} }: 
             key: 'category',
             header: 'Kategori',
             sortable: true,
-            render: (newsItem: any) => (
+            render: (newsItem: News) => (
                 <span className={`inline-flex rounded-full border px-2 py-1 text-xs font-semibold ${getCategoryColor(newsItem.category)}`}>
                     {newsItem.category.charAt(0).toUpperCase() + newsItem.category.slice(1)}
                 </span>
@@ -125,13 +125,13 @@ export default function AdminNewsIndex({ news, categories = [], filters = {} }: 
         {
             key: 'author',
             header: 'Penulis',
-            render: (newsItem: any) => <div className="text-sm text-white">{newsItem.author?.name || 'Unknown'}</div>,
+            render: (newsItem: News) => <div className="text-sm text-white">{newsItem.author?.name || 'Unknown'}</div>,
         },
         {
             key: 'is_published',
             header: 'Status',
             sortable: true,
-            render: (newsItem: any) => (
+            render: (newsItem: News) => (
                 <div className="flex items-center">
                     {newsItem.is_published ? (
                         <>
@@ -151,7 +151,7 @@ export default function AdminNewsIndex({ news, categories = [], filters = {} }: 
             key: 'published_at',
             header: 'Tanggal',
             sortable: true,
-            render: (newsItem: any) => (
+            render: (newsItem: News) => (
                 <div className="text-sm text-zinc-300">
                     {newsItem.published_at ? formatDate(newsItem.published_at) : formatDate(newsItem.created_at)}
                 </div>
@@ -161,7 +161,7 @@ export default function AdminNewsIndex({ news, categories = [], filters = {} }: 
             key: 'views_count',
             header: 'Views',
             className: 'text-center',
-            render: (newsItem: any) => (
+            render: (newsItem: News) => (
                 <div className="flex items-center justify-center text-sm text-zinc-400">
                     <Users className="mr-1 h-4 w-4" />
                     {newsItem.views_count || 0}
@@ -172,7 +172,7 @@ export default function AdminNewsIndex({ news, categories = [], filters = {} }: 
             key: 'actions',
             header: 'Aksi',
             className: 'text-right',
-            render: (newsItem: any) => (
+            render: (newsItem: News) => (
                 <div className="flex items-center justify-end space-x-2">
                     <Link
                         href={route('admin.news.show', newsItem.slug)}

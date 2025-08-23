@@ -17,9 +17,9 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Upload Files', href: '/admin/media/create' },
 ];
 
-interface MediaUploadProps {}
+// No props needed for this component
 
-export default function MediaUpload({}: MediaUploadProps) {
+export default function MediaUpload() {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
     const { data, setData, post, processing, errors } = useForm({

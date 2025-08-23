@@ -20,7 +20,7 @@ it('can view about page', function () {
 
     $response->assertOk();
     $response->assertInertia(
-        fn($page) => $page
+        fn ($page) => $page
             ->component('public/about')
             ->has('globalVars')
             ->where('globalVars.company_name', 'CIGI Global')
@@ -46,7 +46,7 @@ it('can view contact page', function () {
 
     $response->assertOk();
     $response->assertInertia(
-        fn($page) => $page
+        fn ($page) => $page
             ->component('public/contact')
             ->has('globalVars')
             ->where('globalVars.company_name', 'CIGI Global')
@@ -59,7 +59,7 @@ it('about page shows correct metadata', function () {
 
     $response->assertOk();
     $response->assertInertia(
-        fn($page) => $page
+        fn ($page) => $page
             ->component('public/about')
     );
 });
@@ -69,7 +69,7 @@ it('contact page shows correct metadata', function () {
 
     $response->assertOk();
     $response->assertInertia(
-        fn($page) => $page
+        fn ($page) => $page
             ->component('public/contact')
     );
 });

@@ -2,14 +2,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { router } from '@inertiajs/react';
-import { ChevronLeft, ChevronRight, MoreHorizontal, Edit2, Trash2, Eye } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Edit2, Trash2, Eye } from 'lucide-react';
 import { useState } from 'react';
 
-export interface ColumnDef<T = any> {
+export interface ColumnDef<T = unknown> {
     key?: string;
     accessorKey?: string;
     header: string;
-    cell?: (props: { getValue: () => any; row: { original: T } }) => React.ReactNode;
+    cell?: (props: { getValue: () => unknown; row: { original: T } }) => React.ReactNode;
     render?: (item: T) => React.ReactNode;
     sortable?: boolean;
     searchable?: boolean;
@@ -30,12 +30,12 @@ export interface PaginationData {
     }>;
 }
 
-export interface DataTableProps<T = any> {
+export interface DataTableProps<T = unknown> {
     data: T[];
     columns: ColumnDef<T>[];
     pagination?: PaginationData;
     routeName?: string;
-    filters?: Record<string, any>;
+    filters?: Record<string, unknown>;
     searchPlaceholder?: string;
     className?: string;
     showSearch?: boolean;
@@ -50,7 +50,7 @@ export interface DataTableProps<T = any> {
     };
 }
 
-export function DataTable<T = any>({
+export function DataTable<T = unknown>({
     data = [],
     columns,
     pagination,
@@ -65,7 +65,7 @@ export function DataTable<T = any>({
     onRowClick,
     actions,
 }: DataTableProps<T>) {
-    const [searchQuery, setSearchQuery] = useState(filters.search || '');
+    const [searchQuery, setSearchQuery] = useState<string>(filters.search as string || '');
     const [sortConfig, setSortConfig] = useState<{
         key: string;
         direction: 'asc' | 'desc';
@@ -126,17 +126,17 @@ export function DataTable<T = any>({
         }
     };
 
-    const getCellValue = (item: T, column: ColumnDef<T>) => {
+    const getCellValue = (item: T, column: ColumnDef<T>): React.ReactNode => {
         if (column.render) {
             return column.render(item);
         }
         
         if (column.cell) {
-            const getValue = () => column.accessorKey ? (item as any)[column.accessorKey] : '';
+            const getValue = () => column.accessorKey ? (item as Record<string, unknown>)[column.accessorKey] : '';
             return column.cell({ getValue, row: { original: item } });
         }
         
-        return column.accessorKey ? (item as any)[column.accessorKey] : '';
+        return column.accessorKey ? (item as Record<string, unknown>)[column.accessorKey] as React.ReactNode ?? '' : '';
     };
 
     const generatePageNumbers = () => {

@@ -90,7 +90,7 @@ class MediaController extends Controller
 
             return redirect()->route('admin.media.index')->with('success', $message);
         } catch (\Exception $e) {
-            return back()->withErrors(['upload' => 'Upload failed: ' . $e->getMessage()]);
+            return back()->withErrors(['upload' => 'Upload failed: '.$e->getMessage()]);
         }
     }
 
@@ -144,7 +144,7 @@ class MediaController extends Controller
 
             return redirect()->route('admin.media.show', $media)->with('success', 'Media updated successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['update' => 'Update failed: ' . $e->getMessage()]);
+            return back()->withErrors(['update' => 'Update failed: '.$e->getMessage()]);
         }
     }
 
@@ -158,7 +158,7 @@ class MediaController extends Controller
 
             return back()->with('success', 'Media deleted successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['delete' => 'Delete failed: ' . $e->getMessage()]);
+            return back()->withErrors(['delete' => 'Delete failed: '.$e->getMessage()]);
         }
     }
 
@@ -179,7 +179,7 @@ class MediaController extends Controller
         }
 
         // Default to images only if no type specified
-        if (!$request->filled('type') || $request->type === 'all-types') {
+        if (! $request->filled('type') || $request->type === 'all-types') {
             $query->images();
         }
 
@@ -256,9 +256,7 @@ class MediaController extends Controller
 
             return back()->with('success', $message);
         } catch (\Exception $e) {
-            return back()->withErrors(['bulk_delete' => 'Bulk delete failed: ' . $e->getMessage()]);
+            return back()->withErrors(['bulk_delete' => 'Bulk delete failed: '.$e->getMessage()]);
         }
     }
-
-
 }
