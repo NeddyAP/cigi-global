@@ -5,7 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PublicLayout from '@/layouts/public-layout';
 import { type CommunityClub } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Calendar, ChevronRight, Filter, MapPin, Search, Users } from 'lucide-react';
+import { Calendar, ChevronRight, MapPin, Search, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 interface CommunityClubsIndexProps {
@@ -16,28 +16,6 @@ interface CommunityClubsIndexProps {
 export default function CommunityClubsIndex({ communityClubs, clubsByType }: CommunityClubsIndexProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedType, setSelectedType] = useState<string>('all');
-    const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
-
-    // Get all unique activities
-    const allActivities = useMemo(() => {
-        const activities = new Set<string>();
-        communityClubs.forEach((club) => {
-            if (club.activities) {
-                try {
-                    const clubActivities = JSON.parse(club.activities);
-                    if (Array.isArray(clubActivities)) {
-                        clubActivities.forEach((activity) => activities.add(activity));
-                    }
-                } catch {
-                    // If not valid JSON, treat as comma-separated string
-                    club.activities.split(',').forEach((activity) => {
-                        activities.add(activity.trim());
-                    });
-                }
-            }
-        });
-        return Array.from(activities);
-    }, [communityClubs]);
 
     const clubTypes = Object.keys(clubsByType);
 
@@ -60,26 +38,8 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
             );
         }
 
-        // Filter by activities
-        if (selectedActivities.length > 0) {
-            filtered = filtered.filter((club) => {
-                if (!club.activities) return false;
-                try {
-                    const clubActivities = JSON.parse(club.activities);
-                    return selectedActivities.some((activity) => clubActivities.includes(activity));
-                } catch {
-                    const clubActivities = club.activities.split(',').map((a) => a.trim());
-                    return selectedActivities.some((activity) => clubActivities.includes(activity));
-                }
-            });
-        }
-
         return filtered;
-    }, [communityClubs, selectedType, searchQuery, selectedActivities]);
-
-    const toggleActivity = (activity: string) => {
-        setSelectedActivities((prev) => (prev.includes(activity) ? prev.filter((a) => a !== activity) : [...prev, activity]));
-    };
+    }, [communityClubs, selectedType, searchQuery]);
 
     const getClubActivities = (club: CommunityClub): string[] => {
         if (!club.activities) return [];
@@ -101,8 +61,8 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
             {/* Hero Section */}
             <section className="relative overflow-hidden py-20 md:py-32">
                 <div className="glass-hero-overlay absolute inset-0"></div>
-                <div className="container relative mx-auto px-4 text-center sm:px-6 lg:px-8">
-                    <h1 className="text-shadow-lg mb-6 text-4xl font-bold text-white md:text-6xl">Komunitas</h1>
+                <div className="relative container mx-auto px-4 text-center sm:px-6 lg:px-8">
+                    <h1 className="mb-6 text-4xl font-bold text-white text-shadow-lg md:text-6xl">Komunitas</h1>
                     <p className="text-shadow mx-auto mb-8 max-w-3xl text-xl text-white/90 md:text-2xl">
                         Bergabunglah dengan berbagai komunitas yang memiliki minat dan tujuan yang sama untuk berkembang dan berinovasi bersama.
                     </p>
@@ -110,7 +70,7 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
                     {/* Search Bar */}
                     <div className="mx-auto max-w-md">
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
+                            <Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
                             <Input
                                 type="text"
                                 placeholder="Cari komunitas..."
@@ -129,7 +89,7 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
                     {/* Type Tabs */}
                     <div className="mb-12">
                         <Tabs value={selectedType} onValueChange={setSelectedType} className="w-full">
-                            <TabsList className="glass-card grid h-auto w-full grid-cols-2 gap-2 p-2 lg:grid-cols-4">
+                            <TabsList className="grid h-auto w-full grid-cols-2 gap-2 glass-card p-2 lg:grid-cols-4">
                                 <TabsTrigger value="all" className="text-white/70 data-[state=active]:bg-white/20 data-[state=active]:text-white">
                                     Semua ({communityClubs.length})
                                 </TabsTrigger>
@@ -146,44 +106,6 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
                         </Tabs>
                     </div>
 
-                    {/* Activities Filter */}
-                    {allActivities.length > 0 && (
-                        <div className="mb-12">
-                            <div className="glass-card rounded-xl p-6">
-                                <div className="mb-4 flex items-center">
-                                    <Filter className="mr-2 h-5 w-5 text-white" />
-                                    <h3 className="text-lg font-semibold text-white">Filter berdasarkan aktivitas:</h3>
-                                </div>
-                                <div className="flex flex-wrap gap-2">
-                                    {allActivities.map((activity) => (
-                                        <Badge
-                                            key={activity}
-                                            variant={selectedActivities.includes(activity) ? 'default' : 'outline'}
-                                            className={`cursor-pointer transition-all duration-200 ${
-                                                selectedActivities.includes(activity)
-                                                    ? 'bg-green-500 text-white'
-                                                    : 'glass-button border-white/30 text-white hover:bg-white/20'
-                                            }`}
-                                            onClick={() => toggleActivity(activity)}
-                                        >
-                                            {activity}
-                                        </Badge>
-                                    ))}
-                                </div>
-                                {selectedActivities.length > 0 && (
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => setSelectedActivities([])}
-                                        className="mt-3 text-white/80 hover:bg-white/10 hover:text-white"
-                                    >
-                                        Hapus semua filter
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
                     {/* Results Count */}
                     <div className="mb-8">
                         <p className="text-white/80">
@@ -195,7 +117,7 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
                     {filteredClubs.length > 0 ? (
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {filteredClubs.map((club) => (
-                                <div key={club.id} className="glass-card-hover group">
+                                <div key={club.id} className="group glass-card-hover">
                                     {/* Image */}
                                     {club.image && (
                                         <div className="relative h-48 overflow-hidden rounded-t-xl">
@@ -205,7 +127,7 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
                                                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                                            <div className="absolute right-4 top-4">
+                                            <div className="absolute top-4 right-4">
                                                 <Badge className="bg-green-500 text-white">{club.type}</Badge>
                                             </div>
                                         </div>
@@ -261,7 +183,7 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
                                         {/* Action Button */}
                                         <Link
                                             href={route('community-clubs.show', club.slug)}
-                                            className="glass-button inline-flex w-full items-center justify-center rounded-lg px-4 py-2 font-medium text-white transition-all duration-200 hover:scale-105"
+                                            className="inline-flex w-full items-center justify-center glass-button rounded-lg px-4 py-2 font-medium text-white transition-all duration-200 hover:scale-105"
                                         >
                                             Lihat Detail
                                             <ChevronRight className="ml-2 h-4 w-4" />
@@ -272,7 +194,7 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
                         </div>
                     ) : (
                         <div className="py-16 text-center">
-                            <div className="glass-card mx-auto max-w-md rounded-xl p-8">
+                            <div className="mx-auto max-w-md glass-card rounded-xl p-8">
                                 <Search className="mx-auto mb-4 h-16 w-16 text-white/50" />
                                 <h3 className="mb-2 text-xl font-semibold text-white">Tidak ditemukan hasil</h3>
                                 <p className="mb-4 text-white/70">Tidak ada komunitas yang sesuai dengan pencarian Anda.</p>
@@ -281,7 +203,6 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
                                     onClick={() => {
                                         setSearchQuery('');
                                         setSelectedType('all');
-                                        setSelectedActivities([]);
                                     }}
                                     className="text-white hover:bg-white/10"
                                 >

@@ -7,16 +7,17 @@ import { Link, usePage } from '@inertiajs/react';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-interface PublicHeaderProps {
-    businessUnits: BusinessUnit[];
-    communityClubs: CommunityClub[];
-}
-
-export default function PublicHeader({ businessUnits = [], communityClubs = [] }: PublicHeaderProps) {
+export default function PublicHeader() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
-    const { url } = usePage();
+    const { url, props } = usePage<{
+        navBusinessUnits: BusinessUnit[];
+        navCommunityClubs: CommunityClub[];
+    }>();
+
+    const businessUnits = props.navBusinessUnits || [];
+    const communityClubs = props.navCommunityClubs || [];
 
     // Handle scroll effect
     useEffect(() => {
@@ -157,7 +158,7 @@ export default function PublicHeader({ businessUnits = [], communityClubs = [] }
                                                                         {club.image ? (
                                                                             <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg transition-transform duration-300 group-hover:scale-110">
                                                                                 <img
-                                                                                    src={club.image}
+                                                                                    src={`/${club.image}`}
                                                                                     alt={club.name}
                                                                                     className="h-full w-full object-cover"
                                                                                 />
@@ -217,7 +218,7 @@ export default function PublicHeader({ businessUnits = [], communityClubs = [] }
                                                                         {unit.image ? (
                                                                             <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg transition-transform duration-300 group-hover:scale-110">
                                                                                 <img
-                                                                                    src={unit.image}
+                                                                                    src={`/${unit.image}`}
                                                                                     alt={unit.name}
                                                                                     className="h-full w-full object-cover"
                                                                                 />

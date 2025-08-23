@@ -26,8 +26,6 @@ import { useState } from 'react';
 interface HomeProps {
     globalVars: GlobalVars;
     galleryMedia: Media[];
-    navBusinessUnits: BusinessUnit[];
-    navCommunityClubs: CommunityClub[];
     businessUnits: BusinessUnit[];
     communityClubs: CommunityClub[];
     featuredNews: News[];
@@ -37,8 +35,6 @@ interface HomeProps {
 export default function Home({
     globalVars,
     galleryMedia = [],
-    navBusinessUnits = [],
-    navCommunityClubs = [],
     businessUnits = [],
     communityClubs = [],
     featuredNews = [],
@@ -61,12 +57,7 @@ export default function Home({
     };
 
     return (
-        <PublicLayout
-            title="Beranda"
-            description={globalVars.company_description || 'Membangun masa depan bersama melalui inovasi dan kolaborasi'}
-            businessUnits={navBusinessUnits}
-            communityClubs={navCommunityClubs}
-        >
+        <PublicLayout title="Beranda" description={globalVars.company_description || 'Membangun masa depan bersama melalui inovasi dan kolaborasi'}>
             <Head title="Beranda - CIGI Global" />
 
             {/* 1. Hero Section */}

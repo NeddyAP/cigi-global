@@ -38,12 +38,12 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                     <div className="glass-hero-overlay absolute inset-0"></div>
                 </div>
 
-                <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-4xl">
                         {/* Back Button */}
                         <Link
                             href={route('community-clubs.index')}
-                            className="glass-button mb-8 inline-flex items-center rounded-lg px-4 py-2 text-white"
+                            className="mb-8 inline-flex items-center glass-button rounded-lg px-4 py-2 text-white"
                         >
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Kembali ke Komunitas
@@ -53,7 +53,7 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                             <Badge className="mr-4 bg-green-500 text-white">{communityClub.type}</Badge>
                         </div>
 
-                        <h1 className="text-shadow-lg mb-6 text-4xl font-bold text-white md:text-6xl">{communityClub.name}</h1>
+                        <h1 className="mb-6 text-4xl font-bold text-white text-shadow-lg md:text-6xl">{communityClub.name}</h1>
 
                         {communityClub.description && (
                             <p className="text-shadow text-xl leading-relaxed text-white/90 md:text-2xl">{communityClub.description}</p>
@@ -77,7 +77,7 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                                     </h2>
                                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                         {activities.map((activity, index) => (
-                                            <div key={index} className="glass-button flex items-center rounded-lg p-4">
+                                            <div key={index} className="flex items-center glass-button rounded-lg p-4">
                                                 <Activity className="mr-3 h-5 w-5 flex-shrink-0 text-green-400" />
                                                 <span className="font-medium text-white">{activity}</span>
                                             </div>
@@ -94,12 +94,12 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                                         Jadwal Pertemuan
                                     </h2>
                                     <div className="space-y-4">
-                                        <div className="glass-button flex items-center rounded-lg p-4">
+                                        <div className="flex items-center glass-button rounded-lg p-4">
                                             <Clock className="mr-3 h-5 w-5 text-blue-400" />
                                             <span className="text-white">{communityClub.meeting_schedule}</span>
                                         </div>
                                         {communityClub.location && (
-                                            <div className="glass-button flex items-center rounded-lg p-4">
+                                            <div className="flex items-center glass-button rounded-lg p-4">
                                                 <MapPin className="mr-3 h-5 w-5 text-red-400" />
                                                 <span className="text-white">{communityClub.location}</span>
                                             </div>
@@ -196,7 +196,7 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                                 <Separator className="my-6 bg-white/20" />
 
                                 <div className="space-y-3">
-                                    <Button asChild className="glass-button w-full border border-white/30 text-white hover:bg-white/20">
+                                    <Button asChild className="w-full glass-button border border-white/30 text-white hover:bg-white/20">
                                         <a
                                             href={`mailto:${communityClub.contact_email || 'info@cigi-global.com'}?subject=Bergabung dengan ${communityClub.name}`}
                                         >
@@ -209,7 +209,7 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                                         <Button
                                             asChild
                                             variant="outline"
-                                            className="glass-button w-full border border-white/30 text-white hover:bg-white/10"
+                                            className="w-full glass-button border border-white/30 text-white hover:bg-white/10"
                                         >
                                             <a href={`tel:${communityClub.contact_phone}`}>
                                                 <Phone className="mr-2 h-4 w-4" />
@@ -224,13 +224,13 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                             <div className="glass-card rounded-xl p-6">
                                 <h3 className="mb-4 text-xl font-bold text-white">Info Komunitas</h3>
                                 <div className="space-y-4">
-                                    <div className="glass-button flex items-center justify-between rounded-lg p-3">
+                                    <div className="flex items-center justify-between glass-button rounded-lg p-3">
                                         <span className="text-white/70">Tipe Komunitas</span>
                                         <Badge className="bg-green-500 text-white">{communityClub.type}</Badge>
                                     </div>
 
                                     {activities.length > 0 && (
-                                        <div className="glass-button flex items-center justify-between rounded-lg p-3">
+                                        <div className="flex items-center justify-between glass-button rounded-lg p-3">
                                             <span className="text-white/70">Jumlah Aktivitas</span>
                                             <span className="font-semibold text-white">{activities.length}</span>
                                         </div>
@@ -259,7 +259,7 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                             <h2 className="mb-12 text-center text-3xl font-bold text-white">Komunitas Terkait</h2>
                             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                                 {relatedClubs.slice(0, 3).map((club) => (
-                                    <Link key={club.id} href={route('community-clubs.show', club.slug)} className="glass-card-hover group">
+                                    <Link key={club.id} href={route('community-clubs.show', club.slug)} className="group glass-card-hover">
                                         {club.image && (
                                             <div className="relative h-32 overflow-hidden rounded-t-xl">
                                                 <img
@@ -267,7 +267,7 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                                                     alt={club.name}
                                                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                                 />
-                                                <div className="absolute right-2 top-2">
+                                                <div className="absolute top-2 right-2">
                                                     <Badge className="bg-green-500 text-xs text-white">{club.type}</Badge>
                                                 </div>
                                             </div>

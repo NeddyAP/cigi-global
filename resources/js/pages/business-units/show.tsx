@@ -28,18 +28,18 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     <div className="glass-hero-overlay absolute inset-0"></div>
                 </div>
 
-                <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-4xl">
                         {/* Back Button */}
                         <Link
                             href={route('business-units.index')}
-                            className="glass-button mb-8 inline-flex items-center rounded-lg px-4 py-2 text-white"
+                            className="mb-8 inline-flex items-center glass-button rounded-lg px-4 py-2 text-white"
                         >
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Kembali ke Unit Bisnis
                         </Link>
 
-                        <h1 className="text-shadow-lg mb-6 text-4xl font-bold text-white md:text-6xl">{businessUnit.name}</h1>
+                        <h1 className="mb-6 text-4xl font-bold text-white text-shadow-lg md:text-6xl">{businessUnit.name}</h1>
 
                         {businessUnit.description && (
                             <p className="text-shadow text-xl leading-relaxed text-white/90 md:text-2xl">{businessUnit.description}</p>
@@ -63,7 +63,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                                     </h2>
                                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                         {services.map((service, index) => (
-                                            <div key={index} className="glass-button flex items-center rounded-lg p-4">
+                                            <div key={index} className="flex items-center glass-button rounded-lg p-4">
                                                 <CheckCircle className="mr-3 h-5 w-5 flex-shrink-0 text-green-400" />
                                                 <span className="font-medium text-white">{service}</span>
                                             </div>
@@ -81,7 +81,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                                     </h2>
                                     <div className="space-y-3">
                                         {operatingHours.map((hour, index) => (
-                                            <div key={index} className="glass-button flex items-center rounded-lg p-3">
+                                            <div key={index} className="flex items-center glass-button rounded-lg p-3">
                                                 <Clock className="mr-3 h-4 w-4 text-blue-400" />
                                                 <span className="text-white">{hour}</span>
                                             </div>
@@ -169,7 +169,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
 
                                 <Separator className="my-6 bg-white/20" />
 
-                                <Button asChild className="glass-button w-full border border-white/30 text-white hover:bg-white/20">
+                                <Button asChild className="w-full glass-button border border-white/30 text-white hover:bg-white/20">
                                     <a href={`mailto:${businessUnit.contact_email || 'info@cigi-global.com'}`}>
                                         <Mail className="mr-2 h-4 w-4" />
                                         Hubungi Kami
@@ -198,7 +198,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                             <h2 className="mb-12 text-center text-3xl font-bold text-white">Unit Bisnis Terkait</h2>
                             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                                 {relatedUnits.slice(0, 3).map((unit) => (
-                                    <Link key={unit.id} href={route('business-units.show', unit.slug)} className="glass-card-hover group">
+                                    <Link key={unit.id} href={route('business-units.show', unit.slug)} className="group glass-card-hover">
                                         {unit.image && (
                                             <div className="relative h-32 overflow-hidden rounded-t-xl">
                                                 <img

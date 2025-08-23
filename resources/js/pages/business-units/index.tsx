@@ -13,20 +13,6 @@ interface BusinessUnitsIndexProps {
 
 export default function BusinessUnitsIndex({ businessUnits }: BusinessUnitsIndexProps) {
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedServices, setSelectedServices] = useState<string[]>([]);
-
-    // Get all unique services
-    const allServices = useMemo(() => {
-        const services = new Set<string>();
-        businessUnits.forEach((unit) => {
-            if (unit.services) {
-                unit.services.split(',').forEach((service) => {
-                    services.add(service.trim());
-                });
-            }
-        });
-        return Array.from(services);
-    }, [businessUnits]);
 
     // Filter business units
     const filteredUnits = useMemo(() => {
@@ -34,15 +20,9 @@ export default function BusinessUnitsIndex({ businessUnits }: BusinessUnitsIndex
             const matchesSearch =
                 unit.name.toLowerCase().includes(searchQuery.toLowerCase()) || unit.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
-            const matchesServices = selectedServices.length === 0 || selectedServices.some((service) => unit.services?.includes(service));
-
-            return matchesSearch && matchesServices;
+            return matchesSearch;
         });
-    }, [businessUnits, searchQuery, selectedServices]);
-
-    const toggleService = (service: string) => {
-        setSelectedServices((prev) => (prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service]));
-    };
+    }, [businessUnits, searchQuery]);
 
     return (
         <PublicLayout
@@ -54,8 +34,8 @@ export default function BusinessUnitsIndex({ businessUnits }: BusinessUnitsIndex
             {/* Hero Section */}
             <section className="relative overflow-hidden py-20 md:py-32">
                 <div className="glass-hero-overlay absolute inset-0"></div>
-                <div className="container relative mx-auto px-4 text-center sm:px-6 lg:px-8">
-                    <h1 className="text-shadow-lg mb-6 text-4xl font-bold text-white md:text-6xl">Unit Bisnis</h1>
+                <div className="relative container mx-auto px-4 text-center sm:px-6 lg:px-8">
+                    <h1 className="mb-6 text-4xl font-bold text-white text-shadow-lg md:text-6xl">Unit Bisnis</h1>
                     <p className="text-shadow mx-auto mb-8 max-w-3xl text-xl text-white/90 md:text-2xl">
                         Jelajahi berbagai unit bisnis kami yang melayani berbagai kebutuhan industri dengan solusi terdepan dan inovasi berkelanjutan.
                     </p>
@@ -63,7 +43,7 @@ export default function BusinessUnitsIndex({ businessUnits }: BusinessUnitsIndex
                     {/* Search Bar */}
                     <div className="mx-auto max-w-md">
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
+                            <Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
                             <Input
                                 type="text"
                                 placeholder="Cari unit bisnis..."
@@ -79,41 +59,6 @@ export default function BusinessUnitsIndex({ businessUnits }: BusinessUnitsIndex
             {/* Content Section */}
             <section className="py-16">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* Services Filter */}
-                    {allServices.length > 0 && (
-                        <div className="mb-12">
-                            <div className="glass-card rounded-xl p-6">
-                                <h3 className="mb-4 text-lg font-semibold text-white">Filter berdasarkan layanan:</h3>
-                                <div className="flex flex-wrap gap-2">
-                                    {allServices.map((service) => (
-                                        <Badge
-                                            key={service}
-                                            variant={selectedServices.includes(service) ? 'default' : 'outline'}
-                                            className={`cursor-pointer transition-all duration-200 ${
-                                                selectedServices.includes(service)
-                                                    ? 'bg-blue-500 text-white'
-                                                    : 'glass-button border-white/30 text-white hover:bg-white/20'
-                                            }`}
-                                            onClick={() => toggleService(service)}
-                                        >
-                                            {service}
-                                        </Badge>
-                                    ))}
-                                </div>
-                                {selectedServices.length > 0 && (
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => setSelectedServices([])}
-                                        className="mt-3 text-white/80 hover:bg-white/10 hover:text-white"
-                                    >
-                                        Hapus semua filter
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
                     {/* Results Count */}
                     <div className="mb-8">
                         <p className="text-white/80">
@@ -125,7 +70,7 @@ export default function BusinessUnitsIndex({ businessUnits }: BusinessUnitsIndex
                     {filteredUnits.length > 0 ? (
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {filteredUnits.map((unit) => (
-                                <div key={unit.id} className="glass-card-hover group">
+                                <div key={unit.id} className="group glass-card-hover">
                                     {/* Image */}
                                     {unit.image && (
                                         <div className="relative h-48 overflow-hidden rounded-t-xl">
@@ -189,7 +134,7 @@ export default function BusinessUnitsIndex({ businessUnits }: BusinessUnitsIndex
                                         {/* Action Button */}
                                         <Link
                                             href={route('business-units.show', unit.slug)}
-                                            className="glass-button inline-flex w-full items-center justify-center rounded-lg px-4 py-2 font-medium text-white transition-all duration-200 hover:scale-105"
+                                            className="inline-flex w-full items-center justify-center glass-button rounded-lg px-4 py-2 font-medium text-white transition-all duration-200 hover:scale-105"
                                         >
                                             Lihat Detail
                                             <ChevronRight className="ml-2 h-4 w-4" />
@@ -200,7 +145,7 @@ export default function BusinessUnitsIndex({ businessUnits }: BusinessUnitsIndex
                         </div>
                     ) : (
                         <div className="py-16 text-center">
-                            <div className="glass-card mx-auto max-w-md rounded-xl p-8">
+                            <div className="mx-auto max-w-md glass-card rounded-xl p-8">
                                 <Search className="mx-auto mb-4 h-16 w-16 text-white/50" />
                                 <h3 className="mb-2 text-xl font-semibold text-white">Tidak ditemukan hasil</h3>
                                 <p className="mb-4 text-white/70">Tidak ada unit bisnis yang sesuai dengan pencarian Anda.</p>
@@ -208,7 +153,6 @@ export default function BusinessUnitsIndex({ businessUnits }: BusinessUnitsIndex
                                     variant="ghost"
                                     onClick={() => {
                                         setSearchQuery('');
-                                        setSelectedServices([]);
                                     }}
                                     className="text-white hover:bg-white/10"
                                 >

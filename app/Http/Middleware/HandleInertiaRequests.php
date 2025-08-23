@@ -2,8 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\BusinessUnit;
+use App\Models\CommunityClub;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -39,6 +42,26 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        // Cache navigation data for performance (5 minutes)
+        $navigationData = Cache::remember('global_navigation_data', 300, function () {
+            return [
+                'navBusinessUnits' => BusinessUnit::active()
+                    ->ordered()
+                    ->limit(6)
+                    ->get()
+                    ->map(function ($unit) {
+                        return $unit->toNavigationArray();
+                    }),
+                'navCommunityClubs' => CommunityClub::active()
+                    ->ordered()
+                    ->limit(8)
+                    ->get()
+                    ->map(function ($club) {
+                        return $club->toNavigationArray();
+                    }),
+            ];
+        });
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -46,11 +69,13 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'ziggy' => fn (): array => [
+            'ziggy' => fn(): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            // Global navigation data
+            ...$navigationData,
         ];
     }
 }

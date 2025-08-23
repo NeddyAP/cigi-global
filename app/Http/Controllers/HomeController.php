@@ -15,8 +15,8 @@ class HomeController extends Controller
     public function index(): Response
     {
         // Use enhanced model methods
-        $businessUnits = BusinessUnit::getFeatured(4);
-        $communityClubs = CommunityClub::getFeatured(4);
+        $businessUnits = BusinessUnit::getFeatured(6);
+        $communityClubs = CommunityClub::getFeatured(8);
 
         $featuredNews = News::published()
             ->featured()
@@ -58,19 +58,6 @@ class HomeController extends Controller
             }
         }
 
-        // Get navigation data for header
-        $navBusinessUnits = BusinessUnit::active()
-            ->ordered()
-            ->limit(6)
-            ->get();
-
-        $navCommunityClubs = CommunityClub::active()
-            ->ordered()
-            ->limit(8)
-            ->get();
-
-        $clubTypes = CommunityClub::getTypes()->toArray();
-
         return Inertia::render('home', [
             'businessUnits' => $businessUnits,
             'communityClubs' => $communityClubs,
@@ -78,9 +65,6 @@ class HomeController extends Controller
             'latestNews' => $latestNews,
             'globalVars' => $globalVars,
             'galleryMedia' => $galleryMedia,
-            'navBusinessUnits' => $navBusinessUnits,
-            'navCommunityClubs' => $navCommunityClubs,
-            'clubTypes' => $clubTypes,
         ]);
     }
 }
