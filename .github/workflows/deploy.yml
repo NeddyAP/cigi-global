@@ -1,0 +1,66 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, iconv, json, mbstring, pdo
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install PHP dependencies
+      run: composer install --no-dev --optimize-autoloader --no-interaction
+      
+    - name: Install Node.js dependencies
+      run: npm ci --include=dev
+      
+    - name: Build assets
+      run: npm run build
+      
+    - name: Create deployment artifact
+      env:
+        GITHUB_SHA: ${{ github.sha }}
+      run: tar -czf "${GITHUB_SHA}".tar.gz --exclude=*.git --exclude=node_modules --exclude=tests *
+      
+    - name: Store artifact for distribution
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-build
+        path: ${{ github.sha }}.tar.gz
+        
+    - name: Trigger Hostinger Deployment
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      run: |
+        curl -X POST "${{ secrets.HOSTINGER_WEBHOOK_URL }}" \
+        -H "Content-Type: application/json" \
+        -d '{
+          "ref": "${{ github.ref }}",
+          "repository": {
+            "full_name": "${{ github.repository }}"
+          },
+          "pusher": {
+            "name": "${{ github.actor }}"
+          },
+          "head_commit": {
+            "id": "${{ github.sha }}",
+            "message": "${{ github.event.head_commit.message }}"
+          }
+        }'

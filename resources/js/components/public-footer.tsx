@@ -6,7 +6,7 @@ export default function PublicFooter() {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="glass-card mt-20 border-t border-white/20">
+        <footer className="mt-20 glass-card border-t border-white/20">
             <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                     {/* Company Info */}

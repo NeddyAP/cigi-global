@@ -43,19 +43,19 @@ export default function AdminBusinessUnitsIndex({ businessUnits }: AdminBusiness
                         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead className="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Unit Bisnis
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Kontak
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Status
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Urutan
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Aksi
                                     </th>
                                 </tr>
@@ -63,7 +63,7 @@ export default function AdminBusinessUnitsIndex({ businessUnits }: AdminBusiness
                             <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
                                 {businessUnits.map((unit) => (
                                     <tr key={unit.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="whitespace-nowrap px-6 py-4">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 {unit.image && (
                                                     <div className="h-10 w-10 flex-shrink-0">
@@ -76,11 +76,11 @@ export default function AdminBusinessUnitsIndex({ businessUnits }: AdminBusiness
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-6 py-4">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm text-gray-900 dark:text-white">{unit.contact_phone}</div>
                                             <div className="text-sm text-gray-500 dark:text-gray-400">{unit.contact_email}</div>
                                         </td>
-                                        <td className="whitespace-nowrap px-6 py-4">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <span
                                                 className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
                                                     unit.is_active
@@ -91,8 +91,8 @@ export default function AdminBusinessUnitsIndex({ businessUnits }: AdminBusiness
                                                 {unit.is_active ? 'Aktif' : 'Tidak Aktif'}
                                             </span>
                                         </td>
-                                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{unit.sort_order}</td>
-                                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">{unit.sort_order}</td>
+                                        <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link
                                                     href={route('admin.business-units.show', unit.slug)}

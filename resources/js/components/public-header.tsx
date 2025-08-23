@@ -36,18 +36,6 @@ export default function PublicHeader() {
         return url.startsWith(path);
     };
 
-    // Group community clubs by type
-    const clubsByType = communityClubs.reduce(
-        (acc, club) => {
-            if (!acc[club.type]) {
-                acc[club.type] = [];
-            }
-            acc[club.type].push(club);
-            return acc;
-        },
-        {} as Record<string, CommunityClub[]>,
-    );
-
     const navItems = [
         { href: route('home'), label: 'Beranda', path: '/', type: 'link' as const },
         { href: route('business-units.index'), label: 'Unit Usaha', path: '/unit-bisnis', type: 'dropdown' as const, key: 'business' },
@@ -147,7 +135,7 @@ export default function PublicHeader() {
 
                                                         {/* Communities Grid - Compact */}
                                                         <div className="grid grid-cols-3 gap-3">
-                                                            {communityClubs.slice(0, 6).map((club, index) => (
+                                                            {communityClubs.slice(0, 6).map((club) => (
                                                                 <Link
                                                                     key={club.id}
                                                                     href={route('community-clubs.show', club.slug)}
@@ -207,7 +195,7 @@ export default function PublicHeader() {
 
                                                         {/* Business Units Grid - Compact */}
                                                         <div className="grid grid-cols-3 gap-3">
-                                                            {businessUnits.slice(0, 6).map((unit, index) => (
+                                                            {businessUnits.slice(0, 6).map((unit) => (
                                                                 <Link
                                                                     key={unit.id}
                                                                     href={route('business-units.show', unit.slug)}

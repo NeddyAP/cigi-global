@@ -54,22 +54,22 @@ export default function AdminCommunityClubsIndex({ communityClubs }: AdminCommun
                         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead className="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Komunitas
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Tipe
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Kontak
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Status
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Urutan
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                    <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
                                         Aksi
                                     </th>
                                 </tr>
@@ -77,7 +77,7 @@ export default function AdminCommunityClubsIndex({ communityClubs }: AdminCommun
                             <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
                                 {communityClubs.map((club) => (
                                     <tr key={club.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="whitespace-nowrap px-6 py-4">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 {club.image && (
                                                     <div className="h-10 w-10 flex-shrink-0">
@@ -90,16 +90,16 @@ export default function AdminCommunityClubsIndex({ communityClubs }: AdminCommun
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-6 py-4">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getTypeColor(club.type)}`}>
                                                 {club.type}
                                             </span>
                                         </td>
-                                        <td className="whitespace-nowrap px-6 py-4">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm text-gray-900 dark:text-white">{club.contact_person}</div>
                                             <div className="text-sm text-gray-500 dark:text-gray-400">{club.contact_phone}</div>
                                         </td>
-                                        <td className="whitespace-nowrap px-6 py-4">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <span
                                                 className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
                                                     club.is_active
@@ -110,8 +110,8 @@ export default function AdminCommunityClubsIndex({ communityClubs }: AdminCommun
                                                 {club.is_active ? 'Aktif' : 'Tidak Aktif'}
                                             </span>
                                         </td>
-                                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{club.sort_order}</td>
-                                        <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">{club.sort_order}</td>
+                                        <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                                             <div className="flex items-center justify-end space-x-2">
                                                 <Link
                                                     href={route('admin.community-clubs.show', club.slug)}

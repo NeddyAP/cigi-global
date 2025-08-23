@@ -193,7 +193,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                                         id="category"
                                         value={data.category}
                                         onChange={(e) => setData('category', e.target.value)}
-                                        className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white ${errors.category ? 'border-red-500' : ''}`}
+                                        className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white ${errors.category ? 'border-red-500' : ''}`}
                                     >
                                         {variableCategories.map((category) => (
                                             <option key={category.value} value={category.value}>
@@ -223,7 +223,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                                     id="type"
                                     value={data.type}
                                     onChange={(e) => setData('type', e.target.value)}
-                                    className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white ${errors.type ? 'border-red-500' : ''}`}
+                                    className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white ${errors.type ? 'border-red-500' : ''}`}
                                 >
                                     {variableTypes.map((type) => (
                                         <option key={type.value} value={type.value}>
@@ -271,7 +271,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                                 <div>
                                     <Label>Akses Publik</Label>
                                     <div className="mt-1 flex items-start">
-                                        <Info className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-blue-500" />
+                                        <Info className="mt-0.5 mr-2 h-4 w-4 flex-shrink-0 text-blue-500" />
                                         <p className="text-sm text-gray-600 dark:text-gray-400">
                                             {data.is_public
                                                 ? 'Variabel ini dapat diakses dari frontend dan API publik'
@@ -288,7 +288,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         <div className="rounded-lg border border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-900/20">
                             <div className="px-6 py-4">
                                 <div className="flex items-start">
-                                    <Info className="mr-2 mt-0.5 h-5 w-5 flex-shrink-0 text-yellow-500" />
+                                    <Info className="mt-0.5 mr-2 h-5 w-5 flex-shrink-0 text-yellow-500" />
                                     <div className="w-full">
                                         <h4 className="text-sm font-medium text-yellow-900 dark:text-yellow-100">Perubahan Terdeteksi</h4>
                                         <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -318,7 +318,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                     <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
                         <div className="px-6 py-4">
                             <div className="flex items-start">
-                                <Info className="mr-2 mt-0.5 h-5 w-5 flex-shrink-0 text-blue-500" />
+                                <Info className="mt-0.5 mr-2 h-5 w-5 flex-shrink-0 text-blue-500" />
                                 <div>
                                     <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100">Informasi Variabel</h4>
                                     <div className="mt-2 text-sm text-blue-800 dark:text-blue-200">

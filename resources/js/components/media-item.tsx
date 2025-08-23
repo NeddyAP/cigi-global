@@ -81,7 +81,7 @@ export default function MediaItem({
                 >
                     {/* Selection Checkbox */}
                     {selectable && (
-                        <div className="absolute left-2 top-2 z-10 opacity-0 transition-opacity group-hover:opacity-100">
+                        <div className="absolute top-2 left-2 z-10 opacity-0 transition-opacity group-hover:opacity-100">
                             <Checkbox
                                 checked={selected}
                                 onCheckedChange={handleSelect}
@@ -93,7 +93,7 @@ export default function MediaItem({
 
                     {/* Image Type Badge */}
                     {media.is_image && (
-                        <div className="absolute right-2 top-2 z-10">
+                        <div className="absolute top-2 right-2 z-10">
                             <div className="rounded bg-black/50 p-1">
                                 <Image className="h-3 w-3 text-white" />
                             </div>
@@ -115,7 +115,7 @@ export default function MediaItem({
                     </div>
 
                     {/* Action Buttons - Show on Hover */}
-                    <div className="absolute bottom-2 left-2 right-2 flex justify-center space-x-1 opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="absolute right-2 bottom-2 left-2 flex justify-center space-x-1 opacity-0 transition-opacity group-hover:opacity-100">
                         <Button
                             size="sm"
                             variant="secondary"

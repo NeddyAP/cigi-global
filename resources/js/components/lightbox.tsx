@@ -64,7 +64,7 @@ export default function Lightbox({ images, currentIndex, isOpen, onClose, onNext
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
             {/* Header */}
-            <div className="glass-nav absolute left-0 right-0 top-0 z-10 p-4">
+            <div className="glass-nav absolute top-0 right-0 left-0 z-10 p-4">
                 <div className="flex items-center justify-between">
                     <div className="text-white">
                         <h3 className="font-semibold">{currentImage.original_filename}</h3>
@@ -96,7 +96,7 @@ export default function Lightbox({ images, currentIndex, isOpen, onClose, onNext
                         variant="ghost"
                         size="sm"
                         onClick={onPrevious}
-                        className="glass-button absolute left-4 top-1/2 z-10 -translate-y-1/2 text-white hover:bg-white/10"
+                        className="absolute top-1/2 left-4 z-10 -translate-y-1/2 glass-button text-white hover:bg-white/10"
                         disabled={currentIndex === 0}
                     >
                         <ChevronLeft className="h-6 w-6" />
@@ -106,7 +106,7 @@ export default function Lightbox({ images, currentIndex, isOpen, onClose, onNext
                         variant="ghost"
                         size="sm"
                         onClick={onNext}
-                        className="glass-button absolute right-4 top-1/2 z-10 -translate-y-1/2 text-white hover:bg-white/10"
+                        className="absolute top-1/2 right-4 z-10 -translate-y-1/2 glass-button text-white hover:bg-white/10"
                         disabled={currentIndex === images.length - 1}
                     >
                         <ChevronRight className="h-6 w-6" />
@@ -126,7 +126,7 @@ export default function Lightbox({ images, currentIndex, isOpen, onClose, onNext
                 />
 
                 {currentImage.caption && (
-                    <div className="glass-card absolute bottom-4 left-4 right-4 rounded-lg p-3">
+                    <div className="absolute right-4 bottom-4 left-4 glass-card rounded-lg p-3">
                         <p className="text-sm text-white">{currentImage.caption}</p>
                     </div>
                 )}

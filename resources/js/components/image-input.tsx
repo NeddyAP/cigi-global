@@ -164,7 +164,7 @@ export default function ImageInput({
                                 type="button"
                                 size="sm"
                                 variant="destructive"
-                                className="absolute -right-2 -top-2 h-6 w-6 rounded-full p-0"
+                                className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
                                 onClick={clearSelection}
                             >
                                 <Trash2 className="h-3 w-3" />

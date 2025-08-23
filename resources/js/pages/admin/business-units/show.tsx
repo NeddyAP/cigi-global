@@ -70,7 +70,7 @@ export default function ShowBusinessUnit({ businessUnit }: ShowBusinessUnitProps
                                 {businessUnit.description && (
                                     <div>
                                         <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Deskripsi</dt>
-                                        <dd className="mt-1 whitespace-pre-wrap text-sm text-gray-900 dark:text-white">{businessUnit.description}</dd>
+                                        <dd className="mt-1 text-sm whitespace-pre-wrap text-gray-900 dark:text-white">{businessUnit.description}</dd>
                                     </div>
                                 )}
                                 {services.length > 0 && (
@@ -111,7 +111,7 @@ export default function ShowBusinessUnit({ businessUnit }: ShowBusinessUnitProps
                                 {businessUnit.address && (
                                     <div>
                                         <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Alamat</dt>
-                                        <dd className="mt-1 whitespace-pre-wrap text-sm text-gray-900 dark:text-white">{businessUnit.address}</dd>
+                                        <dd className="mt-1 text-sm whitespace-pre-wrap text-gray-900 dark:text-white">{businessUnit.address}</dd>
                                     </div>
                                 )}
                                 {businessUnit.website_url && (
@@ -133,7 +133,7 @@ export default function ShowBusinessUnit({ businessUnit }: ShowBusinessUnitProps
                                 {businessUnit.operating_hours && (
                                     <div>
                                         <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Jam Operasional</dt>
-                                        <dd className="mt-1 whitespace-pre-wrap text-sm text-gray-900 dark:text-white">
+                                        <dd className="mt-1 text-sm whitespace-pre-wrap text-gray-900 dark:text-white">
                                             {businessUnit.operating_hours}
                                         </dd>
                                     </div>
