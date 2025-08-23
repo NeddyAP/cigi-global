@@ -1,11 +1,31 @@
 import { Button } from '@/components/ui/button';
+import { DataTable, type ColumnDef } from '@/components/ui/data-table';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, BusinessUnit } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { Edit, Eye, Plus, Trash2 } from 'lucide-react';
 
 interface AdminBusinessUnitsIndexProps {
-    businessUnits: BusinessUnit[];
+    businessUnits: {
+        data: BusinessUnit[];
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+        from: number;
+        to: number;
+        links: {
+            url: string | null;
+            label: string;
+            active: boolean;
+        }[];
+    };
+    filters: {
+        search?: string;
+        sort?: string;
+        direction?: 'asc' | 'desc';
+        per_page?: number;
+    };
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -13,126 +33,157 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Unit Bisnis', href: '/admin/business-units' },
 ];
 
-export default function AdminBusinessUnitsIndex({ businessUnits }: AdminBusinessUnitsIndexProps) {
+export default function AdminBusinessUnitsIndex({ businessUnits, filters = {} }: AdminBusinessUnitsIndexProps) {
     const handleDelete = (businessUnit: BusinessUnit) => {
         if (confirm(`Apakah Anda yakin ingin menghapus ${businessUnit.name}?`)) {
             router.delete(route('admin.business-units.destroy', businessUnit.slug));
         }
     };
 
+    const columns: ColumnDef<BusinessUnit>[] = [
+        {
+            key: 'name',
+            header: 'Unit Bisnis',
+            sortable: true,
+            searchable: true,
+            render: (unit: any) => (
+                <div className="flex items-center">
+                    {unit.image && (
+                        <div className="h-10 w-10 flex-shrink-0">
+                            <img className="h-10 w-10 rounded-lg object-cover" src={`/${unit.image}`} alt={unit.name} />
+                        </div>
+                    )}
+                    <div className={unit.image ? 'ml-4' : ''}>
+                        <div className="text-sm font-medium text-white">{unit.name}</div>
+                        <div className="text-sm text-zinc-400">{unit.slug}</div>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            key: 'contact_info',
+            header: 'Kontak',
+            render: (unit: any) => (
+                <div>
+                    <div className="text-sm text-white">{unit.contact_phone || '-'}</div>
+                    <div className="text-sm text-zinc-400">{unit.contact_email || '-'}</div>
+                </div>
+            ),
+        },
+        {
+            key: 'is_active',
+            header: 'Status',
+            sortable: true,
+            render: (unit: any) => (
+                <span
+                    className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
+                        unit.is_active
+                            ? 'border border-green-500/30 bg-green-500/20 text-green-400'
+                            : 'border border-red-500/30 bg-red-500/20 text-red-400'
+                    }`}
+                >
+                    {unit.is_active ? 'Aktif' : 'Tidak Aktif'}
+                </span>
+            ),
+        },
+        {
+            key: 'sort_order',
+            header: 'Urutan',
+            sortable: true,
+            className: 'text-center',
+            render: (unit: any) => <div className="text-center text-zinc-300">{unit.sort_order}</div>,
+        },
+        {
+            key: 'created_at',
+            header: 'Dibuat',
+            sortable: true,
+            render: (unit: any) => (
+                <div className="text-sm text-zinc-300">{unit.created_at ? new Date(unit.created_at).toLocaleDateString('id-ID') : '-'}</div>
+            ),
+        },
+        {
+            key: 'actions',
+            header: 'Aksi',
+            className: 'text-right',
+            render: (unit: any) => (
+                <div className="flex items-center justify-end space-x-2">
+                    <Link
+                        href={route('admin.business-units.show', unit.slug)}
+                        className="text-blue-400 transition-colors hover:text-blue-300"
+                        title="Lihat Detail"
+                    >
+                        <Eye className="h-4 w-4" />
+                    </Link>
+                    <Link
+                        href={route('admin.business-units.edit', unit.slug)}
+                        className="text-amber-400 transition-colors hover:text-amber-300"
+                        title="Edit"
+                    >
+                        <Edit className="h-4 w-4" />
+                    </Link>
+                    <button onClick={() => handleDelete(unit)} className="text-red-400 transition-colors hover:text-red-300" title="Hapus">
+                        <Trash2 className="h-4 w-4" />
+                    </button>
+                </div>
+            ),
+        },
+    ];
+
+    const emptyState = (
+        <div className="py-12 text-center">
+            <div className="mb-4 text-zinc-400">Belum ada unit bisnis yang terdaftar.</div>
+            <Link href={route('admin.business-units.create')}>
+                <Button className="cta-button">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Tambah Unit Bisnis Pertama
+                </Button>
+            </Link>
+        </div>
+    );
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Kelola Unit Bisnis" />
 
-            <div className="space-y-6">
-                <div className="flex items-center justify-between">
+            {/* Hero Section */}
+            <div className="relative mb-8 overflow-hidden rounded-2xl border border-amber-500/20 bg-gradient-to-br from-zinc-900 via-zinc-800 to-amber-900/20 p-6 md:p-8">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent"></div>
+                <div className="relative z-10 flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Kelola Unit Bisnis</h1>
-                        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Kelola semua unit bisnis Cigi Global</p>
+                        <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
+                            <span className="text-amber-400">Kelola</span> Unit Bisnis
+                        </h1>
+                        <p className="text-lg text-zinc-300">Manajemen unit bisnis CIGI Global dengan sistem pencarian dan filter yang canggih</p>
                     </div>
                     <Link href={route('admin.business-units.create')}>
-                        <Button>
+                        <Button className="cta-button">
                             <Plus className="mr-2 h-4 w-4" />
                             Tambah Unit Bisnis
                         </Button>
                     </Link>
                 </div>
-
-                <div className="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead className="bg-gray-50 dark:bg-gray-700">
-                                <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
-                                        Unit Bisnis
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
-                                        Kontak
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
-                                        Status
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
-                                        Urutan
-                                    </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                                {businessUnits.map((unit) => (
-                                    <tr key={unit.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="flex items-center">
-                                                {unit.image && (
-                                                    <div className="h-10 w-10 flex-shrink-0">
-                                                        <img className="h-10 w-10 rounded-lg object-cover" src={`/${unit.image}`} alt={unit.name} />
-                                                    </div>
-                                                )}
-                                                <div className={unit.image ? 'ml-4' : ''}>
-                                                    <div className="text-sm font-medium text-gray-900 dark:text-white">{unit.name}</div>
-                                                    <div className="text-sm text-gray-500 dark:text-gray-400">{unit.slug}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm text-gray-900 dark:text-white">{unit.contact_phone}</div>
-                                            <div className="text-sm text-gray-500 dark:text-gray-400">{unit.contact_email}</div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span
-                                                className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-                                                    unit.is_active
-                                                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                                        : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                                                }`}
-                                            >
-                                                {unit.is_active ? 'Aktif' : 'Tidak Aktif'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">{unit.sort_order}</td>
-                                        <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
-                                            <div className="flex items-center justify-end space-x-2">
-                                                <Link
-                                                    href={route('admin.business-units.show', unit.slug)}
-                                                    className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-                                                >
-                                                    <Eye className="h-4 w-4" />
-                                                </Link>
-                                                <Link
-                                                    href={route('admin.business-units.edit', unit.slug)}
-                                                    className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                                                >
-                                                    <Edit className="h-4 w-4" />
-                                                </Link>
-                                                <button
-                                                    onClick={() => handleDelete(unit)}
-                                                    className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-
-                        {businessUnits.length === 0 && (
-                            <div className="py-12 text-center">
-                                <div className="text-gray-500 dark:text-gray-400">Belum ada unit bisnis yang terdaftar.</div>
-                                <Link href={route('admin.business-units.create')} className="mt-4 inline-block">
-                                    <Button>
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Tambah Unit Bisnis Pertama
-                                    </Button>
-                                </Link>
-                            </div>
-                        )}
-                    </div>
-                </div>
             </div>
+
+            {/* Data Table */}
+            <DataTable
+                data={businessUnits?.data || []}
+                columns={columns}
+                pagination={
+                    businessUnits && {
+                        current_page: businessUnits.current_page,
+                        last_page: businessUnits.last_page,
+                        per_page: businessUnits.per_page,
+                        total: businessUnits.total,
+                        from: businessUnits.from,
+                        to: businessUnits.to,
+                        links: businessUnits.links,
+                    }
+                }
+                filters={filters}
+                searchPlaceholder="Cari unit bisnis..."
+                emptyState={emptyState}
+                routeName="admin.business-units.index"
+            />
         </AppLayout>
     );
 }

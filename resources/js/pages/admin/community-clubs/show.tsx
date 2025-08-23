@@ -1,14 +1,21 @@
+import { FormSection } from '@/components/admin/form-section';
+import { InfoGrid, InfoItem } from '@/components/admin/info-display';
+import { LoadingButton } from '@/components/admin/loading-button';
+import { StatusBadge } from '@/components/admin/status-badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, CommunityClub } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { Activity, ArrowLeft, Calendar, Edit, Mail, MapPin, Phone, Trash2, Users } from 'lucide-react';
+import { Activity, ArrowLeft, Calendar, Edit, Mail, MapPin, Phone, Plus, Users } from 'lucide-react';
+import React from 'react';
 
 interface ShowCommunityClubProps {
     communityClub: CommunityClub;
 }
 
 export default function ShowCommunityClub({ communityClub }: ShowCommunityClubProps) {
+    const [deleting, setDeleting] = React.useState(false);
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin' },
         { title: 'Komunitas', href: '/admin/community-clubs' },
@@ -17,7 +24,10 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
 
     const handleDelete = () => {
         if (confirm(`Apakah Anda yakin ingin menghapus ${communityClub.name}?`)) {
-            router.delete(route('admin.community-clubs.destroy', communityClub.slug));
+            setDeleting(true);
+            router.delete(route('admin.community-clubs.destroy', communityClub.slug), {
+                onFinish: () => setDeleting(false),
+            });
         }
     };
 
@@ -44,28 +54,43 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
             <Head title={`Detail ${communityClub.name}`} />
 
             <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{communityClub.name}</h1>
-                        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Detail informasi komunitas</p>
+                {/* Header */}
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="flex-1">
+                        <div className="mb-3 flex items-center gap-3">
+                            <StatusBadge status={communityClub.type.toLowerCase()} />
+                            <StatusBadge status={communityClub.is_active ? 'active' : 'inactive'} />
+                        </div>
+
+                        <h1 className="mb-4 text-3xl font-bold text-zinc-900 dark:text-white">{communityClub.name}</h1>
+
+                        {communityClub.description && <p className="mb-4 text-lg leading-relaxed text-zinc-300">{communityClub.description}</p>}
                     </div>
-                    <div className="flex items-center space-x-3">
-                        <Button variant="outline" asChild>
+
+                    <div className="flex flex-wrap gap-2 lg:flex-col">
+                        <Button variant="outline" size="sm" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                             <Link href={route('admin.community-clubs.index')}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 Kembali
                             </Link>
                         </Button>
-                        <Button variant="outline" asChild>
+                        <Button variant="outline" size="sm" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                             <Link href={route('admin.community-clubs.edit', communityClub.slug)}>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Link>
                         </Button>
-                        <Button variant="outline" onClick={handleDelete} className="text-red-600 hover:text-red-700">
-                            <Trash2 className="mr-2 h-4 w-4" />
+                        <LoadingButton
+                            variant="outline"
+                            size="sm"
+                            onClick={handleDelete}
+                            loading={deleting}
+                            loadingText="Menghapus..."
+                            className="border-red-700 bg-red-900/20 text-red-400 hover:bg-red-900/40"
+                            icon="delete"
+                        >
                             Hapus
-                        </Button>
+                        </LoadingButton>
                     </div>
                 </div>
 
@@ -73,152 +98,75 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
                     {/* Main Content */}
                     <div className="space-y-6 lg:col-span-2">
                         {/* Basic Information */}
-                        <div className="rounded-lg bg-white shadow dark:bg-gray-800">
-                            <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-                                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Informasi Dasar</h3>
-                            </div>
-                            <div className="px-6 py-4">
-                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Komunitas</label>
-                                        <p className="mt-1 text-sm text-gray-900 dark:text-white">{communityClub.name}</p>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Slug URL</label>
-                                        <p className="mt-1 font-mono text-sm text-gray-900 dark:text-white">{communityClub.slug}</p>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipe Komunitas</label>
-                                        <div className="mt-1">
-                                            <span
-                                                className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getTypeColor(communityClub.type)}`}
-                                            >
-                                                {communityClub.type}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
-                                        <div className="mt-1">
-                                            <span
-                                                className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-                                                    communityClub.is_active
-                                                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                                        : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                                                }`}
-                                            >
-                                                {communityClub.is_active ? 'Aktif' : 'Tidak Aktif'}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                        <FormSection title="Informasi Dasar" icon={<Users className="h-5 w-5" />}>
+                            <InfoGrid>
+                                <InfoItem label="Nama Komunitas" value={communityClub.name} />
+                                <InfoItem label="Slug URL" value={communityClub.slug} copyable className="font-mono" />
+                                <InfoItem label="Tipe Komunitas" value={<StatusBadge status={communityClub.type.toLowerCase()} />} />
+                                <InfoItem label="Status" value={<StatusBadge status={communityClub.is_active ? 'active' : 'inactive'} />} />
+                            </InfoGrid>
 
-                                {communityClub.description && (
-                                    <div className="mt-6">
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi</label>
-                                        <p className="mt-1 text-sm whitespace-pre-wrap text-gray-900 dark:text-white">{communityClub.description}</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                            {communityClub.description && (
+                                <InfoItem label="Deskripsi" value={communityClub.description} type="multiline" className="mt-4" />
+                            )}
+                        </FormSection>
 
                         {/* Activities */}
                         {communityClub.activities && (
-                            <div className="rounded-lg bg-white shadow dark:bg-gray-800">
-                                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-                                    <h3 className="flex items-center text-lg font-medium text-gray-900 dark:text-white">
-                                        <Activity className="mr-2 h-5 w-5" />
-                                        Aktivitas Komunitas
-                                    </h3>
-                                </div>
-                                <div className="px-6 py-4">
-                                    <ul className="space-y-2">
-                                        {formatActivities(communityClub.activities).map((activity, index) => (
-                                            <li key={index} className="flex items-start">
-                                                <span className="mt-1.5 mr-2 h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
-                                                <span className="text-sm text-gray-900 dark:text-white">{activity}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
+                            <FormSection title="Aktivitas Komunitas" icon={<Activity className="h-5 w-5" />}>
+                                <ul className="space-y-2">
+                                    {formatActivities(communityClub.activities).map((activity, index) => (
+                                        <li key={index} className="flex items-start">
+                                            <span className="mt-1.5 mr-2 h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                                            <span className="text-sm text-zinc-300">{activity}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </FormSection>
                         )}
 
                         {/* Contact Information */}
-                        <div className="rounded-lg bg-white shadow dark:bg-gray-800">
-                            <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-                                <h3 className="flex items-center text-lg font-medium text-gray-900 dark:text-white">
-                                    <Users className="mr-2 h-5 w-5" />
-                                    Informasi Kontak
-                                </h3>
-                            </div>
-                            <div className="px-6 py-4">
-                                <div className="space-y-4">
-                                    {communityClub.contact_person && (
-                                        <div className="flex items-center">
-                                            <Users className="mr-3 h-5 w-5 text-gray-400" />
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Penanggung Jawab</label>
-                                                <p className="text-sm text-gray-900 dark:text-white">{communityClub.contact_person}</p>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {communityClub.contact_phone && (
-                                        <div className="flex items-center">
-                                            <Phone className="mr-3 h-5 w-5 text-gray-400" />
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nomor Telepon</label>
-                                                <p className="text-sm text-gray-900 dark:text-white">{communityClub.contact_phone}</p>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {communityClub.contact_email && (
-                                        <div className="flex items-center">
-                                            <Mail className="mr-3 h-5 w-5 text-gray-400" />
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                                                <p className="text-sm text-gray-900 dark:text-white">{communityClub.contact_email}</p>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                        <FormSection title="Informasi Kontak" icon={<Phone className="h-5 w-5" />}>
+                            <InfoGrid>
+                                {communityClub.contact_person && (
+                                    <InfoItem label="Penanggung Jawab" value={communityClub.contact_person} icon={<Users className="h-4 w-4" />} />
+                                )}
+                                {communityClub.contact_phone && (
+                                    <InfoItem
+                                        label="Nomor Telepon"
+                                        value={communityClub.contact_phone}
+                                        type="phone"
+                                        icon={<Phone className="h-4 w-4" />}
+                                    />
+                                )}
+                                {communityClub.contact_email && (
+                                    <InfoItem label="Email" value={communityClub.contact_email} type="email" icon={<Mail className="h-4 w-4" />} />
+                                )}
+                            </InfoGrid>
+                        </FormSection>
 
                         {/* Meeting Schedule & Location */}
                         {(communityClub.meeting_schedule || communityClub.location) && (
-                            <div className="rounded-lg bg-white shadow dark:bg-gray-800">
-                                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-                                    <h3 className="flex items-center text-lg font-medium text-gray-900 dark:text-white">
-                                        <Calendar className="mr-2 h-5 w-5" />
-                                        Jadwal & Lokasi
-                                    </h3>
-                                </div>
-                                <div className="space-y-4 px-6 py-4">
+                            <FormSection title="Jadwal & Lokasi" icon={<Calendar className="h-5 w-5" />}>
+                                <InfoGrid>
                                     {communityClub.meeting_schedule && (
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Jadwal Pertemuan</label>
-                                            <p className="mt-1 text-sm whitespace-pre-wrap text-gray-900 dark:text-white">
-                                                {communityClub.meeting_schedule}
-                                            </p>
-                                        </div>
+                                        <InfoItem
+                                            label="Jadwal Pertemuan"
+                                            value={communityClub.meeting_schedule}
+                                            type="multiline"
+                                            icon={<Calendar className="h-4 w-4" />}
+                                        />
                                     )}
-
                                     {communityClub.location && (
-                                        <div className="flex items-start">
-                                            <MapPin className="mt-1 mr-3 h-5 w-5 flex-shrink-0 text-gray-400" />
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Lokasi</label>
-                                                <p className="mt-1 text-sm whitespace-pre-wrap text-gray-900 dark:text-white">
-                                                    {communityClub.location}
-                                                </p>
-                                            </div>
-                                        </div>
+                                        <InfoItem
+                                            label="Lokasi"
+                                            value={communityClub.location}
+                                            type="multiline"
+                                            icon={<MapPin className="h-4 w-4" />}
+                                        />
                                     )}
-                                </div>
-                            </div>
+                                </InfoGrid>
+                            </FormSection>
                         )}
                     </div>
 
@@ -226,70 +174,50 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
                     <div className="space-y-6">
                         {/* Image */}
                         {communityClub.image && (
-                            <div className="rounded-lg bg-white shadow dark:bg-gray-800">
-                                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-                                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Foto Komunitas</h3>
+                            <FormSection title="Gambar Komunitas" className="overflow-hidden">
+                                <div className="-mx-6 -mb-4">
+                                    <img src={`/${communityClub.image}`} alt={communityClub.name} className="h-48 w-full object-cover" />
                                 </div>
-                                <div className="px-6 py-4">
-                                    <img
-                                        src={`/${communityClub.image}`}
-                                        alt={communityClub.name}
-                                        className="w-full rounded-lg object-cover"
-                                        onError={(e) => {
-                                            e.currentTarget.style.display = 'none';
-                                        }}
-                                    />
-                                </div>
-                            </div>
+                            </FormSection>
                         )}
 
-                        {/* Metadata */}
-                        <div className="rounded-lg bg-white shadow dark:bg-gray-800">
-                            <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-                                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Metadata</h3>
+                        {/* Community Info */}
+                        <FormSection title="Informasi Komunitas">
+                            <InfoGrid cols={1}>
+                                <InfoItem label="Tipe" value={<StatusBadge status={communityClub.type.toLowerCase()} />} />
+                                <InfoItem label="Status" value={<StatusBadge status={communityClub.is_active ? 'active' : 'inactive'} />} />
+                                <InfoItem label="Urutan Tampilan" value={communityClub.sort_order} />
+                                <InfoItem label="Dibuat" value={communityClub.created_at} type="datetime" icon={<Calendar className="h-4 w-4" />} />
+                                <InfoItem
+                                    label="Diperbarui"
+                                    value={communityClub.updated_at}
+                                    type="datetime"
+                                    icon={<Calendar className="h-4 w-4" />}
+                                />
+                            </InfoGrid>
+                        </FormSection>
+
+                        {/* Quick Actions */}
+                        <FormSection title="Aksi Cepat">
+                            <div className="space-y-3">
+                                <Button asChild className="cta-button w-full justify-start">
+                                    <Link href={route('admin.community-clubs.edit', communityClub.slug)}>
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        Edit Komunitas
+                                    </Link>
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    asChild
+                                    className="w-full justify-start border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700"
+                                >
+                                    <Link href={route('admin.community-clubs.create')}>
+                                        <Plus className="mr-2 h-4 w-4" />
+                                        Tambah Komunitas Baru
+                                    </Link>
+                                </Button>
                             </div>
-                            <div className="space-y-4 px-6 py-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">ID</label>
-                                    <p className="mt-1 font-mono text-sm text-gray-900 dark:text-white">{communityClub.id}</p>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Urutan Tampilan</label>
-                                    <p className="mt-1 text-sm text-gray-900 dark:text-white">{communityClub.sort_order}</p>
-                                </div>
-
-                                {communityClub.created_at && (
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Dibuat</label>
-                                        <p className="mt-1 text-sm text-gray-900 dark:text-white">
-                                            {new Date(communityClub.created_at).toLocaleDateString('id-ID', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric',
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                            })}
-                                        </p>
-                                    </div>
-                                )}
-
-                                {communityClub.updated_at && (
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Terakhir Diupdate</label>
-                                        <p className="mt-1 text-sm text-gray-900 dark:text-white">
-                                            {new Date(communityClub.updated_at).toLocaleDateString('id-ID', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric',
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                            })}
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                        </FormSection>
                     </div>
                 </div>
             </div>

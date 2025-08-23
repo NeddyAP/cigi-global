@@ -9,6 +9,6 @@ interface AppLayoutProps {
 
 export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
     <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
-        {children}
+        <div className="container mx-auto px-4 py-8">{children}</div>
     </AppLayoutTemplate>
 );

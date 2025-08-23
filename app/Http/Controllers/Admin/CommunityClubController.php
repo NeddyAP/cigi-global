@@ -11,12 +11,35 @@ use Inertia\Response;
 
 class CommunityClubController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $communityClubs = CommunityClub::orderBy('sort_order')->get();
+        $query = CommunityClub::query();
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('type', 'like', "%{$search}%")
+                    ->orWhere('contact_person', 'like', "%{$search}%")
+                    ->orWhere('contact_email', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply sorting
+        $sortField = $request->get('sort', 'sort_order');
+        $sortDirection = $request->get('direction', 'asc');
+        $query->orderBy($sortField, $sortDirection);
+
+        // Paginate
+        $perPage = $request->get('per_page', 15);
+        $communityClubs = $query->paginate($perPage)->withQueryString();
 
         return Inertia::render('admin/community-clubs/index', [
             'communityClubs' => $communityClubs,
+            'filters' => $request->only(['search', 'sort', 'direction', 'per_page']),
         ]);
     }
 
@@ -67,7 +90,7 @@ class CommunityClubController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:community_clubs,slug,'.$communityClub->id,
+            'slug' => 'nullable|string|max:255|unique:community_clubs,slug,' . $communityClub->id,
             'description' => 'nullable|string',
             'type' => 'required|string|max:255',
             'activities' => 'nullable|string',

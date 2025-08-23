@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Building2, Eye, Newspaper, Plus, Settings, Users } from 'lucide-react';
+import { BarChart3, Building2, Eye, FileText, Globe2, MessageSquare, Newspaper, Plus, Settings, Shield, Users, Zap } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -14,134 +14,163 @@ export default function Dashboard() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard Admin" />
-
-            <div className="space-y-6">
-                <div>
-                    <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Dashboard Admin Cigi Global</h1>
-                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Kelola konten website dan pengaturan sistem</p>
-                </div>
-
-                {/* Quick Actions */}
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <Link
-                        href={route('admin.business-units.index')}
-                        className="block rounded-lg bg-white p-6 shadow transition-shadow hover:shadow-lg dark:bg-gray-800"
-                    >
-                        <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                                <Building2 className="h-8 w-8 text-blue-600" />
-                            </div>
-                            <div className="ml-4">
-                                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Unit Bisnis</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Kelola unit bisnis</p>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link
-                        href={route('admin.community-clubs.index')}
-                        className="block rounded-lg bg-white p-6 shadow transition-shadow hover:shadow-lg dark:bg-gray-800"
-                    >
-                        <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                                <Users className="h-8 w-8 text-green-600" />
-                            </div>
-                            <div className="ml-4">
-                                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Komunitas</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Kelola komunitas</p>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link
-                        href={route('admin.news.index')}
-                        className="block rounded-lg bg-white p-6 shadow transition-shadow hover:shadow-lg dark:bg-gray-800"
-                    >
-                        <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                                <Newspaper className="h-8 w-8 text-purple-600" />
-                            </div>
-                            <div className="ml-4">
-                                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Berita</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Kelola berita</p>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link
-                        href={route('admin.global-variables.index')}
-                        className="block rounded-lg bg-white p-6 shadow transition-shadow hover:shadow-lg dark:bg-gray-800"
-                    >
-                        <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                                <Settings className="h-8 w-8 text-orange-600" />
-                            </div>
-                            <div className="ml-4">
-                                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Pengaturan</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Variabel global</p>
-                            </div>
-                        </div>
-                    </Link>
-                </div>
-
-                {/* Quick Add Actions */}
-                <div className="rounded-lg bg-white shadow dark:bg-gray-800">
-                    <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Aksi Cepat</h3>
+            {/* Hero Section */}
+            <div className="relative mb-12 overflow-hidden rounded-2xl border border-amber-500/20 bg-gradient-to-br from-zinc-900 via-zinc-800 to-amber-900/20 p-8 md:p-12">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent"></div>
+                <div className="relative z-10">
+                    <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-600/20 px-4 py-2">
+                        <Shield className="h-5 w-5 text-amber-400" />
+                        <span className="text-sm font-medium text-amber-400">Admin Panel - CIGI Global</span>
                     </div>
-                    <div className="p-6">
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <Link
-                                href={route('admin.business-units.create')}
-                                className="flex items-center rounded-lg border border-gray-200 p-4 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700"
-                            >
-                                <Plus className="mr-3 h-5 w-5 text-blue-600" />
-                                <div>
-                                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">Tambah Unit Bisnis</h4>
-                                    <p className="text-xs text-gray-600 dark:text-gray-400">Buat unit bisnis baru</p>
-                                </div>
-                            </Link>
 
-                            <Link
-                                href={route('admin.community-clubs.create')}
-                                className="flex items-center rounded-lg border border-gray-200 p-4 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700"
-                            >
-                                <Plus className="mr-3 h-5 w-5 text-green-600" />
-                                <div>
-                                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">Tambah Komunitas</h4>
-                                    <p className="text-xs text-gray-600 dark:text-gray-400">Buat komunitas baru</p>
-                                </div>
-                            </Link>
+                    <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+                        <span className="block text-amber-400">Dashboard</span>
+                        <span className="block text-white">Admin Control</span>
+                    </h1>
 
-                            <Link
-                                href={route('admin.news.create')}
-                                className="flex items-center rounded-lg border border-gray-200 p-4 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700"
-                            >
-                                <Plus className="mr-3 h-5 w-5 text-purple-600" />
-                                <div>
-                                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">Tulis Berita</h4>
-                                    <p className="text-xs text-gray-600 dark:text-gray-400">Publikasikan berita</p>
-                                </div>
-                            </Link>
+                    <p className="max-w-2xl text-lg leading-relaxed text-zinc-300">
+                        Kelola seluruh konten website dan pengaturan sistem dengan mudah.
+                        <span className="font-semibold text-amber-400">Panel kontrol lengkap</span> untuk administrasi CIGI Global.
+                    </p>
+                </div>
+            </div>
+
+            {/* Main Management Modules */}
+            <div className="mb-12">
+                <h2 className="mb-8 text-2xl font-bold text-white">Modul Utama</h2>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                    <Link href={route('admin.business-units.index')} className="section-card group">
+                        <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/20">
+                            <Building2 className="h-8 w-8 text-blue-400" />
                         </div>
+                        <h3 className="mb-3 text-xl font-bold text-white group-hover:text-amber-400">Unit Bisnis</h3>
+                        <p className="text-zinc-300">Kelola dan organisasi unit bisnis perusahaan</p>
+                        <div className="mt-4 flex items-center text-amber-400 opacity-0 transition-opacity group-hover:opacity-100">
+                            <span className="text-sm font-semibold">Kelola →</span>
+                        </div>
+                    </Link>
+
+                    <Link href={route('admin.community-clubs.index')} className="section-card group">
+                        <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20">
+                            <Users className="h-8 w-8 text-green-400" />
+                        </div>
+                        <h3 className="mb-3 text-xl font-bold text-white group-hover:text-amber-400">Komunitas</h3>
+                        <p className="text-zinc-300">Atur komunitas dan klub yang terdaftar</p>
+                        <div className="mt-4 flex items-center text-amber-400 opacity-0 transition-opacity group-hover:opacity-100">
+                            <span className="text-sm font-semibold">Kelola →</span>
+                        </div>
+                    </Link>
+
+                    <Link href={route('admin.news.index')} className="section-card group">
+                        <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-purple-500/20">
+                            <Newspaper className="h-8 w-8 text-purple-400" />
+                        </div>
+                        <h3 className="mb-3 text-xl font-bold text-white group-hover:text-amber-400">Berita & Media</h3>
+                        <p className="text-zinc-300">Publikasi berita dan konten media</p>
+                        <div className="mt-4 flex items-center text-amber-400 opacity-0 transition-opacity group-hover:opacity-100">
+                            <span className="text-sm font-semibold">Kelola →</span>
+                        </div>
+                    </Link>
+
+                    <Link href={route('admin.global-variables.index')} className="section-card group">
+                        <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-orange-500/20">
+                            <Settings className="h-8 w-8 text-orange-400" />
+                        </div>
+                        <h3 className="mb-3 text-xl font-bold text-white group-hover:text-amber-400">Konfigurasi</h3>
+                        <p className="text-zinc-300">Pengaturan sistem dan variabel global</p>
+                        <div className="mt-4 flex items-center text-amber-400 opacity-0 transition-opacity group-hover:opacity-100">
+                            <span className="text-sm font-semibold">Kelola →</span>
+                        </div>
+                    </Link>
+                </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="mb-12">
+                <h2 className="mb-8 text-2xl font-bold text-white">Aksi Cepat</h2>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <Link href={route('admin.business-units.create')} className="section-card group text-center">
+                        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/20 transition-all group-hover:scale-110">
+                            <Plus className="h-8 w-8 text-blue-400" />
+                        </div>
+                        <h3 className="mb-3 text-xl font-bold text-white group-hover:text-amber-400">Tambah Unit Bisnis</h3>
+                        <p className="text-zinc-300">Buat unit bisnis baru untuk perusahaan</p>
+                    </Link>
+
+                    <Link href={route('admin.community-clubs.create')} className="section-card group text-center">
+                        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 transition-all group-hover:scale-110">
+                            <Plus className="h-8 w-8 text-green-400" />
+                        </div>
+                        <h3 className="mb-3 text-xl font-bold text-white group-hover:text-amber-400">Tambah Komunitas</h3>
+                        <p className="text-zinc-300">Daftarkan komunitas atau klub baru</p>
+                    </Link>
+
+                    <Link href={route('admin.news.create')} className="section-card group text-center">
+                        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-purple-500/20 transition-all group-hover:scale-110">
+                            <Plus className="h-8 w-8 text-purple-400" />
+                        </div>
+                        <h3 className="mb-3 text-xl font-bold text-white group-hover:text-amber-400">Tulis Berita</h3>
+                        <p className="text-zinc-300">Publikasikan artikel dan berita terbaru</p>
+                    </Link>
+                </div>
+            </div>
+
+            {/* System Overview */}
+            <div className="mb-12">
+                <h2 className="mb-8 text-2xl font-bold text-white">Ringkasan Sistem</h2>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                    <div className="contact-card text-center">
+                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20">
+                            <BarChart3 className="h-6 w-6 text-amber-400" />
+                        </div>
+                        <h4 className="mb-2 text-lg font-bold text-white">Analytics</h4>
+                        <p className="text-sm text-zinc-300">Monitor performa website</p>
+                    </div>
+
+                    <div className="contact-card text-center">
+                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/20">
+                            <FileText className="h-6 w-6 text-emerald-400" />
+                        </div>
+                        <h4 className="mb-2 text-lg font-bold text-white">Konten</h4>
+                        <p className="text-sm text-zinc-300">Kelola semua konten</p>
+                    </div>
+
+                    <div className="contact-card text-center">
+                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/20">
+                            <MessageSquare className="h-6 w-6 text-blue-400" />
+                        </div>
+                        <h4 className="mb-2 text-lg font-bold text-white">Messages</h4>
+                        <p className="text-sm text-zinc-300">Pesan dari pengunjung</p>
+                    </div>
+
+                    <div className="contact-card text-center">
+                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-violet-500/20">
+                            <Zap className="h-6 w-6 text-violet-400" />
+                        </div>
+                        <h4 className="mb-2 text-lg font-bold text-white">Performance</h4>
+                        <p className="text-sm text-zinc-300">Status sistem real-time</p>
                     </div>
                 </div>
+            </div>
 
-                {/* Website Link */}
-                <div className="rounded-lg border border-blue-200 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-900/20">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h3 className="text-lg font-medium text-blue-900 dark:text-blue-100">Lihat Website Public</h3>
-                            <p className="text-sm text-blue-700 dark:text-blue-200">Kunjungi halaman depan website Cigi Global</p>
-                        </div>
-                        <Link
-                            href={route('home')}
-                            className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
-                        >
-                            <Eye className="mr-2 h-4 w-4" />
-                            Lihat Website
-                        </Link>
-                    </div>
+            {/* Public Website Access */}
+            <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-500/10 to-amber-600/10 p-8 text-center md:p-12">
+                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-amber-500/20">
+                    <Globe2 className="h-10 w-10 text-amber-400" />
+                </div>
+                <h3 className="mb-4 text-3xl font-bold text-white">Preview Website Public</h3>
+                <p className="mx-auto mb-8 max-w-2xl text-lg text-zinc-300">
+                    Lihat bagaimana website CIGI Global tampil untuk pengunjung. Pastikan semua konten dan fitur berfungsi dengan baik.
+                </p>
+                <div className="flex flex-col justify-center gap-4 sm:flex-row">
+                    <Link href={route('home')} className="cta-button">
+                        <Eye className="mr-2 h-5 w-5" />
+                        Lihat Website Public
+                    </Link>
+                    <Link href={route('news.index')} className="cta-button-outline">
+                        <Newspaper className="mr-2 h-5 w-5" />
+                        Halaman Berita
+                    </Link>
                 </div>
             </div>
         </AppLayout>

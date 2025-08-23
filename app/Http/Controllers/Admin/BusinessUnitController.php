@@ -11,12 +11,34 @@ use Inertia\Response;
 
 class BusinessUnitController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $businessUnits = BusinessUnit::orderBy('sort_order')->get();
+        $query = BusinessUnit::query();
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('services', 'like', "%{$search}%")
+                    ->orWhere('contact_email', 'like', "%{$search}%")
+                    ->orWhere('contact_phone', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply sorting
+        $sortField = $request->get('sort', 'sort_order');
+        $sortDirection = $request->get('direction', 'asc');
+        $query->orderBy($sortField, $sortDirection);
+
+        // Paginate
+        $perPage = $request->get('per_page', 15);
+        $businessUnits = $query->paginate($perPage)->withQueryString();
 
         return Inertia::render('admin/business-units/index', [
             'businessUnits' => $businessUnits,
+            'filters' => $request->only(['search', 'sort', 'direction', 'per_page']),
         ]);
     }
 
@@ -66,7 +88,7 @@ class BusinessUnitController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:business_units,slug,'.$businessUnit->id,
+            'slug' => 'nullable|string|max:255|unique:business_units,slug,' . $businessUnit->id,
             'description' => 'nullable|string',
             'services' => 'nullable|string',
             'image' => 'nullable|string|max:255',

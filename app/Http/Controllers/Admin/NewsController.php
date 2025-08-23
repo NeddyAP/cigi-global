@@ -11,14 +11,56 @@ use Inertia\Response;
 
 class NewsController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $news = News::with('author')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+        $query = News::with('author');
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('excerpt', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply category filter
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            $status = $request->status;
+            if ($status === 'published') {
+                $query->where('is_published', true);
+            } elseif ($status === 'draft') {
+                $query->where('is_published', false);
+            } elseif ($status === 'featured') {
+                $query->where('is_featured', true);
+            }
+        }
+
+        // Apply sorting
+        $sortField = $request->get('sort', 'created_at');
+        $sortDirection = $request->get('direction', 'desc');
+        $query->orderBy($sortField, $sortDirection);
+
+        // Paginate
+        $perPage = $request->get('per_page', 15);
+        $news = $query->paginate($perPage)->withQueryString();
+
+        // Get categories for filter dropdown
+        $categories = News::select('category')
+            ->distinct()
+            ->pluck('category')
+            ->toArray();
 
         return Inertia::render('admin/news/index', [
             'news' => $news,
+            'categories' => $categories,
+            'filters' => $request->only(['search', 'category', 'status', 'sort', 'direction', 'per_page']),
         ]);
     }
 
@@ -53,7 +95,7 @@ class NewsController extends Controller
         }
 
         // Set published_at if publishing
-        if ($validated['is_published'] && ! $validated['published_at']) {
+        if ($validated['is_published'] && !$validated['published_at']) {
             $validated['published_at'] = now();
         }
 
@@ -91,7 +133,7 @@ class NewsController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:news,slug,'.$news->id,
+            'slug' => 'nullable|string|max:255|unique:news,slug,' . $news->id,
             'excerpt' => 'nullable|string',
             'content' => 'required|string',
             'featured_image' => 'nullable|string|max:255',
@@ -108,7 +150,7 @@ class NewsController extends Controller
         }
 
         // Set published_at if publishing for the first time
-        if ($validated['is_published'] && ! $news->is_published && ! $validated['published_at']) {
+        if ($validated['is_published'] && !$news->is_published && !$validated['published_at']) {
             $validated['published_at'] = now();
         }
 
