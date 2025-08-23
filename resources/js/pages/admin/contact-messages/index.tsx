@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import AppLayout from '@/layouts/app-layout';
 import { type ContactMessage } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { Archive, CheckCheck, Eye, Mail, MailCheck, MailOpen, Phone, Search, Trash2, User } from 'lucide-react';
+import { Archive, Eye, Inbox, Mail, MailCheck, MailOpen, Phone, Search, Send, Shield, Trash2, User } from 'lucide-react';
 import { useState } from 'react';
 
 interface ContactMessagesIndexProps {
@@ -108,9 +108,9 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
 
     const getStatusBadge = (message: ContactMessage) => {
         const variants = {
-            unread: 'bg-blue-100 text-blue-800',
-            read: 'bg-green-100 text-green-800',
-            archived: 'bg-gray-100 text-gray-800',
+            unread: 'bg-blue-500/20 text-blue-400 border border-blue-500/30',
+            read: 'bg-green-500/20 text-green-400 border border-green-500/30',
+            archived: 'bg-zinc-500/20 text-zinc-400 border border-zinc-500/30',
         };
 
         const labels = {
@@ -136,271 +136,310 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
         <AppLayout>
             <Head title="Pesan Kontak - Admin" />
 
-            <div className="space-y-6">
-                {/* Header */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Pesan Kontak</h1>
-                        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Kelola pesan kontak dari pengunjung website</p>
+            {/* Hero Section */}
+            <div className="relative mb-8 overflow-hidden rounded-2xl border border-amber-500/20 bg-gradient-to-br from-zinc-900 via-zinc-800 to-amber-900/20 p-8">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent"></div>
+                <div className="relative z-10">
+                    <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-600/20 px-4 py-2">
+                        <Shield className="h-5 w-5 text-amber-400" />
+                        <span className="text-sm font-medium text-amber-400">Inbox - CIGI Global</span>
                     </div>
+
+                    <h1 className="mb-4 text-4xl font-bold">
+                        <span className="block text-amber-400">Contact</span>
+                        <span className="block text-white">Messages</span>
+                    </h1>
+
+                    <p className="max-w-2xl text-lg leading-relaxed text-zinc-300">
+                        Kelola dan balas pesan kontak dari pengunjung website.
+                        <span className="font-semibold text-amber-400"> Inbox terintegrasi</span> untuk komunikasi yang efektif.
+                    </p>
                 </div>
+            </div>
 
-                {/* Stats Cards */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-                    <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                        <div className="flex items-center">
-                            <Mail className="h-5 w-5 text-gray-400" />
-                            <span className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-400">Total</span>
-                        </div>
-                        <div className="mt-1">
-                            <span className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{stats.total}</span>
-                        </div>
-                    </div>
-
-                    <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                        <div className="flex items-center">
-                            <MailOpen className="h-5 w-5 text-blue-500" />
-                            <span className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-400">Belum Dibaca</span>
-                        </div>
-                        <div className="mt-1">
-                            <span className="text-2xl font-semibold text-blue-600">{stats.unread}</span>
-                        </div>
-                    </div>
-
-                    <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                        <div className="flex items-center">
-                            <MailCheck className="h-5 w-5 text-green-500" />
-                            <span className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-400">Sudah Dibaca</span>
-                        </div>
-                        <div className="mt-1">
-                            <span className="text-2xl font-semibold text-green-600">{stats.read}</span>
-                        </div>
-                    </div>
-
-                    <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                        <div className="flex items-center">
-                            <Archive className="h-5 w-5 text-gray-500" />
-                            <span className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-400">Diarsipkan</span>
-                        </div>
-                        <div className="mt-1">
-                            <span className="text-2xl font-semibold text-gray-600">{stats.archived}</span>
-                        </div>
-                    </div>
-
-                    <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                        <div className="flex items-center">
-                            <CheckCheck className="h-5 w-5 text-amber-500" />
-                            <span className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-400">7 Hari Terakhir</span>
-                        </div>
-                        <div className="mt-1">
-                            <span className="text-2xl font-semibold text-amber-600">{stats.recent}</span>
-                        </div>
-                    </div>
+            {/* Success Message */}
+            {flash?.success && (
+                <div className="mb-6 rounded-2xl border border-green-500/20 bg-green-500/10 p-4">
+                    <div className="text-sm font-medium text-green-400">{flash.success}</div>
                 </div>
+            )}
 
-                {/* Success Message */}
-                {flash?.success && (
-                    <div className="rounded-md bg-green-50 p-4 dark:bg-green-900/50">
-                        <div className="text-sm text-green-700 dark:text-green-300">{flash.success}</div>
-                    </div>
-                )}
-
-                {/* Filters and Search */}
-                <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-                        <div className="flex-1">
-                            <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Pencarian
-                            </label>
-                            <div className="relative mt-1">
-                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                                <Input
-                                    id="search"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                    placeholder="Cari berdasarkan nama, email, subjek, atau pesan..."
-                                    className="pl-10"
-                                />
+            {/* Email Layout Container */}
+            <div className="flex h-[800px] gap-6">
+                {/* Left Sidebar - Email Navigation */}
+                <div className="w-80 space-y-6">
+                    {/* Quick Stats */}
+                    <div className="section-card">
+                        <div className="mb-4 flex items-center gap-3">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20">
+                                <Mail className="h-6 w-6 text-amber-400" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold text-white">Inbox Stats</h3>
+                                <p className="text-sm text-zinc-400">Message overview</p>
                             </div>
                         </div>
-
-                        <div className="sm:w-48">
-                            <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Status
-                            </label>
-                            <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                <SelectTrigger className="mt-1">
-                                    <SelectValue placeholder="Semua Status" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">Semua Status</SelectItem>
-                                    <SelectItem value="unread">Belum Dibaca</SelectItem>
-                                    <SelectItem value="read">Sudah Dibaca</SelectItem>
-                                    <SelectItem value="archived">Diarsipkan</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <Button onClick={handleSearch} className="sm:w-auto">
-                            <Search className="mr-2 h-4 w-4" />
-                            Cari
-                        </Button>
-                    </div>
-                </div>
-
-                {/* Bulk Actions */}
-                {selectedIds.length > 0 && (
-                    <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/50">
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm text-amber-700 dark:text-amber-300">{selectedIds.length} pesan dipilih</span>
-                            <div className="flex gap-2">
-                                <Button size="sm" variant="outline" onClick={() => handleBulkAction('mark-as-read')}>
-                                    <MailCheck className="mr-2 h-4 w-4" />
-                                    Tandai Dibaca
-                                </Button>
-                                <Button size="sm" variant="outline" onClick={() => handleBulkAction('mark-as-archived')}>
-                                    <Archive className="mr-2 h-4 w-4" />
-                                    Arsipkan
-                                </Button>
-                                <Button size="sm" variant="destructive" onClick={() => handleBulkAction('bulk-delete')}>
-                                    <Trash2 className="mr-2 h-4 w-4" />
-                                    Hapus
-                                </Button>
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between rounded-lg bg-zinc-800/50 p-3">
+                                <div className="flex items-center gap-3">
+                                    <Inbox className="h-4 w-4 text-blue-400" />
+                                    <span className="text-sm text-zinc-300">Total Messages</span>
+                                </div>
+                                <span className="font-semibold text-white">{stats.total}</span>
+                            </div>
+                            <div className="flex items-center justify-between rounded-lg bg-zinc-800/50 p-3">
+                                <div className="flex items-center gap-3">
+                                    <MailOpen className="h-4 w-4 text-orange-400" />
+                                    <span className="text-sm text-zinc-300">Unread</span>
+                                </div>
+                                <span className="font-semibold text-orange-400">{stats.unread}</span>
+                            </div>
+                            <div className="flex items-center justify-between rounded-lg bg-zinc-800/50 p-3">
+                                <div className="flex items-center gap-3">
+                                    <MailCheck className="h-4 w-4 text-green-400" />
+                                    <span className="text-sm text-zinc-300">Read</span>
+                                </div>
+                                <span className="font-semibold text-green-400">{stats.read}</span>
+                            </div>
+                            <div className="flex items-center justify-between rounded-lg bg-zinc-800/50 p-3">
+                                <div className="flex items-center gap-3">
+                                    <Archive className="h-4 w-4 text-zinc-400" />
+                                    <span className="text-sm text-zinc-300">Archived</span>
+                                </div>
+                                <span className="font-semibold text-zinc-400">{stats.archived}</span>
                             </div>
                         </div>
                     </div>
-                )}
 
-                {/* Messages Table */}
-                <div className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead className="bg-gray-50 dark:bg-gray-900/50">
-                                <tr>
-                                    <th className="w-12 px-4 py-3">
-                                        <Checkbox checked={selectedIds.length === contactMessages.data.length} onCheckedChange={handleSelectAll} />
-                                    </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-400">
-                                        Pengirim
-                                    </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-400">
-                                        Subjek & Pesan
-                                    </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-400">
-                                        Status
-                                    </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-400">
-                                        Tanggal
-                                    </th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-400">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                                {contactMessages.data.map((message) => (
-                                    <tr
-                                        key={message.id}
-                                        className={`hover:bg-gray-50 dark:hover:bg-gray-900/50 ${
-                                            message.status === 'unread' ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''
-                                        }`}
+                    {/* Filters */}
+                    <div className="section-card">
+                        <h3 className="mb-4 text-lg font-bold text-white">Filters & Search</h3>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="mb-2 block text-sm font-medium text-zinc-300">Search Messages</label>
+                                <div className="relative">
+                                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                    <Input
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                                        placeholder="Search by name, email, subject..."
+                                        className="border-zinc-600 bg-zinc-800/50 pl-10 text-zinc-100 placeholder-zinc-500"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="mb-2 block text-sm font-medium text-zinc-300">Message Status</label>
+                                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                    <SelectTrigger className="border-zinc-600 bg-zinc-800/50 text-zinc-100">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">All Messages</SelectItem>
+                                        <SelectItem value="unread">Unread Only</SelectItem>
+                                        <SelectItem value="read">Read Only</SelectItem>
+                                        <SelectItem value="archived">Archived Only</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <Button onClick={handleSearch} className="w-full bg-amber-600 hover:bg-amber-700">
+                                <Search className="mr-2 h-4 w-4" />
+                                Apply Filters
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Main Content - Email List */}
+                <div className="flex-1 space-y-6">
+                    {/* Bulk Actions */}
+                    {selectedIds.length > 0 && (
+                        <div className="section-card border-amber-500/20 bg-amber-500/10">
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm font-medium text-amber-400">{selectedIds.length} messages selected</span>
+                                <div className="flex gap-2">
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => handleBulkAction('mark-as-read')}
+                                        className="border-green-500/30 bg-green-500/10 text-green-400 hover:bg-green-500/20"
                                     >
-                                        <td className="px-4 py-4">
-                                            <Checkbox
-                                                checked={selectedIds.includes(message.id)}
-                                                onCheckedChange={(checked) => handleSelectMessage(message.id, checked as boolean)}
-                                            />
-                                        </td>
-                                        <td className="px-4 py-4">
-                                            <div className="flex items-start space-x-3">
-                                                <div className="flex-shrink-0">
-                                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
-                                                        <User className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                                                    </div>
-                                                </div>
-                                                <div className="min-w-0 flex-1">
-                                                    <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{message.name}</p>
-                                                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                                        <Mail className="mr-1 h-3 w-3" />
+                                        <MailCheck className="mr-2 h-4 w-4" />
+                                        Mark Read
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => handleBulkAction('mark-as-archived')}
+                                        className="border-zinc-500/30 bg-zinc-500/10 text-zinc-400 hover:bg-zinc-500/20"
+                                    >
+                                        <Archive className="mr-2 h-4 w-4" />
+                                        Archive
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="destructive"
+                                        onClick={() => handleBulkAction('bulk-delete')}
+                                        className="border-red-500/30 bg-red-500/20 text-red-400 hover:bg-red-500/30"
+                                    >
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        Delete
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Email List Header */}
+                    <div className="section-card">
+                        <div className="mb-4 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <Checkbox checked={selectedIds.length === contactMessages.data.length} onCheckedChange={handleSelectAll} />
+                                <h3 className="text-lg font-bold text-white">Inbox Messages</h3>
+                                <Badge className="border border-amber-500/30 bg-amber-500/20 text-amber-400">{contactMessages.total} total</Badge>
+                            </div>
+                        </div>
+
+                        {/* Message List */}
+                        <div className="space-y-1">
+                            {contactMessages.data.map((message) => (
+                                <div
+                                    key={message.id}
+                                    className={`group flex items-start gap-4 rounded-lg border p-4 transition-all duration-200 hover:border-amber-500/30 hover:bg-zinc-800/30 ${
+                                        message.status === 'unread' ? 'border-amber-500/20 bg-amber-500/5' : 'border-zinc-700 bg-zinc-800/20'
+                                    }`}
+                                >
+                                    <Checkbox
+                                        checked={selectedIds.includes(message.id)}
+                                        onCheckedChange={(checked) => handleSelectMessage(message.id, checked as boolean)}
+                                    />
+
+                                    <div className="flex-shrink-0">
+                                        <div
+                                            className={`flex h-12 w-12 items-center justify-center rounded-full ${
+                                                message.status === 'unread' ? 'bg-amber-500/20' : 'bg-zinc-600/50'
+                                            }`}
+                                        >
+                                            <User className={`h-6 w-6 ${message.status === 'unread' ? 'text-amber-400' : 'text-zinc-400'}`} />
+                                        </div>
+                                    </div>
+
+                                    <div className="min-w-0 flex-1 space-y-2">
+                                        <div className="flex items-start justify-between">
+                                            <div>
+                                                <h4 className={`font-semibold ${message.status === 'unread' ? 'text-white' : 'text-zinc-300'}`}>
+                                                    {message.name}
+                                                </h4>
+                                                <div className="flex items-center gap-3 text-sm text-zinc-400">
+                                                    <div className="flex items-center gap-1">
+                                                        <Mail className="h-3 w-3" />
                                                         {message.email}
                                                     </div>
                                                     {message.phone && (
-                                                        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                                            <Phone className="mr-1 h-3 w-3" />
+                                                        <div className="flex items-center gap-1">
+                                                            <Phone className="h-3 w-3" />
                                                             {message.phone}
                                                         </div>
                                                     )}
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td className="px-4 py-4">
-                                            <div className="max-w-xs">
-                                                <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{message.subject}</p>
-                                                <p className="line-clamp-2 text-sm text-gray-500 dark:text-gray-400">
-                                                    {message.message.substring(0, 100)}
-                                                    {message.message.length > 100 && '...'}
-                                                </p>
+                                            <div className="flex items-center gap-2">
+                                                {getStatusBadge(message)}
+                                                <span className="text-xs text-zinc-500">{formatDate(message.created_at)}</span>
                                             </div>
-                                        </td>
-                                        <td className="px-4 py-4">{getStatusBadge(message)}</td>
-                                        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">{formatDate(message.created_at)}</td>
-                                        <td className="px-4 py-4">
-                                            <div className="flex items-center space-x-2">
-                                                <Button size="sm" variant="outline" asChild>
-                                                    <Link href={route('admin.contact-messages.show', message.id)}>
-                                                        <Eye className="h-4 w-4" />
-                                                    </Link>
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    variant="destructive"
-                                                    onClick={() => {
-                                                        if (confirm('Hapus pesan ini?')) {
-                                                            router.delete(route('admin.contact-messages.destroy', message.id));
-                                                        }
-                                                    }}
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                        </div>
+
+                                        <div>
+                                            <p
+                                                className={`mb-1 text-sm font-medium ${
+                                                    message.status === 'unread' ? 'text-amber-400' : 'text-zinc-400'
+                                                }`}
+                                            >
+                                                {message.subject}
+                                            </p>
+                                            <p className="line-clamp-2 text-sm text-zinc-500">
+                                                {message.message.substring(0, 150)}
+                                                {message.message.length > 150 && '...'}
+                                            </p>
+                                        </div>
+
+                                        <div className="flex items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                asChild
+                                                className="border-blue-500/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
+                                            >
+                                                <Link href={route('admin.contact-messages.show', message.id)}>
+                                                    <Eye className="mr-2 h-3 w-3" />
+                                                    View
+                                                </Link>
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                className="border-green-500/30 bg-green-500/10 text-green-400 hover:bg-green-500/20"
+                                                onClick={() => {
+                                                    window.open(`mailto:${message.email}?subject=Re: ${message.subject}`);
+                                                }}
+                                            >
+                                                <Send className="mr-2 h-3 w-3" />
+                                                Reply
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                className="border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20"
+                                                onClick={() => {
+                                                    if (confirm('Delete this message?')) {
+                                                        router.delete(route('admin.contact-messages.destroy', message.id));
+                                                    }
+                                                }}
+                                            >
+                                                <Trash2 className="h-3 w-3" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Empty State */}
+                        {contactMessages.data.length === 0 && (
+                            <div className="py-16 text-center">
+                                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-zinc-800/50">
+                                    <Mail className="h-10 w-10 text-zinc-500" />
+                                </div>
+                                <h3 className="mb-2 text-xl font-semibold text-white">No Messages</h3>
+                                <p className="text-zinc-400">Your inbox is empty. New contact messages will appear here.</p>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Empty State */}
-                    {contactMessages.data.length === 0 && (
-                        <div className="py-12 text-center">
-                            <Mail className="mx-auto h-12 w-12 text-gray-400" />
-                            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">Tidak ada pesan</h3>
-                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Belum ada pesan kontak yang masuk.</p>
+                    {/* Pagination */}
+                    {contactMessages.last_page > 1 && (
+                        <div className="section-card">
+                            <div className="flex items-center justify-between">
+                                <div className="text-sm text-zinc-400">
+                                    Showing {contactMessages.from} to {contactMessages.to} of {contactMessages.total} messages
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    {contactMessages.links.map((link, index) => (
+                                        <Button
+                                            key={index}
+                                            size="sm"
+                                            variant={link.active ? 'default' : 'outline'}
+                                            disabled={!link.url}
+                                            onClick={() => link.url && router.get(link.url)}
+                                            dangerouslySetInnerHTML={{ __html: link.label }}
+                                            className={link.active ? 'bg-amber-600 hover:bg-amber-700' : ''}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>
-
-                {/* Pagination */}
-                {contactMessages.last_page > 1 && (
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-gray-700 dark:text-gray-300">
-                            Menampilkan {contactMessages.from} sampai {contactMessages.to} dari {contactMessages.total} hasil
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            {contactMessages.links.map((link, index) => (
-                                <Button
-                                    key={index}
-                                    size="sm"
-                                    variant={link.active ? 'default' : 'outline'}
-                                    disabled={!link.url}
-                                    onClick={() => link.url && router.get(link.url)}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                )}
             </div>
         </AppLayout>
     );
