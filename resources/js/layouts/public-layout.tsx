@@ -19,10 +19,10 @@ export default function PublicLayout({ children, title, description, businessUni
         <>
             <Head title={pageTitle}>{description && <meta name="description" content={description} />}</Head>
 
-            <div className="flex min-h-screen flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900">
+            <div className="flex min-h-screen flex-col bg-black">
                 <PublicHeader businessUnits={businessUnits} communityClubs={communityClubs} />
 
-                <main className="flex-1">{children}</main>
+                <main className="flex-1 pt-16 md:pt-20">{children}</main>
 
                 <PublicFooter />
             </div>
