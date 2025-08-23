@@ -6,12 +6,7 @@ import { type Media } from '@/types';
 import { Edit, Eye, FileText, Image, Trash2 } from 'lucide-react';
 
 interface MediaItemProps {
-    media: Media & {
-        original_name?: string;
-        thumbnail_url?: string;
-        human_size?: string;
-        is_image?: boolean;
-    };
+    media: Media;
     selected?: boolean;
     onSelect?: (id: number, selected: boolean) => void;
     onView?: (media: Media) => void;
@@ -46,7 +41,7 @@ export default function MediaItem({
             return (
                 <img
                     src={media.thumbnail_url || media.url}
-                    alt={media.alt_text || media.title || media.original_name}
+                    alt={media.alt_text || media.title || media.original_filename}
                     className="h-full w-full object-cover"
                     loading="lazy"
                 />
@@ -105,8 +100,8 @@ export default function MediaItem({
 
                     {/* Media Info */}
                     <div className="mt-2 space-y-1">
-                        <p className="truncate text-sm font-medium text-gray-900 dark:text-white" title={media.title || media.original_name}>
-                            {media.title || media.original_name}
+                        <p className="truncate text-sm font-medium text-gray-900 dark:text-white" title={media.title || media.original_filename}>
+                            {media.title || media.original_filename}
                         </p>
                         <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                             <span>{media.human_size}</span>

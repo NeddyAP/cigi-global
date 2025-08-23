@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
@@ -23,7 +22,7 @@ interface MediaShowProps {
     media: {
         id: number;
         filename: string;
-        original_name: string;
+        original_filename: string;
         mime_type: string;
         size: number;
         human_size: string;
@@ -40,25 +39,15 @@ interface MediaShowProps {
             height: number;
         };
         metadata?: Record<string, unknown>;
-        folder?: {
-            id: number;
-            name: string;
-            slug: string;
-        };
         uploader?: {
             id: number;
             name: string;
             email: string;
         };
     };
-    folders?: Array<{
-        id: number;
-        name: string;
-        slug: string;
-    }>;
 }
 
-export default function MediaShow({ media, folders = [] }: MediaShowProps) {
+export default function MediaShow({ media }: MediaShowProps) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [copiedUrl, setCopiedUrl] = useState(false);
@@ -66,14 +55,13 @@ export default function MediaShow({ media, folders = [] }: MediaShowProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin' },
         { title: 'Media Manager', href: '/admin/media' },
-        { title: media.title || media.original_name, href: `/admin/media/${media.id}` },
+        { title: media.title || media.original_filename, href: `/admin/media/${media.id}` },
     ];
 
     const { data, setData, put, processing, errors } = useForm({
         title: media.title || '',
         alt_text: media.alt_text || '',
         description: media.description || '',
-        folder_id: media.folder?.id?.toString() || '',
     });
 
     const handleEdit = () => {
@@ -95,7 +83,6 @@ export default function MediaShow({ media, folders = [] }: MediaShowProps) {
             title: media.title || '',
             alt_text: media.alt_text || '',
             description: media.description || '',
-            folder_id: media.folder?.id?.toString() || '',
         });
     };
 
@@ -127,11 +114,11 @@ export default function MediaShow({ media, folders = [] }: MediaShowProps) {
                 <div className="relative">
                     <img
                         src={media.url}
-                        alt={media.alt_text || media.title || media.original_name}
-                        className="max-h-96 w-full rounded-lg object-contain"
+                        alt={media.alt_text || media.title || media.original_filename}
+                        className="max-h-96 w-full rounded-lg bg-zinc-800 object-contain"
                     />
                     {media.dimensions && (
-                        <div className="absolute bottom-2 left-2 rounded bg-black/50 px-2 py-1 text-xs text-white">
+                        <div className="absolute bottom-2 left-2 rounded bg-black/70 px-3 py-1 text-sm text-white backdrop-blur">
                             {media.dimensions.width} × {media.dimensions.height}
                         </div>
                     )}
@@ -140,11 +127,11 @@ export default function MediaShow({ media, folders = [] }: MediaShowProps) {
         }
 
         return (
-            <div className="flex h-64 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+            <div className="flex h-64 items-center justify-center rounded-lg bg-zinc-800">
                 <div className="text-center">
-                    <FileText className="mx-auto h-16 w-16 text-gray-400" />
-                    <p className="mt-2 text-sm text-gray-500">{media.original_name.split('.').pop()?.toUpperCase()} File</p>
-                    <p className="text-xs text-gray-400">{media.human_size}</p>
+                    <FileText className="mx-auto h-16 w-16 text-zinc-400" />
+                    <p className="mt-2 text-sm text-zinc-300">{media.original_filename?.split('.').pop()?.toUpperCase()} File</p>
+                    <p className="text-xs text-zinc-500">{media.human_size}</p>
                 </div>
             </div>
         );
@@ -152,18 +139,18 @@ export default function MediaShow({ media, folders = [] }: MediaShowProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={media.title || media.original_name} />
+            <Head title={media.title || media.original_filename} />
 
             <div className="space-y-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{media.title || media.original_name}</h1>
-                        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Media file details and properties</p>
+                        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">{media.title || media.original_filename}</h1>
+                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">Media file details and properties</p>
                     </div>
 
-                    <div className="flex space-x-2">
-                        <Button variant="outline" asChild>
+                    <div className="flex space-x-3">
+                        <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                             <a href={route('admin.media.index')}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 Back to Media
@@ -171,13 +158,17 @@ export default function MediaShow({ media, folders = [] }: MediaShowProps) {
                         </Button>
 
                         {!isEditing && (
-                            <Button variant="outline" onClick={handleEdit}>
+                            <Button
+                                variant="outline"
+                                onClick={handleEdit}
+                                className="border-amber-600 text-amber-400 hover:bg-amber-600 hover:text-white"
+                            >
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Button>
                         )}
 
-                        <Button variant="outline" asChild>
+                        <Button variant="outline" asChild className="border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white">
                             <a href={media.url} download target="_blank">
                                 <Download className="mr-2 h-4 w-4" />
                                 Download
@@ -194,8 +185,8 @@ export default function MediaShow({ media, folders = [] }: MediaShowProps) {
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     {/* Preview */}
                     <div className="lg:col-span-2">
-                        <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-                            <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">Preview</h3>
+                        <div className="section-card p-6">
+                            <h3 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">Preview</h3>
                             {renderPreview()}
                         </div>
                     </div>
@@ -203,63 +194,61 @@ export default function MediaShow({ media, folders = [] }: MediaShowProps) {
                     {/* Details and Edit Form */}
                     <div className="space-y-6">
                         {/* File Information */}
-                        <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-                            <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">File Information</h3>
+                        <div className="section-card p-6">
+                            <h3 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">File Information</h3>
 
-                            <div className="space-y-3 text-sm">
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500 dark:text-gray-400">File name:</span>
-                                    <span className="font-medium">{media.original_name}</span>
+                            <div className="space-y-4 text-sm">
+                                <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
+                                    <span className="text-zinc-400">File name:</span>
+                                    <span className="font-medium text-white">{media.original_filename}</span>
                                 </div>
 
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500 dark:text-gray-400">File size:</span>
-                                    <span className="font-medium">{media.human_size}</span>
+                                <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
+                                    <span className="text-zinc-400">File size:</span>
+                                    <span className="font-medium text-amber-400">{media.human_size}</span>
                                 </div>
 
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500 dark:text-gray-400">MIME type:</span>
-                                    <span className="font-medium">{media.mime_type}</span>
+                                <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
+                                    <span className="text-zinc-400">MIME type:</span>
+                                    <span className="font-medium text-white">{media.mime_type}</span>
                                 </div>
 
                                 {media.dimensions && (
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500 dark:text-gray-400">Dimensions:</span>
-                                        <span className="font-medium">
+                                    <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
+                                        <span className="text-zinc-400">Dimensions:</span>
+                                        <span className="font-medium text-white">
                                             {media.dimensions.width} × {media.dimensions.height}
                                         </span>
                                     </div>
                                 )}
 
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500 dark:text-gray-400">Uploaded:</span>
-                                    <span className="font-medium">{formatDate(media.created_at)}</span>
+                                <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
+                                    <span className="text-zinc-400">Uploaded:</span>
+                                    <span className="font-medium text-white">{formatDate(media.created_at)}</span>
                                 </div>
 
                                 {media.uploader && (
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500 dark:text-gray-400">Uploader:</span>
-                                        <span className="font-medium">{media.uploader.name}</span>
-                                    </div>
-                                )}
-
-                                {media.folder && (
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500 dark:text-gray-400">Folder:</span>
-                                        <span className="font-medium">{media.folder.name}</span>
+                                    <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
+                                        <span className="text-zinc-400">Uploader:</span>
+                                        <span className="font-medium text-white">{media.uploader.name}</span>
                                     </div>
                                 )}
                             </div>
 
                             {/* URL Copy */}
-                            <div className="mt-4 border-t border-gray-200 pt-4 dark:border-gray-700">
-                                <Label className="text-sm text-gray-500 dark:text-gray-400">File URL</Label>
-                                <div className="mt-1 flex">
-                                    <Input value={media.url} readOnly className="flex-1 text-xs" />
-                                    <Button size="sm" variant="outline" onClick={copyUrl} className="ml-2">
+                            <div className="mt-6 border-t border-zinc-700 pt-6">
+                                <Label className="text-sm text-zinc-400">File URL</Label>
+                                <div className="mt-2 flex">
+                                    <Input value={media.url} readOnly className="flex-1 border-zinc-700 bg-zinc-800 text-xs text-white" />
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={copyUrl}
+                                        className="ml-2 border-zinc-700 text-zinc-300 hover:bg-zinc-700"
+                                    >
                                         {copiedUrl ? 'Copied!' : <Copy className="h-4 w-4" />}
                                     </Button>
-                                    <Button size="sm" variant="outline" asChild className="ml-1">
+                                    <Button size="sm" variant="outline" asChild className="ml-1 border-zinc-700 text-zinc-300 hover:bg-zinc-700">
                                         <a href={media.url} target="_blank" rel="noopener noreferrer">
                                             <ExternalLink className="h-4 w-4" />
                                         </a>
@@ -269,91 +258,91 @@ export default function MediaShow({ media, folders = [] }: MediaShowProps) {
                         </div>
 
                         {/* Edit Form */}
-                        <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-                            <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">{isEditing ? 'Edit Details' : 'Details'}</h3>
+                        <div className="section-card p-6">
+                            <h3 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">{isEditing ? 'Edit Details' : 'Details'}</h3>
 
                             {isEditing ? (
                                 <form onSubmit={handleSave} className="space-y-4">
                                     <div>
-                                        <Label htmlFor="title">Title</Label>
+                                        <Label htmlFor="title" className="text-zinc-300">
+                                            Title
+                                        </Label>
                                         <Input
                                             id="title"
                                             value={data.title}
                                             onChange={(e) => setData('title', e.target.value)}
                                             placeholder="Enter title"
+                                            className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                         />
-                                        {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
+                                        {errors.title && <p className="mt-1 text-sm text-red-400">{errors.title}</p>}
                                     </div>
 
                                     {media.is_image && (
                                         <div>
-                                            <Label htmlFor="alt_text">Alt Text</Label>
+                                            <Label htmlFor="alt_text" className="text-zinc-300">
+                                                Alt Text
+                                            </Label>
                                             <Input
                                                 id="alt_text"
                                                 value={data.alt_text}
                                                 onChange={(e) => setData('alt_text', e.target.value)}
                                                 placeholder="Describe the image for accessibility"
+                                                className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                             />
-                                            {errors.alt_text && <p className="mt-1 text-sm text-red-600">{errors.alt_text}</p>}
+                                            {errors.alt_text && <p className="mt-1 text-sm text-red-400">{errors.alt_text}</p>}
                                         </div>
                                     )}
 
                                     <div>
-                                        <Label htmlFor="description">Description</Label>
+                                        <Label htmlFor="description" className="text-zinc-300">
+                                            Description
+                                        </Label>
                                         <Textarea
                                             id="description"
                                             value={data.description}
                                             onChange={(e) => setData('description', e.target.value)}
                                             placeholder="Enter description"
                                             rows={3}
+                                            className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                         />
-                                        {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="folder_id">Folder</Label>
-                                        <Select value={data.folder_id} onValueChange={(value) => setData('folder_id', value)}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select folder" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="root">Root Folder</SelectItem>
-                                                {folders.map((folder) => (
-                                                    <SelectItem key={folder.id} value={folder.id.toString()}>
-                                                        {folder.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        {errors.folder_id && <p className="mt-1 text-sm text-red-600">{errors.folder_id}</p>}
+                                        {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
                                     </div>
 
                                     <div className="flex space-x-2">
-                                        <Button type="submit" disabled={processing} className="flex-1">
+                                        <Button type="submit" disabled={processing} className="cta-button flex-1">
                                             {processing ? 'Saving...' : 'Save Changes'}
                                         </Button>
-                                        <Button type="button" variant="outline" onClick={handleCancel} className="flex-1">
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={handleCancel}
+                                            className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-700"
+                                        >
                                             Cancel
                                         </Button>
                                     </div>
                                 </form>
                             ) : (
-                                <div className="space-y-3 text-sm">
-                                    <div>
-                                        <span className="text-gray-500 dark:text-gray-400">Title:</span>
-                                        <p className="mt-1 font-medium">{media.title || <em className="text-gray-400">No title</em>}</p>
+                                <div className="space-y-4">
+                                    <div className="rounded-lg bg-zinc-800 p-3">
+                                        <span className="text-sm text-zinc-400">Title:</span>
+                                        <p className="mt-1 font-medium text-white">{media.title || <em className="text-zinc-500">No title</em>}</p>
                                     </div>
 
                                     {media.is_image && (
-                                        <div>
-                                            <span className="text-gray-500 dark:text-gray-400">Alt Text:</span>
-                                            <p className="mt-1 font-medium">{media.alt_text || <em className="text-gray-400">No alt text</em>}</p>
+                                        <div className="rounded-lg bg-zinc-800 p-3">
+                                            <span className="text-sm text-zinc-400">Alt Text:</span>
+                                            <p className="mt-1 font-medium text-white">
+                                                {media.alt_text || <em className="text-zinc-500">No alt text</em>}
+                                            </p>
                                         </div>
                                     )}
 
-                                    <div>
-                                        <span className="text-gray-500 dark:text-gray-400">Description:</span>
-                                        <p className="mt-1 font-medium">{media.description || <em className="text-gray-400">No description</em>}</p>
+                                    <div className="rounded-lg bg-zinc-800 p-3">
+                                        <span className="text-sm text-zinc-400">Description:</span>
+                                        <p className="mt-1 font-medium text-white">
+                                            {media.description || <em className="text-zinc-500">No description</em>}
+                                        </p>
                                     </div>
                                 </div>
                             )}
@@ -365,10 +354,10 @@ export default function MediaShow({ media, folders = [] }: MediaShowProps) {
                 <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Media File</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Are you sure you want to delete "{media.title || media.original_name}"? This action cannot be undone and the file will
-                                be permanently removed from storage.
+                            <AlertDialogTitle className="text-zinc-900 dark:text-white">Delete Media File</AlertDialogTitle>
+                            <AlertDialogDescription className="text-zinc-600 dark:text-zinc-400">
+                                Are you sure you want to delete "{media.title || media.original_filename}"? This action cannot be undone and the file
+                                will be permanently removed from storage.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

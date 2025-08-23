@@ -56,7 +56,7 @@ export default function MediaGrid({
     };
 
     const renderGridView = () => (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
             {media.map((item) => (
                 <MediaItem
                     key={item.id}
@@ -66,7 +66,7 @@ export default function MediaGrid({
                     onView={onItemView}
                     onEdit={onItemEdit}
                     onDelete={onItemDelete}
-                    size="medium"
+                    size="large"
                 />
             ))}
         </div>
@@ -132,8 +132,8 @@ export default function MediaGrid({
     const renderSkeletons = () => {
         if (viewMode === 'grid') {
             return (
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
-                    {Array.from({ length: 12 }).map((_, i) => (
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
+                    {Array.from({ length: 8 }).map((_, i) => (
                         <div key={i} className="space-y-2">
                             <Skeleton className="aspect-square w-full" />
                             <Skeleton className="h-4 w-full" />

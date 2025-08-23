@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Media;
-use App\Models\MediaFolder;
 use App\Services\MediaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -24,17 +23,11 @@ class MediaController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Media::with(['folder', 'uploader']);
+        $query = Media::with(['uploader']);
 
         // Apply filters
         if ($request->filled('search')) {
             $query->search($request->search);
-        }
-
-        if ($request->filled('folder_id') && $request->folder_id !== 'all-folders') {
-            // Convert placeholder to null for root folder
-            $folderId = $request->folder_id === 'root' ? null : $request->folder_id;
-            $query->inFolder($folderId);
         }
 
         if ($request->filled('type') && $request->type !== 'all-types') {
@@ -46,24 +39,10 @@ class MediaController extends Controller
             ->paginate(24)
             ->withQueryString();
 
-        // Get folders for navigation
-        $folders = MediaFolder::with('children')
-            ->whereNull('parent_id')
-            ->orderBy('name')
-            ->get();
-
-        $currentFolder = null;
-        if ($request->filled('folder_id')) {
-            $currentFolder = MediaFolder::with('parent')->find($request->folder_id);
-        }
-
         return Inertia::render('admin/media/index', [
             'media' => $media,
-            'folders' => $folders,
-            'currentFolder' => $currentFolder,
             'filters' => [
                 'search' => $request->search,
-                'folder_id' => $request->folder_id,
                 'type' => $request->type,
             ],
         ]);
@@ -74,13 +53,7 @@ class MediaController extends Controller
      */
     public function create(Request $request)
     {
-        $folders = MediaFolder::orderBy('name')->get();
-        $selectedFolderId = $request->get('folder_id');
-
-        return Inertia::render('admin/media/create', [
-            'folders' => $folders,
-            'selectedFolderId' => $selectedFolderId,
-        ]);
+        return Inertia::render('admin/media/create');
     }
 
     /**
@@ -91,30 +64,17 @@ class MediaController extends Controller
         $validator = Validator::make($request->all(), [
             'files' => 'required|array|min:1',
             'files.*' => 'required|file|max:10240', // 10MB max
-            'folder_id' => ['nullable', 'string'],
             'title' => 'nullable|string|max:255',
             'alt_text' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
-
-        // Add custom validation for folder_id
-        $validator->after(function ($validator) use ($request) {
-            $folderId = $request->folder_id;
-            if ($folderId && $folderId !== 'root' && ! \App\Models\MediaFolder::find($folderId)) {
-                $validator->errors()->add('folder_id', 'The selected folder id is invalid.');
-            }
-        });
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
         try {
-            // Convert placeholder value to null for database
-            $folderId = $request->folder_id === 'root' ? null : $request->folder_id;
-
             $results = $this->mediaService->bulkUpload($request->file('files'), [
-                'folder_id' => $folderId,
                 'title' => $request->title,
                 'alt_text' => $request->alt_text,
                 'description' => $request->description,
@@ -130,7 +90,7 @@ class MediaController extends Controller
 
             return redirect()->route('admin.media.index')->with('success', $message);
         } catch (\Exception $e) {
-            return back()->withErrors(['upload' => 'Upload failed: '.$e->getMessage()]);
+            return back()->withErrors(['upload' => 'Upload failed: ' . $e->getMessage()]);
         }
     }
 
@@ -139,7 +99,7 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
-        $media->load(['folder', 'uploader']);
+        $media->load(['uploader']);
 
         return Inertia::render('admin/media/show', [
             'media' => $media,
@@ -151,12 +111,10 @@ class MediaController extends Controller
      */
     public function edit(Media $media)
     {
-        $media->load(['folder']);
-        $folders = MediaFolder::orderBy('name')->get();
+        $media->load(['uploader']);
 
         return Inertia::render('admin/media/edit', [
             'media' => $media,
-            'folders' => $folders,
         ]);
     }
 
@@ -169,37 +127,24 @@ class MediaController extends Controller
             'title' => 'nullable|string|max:255',
             'alt_text' => 'nullable|string',
             'description' => 'nullable|string',
-            'folder_id' => ['nullable', 'string'],
         ]);
-
-        // Add custom validation for folder_id
-        $validator->after(function ($validator) use ($request) {
-            $folderId = $request->folder_id;
-            if ($folderId && $folderId !== 'root' && ! \App\Models\MediaFolder::find($folderId)) {
-                $validator->errors()->add('folder_id', 'The selected folder id is invalid.');
-            }
-        });
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
         try {
-            // Convert placeholder value to null for database
-            $folderId = $request->folder_id === 'root' ? null : $request->folder_id;
-
             $updateData = $request->only([
                 'title',
                 'alt_text',
                 'description',
             ]);
-            $updateData['folder_id'] = $folderId;
 
             $media->update($updateData);
 
-            return back()->with('success', 'Media updated successfully.');
+            return redirect()->route('admin.media.show', $media)->with('success', 'Media updated successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['update' => 'Update failed: '.$e->getMessage()]);
+            return back()->withErrors(['update' => 'Update failed: ' . $e->getMessage()]);
         }
     }
 
@@ -213,7 +158,7 @@ class MediaController extends Controller
 
             return back()->with('success', 'Media deleted successfully.');
         } catch (\Exception $e) {
-            return back()->withErrors(['delete' => 'Delete failed: '.$e->getMessage()]);
+            return back()->withErrors(['delete' => 'Delete failed: ' . $e->getMessage()]);
         }
     }
 
@@ -222,17 +167,11 @@ class MediaController extends Controller
      */
     public function picker(Request $request)
     {
-        $query = Media::with(['folder']);
+        $query = Media::query();
 
         // Apply filters
         if ($request->filled('search')) {
             $query->search($request->search);
-        }
-
-        if ($request->filled('folder_id') && $request->folder_id !== 'all-folders') {
-            // Convert placeholder to null for root folder
-            $folderId = $request->folder_id === 'root' ? null : $request->folder_id;
-            $query->inFolder($folderId);
         }
 
         if ($request->filled('type') && $request->type !== 'all-types') {
@@ -240,18 +179,15 @@ class MediaController extends Controller
         }
 
         // Default to images only if no type specified
-        if (! $request->filled('type') || $request->type === 'all-types') {
+        if (!$request->filled('type') || $request->type === 'all-types') {
             $query->images();
         }
 
         $media = $query->orderBy('created_at', 'desc')
             ->paginate(20);
 
-        $folders = MediaFolder::orderBy('name')->get();
-
         return response()->json([
             'media' => $media,
-            'folders' => $folders,
         ]);
     }
 
@@ -262,16 +198,7 @@ class MediaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'file' => 'required|file|max:10240', // 10MB max
-            'folder_id' => ['nullable', 'string'],
         ]);
-
-        // Add custom validation for folder_id
-        $validator->after(function ($validator) use ($request) {
-            $folderId = $request->folder_id;
-            if ($folderId && $folderId !== 'root' && ! MediaFolder::find($folderId)) {
-                $validator->errors()->add('folder_id', 'The selected folder id is invalid.');
-            }
-        });
 
         if ($validator->fails()) {
             return response()->json([
@@ -281,12 +208,7 @@ class MediaController extends Controller
         }
 
         try {
-            // Convert placeholder value to null for database
-            $folderId = $request->folder_id === 'root' ? null : $request->folder_id;
-
-            $media = $this->mediaService->uploadFile($request->file('file'), [
-                'folder_id' => $folderId,
-            ]);
+            $media = $this->mediaService->uploadFile($request->file('file'));
 
             return response()->json([
                 'success' => true,
@@ -334,41 +256,9 @@ class MediaController extends Controller
 
             return back()->with('success', $message);
         } catch (\Exception $e) {
-            return back()->withErrors(['bulk_delete' => 'Bulk delete failed: '.$e->getMessage()]);
+            return back()->withErrors(['bulk_delete' => 'Bulk delete failed: ' . $e->getMessage()]);
         }
     }
 
-    /**
-     * Move media files to a folder.
-     */
-    public function bulkMove(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'ids' => 'required|array|min:1',
-            'ids.*' => 'required|exists:media,id',
-            'folder_id' => 'nullable|exists:media_folders,id',
-        ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator);
-        }
-
-        try {
-            $folder = $request->folder_id ? MediaFolder::find($request->folder_id) : null;
-            $moved = 0;
-
-            foreach ($request->ids as $id) {
-                $media = Media::find($id);
-                if ($media && $this->mediaService->moveToFolder($media, $folder)) {
-                    $moved++;
-                }
-            }
-
-            $folderName = $folder ? $folder->name : 'Root';
-
-            return back()->with('success', "Moved {$moved} files to {$folderName}.");
-        } catch (\Exception $e) {
-            return back()->withErrors(['bulk_move' => 'Bulk move failed: '.$e->getMessage()]);
-        }
-    }
 }

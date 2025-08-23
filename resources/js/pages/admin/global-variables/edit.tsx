@@ -25,18 +25,18 @@ const variableTypes = [
 ];
 
 const variableCategories = [
-    { value: 'company', label: 'Informasi Perusahaan' },
-    { value: 'contact', label: 'Informasi Kontak' },
-    { value: 'social', label: 'Media Sosial' },
-    { value: 'general', label: 'Umum' },
+    { value: 'company', label: 'Company Information' },
+    { value: 'contact', label: 'Contact Information' },
+    { value: 'social', label: 'Social Media' },
+    { value: 'general', label: 'General' },
     { value: 'seo', label: 'SEO' },
-    { value: 'config', label: 'Konfigurasi' },
+    { value: 'config', label: 'Configuration' },
 ];
 
 export default function EditGlobalVariable({ variable }: EditGlobalVariableProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin' },
-        { title: 'Variabel Global', href: '/admin/global-variables' },
+        { title: 'Global Variables', href: '/admin/global-variables' },
         { title: variable.key, href: `/admin/global-variables/${variable.id}` },
         { title: 'Edit', href: `/admin/global-variables/${variable.id}/edit` },
     ];
@@ -57,12 +57,12 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
 
     const getTypeDescription = (type: string) => {
         const descriptions = {
-            text: 'Teks sederhana, maksimal 255 karakter',
-            textarea: 'Teks panjang dengan line breaks',
-            number: 'Angka (integer atau decimal)',
-            email: 'Format email yang valid',
-            url: 'URL yang valid (http/https)',
-            json: 'Data dalam format JSON',
+            text: 'Simple text, maximum 255 characters',
+            textarea: 'Long text with line breaks',
+            number: 'Number (integer or decimal)',
+            email: 'Valid email format',
+            url: 'Valid URL (http/https)',
+            json: 'Data in JSON format',
             boolean: 'True/False (1/0)',
         };
         return descriptions[type as keyof typeof descriptions] || '';
@@ -76,9 +76,9 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         id="value"
                         value={data.value}
                         onChange={(e) => setData('value', e.target.value)}
-                        placeholder="Masukkan nilai variabel..."
+                        placeholder="Enter variable value..."
                         rows={4}
-                        className={errors.value ? 'border-red-500' : ''}
+                        className={`border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400 ${errors.value ? 'border-red-500' : ''}`}
                     />
                 );
             case 'number':
@@ -89,7 +89,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         value={data.value}
                         onChange={(e) => setData('value', e.target.value)}
                         placeholder="0"
-                        className={errors.value ? 'border-red-500' : ''}
+                        className={`border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400 ${errors.value ? 'border-red-500' : ''}`}
                     />
                 );
             case 'email':
@@ -100,7 +100,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         value={data.value}
                         onChange={(e) => setData('value', e.target.value)}
                         placeholder="user@example.com"
-                        className={errors.value ? 'border-red-500' : ''}
+                        className={`border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400 ${errors.value ? 'border-red-500' : ''}`}
                     />
                 );
             case 'url':
@@ -111,7 +111,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         value={data.value}
                         onChange={(e) => setData('value', e.target.value)}
                         placeholder="https://example.com"
-                        className={errors.value ? 'border-red-500' : ''}
+                        className={`border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400 ${errors.value ? 'border-red-500' : ''}`}
                     />
                 );
             case 'json':
@@ -122,7 +122,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         onChange={(e) => setData('value', e.target.value)}
                         placeholder='{"key": "value"}'
                         rows={6}
-                        className={`font-mono ${errors.value ? 'border-red-500' : ''}`}
+                        className={`border-zinc-700 bg-zinc-800 font-mono text-white placeholder:text-zinc-400 ${errors.value ? 'border-red-500' : ''}`}
                     />
                 );
             case 'boolean':
@@ -135,7 +135,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         >
                             {data.value === '1' ? 'True' : 'False'}
                         </Toggle>
-                        <Label>Nilai Boolean</Label>
+                        <Label className="text-zinc-300">Boolean Value</Label>
                     </div>
                 );
             default:
@@ -144,8 +144,8 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         id="value"
                         value={data.value}
                         onChange={(e) => setData('value', e.target.value)}
-                        placeholder="Masukkan nilai variabel..."
-                        className={errors.value ? 'border-red-500' : ''}
+                        placeholder="Enter variable value..."
+                        className={`border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400 ${errors.value ? 'border-red-500' : ''}`}
                     />
                 );
         }
@@ -158,40 +158,44 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Edit Variabel Global</h1>
-                        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">Edit variabel "{variable.key}"</p>
+                        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Edit Global Variable</h1>
+                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">Edit variable "{variable.key}"</p>
                     </div>
                     <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                         <a href={route('admin.global-variables.show', variable.id)}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Kembali
+                            Back to Details
                         </a>
                     </Button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <FormSection title="Informasi Dasar" description="Detail kunci dan kategori variabel" icon={<Database className="h-5 w-5" />}>
+                    <FormSection title="Basic Information" description="Variable key and category details" icon={<Database className="h-5 w-5" />}>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div>
-                                <Label htmlFor="key">Kunci Variabel *</Label>
+                                <Label htmlFor="key" className="text-zinc-300">
+                                    Variable Key *
+                                </Label>
                                 <Input
                                     id="key"
                                     value={data.key}
                                     onChange={(e) => setData('key', e.target.value)}
                                     placeholder="company_name"
-                                    className={`font-mono ${errors.key ? 'border-red-500' : ''}`}
+                                    className={`border-zinc-700 bg-zinc-800 font-mono text-white placeholder:text-zinc-400 ${errors.key ? 'border-red-500' : ''}`}
                                 />
-                                {errors.key && <p className="mt-1 text-sm text-red-600">{errors.key}</p>}
-                                <p className="mt-1 text-sm text-gray-500">Gunakan format snake_case (huruf kecil dengan underscore)</p>
+                                {errors.key && <p className="mt-1 text-sm text-red-400">{errors.key}</p>}
+                                <p className="mt-1 text-sm text-zinc-500">Use snake_case format (lowercase with underscores)</p>
                             </div>
 
                             <div>
-                                <Label htmlFor="category">Kategori *</Label>
+                                <Label htmlFor="category" className="text-zinc-300">
+                                    Category *
+                                </Label>
                                 <select
                                     id="category"
                                     value={data.category}
                                     onChange={(e) => setData('category', e.target.value)}
-                                    className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white ${errors.category ? 'border-red-500' : ''}`}
+                                    className={`w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white shadow-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none ${errors.category ? 'border-red-500' : ''}`}
                                 >
                                     {variableCategories.map((category) => (
                                         <option key={category.value} value={category.value}>
@@ -199,29 +203,33 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                                         </option>
                                     ))}
                                 </select>
-                                {errors.category && <p className="mt-1 text-sm text-red-600">{errors.category}</p>}
+                                {errors.category && <p className="mt-1 text-sm text-red-400">{errors.category}</p>}
                             </div>
                         </div>
 
                         <div>
-                            <Label htmlFor="description">Deskripsi</Label>
+                            <Label htmlFor="description" className="text-zinc-300">
+                                Description
+                            </Label>
                             <Input
                                 id="description"
                                 value={data.description}
                                 onChange={(e) => setData('description', e.target.value)}
-                                placeholder="Deskripsi penggunaan variabel ini"
-                                className={errors.description ? 'border-red-500' : ''}
+                                placeholder="Description of this variable usage"
+                                className={`border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400 ${errors.description ? 'border-red-500' : ''}`}
                             />
-                            {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
+                            {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
                         </div>
 
                         <div>
-                            <Label htmlFor="type">Tipe Data *</Label>
+                            <Label htmlFor="type" className="text-zinc-300">
+                                Data Type *
+                            </Label>
                             <select
                                 id="type"
                                 value={data.type}
                                 onChange={(e) => setData('type', e.target.value)}
-                                className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white ${errors.type ? 'border-red-500' : ''}`}
+                                className={`w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white shadow-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none ${errors.type ? 'border-red-500' : ''}`}
                             >
                                 {variableTypes.map((type) => (
                                     <option key={type.value} value={type.value}>
@@ -229,37 +237,37 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                                     </option>
                                 ))}
                             </select>
-                            {errors.type && <p className="mt-1 text-sm text-red-600">{errors.type}</p>}
-                            <p className="mt-1 text-sm text-gray-500">{getTypeDescription(data.type)}</p>
+                            {errors.type && <p className="mt-1 text-sm text-red-400">{errors.type}</p>}
+                            <p className="mt-1 text-sm text-zinc-500">{getTypeDescription(data.type)}</p>
                         </div>
                     </FormSection>
 
-                    <FormSection title="Nilai Variabel" description="Isi nilai untuk variabel" icon={<Settings className="h-5 w-5" />}>
+                    <FormSection title="Variable Value" description="Set the variable value" icon={<Settings className="h-5 w-5" />}>
                         <div>
-                            <Label htmlFor="value">Nilai {data.type !== 'boolean' && '*'}</Label>
+                            <Label htmlFor="value" className="text-zinc-300">
+                                Value {data.type !== 'boolean' && '*'}
+                            </Label>
                             {renderValueInput()}
-                            {errors.value && <p className="mt-1 text-sm text-red-600">{errors.value}</p>}
+                            {errors.value && <p className="mt-1 text-sm text-red-400">{errors.value}</p>}
                             {data.type === 'json' && (
-                                <p className="mt-1 text-sm text-gray-500">
-                                    Pastikan format JSON valid. Contoh: {'{'}"name": "value", "number": 123{'}'}
-                                </p>
+                                <p className="mt-1 text-sm text-zinc-500">Ensure valid JSON format. Example: {'{"name": "value", "number": 123}'}</p>
                             )}
                         </div>
                     </FormSection>
 
-                    <FormSection title="Pengaturan Akses" description="Kontrol visibilitas variabel" icon={<Settings className="h-5 w-5" />}>
+                    <FormSection title="Access Settings" description="Control variable visibility" icon={<Settings className="h-5 w-5" />}>
                         <div className="flex items-start space-x-3">
-                            <Toggle pressed={data.is_public} onPressedChange={(pressed) => setData('is_public', pressed)} aria-label="Akses Publik">
-                                {data.is_public ? 'Publik' : 'Privat'}
+                            <Toggle pressed={data.is_public} onPressedChange={(pressed) => setData('is_public', pressed)} aria-label="Public Access">
+                                {data.is_public ? 'Public' : 'Private'}
                             </Toggle>
                             <div>
-                                <Label>Akses Publik</Label>
+                                <Label className="text-zinc-300">Public Access</Label>
                                 <div className="mt-1 flex items-start">
-                                    <Info className="mt-0.5 mr-2 h-4 w-4 flex-shrink-0 text-blue-500" />
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    <Info className="mt-0.5 mr-2 h-4 w-4 flex-shrink-0 text-blue-400" />
+                                    <p className="text-sm text-zinc-400">
                                         {data.is_public
-                                            ? 'Variabel ini dapat diakses dari frontend dan API publik'
-                                            : 'Variabel ini hanya dapat diakses dari backend/admin'}
+                                            ? 'This variable can be accessed from frontend and public API'
+                                            : 'This variable can only be accessed from backend/admin'}
                                     </p>
                                 </div>
                             </div>
@@ -268,29 +276,27 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
 
                     {/* Current vs New Value Comparison */}
                     {variable.value !== data.value && (
-                        <div className="rounded-lg border border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-900/20">
-                            <div className="px-6 py-4">
-                                <div className="flex items-start">
-                                    <Info className="mt-0.5 mr-2 h-5 w-5 flex-shrink-0 text-yellow-500" />
-                                    <div className="w-full">
-                                        <h4 className="text-sm font-medium text-yellow-900 dark:text-yellow-100">Perubahan Terdeteksi</h4>
-                                        <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
-                                            <div>
-                                                <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">Nilai Saat Ini:</p>
-                                                <p className="mt-1 rounded border bg-white p-2 text-sm text-gray-900 dark:bg-gray-800 dark:text-white">
-                                                    {variable.type === 'boolean'
-                                                        ? variable.value === '1'
-                                                            ? 'True'
-                                                            : 'False'
-                                                        : variable.value || '(kosong)'}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">Nilai Baru:</p>
-                                                <p className="mt-1 rounded border bg-white p-2 text-sm text-gray-900 dark:bg-gray-800 dark:text-white">
-                                                    {data.type === 'boolean' ? (data.value === '1' ? 'True' : 'False') : data.value || '(kosong)'}
-                                                </p>
-                                            </div>
+                        <div className="rounded-lg border border-yellow-600/30 bg-yellow-500/10 p-6">
+                            <div className="flex items-start">
+                                <Info className="mt-0.5 mr-2 h-5 w-5 flex-shrink-0 text-yellow-400" />
+                                <div className="w-full">
+                                    <h4 className="text-sm font-medium text-yellow-300">Changes Detected</h4>
+                                    <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
+                                        <div>
+                                            <p className="text-sm font-medium text-yellow-200">Current Value:</p>
+                                            <p className="mt-1 rounded border border-zinc-700 bg-zinc-800 p-2 text-sm text-white">
+                                                {variable.type === 'boolean'
+                                                    ? variable.value === '1'
+                                                        ? 'True'
+                                                        : 'False'
+                                                    : variable.value || '(empty)'}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-medium text-yellow-200">New Value:</p>
+                                            <p className="mt-1 rounded border border-zinc-700 bg-zinc-800 p-2 text-sm text-white">
+                                                {data.type === 'boolean' ? (data.value === '1' ? 'True' : 'False') : data.value || '(empty)'}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -298,19 +304,29 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         </div>
                     )}
 
-                    <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
-                        <div className="px-6 py-4">
-                            <div className="flex items-start">
-                                <Info className="mt-0.5 mr-2 h-5 w-5 flex-shrink-0 text-blue-500" />
-                                <div>
-                                    <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100">Informasi Variabel</h4>
-                                    <div className="mt-2 text-sm text-blue-800 dark:text-blue-200">
+                    <div className="rounded-lg border border-blue-600/30 bg-blue-500/10 p-6">
+                        <div className="flex items-start">
+                            <Info className="mt-0.5 mr-2 h-5 w-5 flex-shrink-0 text-blue-400" />
+                            <div>
+                                <h4 className="text-sm font-medium text-blue-300">Variable Information</h4>
+                                <div className="mt-2 text-sm text-blue-200">
+                                    <p>
+                                        <strong>ID:</strong> {variable.id}
+                                    </p>
+                                    <p>
+                                        <strong>Created:</strong>{' '}
+                                        {new Date(variable.created_at).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                        })}
+                                    </p>
+                                    {variable.updated_at && (
                                         <p>
-                                            <strong>ID:</strong> {variable.id}
-                                        </p>
-                                        <p>
-                                            <strong>Dibuat:</strong>{' '}
-                                            {new Date(variable.created_at).toLocaleDateString('id-ID', {
+                                            <strong>Last Updated:</strong>{' '}
+                                            {new Date(variable.updated_at).toLocaleDateString('en-US', {
                                                 year: 'numeric',
                                                 month: 'long',
                                                 day: 'numeric',
@@ -318,19 +334,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                                                 minute: '2-digit',
                                             })}
                                         </p>
-                                        {variable.updated_at && (
-                                            <p>
-                                                <strong>Terakhir Diupdate:</strong>{' '}
-                                                {new Date(variable.updated_at).toLocaleDateString('id-ID', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit',
-                                                })}
-                                            </p>
-                                        )}
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -338,10 +342,10 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
 
                     <div className="flex justify-end space-x-3">
                         <Button type="button" variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
-                            <a href={route('admin.global-variables.show', variable.id)}>Batal</a>
+                            <a href={route('admin.global-variables.show', variable.id)}>Cancel</a>
                         </Button>
-                        <LoadingButton type="submit" loading={processing} loadingText="Menyimpan..." icon="save" className="cta-button">
-                            Simpan Perubahan
+                        <LoadingButton type="submit" loading={processing} loadingText="Saving..." icon="save" className="cta-button">
+                            Save Changes
                         </LoadingButton>
                     </div>
                 </form>

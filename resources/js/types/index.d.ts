@@ -125,8 +125,10 @@ export interface Media {
     thumbnail_url?: string;
     alt_text?: string;
     title?: string;
+    description?: string;
     caption?: string;
     folder_id?: number;
+    uploaded_by?: number;
     is_image?: boolean;
     human_size?: string;
     dimensions?: {
@@ -135,6 +137,7 @@ export interface Media {
     };
     created_at: string;
     updated_at: string;
+    uploader?: User;
 }
 
 export interface ContactMessage {

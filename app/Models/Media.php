@@ -13,7 +13,7 @@ class Media extends Model
 
     protected $fillable = [
         'filename',
-        'original_name',
+        'original_filename',
         'mime_type',
         'size',
         'path',
@@ -21,7 +21,6 @@ class Media extends Model
         'alt_text',
         'title',
         'description',
-        'folder_id',
         'uploaded_by',
         'metadata',
     ];
@@ -37,14 +36,6 @@ class Media extends Model
         'human_size',
         'is_image',
     ];
-
-    /**
-     * Get the folder that owns the media.
-     */
-    public function folder(): BelongsTo
-    {
-        return $this->belongsTo(MediaFolder::class, 'folder_id');
-    }
 
     /**
      * Get the user who uploaded the media.
@@ -82,7 +73,7 @@ class Media extends Model
             $bytes /= 1024;
         }
 
-        return round($bytes, 2).' '.$units[$i];
+        return round($bytes, 2) . ' ' . $units[$i];
     }
 
     /**
@@ -98,7 +89,7 @@ class Media extends Model
      */
     public function getExtensionAttribute(): string
     {
-        return pathinfo($this->original_name, PATHINFO_EXTENSION);
+        return pathinfo($this->original_filename, PATHINFO_EXTENSION);
     }
 
     /**
@@ -121,7 +112,7 @@ class Media extends Model
      */
     public function scopeOfType($query, string $type)
     {
-        return $query->where('mime_type', 'like', $type.'%');
+        return $query->where('mime_type', 'like', $type . '%');
     }
 
     /**
@@ -133,27 +124,15 @@ class Media extends Model
     }
 
     /**
-     * Scope to filter by folder.
-     */
-    public function scopeInFolder($query, $folderId)
-    {
-        if ($folderId === null || $folderId === 'root') {
-            return $query->whereNull('folder_id');
-        }
-
-        return $query->where('folder_id', (int) $folderId);
-    }
-
-    /**
      * Scope to search by filename or original name.
      */
     public function scopeSearch($query, string $search)
     {
         return $query->where(function ($query) use ($search) {
-            $query->where('filename', 'like', '%'.$search.'%')
-                ->orWhere('original_name', 'like', '%'.$search.'%')
-                ->orWhere('title', 'like', '%'.$search.'%')
-                ->orWhere('alt_text', 'like', '%'.$search.'%');
+            $query->where('filename', 'like', '%' . $search . '%')
+                ->orWhere('original_filename', 'like', '%' . $search . '%')
+                ->orWhere('title', 'like', '%' . $search . '%')
+                ->orWhere('alt_text', 'like', '%' . $search . '%');
         });
     }
 

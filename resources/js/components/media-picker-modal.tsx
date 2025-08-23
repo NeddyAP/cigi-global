@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDebounce } from '@/hooks/use-debounce';
 import { type Media } from '@/types';
-import { Folder, Search, Upload } from 'lucide-react';
+import { Search, Upload } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 interface MediaPickerModalProps {
@@ -27,25 +27,15 @@ interface MediaData {
     total: number;
 }
 
-interface Folder {
-    id: number;
-    name: string;
-    slug: string;
-    parent_id?: number;
-    children?: Folder[];
-}
-
 export default function MediaPickerModal({ isOpen, onClose, onSelect, multiple = false, title = 'Select Media' }: MediaPickerModalProps) {
     const [activeTab, setActiveTab] = useState<'gallery' | 'upload'>('gallery');
     const [media, setMedia] = useState<MediaData | null>(null);
-    const [folders, setFolders] = useState<Folder[]>([]);
     const [loading, setLoading] = useState(false);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     // Filters
     const [search, setSearch] = useState('');
-    const [selectedFolder, setSelectedFolder] = useState<string>('all-folders');
     const [selectedType, setSelectedType] = useState<string>('all-types');
 
     const debouncedSearch = useDebounce(search, 300);
@@ -60,9 +50,6 @@ export default function MediaPickerModal({ isOpen, onClose, onSelect, multiple =
             if (debouncedSearch) {
                 params.append('search', debouncedSearch);
             }
-            if (selectedFolder && selectedFolder !== 'all-folders') {
-                params.append('folder_id', selectedFolder);
-            }
             if (selectedType && selectedType !== 'all-types') {
                 params.append('type', selectedType);
             }
@@ -71,18 +58,17 @@ export default function MediaPickerModal({ isOpen, onClose, onSelect, multiple =
             const data = await response.json();
 
             setMedia(data.media);
-            setFolders(data.folders);
         } catch (error) {
             console.error('Failed to load media:', error);
         }
         setLoading(false);
-    }, [currentPage, debouncedSearch, selectedFolder, selectedType]);
+    }, [currentPage, debouncedSearch, selectedType]);
 
     useEffect(() => {
         if (isOpen) {
             loadMedia();
         }
-    }, [isOpen, currentPage, debouncedSearch, selectedFolder, selectedType, loadMedia]);
+    }, [isOpen, currentPage, debouncedSearch, selectedType, loadMedia]);
 
     const handleSelect = (selectedIds: number[]) => {
         setSelectedItems(selectedIds);
@@ -101,16 +87,6 @@ export default function MediaPickerModal({ isOpen, onClose, onSelect, multiple =
 
         onClose();
         setSelectedItems([]);
-    };
-
-    // Removed unused handleUpload function
-
-    const renderFolderTree = (folders: Folder[], level = 0) => {
-        return folders.map((folder) => (
-            <SelectItem key={folder.id} value={folder.id.toString()}>
-                {'  '.repeat(level) + folder.name}
-            </SelectItem>
-        ));
     };
 
     return (
@@ -134,23 +110,10 @@ export default function MediaPickerModal({ isOpen, onClose, onSelect, multiple =
 
                     <TabsContent value="gallery" className="space-y-4">
                         {/* Filters */}
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div>
                                 <Label htmlFor="search">Search</Label>
                                 <Input id="search" placeholder="Search files..." value={search} onChange={(e) => setSearch(e.target.value)} />
-                            </div>
-
-                            <div>
-                                <Label htmlFor="folder">Folder</Label>
-                                <Select value={selectedFolder} onValueChange={setSelectedFolder}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="All folders" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="all-folders">All folders</SelectItem>
-                                        {renderFolderTree(folders)}
-                                    </SelectContent>
-                                </Select>
                             </div>
 
                             <div>

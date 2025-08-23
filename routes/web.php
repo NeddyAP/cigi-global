@@ -53,12 +53,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('media/ajax-upload', [\App\Http\Controllers\Admin\MediaController::class, 'ajaxUpload'])->name('media.ajax-upload');
     Route::get('media-picker', [\App\Http\Controllers\Admin\MediaController::class, 'picker'])->name('media.picker');
     Route::post('media/bulk-delete', [\App\Http\Controllers\Admin\MediaController::class, 'bulkDelete'])->name('media.bulk-delete');
-    Route::post('media/bulk-move', [\App\Http\Controllers\Admin\MediaController::class, 'bulkMove'])->name('media.bulk-move');
-
-    // Media Folder routes
-    Route::resource('media-folders', \App\Http\Controllers\Admin\MediaFolderController::class)->only(['index', 'store', 'update', 'destroy']);
-    Route::get('media-folders/tree', [\App\Http\Controllers\Admin\MediaFolderController::class, 'tree'])->name('media-folders.tree');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';

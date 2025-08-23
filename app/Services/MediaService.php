@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Media;
-use App\Models\MediaFolder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -45,11 +44,10 @@ class MediaService
         // Create media record
         $media = Media::create([
             'filename' => $filename,
-            'original_name' => $file->getClientOriginalName(),
+            'original_filename' => $file->getClientOriginalName(),
             'mime_type' => $file->getMimeType(),
             'size' => $file->getSize(),
             'path' => $storedPath,
-            'folder_id' => $options['folder_id'] ?? null,
             'uploaded_by' => auth()->id(),
             'metadata' => $metadata,
             'title' => $options['title'] ?? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
@@ -70,7 +68,7 @@ class MediaService
      */
     public function processImage(Media $media): void
     {
-        if (! $media->is_image) {
+        if (!$media->is_image) {
             return;
         }
 
@@ -101,7 +99,7 @@ class MediaService
 
             // Ensure directory exists
             $thumbnailDir = dirname($fullThumbnailPath);
-            if (! is_dir($thumbnailDir)) {
+            if (!is_dir($thumbnailDir)) {
                 mkdir($thumbnailDir, 0755, true);
             }
 
@@ -112,7 +110,7 @@ class MediaService
             $media->update(['thumbnail_path' => $thumbnailPath]);
         } catch (\Exception $e) {
             // Log error but don't fail the upload
-            \Log::error('Failed to create thumbnail for media ID: '.$media->id, ['error' => $e->getMessage()]);
+            \Log::error('Failed to create thumbnail for media ID: ' . $media->id, ['error' => $e->getMessage()]);
         }
     }
 
@@ -131,7 +129,7 @@ class MediaService
                 $image->toJpeg(85)->save($path);
             }
         } catch (\Exception $e) {
-            \Log::error('Failed to optimize image: '.$path, ['error' => $e->getMessage()]);
+            \Log::error('Failed to optimize image: ' . $path, ['error' => $e->getMessage()]);
         }
     }
 
@@ -153,23 +151,7 @@ class MediaService
             // Delete database record
             return $media->delete();
         } catch (\Exception $e) {
-            \Log::error('Failed to delete media ID: '.$media->id, ['error' => $e->getMessage()]);
-
-            return false;
-        }
-    }
-
-    /**
-     * Move media to different folder.
-     */
-    public function moveToFolder(Media $media, ?MediaFolder $folder): bool
-    {
-        try {
-            $media->update(['folder_id' => $folder?->id]);
-
-            return true;
-        } catch (\Exception $e) {
-            \Log::error('Failed to move media ID: '.$media->id, ['error' => $e->getMessage()]);
+            \Log::error('Failed to delete media ID: ' . $media->id, ['error' => $e->getMessage()]);
 
             return false;
         }
@@ -206,21 +188,17 @@ class MediaService
      */
     public function searchMedia(array $criteria = [])
     {
-        $query = Media::with(['folder', 'uploader']);
+        $query = Media::with(['uploader']);
 
-        if (! empty($criteria['search'])) {
+        if (!empty($criteria['search'])) {
             $query->search($criteria['search']);
         }
 
-        if (! empty($criteria['folder_id'])) {
-            $query->inFolder($criteria['folder_id']);
-        }
-
-        if (! empty($criteria['type'])) {
+        if (!empty($criteria['type'])) {
             $query->ofType($criteria['type']);
         }
 
-        if (! empty($criteria['uploader_id'])) {
+        if (!empty($criteria['uploader_id'])) {
             $query->where('uploaded_by', $criteria['uploader_id']);
         }
 
@@ -235,8 +213,14 @@ class MediaService
     {
         $maxSize = 10 * 1024 * 1024; // 10MB
         $allowedMimes = [
-            'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',
-            'application/pdf', 'text/plain', 'application/msword',
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'image/webp',
+            'image/svg+xml',
+            'application/pdf',
+            'text/plain',
+            'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         ];
 
@@ -244,7 +228,7 @@ class MediaService
             throw new \Exception('File size exceeds 10MB limit.');
         }
 
-        if (! in_array($file->getMimeType(), $allowedMimes)) {
+        if (!in_array($file->getMimeType(), $allowedMimes)) {
             throw new \Exception('File type not allowed.');
         }
     }
