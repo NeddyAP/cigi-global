@@ -268,7 +268,7 @@ class MediaController extends Controller
         // Add custom validation for folder_id
         $validator->after(function ($validator) use ($request) {
             $folderId = $request->folder_id;
-            if ($folderId && $folderId !== 'root' && ! \App\Models\MediaFolder::find($folderId)) {
+            if ($folderId && $folderId !== 'root' && ! MediaFolder::find($folderId)) {
                 $validator->errors()->add('folder_id', 'The selected folder id is invalid.');
             }
         });

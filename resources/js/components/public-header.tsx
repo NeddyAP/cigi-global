@@ -40,9 +40,9 @@ export default function PublicHeader() {
         { href: route('home'), label: 'Beranda', path: '/', type: 'link' as const },
         { href: route('business-units.index'), label: 'Unit Usaha', path: '/unit-bisnis', type: 'dropdown' as const, key: 'business' },
         { href: route('community-clubs.index'), label: 'Komunitas', path: '/komunitas', type: 'dropdown' as const, key: 'community' },
-        { href: '#tentang-kami', label: 'Tentang Kami', path: '/tentang-kami', type: 'link' as const },
+        { href: route('about'), label: 'Tentang Kami', path: '/tentang-kami', type: 'link' as const },
         { href: route('news.index'), label: 'Berita', path: '/berita', type: 'link' as const },
-        { href: '#kontak', label: 'Kontak', path: '/kontak', type: 'link' as const },
+        { href: route('contact'), label: 'Kontak', path: '/kontak', type: 'link' as const },
     ];
 
     return (

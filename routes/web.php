@@ -5,10 +5,13 @@ use App\Http\Controllers\CommunityClubController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\PublicPageController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/tentang-kami', [PublicPageController::class, 'about'])->name('about');
+Route::get('/kontak', [PublicPageController::class, 'contact'])->name('contact');
 
 // Navigation API
 Route::get('/api/navigation-data', [NavigationController::class, 'data'])->name('api.navigation-data');
@@ -50,5 +53,5 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('media-folders/tree', [\App\Http\Controllers\Admin\MediaFolderController::class, 'tree'])->name('media-folders.tree');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
