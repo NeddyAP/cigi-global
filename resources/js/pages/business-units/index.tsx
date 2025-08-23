@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import PublicLayout from '@/layouts/public-layout';
@@ -87,27 +86,6 @@ export default function BusinessUnitsIndex({ businessUnits }: BusinessUnitsIndex
                                         <h3 className="mb-3 text-xl font-bold text-white">{unit.name}</h3>
 
                                         {unit.description && <p className="mb-4 line-clamp-3 text-sm text-white/80">{unit.description}</p>}
-
-                                        {/* Services */}
-                                        {unit.services && (
-                                            <div className="mb-4">
-                                                <div className="flex flex-wrap gap-1">
-                                                    {unit.services
-                                                        .split(',')
-                                                        .slice(0, 3)
-                                                        .map((service, index) => (
-                                                            <Badge key={index} variant="outline" className="border-white/30 text-xs text-white/70">
-                                                                {service.trim()}
-                                                            </Badge>
-                                                        ))}
-                                                    {unit.services.split(',').length > 3 && (
-                                                        <Badge variant="outline" className="border-white/30 text-xs text-white/70">
-                                                            +{unit.services.split(',').length - 3} lainnya
-                                                        </Badge>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
 
                                         {/* Contact Info */}
                                         <div className="mb-6 space-y-2 text-sm text-white/70">

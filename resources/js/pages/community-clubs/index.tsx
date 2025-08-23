@@ -41,16 +41,6 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
         return filtered;
     }, [communityClubs, selectedType, searchQuery]);
 
-    const getClubActivities = (club: CommunityClub): string[] => {
-        if (!club.activities) return [];
-        try {
-            const activities = JSON.parse(club.activities);
-            return Array.isArray(activities) ? activities : [];
-        } catch {
-            return club.activities.split(',').map((a) => a.trim());
-        }
-    };
-
     return (
         <PublicLayout
             title="Komunitas"
@@ -137,26 +127,6 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
                                         <h3 className="mb-3 text-xl font-bold text-white">{club.name}</h3>
 
                                         {club.description && <p className="mb-4 line-clamp-3 text-sm text-white/80">{club.description}</p>}
-
-                                        {/* Activities */}
-                                        {club.activities && (
-                                            <div className="mb-4">
-                                                <div className="flex flex-wrap gap-1">
-                                                    {getClubActivities(club)
-                                                        .slice(0, 3)
-                                                        .map((activity, index) => (
-                                                            <Badge key={index} variant="outline" className="border-white/30 text-xs text-white/70">
-                                                                {activity}
-                                                            </Badge>
-                                                        ))}
-                                                    {getClubActivities(club).length > 3 && (
-                                                        <Badge variant="outline" className="border-white/30 text-xs text-white/70">
-                                                            +{getClubActivities(club).length - 3} lainnya
-                                                        </Badge>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
 
                                         {/* Contact & Meeting Info */}
                                         <div className="mb-6 space-y-2 text-sm text-white/70">
