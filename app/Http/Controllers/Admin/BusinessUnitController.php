@@ -27,6 +27,12 @@ class BusinessUnitController extends Controller
             });
         }
 
+        // Apply status filter
+        if ($request->filled('status')) {
+            $status = $request->status === 'active';
+            $query->where('is_active', $status);
+        }
+
         // Apply sorting
         $sortField = $request->get('sort', 'sort_order');
         $sortDirection = $request->get('direction', 'asc');
@@ -38,7 +44,7 @@ class BusinessUnitController extends Controller
 
         return Inertia::render('admin/business-units/index', [
             'businessUnits' => $businessUnits,
-            'filters' => $request->only(['search', 'sort', 'direction', 'per_page']),
+            'filters' => $request->only(['search', 'status', 'sort', 'direction', 'per_page']),
         ]);
     }
 
@@ -49,20 +55,72 @@ class BusinessUnitController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:business_units',
-            'description' => 'nullable|string',
-            'services' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
-            'contact_phone' => 'nullable|string|max:20',
-            'contact_email' => 'nullable|email|max:255',
-            'address' => 'nullable|string',
-            'website_url' => 'nullable|url|max:255',
-            'operating_hours' => 'nullable|string',
-            'is_active' => 'boolean',
-            'sort_order' => 'integer|min:0',
-        ]);
+        $validated = $request->validate(BusinessUnit::validationRules());
+
+        // Handle image uploads for gallery
+        if ($request->hasFile('gallery_images')) {
+            $galleryImages = [];
+            foreach ($request->file('gallery_images') as $file) {
+                $path = $file->store('business-units/gallery', 'public');
+                $galleryImages[] = $path;
+            }
+            $validated['gallery_images'] = $galleryImages;
+        }
+
+        // Handle main image upload
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('business-units', 'public');
+        }
+
+        // Handle team member images
+        if (isset($validated['team_members'])) {
+            foreach ($validated['team_members'] as $index => $member) {
+                if ($request->hasFile("team_member_images.{$index}")) {
+                    $path = $request->file("team_member_images.{$index}")->store('business-units/team', 'public');
+                    $validated['team_members'][$index]['image'] = $path;
+                }
+            }
+        }
+
+        // Handle client testimonial images
+        if (isset($validated['client_testimonials'])) {
+            foreach ($validated['client_testimonials'] as $index => $testimonial) {
+                if ($request->hasFile("testimonial_images.{$index}")) {
+                    $path = $request->file("testimonial_images.{$index}")->store('business-units/testimonials', 'public');
+                    $validated['client_testimonials'][$index]['image'] = $path;
+                }
+            }
+        }
+
+        // Handle portfolio item images
+        if (isset($validated['portfolio_items'])) {
+            foreach ($validated['portfolio_items'] as $index => $item) {
+                if ($request->hasFile("portfolio_images.{$index}")) {
+                    $path = $request->file("portfolio_images.{$index}")->store('business-units/portfolio', 'public');
+                    $validated['portfolio_items'][$index]['image'] = $path;
+                }
+            }
+        }
+
+        // Handle certification images
+        if (isset($validated['certifications'])) {
+            foreach ($validated['certifications'] as $index => $certification) {
+                if ($request->hasFile("certification_images.{$index}")) {
+                    $path = $request->file("certification_images.{$index}")->store('business-units/certifications', 'public');
+                    $validated['certifications'][$index]['image'] = $path;
+                }
+            }
+        }
+
+        // Handle achievement images
+        if (isset($validated['achievements'])) {
+            foreach ($validated['achievements'] as $index => $achievement) {
+                if ($request->hasFile("achievement_images.{$index}")) {
+                    $path = $request->file("achievement_images.{$index}")->store('business-units/achievements', 'public');
+                    $validated['achievements'][$index]['image'] = $path;
+                }
+            }
+        }
 
         BusinessUnit::create($validated);
 
@@ -72,6 +130,8 @@ class BusinessUnitController extends Controller
 
     public function show(BusinessUnit $businessUnit): Response
     {
+        $businessUnit->load('unitServices');
+
         return Inertia::render('admin/business-units/show', [
             'businessUnit' => $businessUnit,
         ]);
@@ -79,6 +139,8 @@ class BusinessUnitController extends Controller
 
     public function edit(BusinessUnit $businessUnit): Response
     {
+        $businessUnit->load('unitServices');
+
         return Inertia::render('admin/business-units/edit', [
             'businessUnit' => $businessUnit,
         ]);
@@ -86,20 +148,87 @@ class BusinessUnitController extends Controller
 
     public function update(Request $request, BusinessUnit $businessUnit): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:business_units,slug,'.$businessUnit->id,
-            'description' => 'nullable|string',
-            'services' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
-            'contact_phone' => 'nullable|string|max:20',
-            'contact_email' => 'nullable|email|max:255',
-            'address' => 'nullable|string',
-            'website_url' => 'nullable|url|max:255',
-            'operating_hours' => 'nullable|string',
-            'is_active' => 'boolean',
-            'sort_order' => 'integer|min:0',
-        ]);
+        $validated = $request->validate(BusinessUnit::updateValidationRules($businessUnit->id));
+
+        // Handle image uploads for gallery
+        if ($request->hasFile('gallery_images')) {
+            $galleryImages = $businessUnit->gallery_images ?? [];
+            foreach ($request->file('gallery_images') as $file) {
+                $path = $file->store('business-units/gallery', 'public');
+                $galleryImages[] = $path;
+            }
+            $validated['gallery_images'] = $galleryImages;
+        }
+
+        // Handle main image upload
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('business-units', 'public');
+        }
+
+        // Handle team member images
+        if (isset($validated['team_members'])) {
+            foreach ($validated['team_members'] as $index => $member) {
+                if ($request->hasFile("team_member_images.{$index}")) {
+                    $path = $request->file("team_member_images.{$index}")->store('business-units/team', 'public');
+                    $validated['team_members'][$index]['image'] = $path;
+                } elseif (isset($businessUnit->team_members[$index]['image'])) {
+                    // Keep existing image if no new one uploaded
+                    $validated['team_members'][$index]['image'] = $businessUnit->team_members[$index]['image'];
+                }
+            }
+        }
+
+        // Handle client testimonial images
+        if (isset($validated['client_testimonials'])) {
+            foreach ($validated['client_testimonials'] as $index => $testimonial) {
+                if ($request->hasFile("testimonial_images.{$index}")) {
+                    $path = $request->file("testimonial_images.{$index}")->store('business-units/testimonials', 'public');
+                    $validated['client_testimonials'][$index]['image'] = $path;
+                } elseif (isset($businessUnit->client_testimonials[$index]['image'])) {
+                    // Keep existing image if no new one uploaded
+                    $validated['client_testimonials'][$index]['image'] = $businessUnit->client_testimonials[$index]['image'];
+                }
+            }
+        }
+
+        // Handle portfolio item images
+        if (isset($validated['portfolio_items'])) {
+            foreach ($validated['portfolio_items'] as $index => $item) {
+                if ($request->hasFile("portfolio_images.{$index}")) {
+                    $path = $request->file("portfolio_images.{$index}")->store('business-units/portfolio', 'public');
+                    $validated['portfolio_items'][$index]['image'] = $path;
+                } elseif (isset($businessUnit->portfolio_items[$index]['image'])) {
+                    // Keep existing image if no new one uploaded
+                    $validated['portfolio_items'][$index]['image'] = $businessUnit->portfolio_items[$index]['image'];
+                }
+            }
+        }
+
+        // Handle certification images
+        if (isset($validated['certifications'])) {
+            foreach ($validated['certifications'] as $index => $certification) {
+                if ($request->hasFile("certification_images.{$index}")) {
+                    $path = $request->file("certification_images.{$index}")->store('business-units/certifications', 'public');
+                    $validated['certifications'][$index]['image'] = $path;
+                } elseif (isset($businessUnit->certifications[$index]['image'])) {
+                    // Keep existing image if no new one uploaded
+                    $validated['certifications'][$index]['image'] = $businessUnit->certifications[$index]['image'];
+                }
+            }
+        }
+
+        // Handle achievement images
+        if (isset($validated['achievements'])) {
+            foreach ($validated['achievements'] as $index => $achievement) {
+                if ($request->hasFile("achievement_images.{$index}")) {
+                    $path = $request->file("achievement_images.{$index}")->store('business-units/achievements', 'public');
+                    $validated['achievements'][$index]['image'] = $path;
+                } elseif (isset($businessUnit->achievements[$index]['image'])) {
+                    // Keep existing image if no new one uploaded
+                    $validated['achievements'][$index]['image'] = $businessUnit->achievements[$index]['image'];
+                }
+            }
+        }
 
         $businessUnit->update($validated);
 

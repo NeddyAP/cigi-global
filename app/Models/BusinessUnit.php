@@ -26,6 +26,17 @@ class BusinessUnit extends Model
         'operating_hours',
         'is_active',
         'sort_order',
+        'team_members',
+        'client_testimonials',
+        'portfolio_items',
+        'certifications',
+        'company_stats',
+        'gallery_images',
+        'achievements',
+        'core_values',
+        'hero_subtitle',
+        'hero_cta_text',
+        'hero_cta_link',
     ];
 
     protected function casts(): array
@@ -33,6 +44,14 @@ class BusinessUnit extends Model
         return [
             'is_active' => 'boolean',
             'sort_order' => 'integer',
+            'team_members' => 'array',
+            'client_testimonials' => 'array',
+            'portfolio_items' => 'array',
+            'certifications' => 'array',
+            'company_stats' => 'array',
+            'gallery_images' => 'array',
+            'achievements' => 'array',
+            'core_values' => 'array',
         ];
     }
 
@@ -192,5 +211,83 @@ class BusinessUnit extends Model
             'image' => $this->display_image,
             'services_count' => $this->getServicesCount(),
         ];
+    }
+
+    // Relationships
+    public function unitServices()
+    {
+        return $this->hasMany(BusinessUnitService::class);
+    }
+
+    // Validation Rules
+    public static function validationRules(): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:business_units,slug',
+            'description' => 'nullable|string',
+            'services' => 'nullable|string',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'contact_phone' => 'nullable|string|max:20',
+            'contact_email' => 'nullable|email|max:255',
+            'address' => 'nullable|string',
+            'website_url' => 'nullable|url|max:500',
+            'operating_hours' => 'nullable|string',
+            'is_active' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0',
+            'team_members' => 'nullable|array',
+            'team_members.*.name' => 'required|string|max:255',
+            'team_members.*.role' => 'required|string|max:255',
+            'team_members.*.bio' => 'nullable|string',
+            'team_members.*.image' => 'nullable|string|max:500',
+            'team_members.*.social_links' => 'nullable|array',
+            'team_members.*.social_links.*.platform' => 'required|string|max:50',
+            'team_members.*.social_links.*.url' => 'required|url|max:500',
+            'client_testimonials' => 'nullable|array',
+            'client_testimonials.*.name' => 'required|string|max:255',
+            'client_testimonials.*.company' => 'nullable|string|max:255',
+            'client_testimonials.*.content' => 'required|string',
+            'client_testimonials.*.image' => 'nullable|string|max:500',
+            'client_testimonials.*.rating' => 'nullable|integer|min:1|max:5',
+            'portfolio_items' => 'nullable|array',
+            'portfolio_items.*.title' => 'required|string|max:255',
+            'portfolio_items.*.description' => 'nullable|string',
+            'portfolio_items.*.image' => 'nullable|string|max:500',
+            'portfolio_items.*.technologies' => 'nullable|array',
+            'portfolio_items.*.technologies.*' => 'string|max:100',
+            'portfolio_items.*.client' => 'nullable|string|max:255',
+            'certifications' => 'nullable|array',
+            'certifications.*.name' => 'required|string|max:255',
+            'certifications.*.issuer' => 'required|string|max:255',
+            'certifications.*.date' => 'nullable|date',
+            'certifications.*.image' => 'nullable|string|max:500',
+            'certifications.*.description' => 'nullable|string',
+            'company_stats' => 'nullable|array',
+            'company_stats.*.label' => 'required|string|max:255',
+            'company_stats.*.value' => 'required|string|max:100',
+            'company_stats.*.icon' => 'nullable|string|max:100',
+            'gallery_images' => 'nullable|array',
+            'gallery_images.*' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'achievements' => 'nullable|array',
+            'achievements.*.title' => 'required|string|max:255',
+            'achievements.*.description' => 'nullable|string',
+            'achievements.*.date' => 'nullable|date',
+            'achievements.*.image' => 'nullable|string|max:500',
+            'core_values' => 'nullable|array',
+            'core_values.*.title' => 'required|string|max:255',
+            'core_values.*.description' => 'nullable|string',
+            'core_values.*.icon' => 'nullable|string|max:100',
+            'hero_subtitle' => 'nullable|string|max:500',
+            'hero_cta_text' => 'nullable|string|max:100',
+            'hero_cta_link' => 'nullable|string|max:500',
+        ];
+    }
+
+    public static function updateValidationRules($id): array
+    {
+        $rules = static::validationRules();
+        $rules['slug'] = 'nullable|string|max:255|unique:business_units,slug,'.$id;
+
+        return $rules;
     }
 }

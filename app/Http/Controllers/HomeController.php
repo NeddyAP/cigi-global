@@ -67,4 +67,9 @@ class HomeController extends Controller
             'galleryMedia' => $galleryMedia,
         ]);
     }
+
+    public function landingDemo(): Response
+    {
+        return Inertia::render('landing-demo');
+    }
 }

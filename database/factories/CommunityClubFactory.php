@@ -34,6 +34,56 @@ class CommunityClubFactory extends Factory
             'location' => fake()->address(),
             'is_active' => true,
             'sort_order' => fake()->numberBetween(1, 100),
+            'gallery_images' => [
+                'assets/gallery/'.fake()->uuid().'.jpg',
+                'assets/gallery/'.fake()->uuid().'.jpg',
+                'assets/gallery/'.fake()->uuid().'.jpg',
+            ],
+            'testimonials' => [
+                [
+                    'name' => fake()->name(),
+                    'content' => fake()->paragraph(),
+                    'role' => fake()->jobTitle(),
+                    'image' => 'assets/testimonials/'.fake()->uuid().'.jpg',
+                ],
+                [
+                    'name' => fake()->name(),
+                    'content' => fake()->paragraph(),
+                    'role' => fake()->jobTitle(),
+                    'image' => 'assets/testimonials/'.fake()->uuid().'.jpg',
+                ],
+            ],
+            'social_media_links' => [
+                [
+                    'platform' => 'Facebook',
+                    'url' => fake()->url(),
+                ],
+                [
+                    'platform' => 'Instagram',
+                    'url' => fake()->url(),
+                ],
+            ],
+            'founded_year' => fake()->numberBetween(1990, 2020),
+            'member_count' => fake()->numberBetween(10, 500),
+            'upcoming_events' => [
+                [
+                    'title' => fake()->sentence(),
+                    'description' => fake()->paragraph(),
+                    'date' => fake()->dateTimeBetween('now', '+3 months')->format('Y-m-d'),
+                    'image' => 'assets/events/'.fake()->uuid().'.jpg',
+                ],
+            ],
+            'achievements' => [
+                [
+                    'title' => fake()->sentence(),
+                    'description' => fake()->paragraph(),
+                    'date' => fake()->dateTimeBetween('-2 years', 'now')->format('Y-m-d'),
+                    'image' => 'assets/achievements/'.fake()->uuid().'.jpg',
+                ],
+            ],
+            'hero_subtitle' => fake()->sentence(),
+            'hero_cta_text' => fake()->randomElement(['Join Us', 'Learn More', 'Get Started', 'Contact Us']),
+            'hero_cta_link' => fake()->url(),
         ];
     }
 

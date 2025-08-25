@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Download, X, ZoomIn, ZoomOut } from 'lucide-
 import { useEffect, useState } from 'react';
 
 interface LightboxProps {
-    images: Media[];
+    images: Array<Media | { id: string | number; url: string; alt?: string; caption?: string; original_filename?: string }>;
     currentIndex: number;
     isOpen: boolean;
     onClose: () => void;
@@ -56,7 +56,8 @@ export default function Lightbox({ images, currentIndex, isOpen, onClose, onNext
         if (currentImage.url) {
             const link = document.createElement('a');
             link.href = currentImage.url;
-            link.download = currentImage.original_filename;
+            const filename = 'original_filename' in currentImage ? currentImage.original_filename : currentImage.alt || `image-${currentImage.id}`;
+            link.download = filename || `image-${currentImage.id}`;
             link.click();
         }
     };
@@ -67,7 +68,9 @@ export default function Lightbox({ images, currentIndex, isOpen, onClose, onNext
             <div className="glass-nav absolute top-0 right-0 left-0 z-10 p-4">
                 <div className="flex items-center justify-between">
                     <div className="text-white">
-                        <h3 className="font-semibold">{currentImage.original_filename}</h3>
+                        <h3 className="font-semibold">
+                            {'original_filename' in currentImage ? currentImage.original_filename : currentImage.alt || `Image ${currentImage.id}`}
+                        </h3>
                         <p className="text-sm text-white/70">
                             {currentIndex + 1} dari {images.length}
                         </p>
@@ -117,8 +120,8 @@ export default function Lightbox({ images, currentIndex, isOpen, onClose, onNext
             {/* Image */}
             <div className="relative mx-4 max-h-[90vh] max-w-7xl">
                 <img
-                    src={currentImage.url || currentImage.path}
-                    alt={currentImage.alt_text || currentImage.original_filename}
+                    src={currentImage.url}
+                    alt={'original_filename' in currentImage ? currentImage.original_filename : currentImage.alt || `Image ${currentImage.id}`}
                     className={`max-h-full max-w-full object-contain transition-transform duration-300 ${
                         isZoomed ? 'scale-150 cursor-zoom-out' : 'cursor-zoom-in'
                     }`}
@@ -153,8 +156,8 @@ export default function Lightbox({ images, currentIndex, isOpen, onClose, onNext
                                     }`}
                                 >
                                     <img
-                                        src={image.url || image.path}
-                                        alt={image.alt_text || image.original_filename}
+                                        src={image.url}
+                                        alt={'original_filename' in image ? image.original_filename : image.alt || `Image ${image.id}`}
                                         className="h-full w-full object-cover"
                                     />
                                 </button>

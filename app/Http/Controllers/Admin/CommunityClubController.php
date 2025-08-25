@@ -28,6 +28,12 @@ class CommunityClubController extends Controller
             });
         }
 
+        // Apply status filter
+        if ($request->filled('status')) {
+            $status = $request->status === 'active';
+            $query->where('is_active', $status);
+        }
+
         // Apply sorting
         $sortField = $request->get('sort', 'sort_order');
         $sortDirection = $request->get('direction', 'asc');
@@ -39,7 +45,7 @@ class CommunityClubController extends Controller
 
         return Inertia::render('admin/community-clubs/index', [
             'communityClubs' => $communityClubs,
-            'filters' => $request->only(['search', 'sort', 'direction', 'per_page']),
+            'filters' => $request->only(['search', 'status', 'sort', 'direction', 'per_page']),
         ]);
     }
 
@@ -50,21 +56,52 @@ class CommunityClubController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:community_clubs',
-            'description' => 'nullable|string',
-            'type' => 'required|string|max:255',
-            'activities' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
-            'contact_phone' => 'nullable|string|max:20',
-            'contact_email' => 'nullable|email|max:255',
-            'meeting_schedule' => 'nullable|string',
-            'location' => 'nullable|string',
-            'is_active' => 'boolean',
-            'sort_order' => 'integer|min:0',
-        ]);
+        $validated = $request->validate(CommunityClub::validationRules());
+
+        // Handle image uploads for gallery
+        if ($request->hasFile('gallery_images')) {
+            $galleryImages = [];
+            foreach ($request->file('gallery_images') as $file) {
+                $path = $file->store('community-clubs/gallery', 'public');
+                $galleryImages[] = $path;
+            }
+            $validated['gallery_images'] = $galleryImages;
+        }
+
+        // Handle main image upload
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('community-clubs', 'public');
+        }
+
+        // Handle testimonial images
+        if (isset($validated['testimonials'])) {
+            foreach ($validated['testimonials'] as $index => $testimonial) {
+                if ($request->hasFile("testimonial_images.{$index}")) {
+                    $path = $request->file("testimonial_images.{$index}")->store('community-clubs/testimonials', 'public');
+                    $validated['testimonials'][$index]['image'] = $path;
+                }
+            }
+        }
+
+        // Handle event images
+        if (isset($validated['upcoming_events'])) {
+            foreach ($validated['upcoming_events'] as $index => $event) {
+                if ($request->hasFile("event_images.{$index}")) {
+                    $path = $request->file("event_images.{$index}")->store('community-clubs/events', 'public');
+                    $validated['upcoming_events'][$index]['image'] = $path;
+                }
+            }
+        }
+
+        // Handle achievement images
+        if (isset($validated['achievements'])) {
+            foreach ($validated['achievements'] as $index => $achievement) {
+                if ($request->hasFile("achievement_images.{$index}")) {
+                    $path = $request->file("achievement_images.{$index}")->store('community-clubs/achievements', 'public');
+                    $validated['achievements'][$index]['image'] = $path;
+                }
+            }
+        }
 
         CommunityClub::create($validated);
 
@@ -74,6 +111,8 @@ class CommunityClubController extends Controller
 
     public function show(CommunityClub $communityClub): Response
     {
+        $communityClub->load('clubActivities');
+
         return Inertia::render('admin/community-clubs/show', [
             'communityClub' => $communityClub,
         ]);
@@ -81,6 +120,8 @@ class CommunityClubController extends Controller
 
     public function edit(CommunityClub $communityClub): Response
     {
+        $communityClub->load('clubActivities');
+
         return Inertia::render('admin/community-clubs/edit', [
             'communityClub' => $communityClub,
         ]);
@@ -88,21 +129,61 @@ class CommunityClubController extends Controller
 
     public function update(Request $request, CommunityClub $communityClub): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:community_clubs,slug,'.$communityClub->id,
-            'description' => 'nullable|string',
-            'type' => 'required|string|max:255',
-            'activities' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
-            'contact_phone' => 'nullable|string|max:20',
-            'contact_email' => 'nullable|email|max:255',
-            'meeting_schedule' => 'nullable|string',
-            'location' => 'nullable|string',
-            'is_active' => 'boolean',
-            'sort_order' => 'integer|min:0',
-        ]);
+        $validated = $request->validate(CommunityClub::updateValidationRules($communityClub->id));
+
+        // Handle image uploads for gallery
+        if ($request->hasFile('gallery_images')) {
+            $galleryImages = $communityClub->gallery_images ?? [];
+            foreach ($request->file('gallery_images') as $file) {
+                $path = $file->store('community-clubs/gallery', 'public');
+                $galleryImages[] = $path;
+            }
+            $validated['gallery_images'] = $galleryImages;
+        }
+
+        // Handle main image upload
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('community-clubs', 'public');
+        }
+
+        // Handle testimonial images
+        if (isset($validated['testimonials'])) {
+            foreach ($validated['testimonials'] as $index => $testimonial) {
+                if ($request->hasFile("testimonial_images.{$index}")) {
+                    $path = $request->file("testimonial_images.{$index}")->store('community-clubs/testimonials', 'public');
+                    $validated['testimonials'][$index]['image'] = $path;
+                } elseif (isset($communityClub->testimonials[$index]['image'])) {
+                    // Keep existing image if no new one uploaded
+                    $validated['testimonials'][$index]['image'] = $communityClub->testimonials[$index]['image'];
+                }
+            }
+        }
+
+        // Handle event images
+        if (isset($validated['upcoming_events'])) {
+            foreach ($validated['upcoming_events'] as $index => $event) {
+                if ($request->hasFile("event_images.{$index}")) {
+                    $path = $request->file("event_images.{$index}")->store('community-clubs/events', 'public');
+                    $validated['upcoming_events'][$index]['image'] = $path;
+                } elseif (isset($communityClub->upcoming_events[$index]['image'])) {
+                    // Keep existing image if no new one uploaded
+                    $validated['upcoming_events'][$index]['image'] = $communityClub->upcoming_events[$index]['image'];
+                }
+            }
+        }
+
+        // Handle achievement images
+        if (isset($validated['achievements'])) {
+            foreach ($validated['achievements'] as $index => $achievement) {
+                if ($request->hasFile("achievement_images.{$index}")) {
+                    $path = $request->file("achievement_images.{$index}")->store('community-clubs/achievements', 'public');
+                    $validated['achievements'][$index]['image'] = $path;
+                } elseif (isset($communityClub->achievements[$index]['image'])) {
+                    // Keep existing image if no new one uploaded
+                    $validated['achievements'][$index]['image'] = $communityClub->achievements[$index]['image'];
+                }
+            }
+        }
 
         $communityClub->update($validated);
 

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/landing-demo', [HomeController::class, 'landingDemo'])->name('landing-demo');
 Route::get('/tentang-kami', [PublicPageController::class, 'about'])->name('about');
 Route::get('/kontak', [PublicPageController::class, 'contact'])->name('contact');
 Route::post('/kontak', [PublicPageController::class, 'storeContactMessage'])->name('contact.store');
@@ -39,6 +40,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Admin resource routes will be added here
     Route::resource('business-units', \App\Http\Controllers\Admin\BusinessUnitController::class);
     Route::resource('community-clubs', \App\Http\Controllers\Admin\CommunityClubController::class);
+    Route::resource('business-unit-services', \App\Http\Controllers\Admin\BusinessUnitServiceController::class);
+    Route::resource('community-club-activities', \App\Http\Controllers\Admin\CommunityClubActivityController::class);
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
     Route::resource('global-variables', \App\Http\Controllers\Admin\GlobalVariableController::class);
     Route::resource('contact-messages', \App\Http\Controllers\Admin\ContactMessageController::class)->only(['index', 'show', 'update', 'destroy']);

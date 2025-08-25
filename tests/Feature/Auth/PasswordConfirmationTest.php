@@ -16,7 +16,7 @@ test('password can be confirmed', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)->post('/confirm-password', [
-        'password' => 'password',
+        'password' => 'admin123',
     ]);
 
     $response->assertRedirect();

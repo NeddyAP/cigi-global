@@ -56,6 +56,60 @@ export interface BusinessUnit {
     operating_hours?: string;
     is_active: boolean;
     sort_order: number;
+    // Enhanced fields
+    team_members?: Array<{
+        name: string;
+        role: string;
+        bio: string;
+        image?: string;
+        social_links?: {
+            linkedin?: string;
+            twitter?: string;
+            github?: string;
+        };
+    }>;
+    client_testimonials?: Array<{
+        name: string;
+        company: string;
+        content: string;
+        image?: string;
+        rating: number;
+    }>;
+    portfolio_items?: Array<{
+        title: string;
+        description: string;
+        image?: string;
+        technologies: string[];
+        client: string;
+    }>;
+    certifications?: Array<{
+        name: string;
+        issuer: string;
+        date: string;
+        image?: string;
+        description: string;
+    }>;
+    company_stats?: {
+        years_in_business?: number;
+        projects_completed?: number;
+        clients_served?: number;
+        team_size?: number;
+    };
+    gallery_images?: string[];
+    achievements?: Array<{
+        title: string;
+        date: string;
+        description: string;
+        image?: string;
+    }>;
+    core_values?: Array<{
+        title: string;
+        description: string;
+        icon?: string;
+    }>;
+    hero_subtitle?: string;
+    hero_cta_text?: string;
+    hero_cta_link?: string;
     created_at: string;
     updated_at: string;
 }
@@ -75,6 +129,39 @@ export interface CommunityClub {
     location?: string;
     is_active: boolean;
     sort_order: number;
+    // Enhanced fields
+    gallery_images?: string[];
+    testimonials?: Array<{
+        name: string;
+        role: string;
+        content: string;
+        image?: string;
+        rating?: number;
+    }>;
+    social_media_links?: {
+        facebook?: string;
+        instagram?: string;
+        twitter?: string;
+        youtube?: string;
+        website?: string;
+    };
+    founded_year?: number;
+    member_count?: number;
+    upcoming_events?: Array<{
+        title: string;
+        date: string;
+        description: string;
+        image?: string;
+    }>;
+    achievements?: Array<{
+        title: string;
+        date: string;
+        description: string;
+        image?: string;
+    }>;
+    hero_subtitle?: string;
+    hero_cta_text?: string;
+    hero_cta_link?: string;
     created_at: string;
     updated_at: string;
 }
@@ -159,4 +246,53 @@ export interface ContactMessage {
     is_unread?: boolean;
     is_read?: boolean;
     is_archived?: boolean;
+}
+
+export interface CommunityClubActivity {
+    id: number;
+    community_club_id: number;
+    title: string;
+    description: string;
+    short_description?: string;
+    image?: string;
+    duration: string;
+    max_participants?: number;
+    requirements?: string;
+    benefits: string[];
+    status?: string;
+    schedule?: string;
+    location?: string;
+    contact_info?: string;
+    featured?: boolean;
+    active?: boolean;
+    created_at: string;
+    updated_at: string;
+    community_club?: CommunityClub;
+}
+
+export interface BusinessUnitService {
+    id: number;
+    business_unit_id: number;
+    title: string;
+    description: string;
+    short_description?: string;
+    image?: string;
+    price?: string;
+    price_range: string;
+    duration: string;
+    status?: string;
+    features: string[];
+    technologies: string[];
+    process_steps: ProcessStep[];
+    featured?: boolean;
+    active?: boolean;
+    created_at: string;
+    updated_at: string;
+    business_unit?: BusinessUnit;
+}
+
+export interface ProcessStep {
+    title: string;
+    description: string;
+    order: number;
 }

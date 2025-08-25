@@ -12,6 +12,7 @@ class BusinessUnitSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create specific business units with enhanced data using factory
         $businessUnits = [
             [
                 'name' => 'Cigi Net',
@@ -71,8 +72,30 @@ class BusinessUnitSeeder extends Seeder
             ],
         ];
 
-        foreach ($businessUnits as $unit) {
-            BusinessUnit::create($unit);
+        // Create business units with enhanced data from factory
+        foreach ($businessUnits as $unitData) {
+            $unit = BusinessUnit::factory()->make($unitData);
+            $unit->save();
+
+            // Create 2-5 services for each business unit
+            $unit->unitServices()->saveMany(
+                \App\Models\BusinessUnitService::factory()
+                    ->count(fake()->numberBetween(2, 5))
+                    ->make(['business_unit_id' => $unit->id])
+            );
         }
+
+        // Create additional random business units with full factory data
+        BusinessUnit::factory()
+            ->count(2)
+            ->create()
+            ->each(function ($unit) {
+                // Create services for each unit
+                $unit->unitServices()->saveMany(
+                    \App\Models\BusinessUnitService::factory()
+                        ->count(fake()->numberBetween(1, 4))
+                        ->make(['business_unit_id' => $unit->id])
+                );
+            });
     }
 }

@@ -83,11 +83,11 @@ export default function NewsShow({ news, relatedNews }: NewsShowProps) {
             <section className="relative overflow-hidden py-12 md:py-20">
                 <div className="glass-hero-overlay absolute inset-0"></div>
                 <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* Back Button */}
-                    <div className="mb-8">
+                    {/* Back Button - Floating */}
+                    <div className="fixed top-23 left-4 z-50">
                         <Link
                             href={route('news.index')}
-                            className="inline-flex items-center glass-button rounded-lg px-4 py-2 text-white transition-all duration-200 hover:scale-105"
+                            className="inline-flex items-center rounded-lg bg-white/20 px-4 py-2 text-white backdrop-blur-sm transition-colors hover:bg-white/30"
                         >
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Kembali ke Berita
@@ -234,7 +234,7 @@ export default function NewsShow({ news, relatedNews }: NewsShowProps) {
                                         {article.featured_image && (
                                             <div className="relative h-32 overflow-hidden rounded-t-xl">
                                                 <img
-                                                    src={article.featured_image}
+                                                    src={`/${article.featured_image}`}
                                                     alt={article.title}
                                                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                                 />

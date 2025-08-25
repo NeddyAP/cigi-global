@@ -27,6 +27,16 @@ class CommunityClub extends Model
         'location',
         'is_active',
         'sort_order',
+        'gallery_images',
+        'testimonials',
+        'social_media_links',
+        'founded_year',
+        'member_count',
+        'upcoming_events',
+        'achievements',
+        'hero_subtitle',
+        'hero_cta_text',
+        'hero_cta_link',
     ];
 
     protected function casts(): array
@@ -34,6 +44,13 @@ class CommunityClub extends Model
         return [
             'is_active' => 'boolean',
             'sort_order' => 'integer',
+            'founded_year' => 'integer',
+            'member_count' => 'integer',
+            'gallery_images' => 'array',
+            'testimonials' => 'array',
+            'social_media_links' => 'array',
+            'upcoming_events' => 'array',
+            'achievements' => 'array',
         ];
     }
 
@@ -241,5 +258,64 @@ class CommunityClub extends Model
             'image' => $this->display_image,
             'activities_count' => $this->getActivitiesCount(),
         ];
+    }
+
+    // Relationships
+    public function clubActivities()
+    {
+        return $this->hasMany(CommunityClubActivity::class);
+    }
+
+    // Validation Rules
+    public static function validationRules(): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:community_clubs,slug',
+            'description' => 'nullable|string',
+            'type' => 'nullable|string|max:100|in:sports,arts,technology,business,social',
+            'activities' => 'nullable|string',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'contact_person' => 'nullable|string|max:255',
+            'contact_phone' => 'nullable|string|max:20',
+            'contact_email' => 'nullable|email|max:255',
+            'meeting_schedule' => 'nullable|string',
+            'location' => 'nullable|string',
+            'is_active' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0',
+            'gallery_images' => 'nullable|array',
+            'gallery_images.*' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'testimonials' => 'nullable|array',
+            'testimonials.*.name' => 'required|string|max:255',
+            'testimonials.*.content' => 'required|string',
+            'testimonials.*.role' => 'nullable|string|max:255',
+            'testimonials.*.image' => 'nullable|string|max:500',
+            'social_media_links' => 'nullable|array',
+            'social_media_links.*.platform' => 'required|string|max:50',
+            'social_media_links.*.url' => 'required|url|max:500',
+            'founded_year' => 'nullable|integer|min:1800|max:'.date('Y'),
+            'member_count' => 'nullable|integer|min:0',
+            'upcoming_events' => 'nullable|array',
+            'upcoming_events.*.title' => 'required|string|max:255',
+            'upcoming_events.*.description' => 'nullable|string',
+            'upcoming_events.*.date' => 'required|date',
+            'upcoming_events.*.image' => 'nullable|string|max:500',
+            'achievements' => 'nullable|array',
+            'achievements.*.title' => 'required|string|max:255',
+            'achievements.*.description' => 'nullable|string',
+            'achievements.*.date' => 'nullable|date',
+            'achievements.*.image' => 'nullable|string|max:500',
+            'hero_subtitle' => 'nullable|string|max:500',
+            'hero_cta_text' => 'nullable|string|max:100',
+            'hero_cta_link' => 'nullable|string|max:500',
+        ];
+    }
+
+    public static function updateValidationRules($id): array
+    {
+        $rules = static::validationRules();
+        $rules['slug'] = 'nullable|string|max:255|unique:community_clubs,slug,'.$id;
+
+        return $rules;
     }
 }

@@ -12,6 +12,7 @@ class CommunityClubSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create specific community clubs with enhanced data using factory
         $communityClubs = [
             [
                 'name' => 'PB Cigi',
@@ -90,8 +91,30 @@ class CommunityClubSeeder extends Seeder
             ],
         ];
 
-        foreach ($communityClubs as $club) {
-            CommunityClub::create($club);
+        // Create community clubs with enhanced data from factory
+        foreach ($communityClubs as $clubData) {
+            $club = CommunityClub::factory()->make($clubData);
+            $club->save();
+
+            // Create 2-4 activities for each community club
+            $club->clubActivities()->saveMany(
+                \App\Models\CommunityClubActivity::factory()
+                    ->count(fake()->numberBetween(2, 4))
+                    ->make(['community_club_id' => $club->id])
+            );
         }
+
+        // Create additional random community clubs with full factory data
+        CommunityClub::factory()
+            ->count(3)
+            ->create()
+            ->each(function ($club) {
+                // Create activities for each club
+                $club->clubActivities()->saveMany(
+                    \App\Models\CommunityClubActivity::factory()
+                        ->count(fake()->numberBetween(1, 5))
+                        ->make(['community_club_id' => $club->id])
+                );
+            });
     }
 }
