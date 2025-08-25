@@ -48,6 +48,7 @@ class HandleInertiaRequests extends Middleware
                 'navBusinessUnits' => BusinessUnit::active()
                     ->ordered()
                     ->limit(6)
+                    ->select('id', 'name', 'slug', 'image')
                     ->get()
                     ->map(function ($unit) {
                         return $unit->toNavigationArray();
@@ -55,6 +56,7 @@ class HandleInertiaRequests extends Middleware
                 'navCommunityClubs' => CommunityClub::active()
                     ->ordered()
                     ->limit(8)
+                    ->select('id', 'name', 'slug', 'image', 'type')
                     ->get()
                     ->map(function ($club) {
                         return $club->toNavigationArray();

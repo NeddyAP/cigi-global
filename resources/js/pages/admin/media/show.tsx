@@ -32,6 +32,7 @@ interface MediaShowProps {
         title?: string;
         alt_text?: string;
         description?: string;
+        tags?: string[];
         created_at: string;
         updated_at: string;
         dimensions?: {
@@ -62,6 +63,7 @@ export default function MediaShow({ media }: MediaShowProps) {
         title: media.title || '',
         alt_text: media.alt_text || '',
         description: media.description || '',
+        tags: media.tags || [],
     });
 
     const handleEdit = () => {
@@ -83,6 +85,7 @@ export default function MediaShow({ media }: MediaShowProps) {
             title: media.title || '',
             alt_text: media.alt_text || '',
             description: media.description || '',
+            tags: media.tags || [],
         });
     };
 
@@ -233,6 +236,19 @@ export default function MediaShow({ media }: MediaShowProps) {
                                         <span className="font-medium text-white">{media.uploader.name}</span>
                                     </div>
                                 )}
+
+                                {media.tags && media.tags.length > 0 && (
+                                    <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
+                                        <span className="text-zinc-400">Tags:</span>
+                                        <span className="font-medium text-white">
+                                            {media.tags.map((tag, index) => (
+                                                <span key={index} className="mr-1 text-zinc-300">
+                                                    #{tag}
+                                                </span>
+                                            ))}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
 
                             {/* URL Copy */}
@@ -308,6 +324,29 @@ export default function MediaShow({ media }: MediaShowProps) {
                                         {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
                                     </div>
 
+                                    <div>
+                                        <Label htmlFor="tags" className="text-zinc-300">
+                                            Tags
+                                        </Label>
+                                        <Input
+                                            id="tags"
+                                            value={data.tags.join(', ')}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'tags',
+                                                    e.target.value
+                                                        .split(',')
+                                                        .map((tag) => tag.trim())
+                                                        .filter(Boolean),
+                                                )
+                                            }
+                                            placeholder="Enter tags separated by commas"
+                                            className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
+                                        />
+                                        {errors.tags && <p className="mt-1 text-sm text-red-400">{errors.tags}</p>}
+                                        <p className="mt-1 text-xs text-zinc-500">Separate multiple tags with commas</p>
+                                    </div>
+
                                     <div className="flex space-x-2">
                                         <Button type="submit" disabled={processing} className="cta-button flex-1">
                                             {processing ? 'Saving...' : 'Save Changes'}
@@ -342,6 +381,24 @@ export default function MediaShow({ media }: MediaShowProps) {
                                         <span className="text-sm text-zinc-400">Description:</span>
                                         <p className="mt-1 font-medium text-white">
                                             {media.description || <em className="text-zinc-500">No description</em>}
+                                        </p>
+                                    </div>
+
+                                    <div className="rounded-lg bg-zinc-800 p-3">
+                                        <span className="text-sm text-zinc-400">Tags:</span>
+                                        <p className="mt-1 font-medium text-white">
+                                            {media.tags && media.tags.length > 0 ? (
+                                                media.tags.map((tag, index) => (
+                                                    <span
+                                                        key={index}
+                                                        className="mr-2 inline-block rounded bg-amber-400/20 px-2 py-1 text-xs text-amber-400"
+                                                    >
+                                                        #{tag}
+                                                    </span>
+                                                ))
+                                            ) : (
+                                                <em className="text-zinc-500">No tags</em>
+                                            )}
                                         </p>
                                     </div>
                                 </div>

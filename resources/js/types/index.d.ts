@@ -224,6 +224,7 @@ export interface Media {
     created_at: string;
     updated_at: string;
     uploader?: User;
+    tags?: string[];
 }
 
 export interface ContactMessage {

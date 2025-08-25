@@ -2,13 +2,14 @@ import { FormSection } from '@/components/admin/form-section';
 import { LoadingButton } from '@/components/admin/loading-button';
 import MediaUploadZone from '@/components/media-upload-zone';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
-import { ArrowLeft, FileText, FolderOpen, Upload } from 'lucide-react';
+import type { BreadcrumbItem, BusinessUnit, CommunityClub } from '@/types';
+import { Head, router } from '@inertiajs/react';
+import { ArrowLeft, FileText, FolderOpen, Tags, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -17,26 +18,82 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Upload Files', href: '/admin/media/create' },
 ];
 
-// No props needed for this component
+interface MediaUploadProps {
+    businessUnits: BusinessUnit[];
+    communityClubs: CommunityClub[];
+}
 
-export default function MediaUpload() {
+export default function MediaUpload({ businessUnits, communityClubs }: MediaUploadProps) {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-
-    const { data, setData, post, processing, errors } = useForm({
-        files: [] as File[],
-        title: '',
-        alt_text: '',
-        description: '',
-    });
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [title, setTitle] = useState('');
+    const [altText, setAltText] = useState('');
+    const [description, setDescription] = useState('');
+    const [processing, setProcessing] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleFilesSelected = (files: File[]) => {
         setSelectedFiles(files);
-        setData('files', files);
+        setError(null); // Clear any previous errors
+    };
+
+    const handleTagToggle = (tag: string) => {
+        const newTags = selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag];
+
+        setSelectedTags(newTags);
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('admin.media.store'));
+
+        if (selectedFiles.length === 0) {
+            setError('Please select at least one file to upload.');
+            return;
+        }
+
+        setProcessing(true);
+        setError(null);
+
+        console.log('Starting upload with:', {
+            files: selectedFiles,
+            title,
+            altText,
+            description,
+            tags: selectedTags,
+        });
+
+        // Create FormData to properly handle file uploads
+        const formData = new FormData();
+
+        // Add files
+        selectedFiles.forEach((file, index) => {
+            formData.append(`files[${index}]`, file);
+        });
+
+        // Add other form data
+        formData.append('title', title);
+        formData.append('alt_text', altText);
+        formData.append('description', description);
+
+        // Add tags
+        selectedTags.forEach((tag) => {
+            formData.append('tags[]', tag);
+        });
+
+        console.log('FormData created, posting to:', route('admin.media.store'));
+
+        // Use router to post the form data
+        router.post(route('admin.media.store'), formData, {
+            onSuccess: () => {
+                console.log('Upload successful');
+                setProcessing(false);
+            },
+            onError: (errors) => {
+                console.error('Upload failed:', errors);
+                setProcessing(false);
+                setError('Upload failed. Please check the console for details.');
+            },
+        });
     };
 
     return (
@@ -59,6 +116,26 @@ export default function MediaUpload() {
                     </Button>
                 </div>
 
+                {/* Error Display */}
+                {error && (
+                    <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4">
+                        <div className="flex">
+                            <div className="flex-shrink-0">
+                                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-red-400">{error}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                         {/* Upload Zone */}
@@ -71,12 +148,48 @@ export default function MediaUpload() {
                                     multiple={true}
                                     disabled={processing}
                                 />
-
-                                {errors.files && <p className="mt-2 text-sm text-red-400">{errors.files}</p>}
                             </FormSection>
+
+                            {/* File Preview */}
+                            {selectedFiles.length > 0 && (
+                                <FormSection title="Selected Files" description="Files ready for upload" icon={<FolderOpen className="h-5 w-5" />}>
+                                    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                                        {selectedFiles.map((file, index) => (
+                                            <div key={index} className="group relative rounded-lg border border-zinc-700 bg-zinc-800 p-3">
+                                                {file.type.startsWith('image/') ? (
+                                                    <div className="aspect-square overflow-hidden rounded bg-zinc-900">
+                                                        <img src={URL.createObjectURL(file)} alt={file.name} className="h-full w-full object-cover" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex aspect-square items-center justify-center rounded bg-zinc-900">
+                                                        <FileText className="h-8 w-8 text-zinc-400" />
+                                                    </div>
+                                                )}
+                                                <div className="mt-2">
+                                                    <p className="truncate text-xs text-zinc-300">{file.name}</p>
+                                                    <p className="text-xs text-zinc-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== index))}
+                                                    className="absolute -top-2 -right-2 rounded-full bg-red-500 p-1 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                                                >
+                                                    <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                            clipRule="evenodd"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </FormSection>
+                            )}
                         </div>
 
-                        {/* Metadata */}
+                        {/* Metadata and Tags */}
                         <div className="space-y-6">
                             <FormSection
                                 title="File Information"
@@ -90,15 +203,14 @@ export default function MediaUpload() {
                                         </Label>
                                         <Input
                                             id="title"
-                                            value={data.title}
-                                            onChange={(e) => setData('title', e.target.value)}
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
                                             placeholder="Optional default title for all files"
                                             className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                         />
                                         <p className="mt-1 text-xs text-zinc-500">
                                             If provided, this will be used as the default title for all uploaded files
                                         </p>
-                                        {errors.title && <p className="mt-1 text-sm text-red-400">{errors.title}</p>}
                                     </div>
 
                                     <div>
@@ -107,13 +219,12 @@ export default function MediaUpload() {
                                         </Label>
                                         <Input
                                             id="alt_text"
-                                            value={data.alt_text}
-                                            onChange={(e) => setData('alt_text', e.target.value)}
+                                            value={altText}
+                                            onChange={(e) => setAltText(e.target.value)}
                                             placeholder="Optional default alt text for images"
                                             className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                         />
                                         <p className="mt-1 text-xs text-zinc-500">Alt text for accessibility (images only)</p>
-                                        {errors.alt_text && <p className="mt-1 text-sm text-red-400">{errors.alt_text}</p>}
                                     </div>
 
                                     <div>
@@ -122,44 +233,73 @@ export default function MediaUpload() {
                                         </Label>
                                         <Textarea
                                             id="description"
-                                            value={data.description}
-                                            onChange={(e) => setData('description', e.target.value)}
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
                                             placeholder="Optional default description"
                                             rows={3}
                                             className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                         />
-                                        {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
                                     </div>
                                 </div>
                             </FormSection>
 
-                            {/* Upload Summary */}
-                            {selectedFiles.length > 0 && (
-                                <FormSection title="Upload Summary" description="Files ready for upload" icon={<FolderOpen className="h-5 w-5" />}>
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm text-zinc-400">Files selected:</span>
-                                            <span className="font-semibold text-amber-400">{selectedFiles.length}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm text-zinc-400">Total size:</span>
-                                            <span className="font-semibold text-amber-400">
-                                                {(selectedFiles.reduce((total, file) => total + file.size, 0) / 1024 / 1024).toFixed(2)} MB
-                                            </span>
+                            {/* Tag Selection */}
+                            <FormSection
+                                title="Tags"
+                                description="Select relevant business units and community clubs"
+                                icon={<Tags className="h-5 w-5" />}
+                            >
+                                <div className="space-y-4">
+                                    {/* Business Units */}
+                                    <div>
+                                        <h4 className="mb-3 text-sm font-medium text-amber-400">Business Units</h4>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {businessUnits.map((unit) => (
+                                                <label key={unit.id} className="flex items-center space-x-2">
+                                                    <Checkbox
+                                                        checked={selectedTags.includes(unit.name)}
+                                                        onCheckedChange={() => handleTagToggle(unit.name)}
+                                                        className="border-zinc-600 bg-zinc-800 text-amber-400"
+                                                    />
+                                                    <span className="text-sm text-zinc-300">{unit.name}</span>
+                                                </label>
+                                            ))}
                                         </div>
                                     </div>
 
+                                    {/* Community Clubs */}
+                                    <div>
+                                        <h4 className="mb-3 text-sm font-medium text-amber-400">Community Clubs</h4>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {communityClubs.map((club) => (
+                                                <label key={club.id} className="flex items-center space-x-2">
+                                                    <Checkbox
+                                                        checked={selectedTags.includes(club.name)}
+                                                        onCheckedChange={() => handleTagToggle(club.name)}
+                                                        className="border-zinc-600 bg-zinc-800 text-amber-400"
+                                                    />
+                                                    <span className="text-sm text-zinc-300">{club.name}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </FormSection>
+
+                            {/* Upload Button */}
+                            {selectedFiles.length > 0 && (
+                                <div className="pt-4">
                                     <LoadingButton
                                         type="submit"
                                         loading={processing}
                                         loadingText="Uploading..."
-                                        disabled={selectedFiles.length === 0}
-                                        className="cta-button mt-4 w-full"
+                                        disabled={selectedFiles.length === 0 || processing}
+                                        className="cta-button w-full"
                                         icon="save"
                                     >
-                                        Upload {selectedFiles.length} Files
+                                        {processing ? 'Uploading...' : `Upload ${selectedFiles.length} Files`}
                                     </LoadingButton>
-                                </FormSection>
+                                </div>
                             )}
                         </div>
                     </div>

@@ -21,12 +21,14 @@ class Media extends Model
         'alt_text',
         'title',
         'description',
+        'tags',
         'uploaded_by',
         'metadata',
     ];
 
     protected $casts = [
         'metadata' => 'array',
+        'tags' => 'array',
         'size' => 'integer',
     ];
 
@@ -35,6 +37,7 @@ class Media extends Model
         'thumbnail_url',
         'human_size',
         'is_image',
+        'tags_display',
     ];
 
     /**
@@ -108,6 +111,18 @@ class Media extends Model
     }
 
     /**
+     * Get tags as a readable string.
+     */
+    public function getTagsDisplayAttribute(): string
+    {
+        if (empty($this->tags) || ! is_array($this->tags)) {
+            return '';
+        }
+
+        return implode(', ', $this->tags);
+    }
+
+    /**
      * Scope to filter by mime type.
      */
     public function scopeOfType($query, string $type)
@@ -134,6 +149,22 @@ class Media extends Model
                 ->orWhere('title', 'like', '%'.$search.'%')
                 ->orWhere('alt_text', 'like', '%'.$search.'%');
         });
+    }
+
+    /**
+     * Scope to filter by tags.
+     */
+    public function scopeWithTags($query, array $tags)
+    {
+        return $query->whereJsonContains('tags', $tags);
+    }
+
+    /**
+     * Scope to filter by specific tag.
+     */
+    public function scopeWithTag($query, string $tag)
+    {
+        return $query->whereJsonContains('tags', $tag);
     }
 
     /**

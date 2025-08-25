@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BusinessUnit;
+use App\Models\CommunityClub;
 use App\Models\Media;
 use App\Services\MediaService;
 use Illuminate\Http\Request;
@@ -34,6 +36,11 @@ class MediaController extends Controller
             $query->ofType($request->type);
         }
 
+        // Filter by tags if provided
+        if ($request->filled('tags') && is_array($request->tags)) {
+            $query->withTags($request->tags);
+        }
+
         // Pagination
         $media = $query->orderBy('created_at', 'desc')
             ->paginate(24)
@@ -44,6 +51,7 @@ class MediaController extends Controller
             'filters' => [
                 'search' => $request->search,
                 'type' => $request->type,
+                'tags' => $request->tags,
             ],
         ]);
     }
@@ -53,7 +61,13 @@ class MediaController extends Controller
      */
     public function create(Request $request)
     {
-        return Inertia::render('admin/media/create');
+        $businessUnits = BusinessUnit::select('id', 'name')->get();
+        $communityClubs = CommunityClub::select('id', 'name')->get();
+
+        return Inertia::render('admin/media/create', [
+            'businessUnits' => $businessUnits,
+            'communityClubs' => $communityClubs,
+        ]);
     }
 
     /**
@@ -67,6 +81,8 @@ class MediaController extends Controller
             'title' => 'nullable|string|max:255',
             'alt_text' => 'nullable|string',
             'description' => 'nullable|string',
+            'tags' => 'nullable|array',
+            'tags.*' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -74,10 +90,18 @@ class MediaController extends Controller
         }
 
         try {
+            // Log upload attempt
+            \Log::info('Media upload started', [
+                'file_count' => count($request->file('files')),
+                'tags' => $request->tags,
+                'user_id' => auth()->id(),
+            ]);
+
             $results = $this->mediaService->bulkUpload($request->file('files'), [
                 'title' => $request->title,
                 'alt_text' => $request->alt_text,
                 'description' => $request->description,
+                'tags' => $request->tags,
             ]);
 
             $successful = collect($results)->where('success', true)->count();
@@ -88,22 +112,24 @@ class MediaController extends Controller
                 $message .= " {$failed} files failed to upload.";
             }
 
+            // Log successful upload
+            \Log::info('Media upload completed', [
+                'successful' => $successful,
+                'failed' => $failed,
+                'user_id' => auth()->id(),
+            ]);
+
             return redirect()->route('admin.media.index')->with('success', $message);
         } catch (\Exception $e) {
+            // Log upload error
+            \Log::error('Media upload failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'user_id' => auth()->id(),
+            ]);
+
             return back()->withErrors(['upload' => 'Upload failed: '.$e->getMessage()]);
         }
-    }
-
-    /**
-     * Display the specified media.
-     */
-    public function show(Media $media)
-    {
-        $media->load(['uploader']);
-
-        return Inertia::render('admin/media/show', [
-            'media' => $media,
-        ]);
     }
 
     /**
@@ -112,9 +138,13 @@ class MediaController extends Controller
     public function edit(Media $media)
     {
         $media->load(['uploader']);
+        $businessUnits = BusinessUnit::select('id', 'name')->get();
+        $communityClubs = CommunityClub::select('id', 'name')->get();
 
         return Inertia::render('admin/media/edit', [
             'media' => $media,
+            'businessUnits' => $businessUnits,
+            'communityClubs' => $communityClubs,
         ]);
     }
 
@@ -127,6 +157,8 @@ class MediaController extends Controller
             'title' => 'nullable|string|max:255',
             'alt_text' => 'nullable|string',
             'description' => 'nullable|string',
+            'tags' => 'nullable|array',
+            'tags.*' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -138,11 +170,12 @@ class MediaController extends Controller
                 'title',
                 'alt_text',
                 'description',
+                'tags',
             ]);
 
             $media->update($updateData);
 
-            return redirect()->route('admin.media.show', $media)->with('success', 'Media updated successfully.');
+            return redirect()->route('admin.media.index')->with('success', 'Media updated successfully.');
         } catch (\Exception $e) {
             return back()->withErrors(['update' => 'Update failed: '.$e->getMessage()]);
         }
@@ -156,7 +189,7 @@ class MediaController extends Controller
         try {
             $this->mediaService->deleteMedia($media);
 
-            return back()->with('success', 'Media deleted successfully.');
+            return redirect()->route('admin.media.index')->with('success', 'Media deleted successfully.');
         } catch (\Exception $e) {
             return back()->withErrors(['delete' => 'Delete failed: '.$e->getMessage()]);
         }
@@ -254,7 +287,7 @@ class MediaController extends Controller
                 $message .= " {$failed} files failed to delete.";
             }
 
-            return back()->with('success', $message);
+            return redirect()->route('admin.media.index')->with('success', $message);
         } catch (\Exception $e) {
             return back()->withErrors(['bulk_delete' => 'Bulk delete failed: '.$e->getMessage()]);
         }

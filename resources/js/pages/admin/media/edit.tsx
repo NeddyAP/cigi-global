@@ -1,18 +1,21 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem, Media } from '@/types';
+import type { BreadcrumbItem, BusinessUnit, CommunityClub, Media } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import { ArrowLeft, FileText } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 
 interface MediaEditProps {
     media: Media;
+    businessUnits: BusinessUnit[];
+    communityClubs: CommunityClub[];
 }
 
-export default function MediaEdit({ media }: MediaEditProps) {
+export default function MediaEdit({ media, businessUnits, communityClubs }: MediaEditProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin' },
         { title: 'Media Manager', href: '/admin/media' },
@@ -20,18 +23,28 @@ export default function MediaEdit({ media }: MediaEditProps) {
         { title: 'Edit', href: `/admin/media/${media.id}/edit` },
     ];
 
+    const [selectedTags, setSelectedTags] = useState<string[]>(media.tags || []);
+
     const { data, setData, put, processing, errors } = useForm({
         title: media.title || '',
         alt_text: media.alt_text || '',
         description: media.description || '',
+        tags: media.tags || [],
     });
+
+    const handleTagToggle = (tag: string) => {
+        const newTags = selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag];
+
+        setSelectedTags(newTags);
+        setData('tags', newTags);
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         put(route('admin.media.update', media.id), {
             onSuccess: () => {
-                // Redirect to show page after successful update
-                router.visit(route('admin.media.show', media.id));
+                // Redirect to media index after successful update
+                router.visit(route('admin.media.index'));
             },
         });
     };
@@ -83,9 +96,9 @@ export default function MediaEdit({ media }: MediaEditProps) {
                     </div>
 
                     <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
-                        <Link href={route('admin.media.show', media.id)}>
+                        <Link href={route('admin.media.index')}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Details
+                            Back to Media
                         </Link>
                     </Button>
                 </div>
@@ -185,6 +198,49 @@ export default function MediaEdit({ media }: MediaEditProps) {
                                     <p className="mt-1 text-xs text-zinc-500">Optional detailed description of the media content</p>
                                 </div>
 
+                                {/* Tag Selection */}
+                                <div>
+                                    <Label className="text-zinc-300">Tags</Label>
+                                    <div className="mt-2 space-y-4">
+                                        {/* Business Units */}
+                                        <div>
+                                            <h4 className="mb-3 text-sm font-medium text-amber-400">Business Units</h4>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                {businessUnits.map((unit) => (
+                                                    <label key={unit.id} className="flex items-center space-x-2">
+                                                        <Checkbox
+                                                            checked={selectedTags.includes(unit.name)}
+                                                            onCheckedChange={() => handleTagToggle(unit.name)}
+                                                            className="border-zinc-600 bg-zinc-800 text-amber-400"
+                                                        />
+                                                        <span className="text-sm text-zinc-300">{unit.name}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Community Clubs */}
+                                        <div>
+                                            <h4 className="mb-3 text-sm font-medium text-amber-400">Community Clubs</h4>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                {communityClubs.map((club) => (
+                                                    <label key={club.id} className="flex items-center space-x-2">
+                                                        <Checkbox
+                                                            checked={selectedTags.includes(club.name)}
+                                                            onCheckedChange={() => handleTagToggle(club.name)}
+                                                            className="border-zinc-600 bg-zinc-800 text-amber-400"
+                                                        />
+                                                        <span className="text-sm text-zinc-300">{club.name}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {errors.tags && <p className="mt-1 text-sm text-red-400">{errors.tags}</p>}
+                                        <p className="text-xs text-zinc-500">Select relevant business units and community clubs for this media</p>
+                                    </div>
+                                </div>
+
                                 <div className="flex space-x-4 pt-6">
                                     <Button type="submit" disabled={processing} className="cta-button flex-1">
                                         {processing ? 'Saving...' : 'Save Changes'}
@@ -196,7 +252,7 @@ export default function MediaEdit({ media }: MediaEditProps) {
                                         asChild
                                         className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-700"
                                     >
-                                        <Link href={route('admin.media.show', media.id)}>Cancel</Link>
+                                        <Link href={route('admin.media.index')}>Cancel</Link>
                                     </Button>
                                 </div>
                             </form>

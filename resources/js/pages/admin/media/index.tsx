@@ -66,10 +66,6 @@ export default function MediaIndex({ media, filters }: MediaPageProps) {
         setSelectedItems(selectedIds);
     };
 
-    const handleItemView = (media: Media) => {
-        router.visit(route('admin.media.show', media.id));
-    };
-
     const handleItemEdit = (media: Media) => {
         router.visit(route('admin.media.edit', media.id));
     };
@@ -191,7 +187,6 @@ export default function MediaIndex({ media, filters }: MediaPageProps) {
                     media={media.data}
                     selectedItems={selectedItems}
                     onSelectionChange={handleSelectionChange}
-                    onItemView={handleItemView}
                     onItemEdit={handleItemEdit}
                     onItemDelete={handleItemDelete}
                     viewMode={viewMode}

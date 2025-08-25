@@ -13,7 +13,6 @@ interface MediaGridProps {
     loading?: boolean;
     selectedItems?: number[];
     onSelectionChange?: (selectedIds: number[]) => void;
-    onItemView?: (media: Media) => void;
     onItemEdit?: (media: Media) => void;
     onItemDelete?: (media: Media) => void;
     viewMode?: 'grid' | 'list';
@@ -25,7 +24,6 @@ export default function MediaGrid({
     loading = false,
     selectedItems = [],
     onSelectionChange,
-    onItemView,
     onItemEdit,
     onItemDelete,
     viewMode = 'grid',
@@ -63,7 +61,6 @@ export default function MediaGrid({
                     media={item}
                     selected={selectedItems.includes(item.id)}
                     onSelect={handleItemSelect}
-                    onView={onItemView}
                     onEdit={onItemEdit}
                     onDelete={onItemDelete}
                     size="large"
@@ -114,9 +111,6 @@ export default function MediaGrid({
                     </div>
 
                     <div className="flex space-x-2">
-                        <Button size="sm" variant="outline" onClick={() => onItemView?.(item)}>
-                            View
-                        </Button>
                         <Button size="sm" variant="outline" onClick={() => onItemEdit?.(item)}>
                             Edit
                         </Button>

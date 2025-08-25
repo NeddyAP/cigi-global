@@ -3,29 +3,19 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { cn } from '@/lib/utils';
 import { type Media } from '@/types';
-import { Edit, Eye, FileText, Image, Trash2 } from 'lucide-react';
+import { Edit, FileText, Image, Trash2 } from 'lucide-react';
 
 interface MediaItemProps {
     media: Media;
     selected?: boolean;
     onSelect?: (id: number, selected: boolean) => void;
-    onView?: (media: Media) => void;
     onEdit?: (media: Media) => void;
     onDelete?: (media: Media) => void;
     size?: 'small' | 'medium' | 'large';
     selectable?: boolean;
 }
 
-export default function MediaItem({
-    media,
-    selected = false,
-    onSelect,
-    onView,
-    onEdit,
-    onDelete,
-    size = 'medium',
-    selectable = true,
-}: MediaItemProps) {
+export default function MediaItem({ media, selected = false, onSelect, onEdit, onDelete, size = 'medium', selectable = true }: MediaItemProps) {
     const sizeClasses = {
         small: 'h-24 w-24',
         medium: 'h-32 w-32',
@@ -72,7 +62,6 @@ export default function MediaItem({
                         size === 'medium' && 'p-2',
                         size === 'large' && 'p-3',
                     )}
-                    onClick={() => onView?.(media)}
                 >
                     {/* Selection Checkbox */}
                     {selectable && (
@@ -116,17 +105,6 @@ export default function MediaItem({
                             variant="secondary"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                onView?.(media);
-                            }}
-                            className="h-6 w-6 p-0"
-                        >
-                            <Eye className="h-3 w-3" />
-                        </Button>
-                        <Button
-                            size="sm"
-                            variant="secondary"
-                            onClick={(e) => {
-                                e.stopPropagation();
                                 onEdit?.(media);
                             }}
                             className="h-6 w-6 p-0"
@@ -149,10 +127,6 @@ export default function MediaItem({
             </ContextMenuTrigger>
 
             <ContextMenuContent>
-                <ContextMenuItem onClick={() => onView?.(media)}>
-                    <Eye className="mr-2 h-4 w-4" />
-                    View Details
-                </ContextMenuItem>
                 <ContextMenuItem onClick={() => onEdit?.(media)}>
                     <Edit className="mr-2 h-4 w-4" />
                     Edit

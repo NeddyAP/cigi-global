@@ -53,6 +53,7 @@ class MediaService
             'title' => $options['title'] ?? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
             'alt_text' => $options['alt_text'] ?? null,
             'description' => $options['description'] ?? null,
+            'tags' => is_array($options['tags']) ? array_values(array_filter($options['tags'])) : [],
         ]);
 
         // Process image if it's an image file

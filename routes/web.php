@@ -52,7 +52,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('contact-messages/bulk-delete', [\App\Http\Controllers\Admin\ContactMessageController::class, 'bulkDelete'])->name('contact-messages.bulk-delete');
 
     // Media Manager routes
-    Route::resource('media', \App\Http\Controllers\Admin\MediaController::class);
+    Route::resource('media', \App\Http\Controllers\Admin\MediaController::class)->except(['show'])->parameters(['media' => 'media']);
     Route::post('media/ajax-upload', [\App\Http\Controllers\Admin\MediaController::class, 'ajaxUpload'])->name('media.ajax-upload');
     Route::get('media-picker', [\App\Http\Controllers\Admin\MediaController::class, 'picker'])->name('media.picker');
     Route::post('media/bulk-delete', [\App\Http\Controllers\Admin\MediaController::class, 'bulkDelete'])->name('media.bulk-delete');
