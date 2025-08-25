@@ -98,7 +98,7 @@ export default function AdminNewsIndex({ news, categories = [], filters = {} }: 
                 <div className="flex items-start">
                     {newsItem.featured_image && (
                         <div className="mr-4 h-12 w-16 flex-shrink-0">
-                            <img className="h-12 w-16 rounded-lg object-cover" src={`/${newsItem.featured_image}`} alt={newsItem.title} />
+                            <img className="h-12 w-16 rounded-lg object-cover" src={`${newsItem.featured_image}`} alt={newsItem.title} />
                         </div>
                     )}
                     <div className="min-w-0 flex-1">

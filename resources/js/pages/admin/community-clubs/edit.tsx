@@ -13,7 +13,7 @@ import { Toggle } from '@/components/ui/toggle';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, CommunityClub } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
-import { ArrowLeft, Calendar, Globe, Image, Phone, Settings, Star, Trophy, Users } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, Calendar, Globe, Image, Phone, Settings, Star, Trophy, Users } from 'lucide-react';
 import React, { useState } from 'react';
 
 interface EditCommunityClubProps {
@@ -131,7 +131,7 @@ export default function EditCommunityClub({ communityClub }: EditCommunityClubPr
         return [];
     };
 
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put, processing, errors, hasErrors, clearErrors } = useForm({
         name: communityClub.name || '',
         slug: communityClub.slug || '',
         description: communityClub.description || '',
@@ -244,6 +244,42 @@ export default function EditCommunityClub({ communityClub }: EditCommunityClubPr
                     </Button>
                 </div>
 
+                {/* Error Summary */}
+                {hasErrors && (
+                    <div className="rounded-md bg-red-50 p-4 dark:bg-red-900/20">
+                        <div className="flex items-center justify-between">
+                            <div className="flex">
+                                <div className="flex-shrink-0">
+                                    <AlertTriangle className="h-5 w-5 text-red-400" />
+                                </div>
+                                <div className="ml-3">
+                                    <p className="text-sm font-medium text-red-800 dark:text-red-200">
+                                        Ada kesalahan dalam form. Silakan periksa dan perbaiki.
+                                    </p>
+                                    {/* Show specific errors */}
+                                    {Object.keys(errors).length > 0 && (
+                                        <div className="mt-2 space-y-1">
+                                            {Object.entries(errors).map(([field, error]) => (
+                                                <p key={field} className="text-sm text-red-600 dark:text-red-300">
+                                                    <span className="font-medium capitalize">{field.replace(/_/g, ' ')}:</span> {error}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => clearErrors()}
+                                className="border-red-300 text-red-700 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/20"
+                            >
+                                Tutup
+                            </Button>
+                        </div>
+                    </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                         <TabsList className="grid w-full grid-cols-6">
@@ -312,6 +348,7 @@ export default function EditCommunityClub({ communityClub }: EditCommunityClubPr
                                         error={errors.image}
                                         showPreview={true}
                                         autoUpload={true}
+                                        multiple={false}
                                     />
                                 </div>
 

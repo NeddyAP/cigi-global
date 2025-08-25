@@ -18,6 +18,17 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('services')->nullable(); // JSON or text list of services
             $table->string('image')->nullable(); // Image path
+            $table->json('team_members')->nullable(); // Added enhanced fields
+            $table->json('client_testimonials')->nullable();
+            $table->json('portfolio_items')->nullable();
+            $table->json('certifications')->nullable();
+            $table->json('company_stats')->nullable();
+            $table->json('gallery_images')->nullable();
+            $table->json('achievements')->nullable();
+            $table->json('core_values')->nullable();
+            $table->text('hero_subtitle')->nullable();
+            $table->string('hero_cta_text')->nullable();
+            $table->string('hero_cta_link')->nullable();
             $table->string('contact_phone')->nullable();
             $table->string('contact_email')->nullable();
             $table->text('address')->nullable();

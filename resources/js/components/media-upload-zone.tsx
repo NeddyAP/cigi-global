@@ -10,12 +10,14 @@ interface UploadFile {
     progress: number;
     status: 'pending' | 'uploading' | 'success' | 'error';
     error?: string;
+    mediaId?: number;
+    mediaUrl?: string;
 }
 
 interface MediaUploadZoneProps {
     onUpload?: (files: File[]) => void;
     onFileUploadProgress?: (fileId: string, progress: number) => void;
-    onFileUploadComplete?: (fileId: string, success: boolean, error?: string) => void;
+    onFileUploadComplete?: (fileId: string, success: boolean, error?: string, mediaId?: number, mediaUrl?: string) => void;
     acceptedTypes?: string[];
     maxFileSize?: number; // in MB
     multiple?: boolean;
@@ -25,6 +27,8 @@ interface MediaUploadZoneProps {
 
 export default function MediaUploadZone({
     onUpload,
+    onFileUploadProgress,
+    onFileUploadComplete,
     acceptedTypes = ['image/*'],
     maxFileSize = 10,
     multiple = true,
@@ -60,6 +64,61 @@ export default function MediaUploadZone({
         [maxFileSize, acceptedTypes],
     );
 
+    const uploadFile = useCallback(
+        async (uploadFile: UploadFile) => {
+            const formData = new FormData();
+            formData.append('file', uploadFile.file);
+
+            try {
+                setUploadFiles((prev) => prev.map((file) => (file.id === uploadFile.id ? { ...file, status: 'uploading' } : file)));
+
+                const response = await fetch('/admin/media/ajax-upload', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': (window as any).csrfToken || '',
+                        Accept: 'application/json',
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Upload failed');
+                }
+
+                const result = await response.json();
+
+                if (result.success && result.media) {
+                    setUploadFiles((prev) =>
+                        prev.map((file) =>
+                            file.id === uploadFile.id
+                                ? {
+                                      ...file,
+                                      status: 'success',
+                                      progress: 100,
+                                      mediaId: result.media.id,
+                                      mediaUrl: result.media.url || result.media.path,
+                                  }
+                                : file,
+                        ),
+                    );
+
+                    // Call the completion callback with media info
+                    onFileUploadComplete?.(uploadFile.id, true, undefined, result.media.id, result.media.url || result.media.path);
+                } else {
+                    throw new Error(result.message || 'Upload failed');
+                }
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Upload failed';
+                setUploadFiles((prev) => prev.map((file) => (file.id === uploadFile.id ? { ...file, status: 'error', error: errorMessage } : file)));
+
+                // Call the completion callback with error
+                onFileUploadComplete?.(uploadFile.id, false, errorMessage);
+            }
+        },
+        [onFileUploadComplete],
+    );
+
     const processFiles = useCallback(
         (files: FileList | File[]) => {
             const fileArray = Array.from(files);
@@ -73,6 +132,7 @@ export default function MediaUploadZone({
                     id: Math.random().toString(36).substr(2, 9),
                     progress: 0,
                     status: error ? 'error' : 'pending',
+                    error: error || undefined,
                 };
 
                 newUploadFiles.push(uploadFile);
@@ -84,11 +144,19 @@ export default function MediaUploadZone({
 
             setUploadFiles((prev) => [...prev, ...newUploadFiles]);
 
+            // Start uploading valid files
+            validFiles.forEach((file) => {
+                const uploadFileItem = newUploadFiles.find((uf) => uf.file === file);
+                if (uploadFileItem) {
+                    uploadFile(uploadFileItem);
+                }
+            });
+
             if (validFiles.length > 0) {
                 onUpload?.(validFiles);
             }
         },
-        [validateFile, onUpload],
+        [validateFile, onUpload, uploadFile],
     );
 
     const handleDragOver = useCallback(
@@ -211,7 +279,12 @@ export default function MediaUploadZone({
 
                                     {uploadFile.status === 'error' && <p className="mt-1 text-xs text-red-500">{uploadFile.error}</p>}
 
-                                    {uploadFile.status === 'success' && <p className="mt-1 text-xs text-green-500">Upload complete</p>}
+                                    {uploadFile.status === 'success' && (
+                                        <div className="mt-1 space-y-1">
+                                            <p className="text-xs text-green-500">Upload complete</p>
+                                            {uploadFile.mediaId && <p className="text-xs text-blue-500">Media ID: {uploadFile.mediaId}</p>}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex items-center space-x-2">

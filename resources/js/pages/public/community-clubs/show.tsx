@@ -33,13 +33,28 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
 
     // Transform gallery images for the GallerySection component
     const galleryImages =
-        communityClub.gallery_images?.map((image, index) => ({
-            id: index + 1,
-            url: image,
-            alt: `${communityClub.name} - Image ${index + 1}`,
-            caption: `${communityClub.name} community activities and events`,
-            thumbnail: image,
-        })) || [];
+        communityClub.gallery_images?.map((image: any, index: number) => {
+            // gallery_images may be an array of strings (urls) or objects { id, url, alt, caption }
+            if (typeof image === 'string') {
+                return {
+                    id: `img-${index + 1}`,
+                    url: image,
+                    alt: `${communityClub.name} - Image ${index + 1}`,
+                    caption: `${communityClub.name} community activities and events`,
+                    thumbnail: { url: image },
+                };
+            }
+
+            // If image is an object, safely read properties
+            const imgUrl = image?.url ?? (typeof image === 'string' ? image : '');
+            return {
+                id: image?.id ?? `img-${index + 1}`,
+                url: imgUrl,
+                alt: image?.alt ?? `${communityClub.name} - Image ${index + 1}`,
+                caption: image?.caption ?? `${communityClub.name} community activities and events`,
+                thumbnail: { url: imgUrl },
+            };
+        }) || [];
 
     // Transform testimonials for the TestimonialsSection component
     const testimonials =
@@ -430,7 +445,7 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                                         {club.image && (
                                             <div className="relative h-48 overflow-hidden">
                                                 <img
-                                                    src={club.image}
+                                                    src={`${club.image}`}
                                                     alt={club.name}
                                                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                                 />

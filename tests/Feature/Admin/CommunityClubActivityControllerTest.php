@@ -6,7 +6,6 @@ use App\Models\CommunityClub;
 use App\Models\CommunityClubActivity;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -78,14 +77,12 @@ class CommunityClubActivityControllerTest extends TestCase
 
     public function test_admin_can_create_activity_with_image(): void
     {
-        $file = UploadedFile::fake()->image('activity-image.jpg');
-
         $data = [
             'community_club_id' => $this->communityClub->id,
             'title' => 'Activity with Image',
             'description' => 'Test activity with image',
             'duration' => '1 hour',
-            'image' => $file,
+            'image' => 'https://example.com/activity-image.jpg',
             'benefits' => ['Fun experience'],
         ];
 
@@ -95,8 +92,7 @@ class CommunityClubActivityControllerTest extends TestCase
 
         $activity = CommunityClubActivity::where('title', 'Activity with Image')->first();
         $this->assertNotNull($activity);
-        $this->assertNotNull($activity->image);
-        Storage::disk('public')->assertExists($activity->image);
+        $this->assertEquals('https://example.com/activity-image.jpg', $activity->image);
     }
 
     public function test_admin_can_create_activity_with_complex_benefits(): void
@@ -178,14 +174,12 @@ class CommunityClubActivityControllerTest extends TestCase
             'community_club_id' => $this->communityClub->id,
         ]);
 
-        $file = UploadedFile::fake()->image('new-activity-image.jpg');
-
         $updateData = [
             'community_club_id' => $this->communityClub->id,
             'title' => 'Updated Activity',
             'description' => 'Updated description',
             'duration' => '2 hours',
-            'image' => $file,
+            'image' => 'https://example.com/new-activity-image.jpg',
             'benefits' => ['Benefit 1'],
         ];
 
@@ -194,8 +188,7 @@ class CommunityClubActivityControllerTest extends TestCase
         $response->assertRedirect(route('admin.community-club-activities.index'));
 
         $activity->refresh();
-        $this->assertNotNull($activity->image);
-        Storage::disk('public')->assertExists($activity->image);
+        $this->assertEquals('https://example.com/new-activity-image.jpg', $activity->image);
     }
 
     public function test_admin_can_delete_activity(): void

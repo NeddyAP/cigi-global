@@ -58,47 +58,39 @@ class CommunityClubController extends Controller
     {
         $validated = $request->validate(CommunityClub::validationRules());
 
-        // Handle image uploads for gallery
-        if ($request->hasFile('gallery_images')) {
-            $galleryImages = [];
-            foreach ($request->file('gallery_images') as $file) {
-                $path = $file->store('community-clubs/gallery', 'public');
-                $galleryImages[] = $path;
-            }
-            $validated['gallery_images'] = $galleryImages;
+        // Handle main image - now expects a media ID or URL string
+        if ($request->filled('image')) {
+            // If it's a media ID, we can store it directly
+            // If it's a URL, we can store it directly
+            $validated['image'] = $request->input('image');
         }
 
-        // Handle main image upload
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('community-clubs', 'public');
-        }
-
-        // Handle testimonial images
+        // Handle testimonial images - now expects media IDs or URL strings
         if (isset($validated['testimonials'])) {
             foreach ($validated['testimonials'] as $index => $testimonial) {
-                if ($request->hasFile("testimonial_images.{$index}")) {
-                    $path = $request->file("testimonial_images.{$index}")->store('community-clubs/testimonials', 'public');
-                    $validated['testimonials'][$index]['image'] = $path;
+                if (isset($testimonial['image']) && $testimonial['image']) {
+                    // Store the media ID or URL directly
+                    $validated['testimonials'][$index]['image'] = $testimonial['image'];
                 }
             }
         }
 
-        // Handle event images
+        // Handle event images - now expects media IDs or URL strings
         if (isset($validated['upcoming_events'])) {
             foreach ($validated['upcoming_events'] as $index => $event) {
-                if ($request->hasFile("event_images.{$index}")) {
-                    $path = $request->file("event_images.{$index}")->store('community-clubs/events', 'public');
-                    $validated['upcoming_events'][$index]['image'] = $path;
+                if (isset($event['image']) && $event['image']) {
+                    // Store the media ID or URL directly
+                    $validated['upcoming_events'][$index]['image'] = $event['image'];
                 }
             }
         }
 
-        // Handle achievement images
+        // Handle achievement images - now expects media IDs or URL strings
         if (isset($validated['achievements'])) {
             foreach ($validated['achievements'] as $index => $achievement) {
-                if ($request->hasFile("achievement_images.{$index}")) {
-                    $path = $request->file("achievement_images.{$index}")->store('community-clubs/achievements', 'public');
-                    $validated['achievements'][$index]['image'] = $path;
+                if (isset($achievement['image']) && $achievement['image']) {
+                    // Store the media ID or URL directly
+                    $validated['achievements'][$index]['image'] = $achievement['image'];
                 }
             }
         }
@@ -131,55 +123,47 @@ class CommunityClubController extends Controller
     {
         $validated = $request->validate(CommunityClub::updateValidationRules($communityClub->id));
 
-        // Handle image uploads for gallery
-        if ($request->hasFile('gallery_images')) {
-            $galleryImages = $communityClub->gallery_images ?? [];
-            foreach ($request->file('gallery_images') as $file) {
-                $path = $file->store('community-clubs/gallery', 'public');
-                $galleryImages[] = $path;
-            }
-            $validated['gallery_images'] = $galleryImages;
+        // Handle main image - now expects a media ID or URL string
+        if ($request->filled('image')) {
+            // If it's a media ID, we can store it directly
+            // If it's a URL, we can store it directly
+            $validated['image'] = $request->input('image');
         }
 
-        // Handle main image upload
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('community-clubs', 'public');
-        }
-
-        // Handle testimonial images
+        // Handle testimonial images - now expects media IDs or URL strings
         if (isset($validated['testimonials'])) {
             foreach ($validated['testimonials'] as $index => $testimonial) {
-                if ($request->hasFile("testimonial_images.{$index}")) {
-                    $path = $request->file("testimonial_images.{$index}")->store('community-clubs/testimonials', 'public');
-                    $validated['testimonials'][$index]['image'] = $path;
+                if (isset($testimonial['image']) && $testimonial['image']) {
+                    // Store the media ID or URL directly
+                    $validated['testimonials'][$index]['image'] = $testimonial['image'];
                 } elseif (isset($communityClub->testimonials[$index]['image'])) {
-                    // Keep existing image if no new one uploaded
+                    // Keep existing image if no new one provided
                     $validated['testimonials'][$index]['image'] = $communityClub->testimonials[$index]['image'];
                 }
             }
         }
 
-        // Handle event images
+        // Handle event images - now expects media IDs or URL strings
         if (isset($validated['upcoming_events'])) {
             foreach ($validated['upcoming_events'] as $index => $event) {
-                if ($request->hasFile("event_images.{$index}")) {
-                    $path = $request->file("event_images.{$index}")->store('community-clubs/events', 'public');
-                    $validated['upcoming_events'][$index]['image'] = $path;
+                if (isset($event['image']) && $event['image']) {
+                    // Store the media ID or URL directly
+                    $validated['upcoming_events'][$index]['image'] = $event['image'];
                 } elseif (isset($communityClub->upcoming_events[$index]['image'])) {
-                    // Keep existing image if no new one uploaded
+                    // Keep existing image if no new one provided
                     $validated['upcoming_events'][$index]['image'] = $communityClub->upcoming_events[$index]['image'];
                 }
             }
         }
 
-        // Handle achievement images
+        // Handle achievement images - now expects media IDs or URL strings
         if (isset($validated['achievements'])) {
             foreach ($validated['achievements'] as $index => $achievement) {
-                if ($request->hasFile("achievement_images.{$index}")) {
-                    $path = $request->file("achievement_images.{$index}")->store('community-clubs/achievements', 'public');
-                    $validated['achievements'][$index]['image'] = $path;
+                if (isset($achievement['image']) && $achievement['image']) {
+                    // Store the media ID or URL directly
+                    $validated['achievements'][$index]['image'] = $achievement['image'];
                 } elseif (isset($communityClub->achievements[$index]['image'])) {
-                    // Keep existing image if no new one uploaded
+                    // Keep existing image if no new one provided
                     $validated['achievements'][$index]['image'] = $communityClub->achievements[$index]['image'];
                 }
             }

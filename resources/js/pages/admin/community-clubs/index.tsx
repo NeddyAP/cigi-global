@@ -60,7 +60,7 @@ export default function AdminCommunityClubsIndex({ communityClubs, filters = {} 
                 <div className="flex items-center">
                     {club.image && (
                         <div className="h-10 w-10 flex-shrink-0">
-                            <img className="h-10 w-10 rounded-lg object-cover" src={`/${club.image}`} alt={club.name} />
+                            <img className="h-10 w-10 rounded-lg object-cover" src={`${club.image}`} alt={club.name} />
                         </div>
                     )}
                     <div className={club.image ? 'ml-4' : ''}>

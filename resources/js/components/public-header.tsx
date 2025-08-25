@@ -145,7 +145,7 @@ export default function PublicHeader() {
                                                                         {club.image ? (
                                                                             <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg transition-transform duration-300 group-hover:scale-110">
                                                                                 <img
-                                                                                    src={`/${club.image}`}
+                                                                                    src={`${club.image}`}
                                                                                     alt={club.name}
                                                                                     className="h-full w-full object-cover"
                                                                                 />
@@ -205,7 +205,7 @@ export default function PublicHeader() {
                                                                         {unit.image ? (
                                                                             <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg transition-transform duration-300 group-hover:scale-110">
                                                                                 <img
-                                                                                    src={`/${unit.image}`}
+                                                                                    src={`${unit.image}`}
                                                                                     alt={unit.name}
                                                                                     className="h-full w-full object-cover"
                                                                                 />

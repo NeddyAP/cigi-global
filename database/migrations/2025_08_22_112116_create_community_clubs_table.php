@@ -19,6 +19,16 @@ return new class extends Migration
             $table->string('type'); // e.g., 'Olahraga', 'Keagamaan', 'Lingkungan'
             $table->text('activities')->nullable(); // JSON or text list of activities
             $table->string('image')->nullable(); // Image path
+            $table->json('gallery_images')->nullable(); // Added enhanced fields
+            $table->json('testimonials')->nullable();
+            $table->json('social_media_links')->nullable();
+            $table->integer('founded_year')->nullable();
+            $table->integer('member_count')->nullable();
+            $table->json('upcoming_events')->nullable();
+            $table->json('achievements')->nullable();
+            $table->text('hero_subtitle')->nullable();
+            $table->string('hero_cta_text')->nullable();
+            $table->string('hero_cta_link')->nullable();
             $table->string('contact_person')->nullable();
             $table->string('contact_phone')->nullable();
             $table->string('contact_email')->nullable();

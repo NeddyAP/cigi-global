@@ -6,7 +6,6 @@ use App\Models\BusinessUnit;
 use App\Models\BusinessUnitService;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -90,15 +89,13 @@ class BusinessUnitServiceControllerTest extends TestCase
 
     public function test_admin_can_create_service_with_image(): void
     {
-        $file = UploadedFile::fake()->image('service-image.jpg');
-
         $data = [
             'business_unit_id' => $this->businessUnit->id,
             'title' => 'Service with Image',
             'description' => 'Test service with image',
             'price_range' => '$200-800',
             'duration' => '1 month',
-            'image' => $file,
+            'image' => 'https://example.com/service-image.jpg',
             'features' => ['Professional design'],
             'technologies' => ['Figma', 'Adobe'],
             'process_steps' => [
@@ -116,8 +113,7 @@ class BusinessUnitServiceControllerTest extends TestCase
 
         $service = BusinessUnitService::where('title', 'Service with Image')->first();
         $this->assertNotNull($service);
-        $this->assertNotNull($service->image);
-        Storage::disk('public')->assertExists($service->image);
+        $this->assertEquals('https://example.com/service-image.jpg', $service->image);
     }
 
     public function test_admin_can_create_service_with_complex_features(): void
@@ -252,15 +248,13 @@ class BusinessUnitServiceControllerTest extends TestCase
             'business_unit_id' => $this->businessUnit->id,
         ]);
 
-        $file = UploadedFile::fake()->image('new-service-image.jpg');
-
         $updateData = [
             'business_unit_id' => $this->businessUnit->id,
             'title' => 'Updated Service',
             'description' => 'Updated description',
             'price_range' => '$300-1000',
             'duration' => '4 weeks',
-            'image' => $file,
+            'image' => 'https://example.com/new-service-image.jpg',
             'features' => ['Feature 1'],
             'technologies' => ['React'],
             'process_steps' => [
@@ -277,8 +271,7 @@ class BusinessUnitServiceControllerTest extends TestCase
         $response->assertRedirect(route('admin.business-unit-services.index'));
 
         $service->refresh();
-        $this->assertNotNull($service->image);
-        Storage::disk('public')->assertExists($service->image);
+        $this->assertEquals('https://example.com/new-service-image.jpg', $service->image);
     }
 
     public function test_admin_can_delete_service(): void

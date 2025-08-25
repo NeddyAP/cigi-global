@@ -42,7 +42,7 @@ class CommunityClubActivity extends Model
             'community_club_id' => 'required|integer|exists:community_clubs,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image' => 'nullable|string|max:500', // Changed from file validation to string validation
             'duration' => 'nullable|string|max:100',
             'max_participants' => 'nullable|integer|min:1',
             'requirements' => 'nullable|string',

@@ -57,67 +57,62 @@ class BusinessUnitController extends Controller
     {
         $validated = $request->validate(BusinessUnit::validationRules());
 
-        // Handle image uploads for gallery
-        if ($request->hasFile('gallery_images')) {
-            $galleryImages = [];
-            foreach ($request->file('gallery_images') as $file) {
-                $path = $file->store('business-units/gallery', 'public');
-                $galleryImages[] = $path;
-            }
-            $validated['gallery_images'] = $galleryImages;
+        // Transform data before saving
+        $validated = $this->transformData($validated);
+
+        // Handle main image - now expects a media ID or URL string
+        if ($request->filled('image')) {
+            // If it's a media ID, we can store it directly
+            // If it's a URL, we can store it directly
+            $validated['image'] = $request->input('image');
         }
 
-        // Handle main image upload
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('business-units', 'public');
-        }
-
-        // Handle team member images
+        // Handle team member images - now expects media IDs or URL strings
         if (isset($validated['team_members'])) {
             foreach ($validated['team_members'] as $index => $member) {
-                if ($request->hasFile("team_member_images.{$index}")) {
-                    $path = $request->file("team_member_images.{$index}")->store('business-units/team', 'public');
-                    $validated['team_members'][$index]['image'] = $path;
+                if (isset($member['image']) && $member['image']) {
+                    // Store the media ID or URL directly
+                    $validated['team_members'][$index]['image'] = $member['image'];
                 }
             }
         }
 
-        // Handle client testimonial images
+        // Handle client testimonial images - now expects media IDs or URL strings
         if (isset($validated['client_testimonials'])) {
             foreach ($validated['client_testimonials'] as $index => $testimonial) {
-                if ($request->hasFile("testimonial_images.{$index}")) {
-                    $path = $request->file("testimonial_images.{$index}")->store('business-units/testimonials', 'public');
-                    $validated['client_testimonials'][$index]['image'] = $path;
+                if (isset($testimonial['image']) && $testimonial['image']) {
+                    // Store the media ID or URL directly
+                    $validated['client_testimonials'][$index]['image'] = $testimonial['image'];
                 }
             }
         }
 
-        // Handle portfolio item images
+        // Handle portfolio item images - now expects media IDs or URL strings
         if (isset($validated['portfolio_items'])) {
             foreach ($validated['portfolio_items'] as $index => $item) {
-                if ($request->hasFile("portfolio_images.{$index}")) {
-                    $path = $request->file("portfolio_images.{$index}")->store('business-units/portfolio', 'public');
-                    $validated['portfolio_items'][$index]['image'] = $path;
+                if (isset($item['image']) && $item['image']) {
+                    // Store the media ID or URL directly
+                    $validated['portfolio_items'][$index]['image'] = $item['image'];
                 }
             }
         }
 
-        // Handle certification images
+        // Handle certification images - now expects media IDs or URL strings
         if (isset($validated['certifications'])) {
             foreach ($validated['certifications'] as $index => $certification) {
-                if ($request->hasFile("certification_images.{$index}")) {
-                    $path = $request->file("certification_images.{$index}")->store('business-units/certifications', 'public');
-                    $validated['certifications'][$index]['image'] = $path;
+                if (isset($certification['image']) && $certification['image']) {
+                    // Store the media ID or URL directly
+                    $validated['certifications'][$index]['image'] = $certification['image'];
                 }
             }
         }
 
-        // Handle achievement images
+        // Handle achievement images - now expects media IDs or URL strings
         if (isset($validated['achievements'])) {
             foreach ($validated['achievements'] as $index => $achievement) {
-                if ($request->hasFile("achievement_images.{$index}")) {
-                    $path = $request->file("achievement_images.{$index}")->store('business-units/achievements', 'public');
-                    $validated['achievements'][$index]['image'] = $path;
+                if (isset($achievement['image']) && $achievement['image']) {
+                    // Store the media ID or URL directly
+                    $validated['achievements'][$index]['image'] = $achievement['image'];
                 }
             }
         }
@@ -126,6 +121,87 @@ class BusinessUnitController extends Controller
 
         return redirect()->route('admin.business-units.index')
             ->with('success', 'Unit bisnis berhasil ditambahkan.');
+    }
+
+    private function transformData(array $data): array
+    {
+        // Transform team members social links
+        if (isset($data['team_members'])) {
+            $data['team_members'] = array_map(function ($member) {
+                $socialLinks = [];
+
+                if (! empty($member['social_links_linkedin'])) {
+                    $socialLinks[] = [
+                        'platform' => 'linkedin',
+                        'url' => $member['social_links_linkedin'],
+                    ];
+                }
+
+                if (! empty($member['social_links_twitter'])) {
+                    $socialLinks[] = [
+                        'platform' => 'twitter',
+                        'url' => $member['social_links_twitter'],
+                    ];
+                }
+
+                if (! empty($member['social_links_github'])) {
+                    $socialLinks[] = [
+                        'platform' => 'github',
+                        'url' => $member['social_links_github'],
+                    ];
+                }
+
+                return array_merge($member, ['social_links' => $socialLinks]);
+            }, $data['team_members']);
+        }
+
+        // Transform company stats
+        if (isset($data['company_stats'])) {
+            // Check if data is already in the correct format (has label and value)
+            if (is_array($data['company_stats']) && count($data['company_stats']) > 0 && isset($data['company_stats'][0]['label'])) {
+                // Data is already in correct format, don't transform
+                // Do nothing, keep the data as is
+            } else {
+                // Data is in old format, transform it
+                $companyStats = [];
+
+                if (! empty($data['company_stats']['years_in_business'])) {
+                    $companyStats[] = [
+                        'label' => 'Years in Business',
+                        'value' => $data['company_stats']['years_in_business'],
+                        'icon' => '📅',
+                    ];
+                }
+
+                if (! empty($data['company_stats']['projects_completed'])) {
+                    $companyStats[] = [
+                        'label' => 'Projects Completed',
+                        'value' => $data['company_stats']['projects_completed'],
+                        'icon' => '🚀',
+                    ];
+                }
+
+                if (! empty($data['company_stats']['clients_served'])) {
+                    $companyStats[] = [
+                        'label' => 'Clients Served',
+                        'value' => $data['company_stats']['clients_served'],
+                        'icon' => '👥',
+                    ];
+                }
+
+                if (! empty($data['company_stats']['team_size'])) {
+                    $companyStats[] = [
+                        'label' => 'Team Size',
+                        'value' => $data['company_stats']['team_size'],
+                        'icon' => '👨‍💼',
+                    ];
+                }
+
+                $data['company_stats'] = $companyStats;
+            }
+        }
+
+        return $data;
     }
 
     public function show(BusinessUnit $businessUnit): Response
@@ -150,81 +226,76 @@ class BusinessUnitController extends Controller
     {
         $validated = $request->validate(BusinessUnit::updateValidationRules($businessUnit->id));
 
-        // Handle image uploads for gallery
-        if ($request->hasFile('gallery_images')) {
-            $galleryImages = $businessUnit->gallery_images ?? [];
-            foreach ($request->file('gallery_images') as $file) {
-                $path = $file->store('business-units/gallery', 'public');
-                $galleryImages[] = $path;
-            }
-            $validated['gallery_images'] = $galleryImages;
+        // Transform data before saving
+        $validated = $this->transformData($validated);
+
+        // Handle main image - now expects a media ID or URL string
+        if ($request->filled('image')) {
+            // If it's a media ID, we can store it directly
+            // If it's a URL, we can store it directly
+            $validated['image'] = $request->input('image');
         }
 
-        // Handle main image upload
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('business-units', 'public');
-        }
-
-        // Handle team member images
+        // Handle team member images - now expects media IDs or URL strings
         if (isset($validated['team_members'])) {
             foreach ($validated['team_members'] as $index => $member) {
-                if ($request->hasFile("team_member_images.{$index}")) {
-                    $path = $request->file("team_member_images.{$index}")->store('business-units/team', 'public');
-                    $validated['team_members'][$index]['image'] = $path;
+                if (isset($member['image']) && $member['image']) {
+                    // Store the media ID or URL directly
+                    $validated['team_members'][$index]['image'] = $member['image'];
                 } elseif (isset($businessUnit->team_members[$index]['image'])) {
-                    // Keep existing image if no new one uploaded
+                    // Keep existing image if no new one provided
                     $validated['team_members'][$index]['image'] = $businessUnit->team_members[$index]['image'];
                 }
             }
         }
 
-        // Handle client testimonial images
+        // Handle client testimonial images - now expects media IDs or URL strings
         if (isset($validated['client_testimonials'])) {
             foreach ($validated['client_testimonials'] as $index => $testimonial) {
-                if ($request->hasFile("testimonial_images.{$index}")) {
-                    $path = $request->file("testimonial_images.{$index}")->store('business-units/testimonials', 'public');
-                    $validated['client_testimonials'][$index]['image'] = $path;
+                if (isset($testimonial['image']) && $testimonial['image']) {
+                    // Store the media ID or URL directly
+                    $validated['client_testimonials'][$index]['image'] = $testimonial['image'];
                 } elseif (isset($businessUnit->client_testimonials[$index]['image'])) {
-                    // Keep existing image if no new one uploaded
+                    // Keep existing image if no new one provided
                     $validated['client_testimonials'][$index]['image'] = $businessUnit->client_testimonials[$index]['image'];
                 }
             }
         }
 
-        // Handle portfolio item images
+        // Handle portfolio item images - now expects media IDs or URL strings
         if (isset($validated['portfolio_items'])) {
             foreach ($validated['portfolio_items'] as $index => $item) {
-                if ($request->hasFile("portfolio_images.{$index}")) {
-                    $path = $request->file("portfolio_images.{$index}")->store('business-units/portfolio', 'public');
-                    $validated['portfolio_items'][$index]['image'] = $path;
+                if (isset($item['image']) && $item['image']) {
+                    // Store the media ID or URL directly
+                    $validated['portfolio_items'][$index]['image'] = $item['image'];
                 } elseif (isset($businessUnit->portfolio_items[$index]['image'])) {
-                    // Keep existing image if no new one uploaded
+                    // Keep existing image if no new one provided
                     $validated['portfolio_items'][$index]['image'] = $businessUnit->portfolio_items[$index]['image'];
                 }
             }
         }
 
-        // Handle certification images
+        // Handle certification images - now expects media IDs or URL strings
         if (isset($validated['certifications'])) {
             foreach ($validated['certifications'] as $index => $certification) {
-                if ($request->hasFile("certification_images.{$index}")) {
-                    $path = $request->file("certification_images.{$index}")->store('business-units/certifications', 'public');
-                    $validated['certifications'][$index]['image'] = $path;
+                if (isset($certification['image']) && $certification['image']) {
+                    // Store the media ID or URL directly
+                    $validated['certifications'][$index]['image'] = $certification['image'];
                 } elseif (isset($businessUnit->certifications[$index]['image'])) {
-                    // Keep existing image if no new one uploaded
+                    // Keep existing image if no new one provided
                     $validated['certifications'][$index]['image'] = $businessUnit->certifications[$index]['image'];
                 }
             }
         }
 
-        // Handle achievement images
+        // Handle achievement images - now expects media IDs or URL strings
         if (isset($validated['achievements'])) {
             foreach ($validated['achievements'] as $index => $achievement) {
-                if ($request->hasFile("achievement_images.{$index}")) {
-                    $path = $request->file("achievement_images.{$index}")->store('business-units/achievements', 'public');
-                    $validated['achievements'][$index]['image'] = $path;
+                if (isset($achievement['image']) && $achievement['image']) {
+                    // Store the media ID or URL directly
+                    $validated['achievements'][$index]['image'] = $achievement['image'];
                 } elseif (isset($businessUnit->achievements[$index]['image'])) {
-                    // Keep existing image if no new one uploaded
+                    // Keep existing image if no new one provided
                     $validated['achievements'][$index]['image'] = $businessUnit->achievements[$index]['image'];
                 }
             }

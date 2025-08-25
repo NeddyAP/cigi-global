@@ -53,7 +53,10 @@ class Media extends Model
      */
     public function getUrlAttribute(): string
     {
-        return Storage::url($this->path);
+        // Ensure the path includes the public prefix for correct URL generation
+        $path = str_starts_with($this->path, 'public/') ? $this->path : 'public/'.$this->path;
+
+        return Storage::url($path);
     }
 
     /**
@@ -61,7 +64,14 @@ class Media extends Model
      */
     public function getThumbnailUrlAttribute(): ?string
     {
-        return $this->thumbnail_path ? Storage::url($this->thumbnail_path) : null;
+        if (! $this->thumbnail_path) {
+            return null;
+        }
+
+        // Ensure the path includes the public prefix for correct URL generation
+        $path = str_starts_with($this->thumbnail_path, 'public/') ? $this->thumbnail_path : 'public/'.$this->thumbnail_path;
+
+        return Storage::url($path);
     }
 
     /**

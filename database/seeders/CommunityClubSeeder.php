@@ -20,7 +20,7 @@ class CommunityClubSeeder extends Seeder
                 'description' => 'Persatuan Bulutangkis Cigi adalah wadah bagi para pecinta olahraga bulutangkis. Kami mengadakan latihan rutin dan turnamen untuk mengembangkan bakat dan prestasi.',
                 'type' => 'Olahraga',
                 'activities' => "Latihan Rutin\nTurnamen Bulutangkis\nKelas Pelatihan\nSparing Partner\nKompetisi Antar Club",
-                'image' => 'assets/community/pb-cigi.jpg',
+                'image' => '/assets/community/pb-cigi.jpg',
                 'contact_person' => 'Budi Santoso',
                 'contact_phone' => '+62 812 3456 7890',
                 'contact_email' => 'pbcigi@gmail.com',
@@ -35,7 +35,7 @@ class CommunityClubSeeder extends Seeder
                 'description' => 'Cigi Football Club adalah komunitas sepak bola yang menggabungkan semangat sportivitas dan persaudaraan. Terbuka untuk semua usia dan tingkat kemampuan.',
                 'type' => 'Olahraga',
                 'activities' => "Latihan Sepak Bola\nPertandingan Persahabatan\nTurnamen Lokal\nPembinaan Anak\nKegiatan Sosial",
-                'image' => 'assets/community/cigi-fc.jpg',
+                'image' => '/assets/community/cigi-fc.jpg',
                 'contact_person' => 'Ahmad Rifai',
                 'contact_phone' => '+62 813 4567 8901',
                 'contact_email' => 'cigifc@gmail.com',
@@ -50,7 +50,7 @@ class CommunityClubSeeder extends Seeder
                 'description' => 'Klub panahan yang fokus pada pengembangan konsentrasi, disiplin, dan ketepatan. Menyediakan pelatihan dari tingkat pemula hingga mahir.',
                 'type' => 'Olahraga',
                 'activities' => "Pelatihan Panahan\nKompetisi Panahan\nWorkkshop Teknik\nMeditasi & Konsentrasi\nOutbound Archery",
-                'image' => 'assets/community/cigi-archery.jpg',
+                'image' => '/assets/community/cigi-archery.jpg',
                 'contact_person' => 'Sari Indah',
                 'contact_phone' => '+62 814 5678 9012',
                 'contact_email' => 'cigiarchery@gmail.com',
@@ -65,7 +65,7 @@ class CommunityClubSeeder extends Seeder
                 'description' => 'Majelis Taklim dan Kajian Al-Quran yang mengkaji ilmu agama Islam. Terbuka untuk semua kalangan yang ingin memperdalam pemahaman agama.',
                 'type' => 'Keagamaan',
                 'activities' => "Kajian Al-Quran\nTafsir Hadits\nKelas Tahfidz\nCeramah Agama\nSilaturahmi",
-                'image' => 'assets/community/rt-cigi.jpg',
+                'image' => '/assets/community/rt-cigi.jpg',
                 'contact_person' => 'Ustadz Mahmud',
                 'contact_phone' => '+62 815 6789 0123',
                 'contact_email' => 'majeliscigi@gmail.com',
@@ -80,7 +80,7 @@ class CommunityClubSeeder extends Seeder
                 'description' => 'Kampung Ramah Lingkungan Cigi adalah program komunitas untuk menciptakan lingkungan yang bersih, hijau, dan berkelanjutan.',
                 'type' => 'Lingkungan',
                 'activities' => "Penghijauan\nPengelolaan Sampah\nUrban Farming\nSosialisasi Lingkungan\nGotong Royong",
-                'image' => 'assets/community/krl-cigi.jpg',
+                'image' => '/assets/community/krl-cigi.jpg',
                 'contact_person' => 'Ibu Rina',
                 'contact_phone' => '+62 816 7890 1234',
                 'contact_email' => 'krlcigi@gmail.com',
@@ -103,18 +103,5 @@ class CommunityClubSeeder extends Seeder
                     ->make(['community_club_id' => $club->id])
             );
         }
-
-        // Create additional random community clubs with full factory data
-        CommunityClub::factory()
-            ->count(3)
-            ->create()
-            ->each(function ($club) {
-                // Create activities for each club
-                $club->clubActivities()->saveMany(
-                    \App\Models\CommunityClubActivity::factory()
-                        ->count(fake()->numberBetween(1, 5))
-                        ->make(['community_club_id' => $club->id])
-                );
-            });
     }
 }

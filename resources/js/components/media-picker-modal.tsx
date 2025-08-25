@@ -1,4 +1,5 @@
 import MediaGrid from '@/components/media-grid';
+import MediaUploadZone from '@/components/media-upload-zone';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -89,14 +90,42 @@ export default function MediaPickerModal({ isOpen, onClose, onSelect, multiple =
         setSelectedItems([]);
     };
 
+    const handleUploadComplete = useCallback(
+        async (files: File[]) => {
+            // After upload, refresh the media list and switch to gallery tab
+            setActiveTab('gallery');
+            await loadMedia();
+        },
+        [loadMedia],
+    );
+
+    const handleFileUploadComplete = useCallback(
+        async (fileId: string, success: boolean, error?: string, mediaId?: number, mediaUrl?: string) => {
+            if (success && mediaId && mediaUrl) {
+                // Automatically select the newly uploaded image
+                setSelectedItems([mediaId]);
+
+                // Switch to gallery tab to show the selection
+                setActiveTab('gallery');
+
+                // Refresh the media list to include the new upload
+                await loadMedia();
+            }
+        },
+        [loadMedia],
+    );
+
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-h-[90vh] max-w-6xl overflow-hidden">
+            <DialogContent className="max-h-[90vh] max-w-7xl overflow-hidden" aria-describedby="media-picker-description">
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
+                    <div id="media-picker-description" className="sr-only">
+                        Modal for selecting or uploading media files. Use the tabs to browse existing media or upload new files.
+                    </div>
                 </DialogHeader>
 
-                <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'gallery' | 'upload')}>
+                <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'gallery' | 'upload')} className="w-full">
                     <TabsList className="w-full">
                         <TabsTrigger value="gallery" className="flex-1">
                             <Search className="mr-2 h-4 w-4" />
@@ -170,13 +199,13 @@ export default function MediaPickerModal({ isOpen, onClose, onSelect, multiple =
 
                     <TabsContent value="upload" className="space-y-4">
                         <div className="h-96">
-                            {/* MediaUploadZone would be used here */}
-                            <div className="flex h-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700">
-                                <div className="text-center">
-                                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                                    <p className="mt-2 text-sm text-gray-500">Upload functionality would be implemented here</p>
-                                </div>
-                            </div>
+                            <MediaUploadZone
+                                onUpload={handleUploadComplete}
+                                onFileUploadComplete={handleFileUploadComplete}
+                                acceptedTypes={['image/*']}
+                                maxFileSize={10}
+                                multiple={true}
+                            />
                         </div>
                     </TabsContent>
                 </Tabs>

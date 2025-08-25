@@ -5,7 +5,6 @@ namespace Tests\Feature\Admin;
 use App\Models\BusinessUnit;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -177,15 +176,25 @@ class BusinessUnitControllerTest extends TestCase
 
     public function test_admin_can_upload_gallery_images(): void
     {
-        $file1 = UploadedFile::fake()->image('gallery1.jpg');
-        $file2 = UploadedFile::fake()->image('gallery2.jpg');
-
         $data = [
             'name' => 'Unit with Gallery',
             'slug' => 'unit-with-gallery',
             'description' => 'Test description',
             'services' => 'Test service',
-            'gallery_images' => [$file1, $file2],
+            'gallery_images' => [
+                [
+                    'id' => 'img_1',
+                    'url' => 'https://example.com/image1.jpg',
+                    'alt' => 'Gallery Image 1',
+                    'caption' => 'First gallery image',
+                ],
+                [
+                    'id' => 'img_2',
+                    'url' => 'https://example.com/image2.jpg',
+                    'alt' => 'Gallery Image 2',
+                    'caption' => 'Second gallery image',
+                ],
+            ],
             'is_active' => true,
         ];
 
@@ -197,22 +206,21 @@ class BusinessUnitControllerTest extends TestCase
         $this->assertNotNull($unit);
         $this->assertCount(2, $unit->gallery_images);
 
-        // Check that files were stored
-        foreach ($unit->gallery_images as $imagePath) {
-            Storage::disk('public')->assertExists($imagePath);
-        }
+        // Check that gallery images were stored correctly
+        $this->assertEquals('img_1', $unit->gallery_images[0]['id']);
+        $this->assertEquals('https://example.com/image1.jpg', $unit->gallery_images[0]['url']);
+        $this->assertEquals('Gallery Image 1', $unit->gallery_images[0]['alt']);
+        $this->assertEquals('First gallery image', $unit->gallery_images[0]['caption']);
     }
 
     public function test_admin_can_upload_main_image(): void
     {
-        $file = UploadedFile::fake()->image('main-image.jpg');
-
         $data = [
             'name' => 'Unit with Main Image',
             'slug' => 'unit-with-main-image',
             'description' => 'Test description',
             'services' => 'Test service',
-            'image' => $file,
+            'image' => 'https://example.com/main-image.jpg',
             'is_active' => true,
         ];
 
@@ -222,14 +230,11 @@ class BusinessUnitControllerTest extends TestCase
 
         $unit = BusinessUnit::where('slug', 'unit-with-main-image')->first();
         $this->assertNotNull($unit);
-        $this->assertNotNull($unit->image);
-        Storage::disk('public')->assertExists($unit->image);
+        $this->assertEquals('https://example.com/main-image.jpg', $unit->image);
     }
 
     public function test_admin_can_upload_team_member_images(): void
     {
-        $file = UploadedFile::fake()->image('team-member.jpg');
-
         $data = [
             'name' => 'Unit with Team Images',
             'slug' => 'unit-with-team-images',
@@ -240,10 +245,8 @@ class BusinessUnitControllerTest extends TestCase
                     'name' => 'John Doe',
                     'role' => 'Developer',
                     'bio' => 'Experienced developer',
+                    'image' => 'https://example.com/team-member.jpg',
                 ],
-            ],
-            'team_member_images' => [
-                0 => $file,
             ],
             'is_active' => true,
         ];
@@ -255,14 +258,11 @@ class BusinessUnitControllerTest extends TestCase
         $unit = BusinessUnit::where('slug', 'unit-with-team-images')->first();
         $this->assertNotNull($unit);
         $this->assertCount(1, $unit->team_members);
-        $this->assertNotNull($unit->team_members[0]['image']);
-        Storage::disk('public')->assertExists($unit->team_members[0]['image']);
+        $this->assertEquals('https://example.com/team-member.jpg', $unit->team_members[0]['image']);
     }
 
     public function test_admin_can_upload_testimonial_images(): void
     {
-        $file = UploadedFile::fake()->image('testimonial.jpg');
-
         $data = [
             'name' => 'Unit with Testimonial Images',
             'slug' => 'unit-with-testimonial-images',
@@ -274,10 +274,8 @@ class BusinessUnitControllerTest extends TestCase
                     'company' => 'Tech Corp',
                     'content' => 'Great service!',
                     'rating' => 5,
+                    'image' => 'https://example.com/testimonial.jpg',
                 ],
-            ],
-            'testimonial_images' => [
-                0 => $file,
             ],
             'is_active' => true,
         ];
@@ -289,14 +287,11 @@ class BusinessUnitControllerTest extends TestCase
         $unit = BusinessUnit::where('slug', 'unit-with-testimonial-images')->first();
         $this->assertNotNull($unit);
         $this->assertCount(1, $unit->client_testimonials);
-        $this->assertNotNull($unit->client_testimonials[0]['image']);
-        Storage::disk('public')->assertExists($unit->client_testimonials[0]['image']);
+        $this->assertEquals('https://example.com/testimonial.jpg', $unit->client_testimonials[0]['image']);
     }
 
     public function test_admin_can_upload_portfolio_images(): void
     {
-        $file = UploadedFile::fake()->image('portfolio.jpg');
-
         $data = [
             'name' => 'Unit with Portfolio Images',
             'slug' => 'unit-with-portfolio-images',
@@ -308,10 +303,8 @@ class BusinessUnitControllerTest extends TestCase
                     'description' => 'Modern web application',
                     'technologies' => ['React', 'Laravel'],
                     'client' => 'Client Corp',
+                    'image' => 'https://example.com/portfolio.jpg',
                 ],
-            ],
-            'portfolio_images' => [
-                0 => $file,
             ],
             'is_active' => true,
         ];
@@ -323,8 +316,7 @@ class BusinessUnitControllerTest extends TestCase
         $unit = BusinessUnit::where('slug', 'unit-with-portfolio-images')->first();
         $this->assertNotNull($unit);
         $this->assertCount(1, $unit->portfolio_items);
-        $this->assertNotNull($unit->portfolio_items[0]['image']);
-        Storage::disk('public')->assertExists($unit->portfolio_items[0]['image']);
+        $this->assertEquals('https://example.com/portfolio.jpg', $unit->portfolio_items[0]['image']);
     }
 
     public function test_admin_can_view_edit_form(): void

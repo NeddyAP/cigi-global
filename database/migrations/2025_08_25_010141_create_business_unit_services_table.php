@@ -22,6 +22,8 @@ return new class extends Migration
             $table->json('features')->nullable();
             $table->json('technologies')->nullable();
             $table->json('process_steps')->nullable();
+            $table->boolean('active')->default(true); // Added active and featured fields
+            $table->boolean('featured')->default(false);
             $table->timestamps();
         });
     }

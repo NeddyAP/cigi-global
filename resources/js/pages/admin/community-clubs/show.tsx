@@ -163,7 +163,7 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
                         {communityClub.image && (
                             <FormSection title="Gambar Komunitas" className="overflow-hidden">
                                 <div className="-mx-6 -mb-4">
-                                    <img src={`/${communityClub.image}`} alt={communityClub.name} className="h-48 w-full object-cover" />
+                                    <img src={`${communityClub.image}`} alt={communityClub.name} className="h-48 w-full object-cover" />
                                 </div>
                             </FormSection>
                         )}

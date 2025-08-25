@@ -219,8 +219,14 @@ class MediaController extends Controller
         $media = $query->orderBy('created_at', 'desc')
             ->paginate(20);
 
+        // Get business units and community clubs for tags dropdown
+        $businessUnits = BusinessUnit::active()->select('id', 'name')->get();
+        $communityClubs = CommunityClub::active()->select('id', 'name')->get();
+
         return response()->json([
             'media' => $media,
+            'businessUnits' => $businessUnits,
+            'communityClubs' => $communityClubs,
         ]);
     }
 
@@ -231,6 +237,11 @@ class MediaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'file' => 'required|file|max:10240', // 10MB max
+            'title' => 'nullable|string|max:255',
+            'alt_text' => 'nullable|string',
+            'description' => 'nullable|string',
+            'tags' => 'nullable|array',
+            'tags.*' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -241,7 +252,14 @@ class MediaController extends Controller
         }
 
         try {
-            $media = $this->mediaService->uploadFile($request->file('file'));
+            $options = $request->only([
+                'title',
+                'alt_text',
+                'description',
+                'tags',
+            ]);
+
+            $media = $this->mediaService->uploadFile($request->file('file'), $options);
 
             return response()->json([
                 'success' => true,

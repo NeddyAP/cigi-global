@@ -109,7 +109,7 @@ export default function ShowBusinessUnit({ businessUnit }: ShowBusinessUnitProps
                         {businessUnit.image && (
                             <FormSection title="Gambar" className="overflow-hidden">
                                 <div className="-mx-6 -mb-4">
-                                    <img src={`/${businessUnit.image}`} alt={businessUnit.name} className="h-48 w-full object-cover" />
+                                    <img src={`${businessUnit.image}`} alt={businessUnit.name} className="h-48 w-full object-cover" />
                                 </div>
                             </FormSection>
                         )}

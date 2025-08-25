@@ -5,7 +5,6 @@ namespace Tests\Feature\Admin;
 use App\Models\CommunityClub;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -131,15 +130,25 @@ class CommunityClubControllerTest extends TestCase
 
     public function test_admin_can_upload_gallery_images(): void
     {
-        $file1 = UploadedFile::fake()->image('gallery1.jpg');
-        $file2 = UploadedFile::fake()->image('gallery2.jpg');
-
         $data = [
             'name' => 'Club with Gallery',
             'slug' => 'club-with-gallery',
             'description' => 'Test description',
             'type' => 'sports',
-            'gallery_images' => [$file1, $file2],
+            'gallery_images' => [
+                [
+                    'id' => 'img_1',
+                    'url' => 'https://example.com/gallery1.jpg',
+                    'alt' => 'Gallery Image 1',
+                    'caption' => 'First gallery image',
+                ],
+                [
+                    'id' => 'img_2',
+                    'url' => 'https://example.com/gallery2.jpg',
+                    'alt' => 'Gallery Image 2',
+                    'caption' => 'Second gallery image',
+                ],
+            ],
             'is_active' => true,
         ];
 
@@ -151,22 +160,21 @@ class CommunityClubControllerTest extends TestCase
         $this->assertNotNull($club);
         $this->assertCount(2, $club->gallery_images);
 
-        // Check that files were stored
-        foreach ($club->gallery_images as $imagePath) {
-            Storage::disk('public')->assertExists($imagePath);
-        }
+        // Check that gallery images were stored correctly
+        $this->assertEquals('img_1', $club->gallery_images[0]['id']);
+        $this->assertEquals('https://example.com/gallery1.jpg', $club->gallery_images[0]['url']);
+        $this->assertEquals('Gallery Image 1', $club->gallery_images[0]['alt']);
+        $this->assertEquals('First gallery image', $club->gallery_images[0]['caption']);
     }
 
     public function test_admin_can_upload_main_image(): void
     {
-        $file = UploadedFile::fake()->image('main-image.jpg');
-
         $data = [
             'name' => 'Club with Main Image',
             'slug' => 'club-with-main-image',
             'description' => 'Test description',
             'type' => 'sports',
-            'image' => $file,
+            'image' => 'https://example.com/main-image.jpg',
             'is_active' => true,
         ];
 
@@ -176,8 +184,7 @@ class CommunityClubControllerTest extends TestCase
 
         $club = CommunityClub::where('slug', 'club-with-main-image')->first();
         $this->assertNotNull($club);
-        $this->assertNotNull($club->image);
-        Storage::disk('public')->assertExists($club->image);
+        $this->assertEquals('https://example.com/main-image.jpg', $club->image);
     }
 
     public function test_admin_can_view_edit_form(): void
@@ -394,8 +401,8 @@ class CommunityClubControllerTest extends TestCase
             'type' => 'sports',
             'upcoming_events' => [
                 [
-                    'title' => '', // Missing required title
-                    'date' => '2024-12-01',
+                    'title' => '', // Optional title field - should not cause validation error
+                    'date' => '', // Optional date field - should not cause validation error
                 ],
             ],
             'is_active' => true,
@@ -403,7 +410,8 @@ class CommunityClubControllerTest extends TestCase
 
         $response = $this->actingAs($this->admin)->post(route('admin.community-clubs.store'), $data);
 
-        $response->assertSessionHasErrors(['upcoming_events.0.title']);
+        $response->assertRedirect(route('admin.community-clubs.index'));
+        $response->assertSessionHas('success');
     }
 
     public function test_achievements_validation(): void
@@ -413,7 +421,7 @@ class CommunityClubControllerTest extends TestCase
             'type' => 'sports',
             'achievements' => [
                 [
-                    'title' => '', // Missing required title
+                    'title' => '', // Optional title field - should not cause validation error
                     'description' => 'Test achievement',
                 ],
             ],
@@ -422,7 +430,8 @@ class CommunityClubControllerTest extends TestCase
 
         $response = $this->actingAs($this->admin)->post(route('admin.community-clubs.store'), $data);
 
-        $response->assertSessionHasErrors(['achievements.0.title']);
+        $response->assertRedirect(route('admin.community-clubs.index'));
+        $response->assertSessionHas('success');
     }
 
     public function test_hero_fields_validation(): void

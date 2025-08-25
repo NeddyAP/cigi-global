@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('media', function (Blueprint $table) {
             $table->id();
             $table->string('filename');
-            $table->string('original_name');
+            $table->string('original_filename'); // Renamed from original_name
             $table->string('mime_type', 100);
             $table->unsignedBigInteger('size');
             $table->string('path', 500);
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('alt_text')->nullable();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
+            $table->json('tags')->nullable(); // Added tags field
             $table->unsignedBigInteger('uploaded_by');
             $table->json('metadata')->nullable();
             $table->timestamps();
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->index(['uploaded_by']);
             $table->index(['mime_type']);
             $table->index(['created_at']);
+            $table->index('title', 'media_title_index'); // Added title index
         });
     }
 

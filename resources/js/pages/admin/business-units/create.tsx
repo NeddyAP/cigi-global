@@ -104,6 +104,8 @@ export default function CreateBusinessUnit() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        console.log('Form data before submission:', data);
+
         // Transform data before submission if needed
         transform((data) => ({
             ...data,
@@ -111,25 +113,88 @@ export default function CreateBusinessUnit() {
             team_members: data.team_members.map((member) => ({
                 ...member,
                 bio: member.bio || '',
-                social_links: {
-                    linkedin: member.social_links_linkedin || '',
-                    twitter: member.social_links_twitter || '',
-                    github: member.social_links_github || '',
-                },
+                social_links: [
+                    ...(member.social_links_linkedin
+                        ? [
+                              {
+                                  platform: 'linkedin',
+                                  url: member.social_links_linkedin,
+                              },
+                          ]
+                        : []),
+                    ...(member.social_links_twitter
+                        ? [
+                              {
+                                  platform: 'twitter',
+                                  url: member.social_links_twitter,
+                              },
+                          ]
+                        : []),
+                    ...(member.social_links_github
+                        ? [
+                              {
+                                  platform: 'github',
+                                  url: member.social_links_github,
+                              },
+                          ]
+                        : []),
+                ],
             })),
             client_testimonials: data.client_testimonials.map((testimonial) => ({
                 ...testimonial,
                 company: testimonial.company || '',
                 rating: testimonial.rating || 5,
             })),
+            company_stats: [
+                ...(data.company_stats.years_in_business
+                    ? [
+                          {
+                              label: 'Years in Business',
+                              value: data.company_stats.years_in_business,
+                              icon: '📅',
+                          },
+                      ]
+                    : []),
+                ...(data.company_stats.projects_completed
+                    ? [
+                          {
+                              label: 'Projects Completed',
+                              value: data.company_stats.projects_completed,
+                              icon: '🚀',
+                          },
+                      ]
+                    : []),
+                ...(data.company_stats.clients_served
+                    ? [
+                          {
+                              label: 'Clients Served',
+                              value: data.company_stats.clients_served,
+                              icon: '👥',
+                          },
+                      ]
+                    : []),
+                ...(data.company_stats.team_size
+                    ? [
+                          {
+                              label: 'Team Size',
+                              value: data.company_stats.team_size,
+                              icon: '👨‍💼',
+                          },
+                      ]
+                    : []),
+            ],
         }));
+
+        console.log('Form data after transform:', data);
 
         post(route('admin.business-units.store'), {
             onSuccess: () => {
                 // Form was successful, could show success message
+                console.log('Form submitted successfully');
             },
-            onError: () => {
+            onError: (errors) => {
                 // Handle errors if needed
+                console.error('Form submission errors:', errors);
             },
             preserveScroll: true,
         });
@@ -284,6 +349,16 @@ export default function CreateBusinessUnit() {
                                     <p className="text-sm font-medium text-red-800 dark:text-red-200">
                                         Ada kesalahan dalam form. Silakan periksa dan perbaiki.
                                     </p>
+                                    {/* Show specific errors */}
+                                    {Object.keys(errors).length > 0 && (
+                                        <div className="mt-2 space-y-1">
+                                            {Object.entries(errors).map(([field, error]) => (
+                                                <p key={field} className="text-sm text-red-600 dark:text-red-300">
+                                                    <span className="font-medium capitalize">{field.replace(/_/g, ' ')}:</span> {error}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <Button
@@ -396,16 +471,19 @@ export default function CreateBusinessUnit() {
                                     </div>
                                 </div>
 
-                                <ImageInput
-                                    label="Gambar Unit Bisnis"
-                                    name="image"
-                                    value={data.image}
-                                    onChange={(value) => setData('image', value ? String(value) : '')}
-                                    placeholder="Pilih atau upload gambar unit bisnis"
-                                    error={errors.image}
-                                    showPreview={true}
-                                    autoUpload={true}
-                                />
+                                <div>
+                                    <ImageInput
+                                        label="Gambar Unit Bisnis"
+                                        name="image"
+                                        value={data.image}
+                                        onChange={(value) => setData('image', value?.toString() || '')}
+                                        placeholder="Pilih atau upload gambar unit bisnis"
+                                        error={errors.image}
+                                        showPreview={true}
+                                        autoUpload={true}
+                                        multiple={false}
+                                    />
+                                </div>
                             </FormSection>
                         </TabsContent>
 

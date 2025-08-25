@@ -43,7 +43,7 @@ class BusinessUnitService extends Model
             'business_unit_id' => 'required|exists:business_units,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image' => 'nullable|string|max:500', // Changed from file validation to string validation
             'price_range' => 'nullable|string|max:100',
             'duration' => 'nullable|string|max:100',
             'features' => 'nullable|array',

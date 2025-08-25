@@ -50,7 +50,7 @@ export default function AdminBusinessUnitsIndex({ businessUnits, filters = {} }:
                 <div className="flex items-center">
                     {unit.image && (
                         <div className="h-10 w-10 flex-shrink-0">
-                            <img className="h-10 w-10 rounded-lg object-cover" src={`/${unit.image}`} alt={unit.name} />
+                            <img className="h-10 w-10 rounded-lg object-cover" src={`${unit.image}`} alt={unit.name} />
                         </div>
                     )}
                     <div className={unit.image ? 'ml-4' : ''}>

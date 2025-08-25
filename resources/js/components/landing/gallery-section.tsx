@@ -9,7 +9,7 @@ interface GalleryImage {
     url: string;
     alt?: string;
     caption?: string;
-    thumbnail?: string;
+    thumbnail?: { url: string | null };
 }
 
 interface GallerySectionProps {
@@ -180,7 +180,7 @@ export default function GallerySection({
                                         {!loadedImages.has(image.id) && <div className="absolute inset-0 animate-pulse bg-gray-200" />}
 
                                         <img
-                                            src={image.thumbnail || image.url}
+                                            src={image.thumbnail?.url || image.url}
                                             alt={image.alt || ''}
                                             className={`h-full w-full object-cover transition-opacity duration-300 ${
                                                 loadedImages.has(image.id) ? 'opacity-100' : 'opacity-0'
@@ -286,7 +286,11 @@ export default function GallerySection({
                                 {images.map((image) => (
                                     <div key={image.id} className="w-full flex-shrink-0" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
                                         <div className="relative aspect-video">
-                                            <img src={image.url} alt={image.alt || ''} className="h-full w-full object-cover" />
+                                            <img
+                                                src={image.thumbnail?.url || image.url}
+                                                alt={image.alt || ''}
+                                                className="h-full w-full object-cover"
+                                            />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                                             {/* Caption */}
@@ -352,7 +356,7 @@ export default function GallerySection({
                                             index === currentIndex ? 'scale-110 ring-2 ring-blue-500' : 'opacity-60 hover:opacity-100'
                                         }`}
                                     >
-                                        <img src={image.thumbnail || image.url} alt={image.alt || ''} className="h-full w-full object-cover" />
+                                        <img src={image.thumbnail?.url || image.url} alt={image.alt || ''} className="h-full w-full object-cover" />
                                     </button>
                                 ))}
                             </div>

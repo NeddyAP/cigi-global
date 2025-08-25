@@ -19,7 +19,7 @@ class BusinessUnitSeeder extends Seeder
                 'slug' => 'cigi-net',
                 'description' => 'Penyedia layanan internet terpercaya untuk kebutuhan rumah dan bisnis Anda. Kami menyediakan koneksi internet berkecepatan tinggi dengan jangkauan luas.',
                 'services' => "Internet Rumahan\nInternet Bisnis\nLayanan WiFi\nMaintenance Jaringan\nKonsultasi IT",
-                'image' => 'assets/business/cigi-net.jpg',
+                'image' => '/assets/business/cigi-net.jpg',
                 'contact_phone' => '+62 21 1234 5678',
                 'contact_email' => 'info@ciginet.com',
                 'address' => 'Jl. Teknologi No. 123, Jakarta Selatan',
@@ -33,7 +33,7 @@ class BusinessUnitSeeder extends Seeder
                 'slug' => 'cigi-mart',
                 'description' => 'Pusat perbelanjaan modern dengan berbagai kebutuhan sehari-hari. Menyediakan produk berkualitas dengan harga terjangkau untuk keluarga Indonesia.',
                 'services' => "Kebutuhan Pokok\nProduk Segar\nElektronik\nFashion\nKebutuhan Rumah Tangga",
-                'image' => 'assets/business/cigi-mart.jpg',
+                'image' => '/assets/business/cigi-mart.jpg',
                 'contact_phone' => '+62 21 2345 6789',
                 'contact_email' => 'info@cigimart.com',
                 'address' => 'Jl. Perdagangan No. 456, Jakarta Barat',
@@ -47,7 +47,7 @@ class BusinessUnitSeeder extends Seeder
                 'slug' => 'cigi-food',
                 'description' => 'Restoran dan layanan katering dengan cita rasa otentik Indonesia. Menghadirkan pengalaman kuliner terbaik dengan bahan-bahan berkualitas premium.',
                 'services' => "Restoran Dine-in\nTakeaway & Delivery\nCatering Event\nPaket Ulang Tahun\nMeeting Package",
-                'image' => 'assets/business/cigi-food.jpg',
+                'image' => '/assets/business/cigi-food.jpg',
                 'contact_phone' => '+62 21 3456 7890',
                 'contact_email' => 'info@cigifood.com',
                 'address' => 'Jl. Kuliner No. 789, Jakarta Timur',
@@ -61,7 +61,7 @@ class BusinessUnitSeeder extends Seeder
                 'slug' => 'cigi-farm',
                 'description' => 'Peternakan dan pertanian organik yang menghasilkan produk segar dan berkualitas. Berkomitmen untuk mendukung ketahanan pangan nasional.',
                 'services' => "Sayuran Organik\nBuah Segar\nProduk Peternakan\nBibit Tanaman\nKonsultasi Pertanian",
-                'image' => 'assets/business/cigi-farm.jpg',
+                'image' => '/assets/business/cigi-farm.jpg',
                 'contact_phone' => '+62 21 4567 8901',
                 'contact_email' => 'info@cigifarm.com',
                 'address' => 'Jl. Pertanian No. 012, Bogor',
@@ -84,18 +84,5 @@ class BusinessUnitSeeder extends Seeder
                     ->make(['business_unit_id' => $unit->id])
             );
         }
-
-        // Create additional random business units with full factory data
-        BusinessUnit::factory()
-            ->count(2)
-            ->create()
-            ->each(function ($unit) {
-                // Create services for each unit
-                $unit->unitServices()->saveMany(
-                    \App\Models\BusinessUnitService::factory()
-                        ->count(fake()->numberBetween(1, 4))
-                        ->make(['business_unit_id' => $unit->id])
-                );
-            });
     }
 }

@@ -234,7 +234,7 @@ export default function NewsShow({ news, relatedNews }: NewsShowProps) {
                                         {article.featured_image && (
                                             <div className="relative h-32 overflow-hidden rounded-t-xl">
                                                 <img
-                                                    src={`/${article.featured_image}`}
+                                                    src={`${article.featured_image}`}
                                                     alt={article.title}
                                                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                                 />

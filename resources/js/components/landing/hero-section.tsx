@@ -40,7 +40,7 @@ export default function HeroSection({
             {/* Background Image */}
             {backgroundImage && (
                 <div className="absolute inset-0 z-0">
-                    <img src={`/${backgroundImage}`} alt="Hero background" className="h-full w-full object-cover" />
+                    <img src={`${backgroundImage}`} alt="Hero background" className="h-full w-full object-cover" />
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
                 </div>

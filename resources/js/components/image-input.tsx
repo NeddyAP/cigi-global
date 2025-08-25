@@ -1,24 +1,26 @@
 import MediaPickerModal from '@/components/media-picker-modal';
+import SingleImagePicker from '@/components/single-image-picker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Media } from '@/types';
-import { Image, Trash2, Upload } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import { Image, Trash2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface ImageInputProps {
     label?: string;
     name: string;
-    value?: string | number; // Can be URL string or media ID
+    value?: string | number;
     onChange: (value: string | number | null) => void;
     placeholder?: string;
     error?: string;
+    showPreview?: boolean;
+    autoUpload?: boolean;
+    multiple?: boolean; // New prop to determine picker type
     required?: boolean;
     disabled?: boolean;
     className?: string;
-    showPreview?: boolean;
-    autoUpload?: boolean; // Whether to auto-upload dropped/selected files
     accept?: string;
 }
 
@@ -27,122 +29,64 @@ export default function ImageInput({
     name,
     value,
     onChange,
+    placeholder,
     error,
+    showPreview = false,
+    autoUpload = false,
+    multiple = false,
     required = false,
     disabled = false,
     className,
-    showPreview = true,
-    autoUpload = true,
     accept = 'image/*',
 }: ImageInputProps) {
     const [showMediaPicker, setShowMediaPicker] = useState(false);
-    const [uploading, setUploading] = useState(false);
+    const [showSingleImagePicker, setShowSingleImagePicker] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Set preview URL when component mounts with existing value
+    useEffect(() => {
+        if (value && typeof value === 'string' && (value.startsWith('http') || value.startsWith('/'))) {
+            setPreviewUrl(value);
+        }
+    }, [value]);
 
     // Determine the current preview URL
     const currentPreviewUrl = React.useMemo(() => {
         if (previewUrl) return previewUrl;
-        if (typeof value === 'string' && value.startsWith('http')) return value;
+        // If value is a URL string, use it directly
+        if (typeof value === 'string' && (value.startsWith('http') || value.startsWith('/'))) return value;
+        // If value is a media ID (number), we need to get the URL from the previewUrl state
         return null;
     }, [value, previewUrl]);
 
-    const handleFileSelect = async (files: FileList | null) => {
-        if (!files || files.length === 0) return;
-
-        const file = files[0];
-
-        // Validate file type
-        if (!file.type.startsWith('image/')) {
-            alert('Please select an image file');
-            return;
-        }
-
-        // Validate file size (10MB max)
-        if (file.size > 10 * 1024 * 1024) {
-            alert('File size must be less than 10MB');
-            return;
-        }
-
-        if (autoUpload) {
-            await uploadFile(file);
-        } else {
-            // Create preview URL for local display
-            const url = URL.createObjectURL(file);
-            setPreviewUrl(url);
-            onChange(url);
-        }
-    };
-
-    const uploadFile = async (file: File) => {
-        setUploading(true);
-
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const response = await fetch('/admin/media/ajax-upload', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                },
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                const media = result.media;
-                onChange(media.id); // Use media ID as value
-                setPreviewUrl(media.url);
-            } else {
-                throw new Error(result.message || 'Upload failed');
-            }
-        } catch (error) {
-            console.error('Upload error:', error);
-            alert('Failed to upload image. Please try again.');
-        } finally {
-            setUploading(false);
-        }
-    };
-
-    const handleDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (disabled || uploading) return;
-
-        const files = e.dataTransfer.files;
-        handleFileSelect(files);
-    };
-
-    const handleDragOver = (e: React.DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-    };
-
     const handleMediaSelect = (media: Media | Media[]) => {
+        console.log('Media selected (multiple):', media);
         if (Array.isArray(media) && media.length > 0) {
             const selectedMedia = media[0];
-            onChange(selectedMedia.id);
-            setPreviewUrl(selectedMedia.url || null);
+            console.log('Setting media path (multiple):', selectedMedia.path || selectedMedia.url);
+            // Store the full storage path for display purposes
+            onChange(selectedMedia.path || selectedMedia.url || selectedMedia.id);
+            setPreviewUrl(selectedMedia.path || selectedMedia.url || null);
         } else if (!Array.isArray(media) && media) {
-            onChange(media.id);
-            setPreviewUrl(media.url || null);
+            console.log('Setting media path (multiple):', media.path || media.url);
+            // Store the full storage path for display purposes
+            onChange(media.path || media.url || media.id);
+            setPreviewUrl(media.path || media.url || null);
         }
         setShowMediaPicker(false);
+    };
+
+    const handleSingleImageSelect = (imagePath: string) => {
+        console.log('Single image selected:', imagePath);
+        // Store the full storage path
+        onChange(imagePath);
+        setPreviewUrl(imagePath);
+        setShowSingleImagePicker(false);
     };
 
     const clearSelection = () => {
         onChange(null);
         setPreviewUrl(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-    };
-
-    const openFilePicker = () => {
-        fileInputRef.current?.click();
     };
 
     return (
@@ -178,36 +122,20 @@ export default function ImageInput({
                     <Button
                         type="button"
                         variant="outline"
-                        size="sm"
-                        onClick={() => setShowMediaPicker(true)}
-                        disabled={disabled || uploading}
-                        className="flex-1"
+                        onClick={() => {
+                            if (multiple) {
+                                setShowMediaPicker(true);
+                            } else {
+                                setShowSingleImagePicker(true);
+                            }
+                        }}
+                        disabled={disabled}
+                        className="w-full"
                     >
                         <Image className="mr-2 h-4 w-4" />
-                        Choose from Gallery
-                    </Button>
-
-                    <Button type="button" variant="outline" size="sm" onClick={openFilePicker} disabled={disabled || uploading} className="flex-1">
-                        <Upload className="mr-2 h-4 w-4" />
-                        {uploading ? 'Uploading...' : 'Upload New'}
+                        {multiple ? 'Pilih dari Galeri' : 'Pilih Gambar'}
                     </Button>
                 </div>
-
-                {/* Drop Zone */}
-                <div
-                    onDrop={handleDrop}
-                    onDragOver={handleDragOver}
-                    className={cn(
-                        'rounded-lg border-2 border-dashed border-gray-300 p-4 text-center transition-colors dark:border-gray-700',
-                        'hover:border-gray-400 dark:hover:border-gray-600',
-                        disabled && 'cursor-not-allowed opacity-50',
-                    )}
-                >
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{uploading ? 'Uploading...' : 'Or drag and drop an image here'}</p>
-                </div>
-
-                {/* Hidden File Input */}
-                <input ref={fileInputRef} type="file" accept={accept} onChange={(e) => handleFileSelect(e.target.files)} className="hidden" />
 
                 {/* Hidden Input for Form Submission */}
                 <Input type="hidden" name={name} value={value || ''} />
@@ -215,15 +143,26 @@ export default function ImageInput({
 
             {error && <p className="text-sm text-red-600">{error}</p>}
 
-            {/* Media Picker Modal */}
-            <MediaPickerModal
-                isOpen={showMediaPicker}
-                onClose={() => setShowMediaPicker(false)}
-                onSelect={handleMediaSelect}
-                multiple={false}
-                acceptedTypes={['image/*']}
-                title="Select Image"
-            />
+            {/* Media Picker Modal for multiple images */}
+            {showMediaPicker && (
+                <MediaPickerModal
+                    isOpen={showMediaPicker}
+                    onClose={() => setShowMediaPicker(false)}
+                    onSelect={handleMediaSelect}
+                    title="Pilih Media"
+                    multiple={true}
+                />
+            )}
+
+            {/* Single Image Picker Modal for single images */}
+            {showSingleImagePicker && (
+                <SingleImagePicker
+                    isOpen={showSingleImagePicker}
+                    onClose={() => setShowSingleImagePicker(false)}
+                    onImageSelect={handleSingleImageSelect}
+                    title="Pilih Gambar"
+                />
+            )}
         </div>
     );
 }

@@ -28,7 +28,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             url: image,
             alt: `${businessUnit.name} - Image ${index + 1}`,
             caption: `${businessUnit.name} business operations and projects`,
-            thumbnail: image,
+            thumbnail: { url: image },
         })) || [];
 
     // Transform client testimonials for the TestimonialsSection component
@@ -469,7 +469,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                                         {unit.image && (
                                             <div className="relative h-48 overflow-hidden">
                                                 <img
-                                                    src={`/${unit.image}`}
+                                                    src={`${unit.image}`}
                                                     alt={unit.name}
                                                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                                 />

@@ -74,9 +74,9 @@ export default function ShowNews({ news }: ShowNewsProps) {
                             <FormSection title="Gambar Unggulan" className="overflow-hidden">
                                 <div className="-mx-6 -mb-4">
                                     <img
-                                        src={`/${news.featured_image}`}
+                                        src={`${news.featured_image}`}
                                         alt={news.title}
-                                        className="h-64 w-full object-cover"
+                                        className="h-auto w-auto object-cover"
                                         onError={(e) => {
                                             e.currentTarget.style.display = 'none';
                                         }}
