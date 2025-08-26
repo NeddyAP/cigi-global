@@ -125,6 +125,21 @@ class BusinessUnitController extends Controller
 
     private function transformData(array $data): array
     {
+        // Debug logging for more_about
+        \Log::info('TransformData input more_about:', ['more_about' => $data['more_about'] ?? 'not set']);
+
+        // Transform more_about data - filter out empty entries
+        if (isset($data['more_about'])) {
+            $data['more_about'] = array_filter($data['more_about'], function ($item) {
+                return ! empty($item['title']) && ! empty($item['description']);
+            });
+            // Reset array keys
+            $data['more_about'] = array_values($data['more_about']);
+
+            // Debug logging after transform
+            \Log::info('TransformData output more_about:', ['more_about' => $data['more_about']]);
+        }
+
         // Transform team members social links
         if (isset($data['team_members'])) {
             $data['team_members'] = array_map(function ($member) {

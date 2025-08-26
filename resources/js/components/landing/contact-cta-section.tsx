@@ -302,24 +302,6 @@ export default function ContactCTASection({
                                             ))}
                                         </div>
                                     </div>
-                                    <div>
-                                        <label className="mb-3 block text-sm font-medium text-slate-700 dark:text-slate-300">Urgency Level</label>
-                                        <div className="space-y-2">
-                                            {urgencyOptions.map((option) => (
-                                                <label key={option.value} className="flex items-center">
-                                                    <input
-                                                        type="radio"
-                                                        name="urgency"
-                                                        value={option.value}
-                                                        checked={formData.urgency === option.value}
-                                                        onChange={(e) => handleInputChange('urgency', e.target.value)}
-                                                        className="h-4 w-4 border-slate-300 text-blue-600 focus:ring-blue-500"
-                                                    />
-                                                    <span className={`ml-2 text-sm font-medium ${option.color}`}>{option.label}</span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
                                 </div>
 
                                 {/* Interests */}

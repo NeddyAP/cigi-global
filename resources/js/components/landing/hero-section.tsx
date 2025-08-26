@@ -132,7 +132,7 @@ export default function HeroSection({
                     </div>
 
                     {/* Scroll Indicator */}
-                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 transform animate-bounce">
+                    <div className="absolute left-1/2 -translate-x-1/2 transform animate-bounce">
                         <div className="flex h-10 w-6 justify-center rounded-full border-2 border-white/30">
                             <div className="mt-2 h-3 w-1 animate-pulse rounded-full bg-white/60" />
                         </div>

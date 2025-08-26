@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('type'); // e.g., 'Olahraga', 'Keagamaan', 'Lingkungan'
             $table->text('activities')->nullable(); // JSON or text list of activities
+            $table->json('more_about')->nullable(); // Array of objects with title and description for cards
             $table->string('image')->nullable(); // Image path
             $table->json('gallery_images')->nullable(); // Added enhanced fields
             $table->json('testimonials')->nullable();

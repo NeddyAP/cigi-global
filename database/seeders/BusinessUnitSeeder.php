@@ -60,6 +60,20 @@ class BusinessUnitSeeder extends Seeder
                 'name' => 'Cigi Farm',
                 'slug' => 'cigi-farm',
                 'description' => 'Peternakan dan pertanian organik yang menghasilkan produk segar dan berkualitas. Berkomitmen untuk mendukung ketahanan pangan nasional.',
+                'more_about' => [
+                    [
+                        'title' => 'Misi Kami',
+                        'description' => 'Menghasilkan produk pertanian dan peternakan organik berkualitas untuk ketahanan pangan nasional.',
+                    ],
+                    [
+                        'title' => 'Visi Kami',
+                        'description' => 'Menjadi pelopor pertanian organik yang berkelanjutan dan ramah lingkungan.',
+                    ],
+                    [
+                        'title' => 'Pendekatan Kami',
+                        'description' => 'Menggunakan metode pertanian modern yang ramah lingkungan dan mendukung kesejahteraan petani.',
+                    ],
+                ],
                 'services' => "Sayuran Organik\nBuah Segar\nProduk Peternakan\nBibit Tanaman\nKonsultasi Pertanian",
                 'image' => '/assets/business/cigi-farm.jpg',
                 'contact_phone' => '+62 21 4567 8901',

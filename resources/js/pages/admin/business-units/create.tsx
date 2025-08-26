@@ -97,6 +97,10 @@ export default function CreateBusinessUnit() {
         hero_subtitle: '',
         hero_cta_text: '',
         hero_cta_link: '',
+        more_about: [] as Array<{
+            title: string;
+            description: string;
+        }>,
     });
 
     const [activeTab, setActiveTab] = useState('basic');
@@ -320,6 +324,7 @@ export default function CreateBusinessUnit() {
                                     hero_subtitle: '',
                                     hero_cta_text: '',
                                     hero_cta_link: '',
+                                    more_about: [],
                                 });
                                 clearErrors();
                             }}
@@ -468,6 +473,74 @@ export default function CreateBusinessUnit() {
                                             className={errors.hero_cta_link ? 'border-red-500' : ''}
                                         />
                                         {errors.hero_cta_link && <p className="mt-1 text-sm text-red-600">{errors.hero_cta_link}</p>}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <Label>Informasi Tambahan</Label>
+                                    <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                                        Tambahkan informasi tambahan seperti misi, visi, nilai-nilai, dll. dalam bentuk card
+                                    </p>
+                                    <div className="space-y-3">
+                                        {data.more_about.map((item, index) => (
+                                            <div key={index} className="space-y-3 rounded-lg border p-4">
+                                                <div className="flex items-center justify-between">
+                                                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Card {index + 1}</h4>
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => {
+                                                            const newItems = [...data.more_about];
+                                                            newItems.splice(index, 1);
+                                                            setData('more_about', newItems);
+                                                        }}
+                                                        className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                                                    >
+                                                        Hapus
+                                                    </Button>
+                                                </div>
+                                                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                                                    <div>
+                                                        <Label htmlFor={`more_about_title_${index}`}>Judul</Label>
+                                                        <Input
+                                                            id={`more_about_title_${index}`}
+                                                            value={item.title}
+                                                            onChange={(e) => {
+                                                                const newItems = [...data.more_about];
+                                                                newItems[index].title = e.target.value;
+                                                                setData('more_about', newItems);
+                                                            }}
+                                                            placeholder="Contoh: Misi Kami"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <Label htmlFor={`more_about_description_${index}`}>Deskripsi</Label>
+                                                        <Textarea
+                                                            id={`more_about_description_${index}`}
+                                                            value={item.description}
+                                                            onChange={(e) => {
+                                                                const newItems = [...data.more_about];
+                                                                newItems[index].description = e.target.value;
+                                                                setData('more_about', newItems);
+                                                            }}
+                                                            placeholder="Deskripsi singkat..."
+                                                            rows={2}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() => {
+                                                setData('more_about', [...data.more_about, { title: '', description: '' }]);
+                                            }}
+                                            className="w-full border-dashed border-gray-300 text-gray-600 hover:border-gray-400 hover:text-gray-700"
+                                        >
+                                            + Tambah Card Baru
+                                        </Button>
                                     </div>
                                 </div>
 

@@ -17,6 +17,7 @@ class BusinessUnit extends Model
         'name',
         'slug',
         'description',
+        'more_about',
         'services',
         'image',
         'contact_phone',
@@ -44,6 +45,7 @@ class BusinessUnit extends Model
         return [
             'is_active' => 'boolean',
             'sort_order' => 'integer',
+            'more_about' => 'array',
             'team_members' => 'array',
             'client_testimonials' => 'array',
             'portfolio_items' => 'array',
@@ -226,6 +228,9 @@ class BusinessUnit extends Model
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:business_units,slug',
             'description' => 'nullable|string',
+            'more_about' => 'nullable|array',
+            'more_about.*.title' => 'required|string|max:255',
+            'more_about.*.description' => 'required|string',
             'services' => 'nullable|string',
             'image' => 'nullable|string|max:500', // Changed from file validation to string validation
             'contact_phone' => 'nullable|string|max:20',

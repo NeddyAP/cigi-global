@@ -22,6 +22,20 @@ class BusinessUnitFactory extends Factory
             'name' => $name,
             'slug' => \Illuminate\Support\Str::slug($name.'-'.fake()->unique()->numberBetween(1, 1000)),
             'description' => fake()->paragraph(3),
+            'more_about' => [
+                [
+                    'title' => 'Community Mission',
+                    'description' => 'To create an inclusive environment where members can learn, grow, and contribute to the collective success of our community.',
+                ],
+                [
+                    'title' => 'Our Vision',
+                    'description' => 'To be the leading platform that empowers communities through innovative solutions and sustainable growth.',
+                ],
+                [
+                    'title' => 'Core Values',
+                    'description' => 'Integrity, Excellence, Innovation, and Community-driven approach in everything we do.',
+                ],
+            ],
             'services' => implode("\n", fake()->words(5)),
             'image' => 'assets/business/'.fake()->randomElement(['cigi-net.jpg', 'cigi-mart.jpg', 'cigi-food.jpg', 'cigi-farm.jpg']),
             'contact_phone' => fake()->phoneNumber(),

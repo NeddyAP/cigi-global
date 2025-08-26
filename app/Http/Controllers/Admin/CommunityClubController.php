@@ -182,4 +182,21 @@ class CommunityClubController extends Controller
         return redirect()->route('admin.community-clubs.index')
             ->with('success', 'Komunitas berhasil dihapus.');
     }
+
+    /**
+     * Transform data before saving
+     */
+    private function transformData(array $data): array
+    {
+        // Transform more_about data - filter out empty entries
+        if (isset($data['more_about'])) {
+            $data['more_about'] = array_filter($data['more_about'], function ($item) {
+                return ! empty($item['title']) && ! empty($item['description']);
+            });
+            // Reset array keys
+            $data['more_about'] = array_values($data['more_about']);
+        }
+
+        return $data;
+    }
 }

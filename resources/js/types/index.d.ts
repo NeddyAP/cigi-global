@@ -47,6 +47,10 @@ export interface BusinessUnit {
     name: string;
     slug: string;
     description?: string;
+    more_about?: Array<{
+        title: string;
+        description: string;
+    }>;
     services?: string;
     image?: string;
     contact_phone?: string;

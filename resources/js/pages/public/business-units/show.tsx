@@ -7,6 +7,7 @@ import {
     TeamSection,
     TestimonialsSection,
 } from '@/components/landing';
+import MoreAboutCards from '@/components/landing/MoreAboutCards';
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
 import { type BusinessUnit } from '@/types';
@@ -184,7 +185,6 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             description={businessUnit.description || `Informasi lengkap tentang ${businessUnit.name} - Unit Bisnis CIGI Global`}
         >
             <Head title={businessUnit.name} />
-
             {/* Enhanced Hero Section */}
             <HeroSection
                 title={businessUnit.name}
@@ -194,22 +194,12 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     `We deliver exceptional business services and solutions tailored to meet your specific needs. Our expertise and commitment to excellence ensure your success.`
                 }
                 backgroundImage={businessUnit.image}
-                ctaText="Get Started"
-                ctaLink="#contact"
-                secondaryCtaText="Learn More"
-                secondaryCtaLink="#about"
-                showRating={true}
-                rating={4.9}
-                ratingCount={businessUnit.company_stats?.clients_served || 100}
-                features={[
-                    'Professional Services',
-                    `${services.length}+ Solutions`,
-                    `${businessUnit.company_stats?.years_in_business || 5}+ Years Experience`,
-                    `${businessUnit.company_stats?.team_size || 10}+ Expert Team`,
-                ]}
+                ctaText={businessUnit.hero_cta_text || 'Get Started'}
+                ctaLink={businessUnit.hero_cta_link || '#contact'}
+                secondaryCtaText={businessUnit.hero_cta_text || 'Learn More'}
+                secondaryCtaLink={businessUnit.hero_cta_link || '#about'}
                 className="min-h-screen"
             />
-
             {/* Back Button - Floating */}
             <div className="fixed top-23 left-4 z-50">
                 <Link
@@ -220,50 +210,39 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     Back to Business Units
                 </Link>
             </div>
-
             {/* About Section */}
             <section id="about" className="bg-white py-16 dark:bg-slate-900">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="mx-auto max-w-4xl text-center">
-                        <h2 className="mb-6 text-3xl font-bold text-slate-900 dark:text-white">About Our Business Unit</h2>
-                        <p className="mb-8 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-                            {businessUnit.description ||
-                                'Our business unit is dedicated to delivering exceptional value through innovative solutions, expert consultation, and reliable service delivery. We partner with clients to achieve sustainable growth and success.'}
-                        </p>
+                <div className="container mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
+                    <h2 className="mb-6 text-3xl font-bold text-slate-900 dark:text-white">About Our Business Unit</h2>
 
-                        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-                            <div className="rounded-xl bg-slate-50 p-6 dark:bg-slate-800">
-                                <h3 className="mb-3 text-xl font-semibold text-slate-900 dark:text-white">Our Mission</h3>
-                                <p className="text-slate-600 dark:text-slate-300">
-                                    To provide innovative business solutions that drive growth, efficiency, and success for our clients.
-                                </p>
-                            </div>
-                            <div className="rounded-xl bg-slate-50 p-6 dark:bg-slate-800">
-                                <h3 className="mb-3 text-xl font-semibold text-slate-900 dark:text-white">Our Approach</h3>
-                                <p className="text-slate-600 dark:text-slate-300">
-                                    We combine industry expertise with cutting-edge technology to deliver tailored solutions that meet your unique
-                                    business challenges.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <p className="mb-8 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+                        {businessUnit.description ||
+                            'Our business unit is dedicated to delivering exceptional value through innovative solutions, expert consultation, and reliable service delivery. We partner with clients to achieve sustainable growth and success.'}
+                    </p>
+
+                    {businessUnit.more_about?.length && (
+                        <MoreAboutCards cards={businessUnit.more_about} className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2" />
+                    )}
                 </div>
             </section>
 
             {/* Services Section */}
-            {services.length > 0 && (
+            {services?.length && (
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="mx-auto mb-12 max-w-4xl text-center">
+                        <header className="mx-auto mb-12 max-w-4xl text-center">
                             <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Our Services</h2>
                             <p className="text-lg text-slate-600 dark:text-slate-300">
                                 Discover our comprehensive range of business services designed to meet your specific needs.
                             </p>
-                        </div>
+                        </header>
 
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {services.map((service, index) => (
-                                <div key={index} className="rounded-xl bg-white p-6 shadow-lg transition-shadow hover:shadow-xl dark:bg-slate-700">
+                            {services.map((service, idx) => (
+                                <article
+                                    key={idx}
+                                    className="flex flex-col rounded-xl bg-white p-6 shadow-lg transition-shadow hover:shadow-xl dark:bg-slate-700"
+                                >
                                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30">
                                         <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
                                     </div>
@@ -271,13 +250,12 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                                     <p className="text-sm text-slate-600 dark:text-slate-300">
                                         Professional service delivery with proven methodologies and industry best practices.
                                     </p>
-                                </div>
+                                </article>
                             ))}
                         </div>
                     </div>
                 </section>
             )}
-
             {/* Gallery Section */}
             {galleryImages.length > 0 ? (
                 <GallerySection
@@ -310,7 +288,6 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     </div>
                 </section>
             )}
-
             {/* Team Section */}
             {teamMembers.length > 0 ? (
                 <TeamSection
@@ -341,7 +318,6 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     </div>
                 </section>
             )}
-
             {/* Testimonials Section */}
             {testimonials.length > 0 ? (
                 <TestimonialsSection
@@ -372,7 +348,6 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     </div>
                 </section>
             )}
-
             {/* Achievements Section */}
             {achievements.length > 0 ? (
                 <AchievementsSection
@@ -407,7 +382,6 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     </div>
                 </section>
             )}
-
             {/* Portfolio Section */}
             {portfolioItems.length > 0 ? (
                 <EventsPortfolioSection
@@ -440,7 +414,6 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     </div>
                 </section>
             )}
-
             {/* Contact & CTA Section */}
             <ContactCTASection
                 title="Ready to Work Together?"
@@ -450,7 +423,6 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                 ctaButtons={ctaButtons}
                 showMap={false}
             />
-
             {/* Related Business Units */}
             {relatedUnits.length > 0 && (
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">

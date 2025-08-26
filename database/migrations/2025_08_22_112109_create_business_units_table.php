@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name'); // e.g., 'Cigi Net', 'Cigi Mart', etc.
             $table->string('slug')->unique(); // URL-friendly version
             $table->text('description')->nullable();
+            $table->json('more_about')->nullable(); // Array of objects with title and description for cards
             $table->text('services')->nullable(); // JSON or text list of services
             $table->string('image')->nullable(); // Image path
             $table->json('team_members')->nullable(); // Added enhanced fields
