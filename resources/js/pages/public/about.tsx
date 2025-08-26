@@ -1,14 +1,13 @@
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
-import { type GlobalVars } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Award, Building2, Calendar, CheckCircle, Globe, Heart, Lightbulb, Mail, Phone, Shield, Star, Target, Users } from 'lucide-react';
+import { Award, Building2, Calendar, CheckCircle, Globe, Heart, Lightbulb, Mail, Phone, Shield, Target, Users } from 'lucide-react';
 
 interface AboutProps {
-    globalVars: GlobalVars;
+    globalVariables: Record<string, string>;
 }
 
-export default function About({ globalVars }: AboutProps) {
+export default function About({ globalVariables }: AboutProps) {
     return (
         <PublicLayout
             title="Tentang Kami"
@@ -34,7 +33,7 @@ export default function About({ globalVars }: AboutProps) {
                         </h1>
 
                         <p className="mb-8 text-lg leading-relaxed text-zinc-300 md:text-xl">
-                            {globalVars.company_description ||
+                            {globalVariables.company_description ||
                                 'PT Cimande Girang Global adalah perusahaan inovatif yang berkomitmen untuk memberikan solusi digital terbaik bagi bisnis Anda dengan pengalaman lebih dari 4 tahun.'}
                         </p>
 
@@ -79,7 +78,7 @@ export default function About({ globalVars }: AboutProps) {
                             </div>
                             <h3 className="mb-4 text-2xl font-bold text-white">Visi Kami</h3>
                             <p className="leading-relaxed text-zinc-300">
-                                {globalVars.company_vision ||
+                                {globalVariables.company_vision ||
                                     'Menjadi perusahaan global terdepan yang menghadirkan solusi inovatif dan berkelanjutan untuk kemajuan masyarakat.'}
                             </p>
                         </div>
@@ -91,7 +90,7 @@ export default function About({ globalVars }: AboutProps) {
                             </div>
                             <h3 className="mb-4 text-2xl font-bold text-white">Misi Kami</h3>
                             <p className="leading-relaxed text-zinc-300">
-                                {globalVars.company_mission ||
+                                {globalVariables.company_mission ||
                                     'Memberikan layanan berkualitas tinggi melalui inovasi teknologi dan kemitraan strategis yang menguntungkan semua pihak.'}
                             </p>
                         </div>
@@ -103,7 +102,7 @@ export default function About({ globalVars }: AboutProps) {
                             </div>
                             <h3 className="mb-4 text-2xl font-bold text-white">Nilai Kami</h3>
                             <p className="leading-relaxed text-zinc-300">
-                                {globalVars.company_values ||
+                                {globalVariables.company_values ||
                                     'Integritas, inovasi, dan kolaborasi adalah fondasi dalam setiap langkah yang kami ambil untuk menciptakan dampak positif.'}
                             </p>
                         </div>
@@ -125,7 +124,7 @@ export default function About({ globalVars }: AboutProps) {
 
                             <div className="space-y-4 text-zinc-300">
                                 <p className="leading-relaxed">
-                                    {globalVars.company_history ||
+                                    {globalVariables.company_history ||
                                         'CIGI Global didirikan dengan semangat untuk memberikan solusi digital terbaik bagi UMKM Indonesia. Bermula dari visi sederhana untuk membantu bisnis lokal berkembang di era digital, kami telah berkembang menjadi mitra terpercaya bagi berbagai perusahaan.'}
                                 </p>
                                 <p className="leading-relaxed">
@@ -162,32 +161,32 @@ export default function About({ globalVars }: AboutProps) {
                             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20">
                                 <Award className="h-6 w-6 text-amber-400" />
                             </div>
-                            <h3 className="mb-2 font-semibold text-white">Berpengalaman</h3>
-                            <p className="text-sm text-zinc-400">Lebih dari 4 tahun melayani berbagai klien</p>
+                            <h3 className="mb-2 font-semibold text-white">{globalVariables.why_choose_us_title_1}</h3>
+                            <p className="text-sm text-zinc-400">{globalVariables.why_choose_us_description_1}</p>
                         </div>
 
                         <div className="group rounded-xl border border-zinc-800 bg-zinc-800/50 p-6 text-center transition-all duration-300 hover:border-amber-500/30 hover:bg-zinc-800">
                             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20">
                                 <Shield className="h-6 w-6 text-amber-400" />
                             </div>
-                            <h3 className="mb-2 font-semibold text-white">Terpercaya</h3>
-                            <p className="text-sm text-zinc-400">Komitmen tinggi pada kualitas dan kepuasan klien</p>
+                            <h3 className="mb-2 font-semibold text-white">{globalVariables.why_choose_us_title_2}</h3>
+                            <p className="text-sm text-zinc-400">{globalVariables.why_choose_us_description_2}</p>
                         </div>
 
                         <div className="group rounded-xl border border-zinc-800 bg-zinc-800/50 p-6 text-center transition-all duration-300 hover:border-amber-500/30 hover:bg-zinc-800">
                             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20">
                                 <Globe className="h-6 w-6 text-amber-400" />
                             </div>
-                            <h3 className="mb-2 font-semibold text-white">Inovatif</h3>
-                            <p className="text-sm text-zinc-400">Menggunakan teknologi terdepan dan solusi kreatif</p>
+                            <h3 className="mb-2 font-semibold text-white">{globalVariables.why_choose_us_title_3}</h3>
+                            <p className="text-sm text-zinc-400">{globalVariables.why_choose_us_description_3}</p>
                         </div>
 
                         <div className="group rounded-xl border border-zinc-800 bg-zinc-800/50 p-6 text-center transition-all duration-300 hover:border-amber-500/30 hover:bg-zinc-800">
                             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20">
                                 <Users className="h-6 w-6 text-amber-400" />
                             </div>
-                            <h3 className="mb-2 font-semibold text-white">Kolaboratif</h3>
-                            <p className="text-sm text-zinc-400">Bekerja sama dengan klien sebagai mitra strategis</p>
+                            <h3 className="mb-2 font-semibold text-white">{globalVariables.why_choose_us_title_4}</h3>
+                            <p className="text-sm text-zinc-400">{globalVariables.why_choose_us_description_4}</p>
                         </div>
                     </div>
                 </div>
@@ -200,10 +199,7 @@ export default function About({ globalVars }: AboutProps) {
                         <div className="grid items-center gap-8 lg:grid-cols-2">
                             <div>
                                 <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl">Komitmen Terhadap Keberlanjutan</h2>
-                                <p className="mb-6 text-lg leading-relaxed text-zinc-300">
-                                    CIGI Global berkomitmen untuk menciptakan dampak positif bagi lingkungan dan masyarakat melalui praktik bisnis
-                                    yang bertanggung jawab dan inovasi berkelanjutan.
-                                </p>
+                                <p className="mb-6 text-lg leading-relaxed text-zinc-300">{globalVariables.commitment_description}</p>
 
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3">
@@ -222,17 +218,19 @@ export default function About({ globalVars }: AboutProps) {
 
                                 <div className="mt-6 flex items-center text-amber-400">
                                     <Globe className="mr-2 h-5 w-5" />
-                                    <span className="font-semibold">Bersama membangun masa depan yang berkelanjutan</span>
+                                    <span className="font-semibold">
+                                        {globalVariables.commitment_tagline || 'Bersama membangun masa depan yang berkelanjutan'}
+                                    </span>
                                 </div>
                             </div>
 
-                            <div className="text-center lg:text-right">
-                                <div className="mb-6 inline-flex h-32 w-32 items-center justify-center rounded-full bg-amber-500/20">
-                                    <Star className="h-16 w-16 text-amber-400" />
-                                </div>
-                                <h3 className="mb-2 text-2xl font-bold text-white">4+ Tahun</h3>
-                                <p className="text-zinc-300">Melayani dengan dedikasi</p>
-                            </div>
+                            <img
+                                src={globalVariables.commitment_image}
+                                alt="Commitment"
+                                className="mx-auto h-96 w-96 rounded-lg object-cover"
+                                loading="lazy"
+                                decoding="async"
+                            />
                         </div>
                     </div>
                 </div>
@@ -258,14 +256,14 @@ export default function About({ globalVars }: AboutProps) {
                                 </Link>
                             </Button>
 
-                            {globalVars.contact_whatsapp && (
+                            {globalVariables.contact_whatsapp && (
                                 <Button
                                     asChild
                                     variant="outline"
                                     className="rounded-lg border-zinc-700 bg-zinc-800/50 px-8 py-3 font-semibold text-white transition-all duration-300 hover:bg-zinc-700"
                                 >
                                     <a
-                                        href={`https://wa.me/${globalVars.contact_whatsapp.replace(/[^0-9]/g, '')}`}
+                                        href={`https://wa.me/${globalVariables.contact_whatsapp.replace(/[^0-9]/g, '')}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
@@ -276,11 +274,11 @@ export default function About({ globalVars }: AboutProps) {
                             )}
                         </div>
 
-                        {globalVars.contact_email && (
+                        {globalVariables.contact_email && (
                             <p className="mt-6 text-zinc-400">
                                 Atau kirim email ke{' '}
-                                <a href={`mailto:${globalVars.contact_email}`} className="text-amber-400 hover:text-amber-300">
-                                    {globalVars.contact_email}
+                                <a href={`mailto:${globalVariables.contact_email}`} className="text-amber-400 hover:text-amber-300">
+                                    {globalVariables.contact_email}
                                 </a>
                             </p>
                         )}

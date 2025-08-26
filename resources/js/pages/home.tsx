@@ -2,7 +2,7 @@ import AppLogo from '@/components/app-logo';
 import Lightbox from '@/components/lightbox';
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
-import { type BusinessUnit, type CommunityClub, type GlobalVars, type Media, type News } from '@/types';
+import { type BusinessUnit, type CommunityClub, type Media, type News } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import {
     ArrowRight,
@@ -24,7 +24,7 @@ import {
 import { useState } from 'react';
 
 interface HomeProps {
-    globalVars: GlobalVars;
+    globalVariables: Record<string, string>;
     galleryMedia: Media[];
     businessUnits: BusinessUnit[];
     communityClubs: CommunityClub[];
@@ -33,7 +33,7 @@ interface HomeProps {
 }
 
 export default function Home({
-    globalVars,
+    globalVariables = {},
     galleryMedia = [],
     businessUnits = [],
     communityClubs = [],
@@ -57,7 +57,10 @@ export default function Home({
     };
 
     return (
-        <PublicLayout title="Beranda" description={globalVars.company_description || 'Membangun masa depan bersama melalui inovasi dan kolaborasi'}>
+        <PublicLayout
+            title="Beranda"
+            description={globalVariables.company_description || 'Membangun masa depan bersama melalui inovasi dan kolaborasi'}
+        >
             <Head title="Beranda - CIGI Global" />
 
             {/* 1. Hero Section */}
@@ -72,25 +75,19 @@ export default function Home({
                             {/* Badge */}
                             <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-600/20 px-4 py-2">
                                 <AppLogo className="h-5 w-5" />
-                                <span className="text-sm font-medium text-amber-400">Cimande Girang - Solusi Global, UMKM Lokal</span>
+                                <span className="text-sm font-medium text-amber-400">{globalVariables.homepage_tagline}</span>
                             </div>
 
                             {/* Main Heading */}
                             <div className="space-y-4">
                                 <h1 className="text-5xl leading-tight font-bold md:text-6xl lg:text-7xl">
-                                    <span className="block text-amber-400">UMKM</span>
-                                    <span className="block text-amber-400">Lokal</span>
-                                    <span className="block text-amber-400">Berkualitas</span>
+                                    <span className="block text-amber-400">{globalVariables.homepage_title}</span>
                                 </h1>
                             </div>
 
                             {/* Description */}
                             <div className="max-w-xl space-y-4">
-                                <p className="text-lg leading-relaxed text-zinc-300">
-                                    PT Cimande Girang Global adalah perusahaan inovatif yang berkomitmen untuk memberikan{' '}
-                                    <span className="font-semibold text-amber-400">solusi digital terbaik</span> bagi bisnis Anda. Dengan pengalaman
-                                    lebih dari 4 tahun, kami hadir sebagai mitra terpercaya dalam transformasi digital.
-                                </p>
+                                <p className="text-lg leading-relaxed text-zinc-300">{globalVariables.homepage_description}</p>
                             </div>
 
                             {/* Action Buttons */}
@@ -155,9 +152,7 @@ export default function Home({
                                 <Target className="h-8 w-8 text-amber-400" />
                             </div>
                             <h3 className="mb-4 text-2xl font-bold text-white">Visi Kami</h3>
-                            <p className="text-zinc-300">
-                                Menjadi perusahaan global terdepan yang menghadirkan solusi inovatif dan berkelanjutan untuk kemajuan masyarakat.
-                            </p>
+                            <p className="text-zinc-300">{globalVariables.visi_description}</p>
                         </div>
 
                         <div className="section-card text-center">
@@ -165,10 +160,7 @@ export default function Home({
                                 <Heart className="h-8 w-8 text-amber-400" />
                             </div>
                             <h3 className="mb-4 text-2xl font-bold text-white">Misi Kami</h3>
-                            <p className="text-zinc-300">
-                                Memberikan layanan berkualitas tinggi melalui inovasi teknologi dan kemitraan strategis yang menguntungkan semua
-                                pihak.
-                            </p>
+                            <p className="text-zinc-300">{globalVariables.misi_description}</p>
                         </div>
 
                         <div className="section-card text-center">
@@ -176,34 +168,28 @@ export default function Home({
                                 <Lightbulb className="h-8 w-8 text-amber-400" />
                             </div>
                             <h3 className="mb-4 text-2xl font-bold text-white">Nilai Kami</h3>
-                            <p className="text-zinc-300">
-                                Integritas, inovasi, dan kolaborasi adalah fondasi dalam setiap langkah yang kami ambil untuk menciptakan dampak
-                                positif.
-                            </p>
+                            <p className="text-zinc-300">{globalVariables.value_description}</p>
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-500/10 to-amber-600/10 p-8 md:p-12">
-                        <div className="grid items-center gap-8 md:grid-cols-2">
-                            <div>
-                                <h3 className="mb-4 text-3xl font-bold text-white">Komitmen Terhadap Keberlanjutan</h3>
-                                <p className="mb-6 text-lg leading-relaxed text-zinc-300">
-                                    CIGI Global berkomitmen untuk menciptakan dampak positif bagi lingkungan dan masyarakat melalui praktik bisnis
-                                    yang bertanggung jawab dan inovasi berkelanjutan.
-                                </p>
-                                <div className="flex items-center text-amber-400">
-                                    <Globe className="mr-2 h-5 w-5" />
-                                    <span className="font-semibold">Bersama membangun masa depan yang berkelanjutan</span>
-                                </div>
-                            </div>
-                            <div className="text-center">
-                                <div className="mb-4 inline-flex h-32 w-32 items-center justify-center rounded-full bg-amber-500/20">
-                                    <Globe className="h-16 w-16 text-amber-400" />
-                                </div>
-                                <p className="text-zinc-400">Sustainability First</p>
-                            </div>
+                    <section className="grid items-center gap-8 rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-500/10 to-amber-600/10 p-8 md:grid-cols-2 md:p-12">
+                        <div>
+                            <h3 className="mb-4 text-3xl font-bold text-white">Komitmen Terhadap Keberlanjutan</h3>
+                            <p className="mb-6 text-lg leading-relaxed text-zinc-300">{globalVariables.commitment_description}</p>
+                            <span className="flex items-center font-semibold text-amber-400">
+                                <Globe className="mr-2 h-5 w-5" />
+                                {globalVariables.commitment_tagline}
+                            </span>
                         </div>
-                    </div>
+
+                        <img
+                            src={globalVariables.commitment_image}
+                            alt="Commitment"
+                            className="mx-auto h-96 w-96 rounded-lg object-cover"
+                            loading="lazy"
+                            decoding="async"
+                        />
+                    </section>
                 </div>
             </section>
 
@@ -433,7 +419,7 @@ export default function Home({
                     </div>
 
                     <div className="mb-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                        {globalVars.contact_phone && (
+                        {globalVariables.contact_phone && (
                             <div className="contact-card text-center">
                                 <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
                                     <Phone className="h-8 w-8 text-amber-400" />
@@ -441,16 +427,16 @@ export default function Home({
                                 <h3 className="mb-4 text-xl font-bold text-white">Telepon</h3>
                                 <p className="mb-4 text-zinc-300">Hubungi kami langsung untuk informasi lebih lanjut</p>
                                 <a
-                                    href={`tel:${globalVars.contact_phone}`}
+                                    href={`tel:${globalVariables.contact_phone}`}
                                     className="inline-flex items-center font-semibold text-amber-400 hover:text-amber-300"
                                 >
-                                    {globalVars.contact_phone}
+                                    {globalVariables.contact_phone}
                                     <Phone className="ml-2 h-4 w-4" />
                                 </a>
                             </div>
                         )}
 
-                        {globalVars.contact_email && (
+                        {globalVariables.contact_email && (
                             <div className="contact-card text-center">
                                 <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
                                     <Mail className="h-8 w-8 text-amber-400" />
@@ -458,16 +444,16 @@ export default function Home({
                                 <h3 className="mb-4 text-xl font-bold text-white">Email</h3>
                                 <p className="mb-4 text-zinc-300">Kirim email untuk pertanyaan bisnis dan kemitraan</p>
                                 <a
-                                    href={`mailto:${globalVars.contact_email}`}
+                                    href={`mailto:${globalVariables.contact_email}`}
                                     className="inline-flex items-center font-semibold text-amber-400 hover:text-amber-300"
                                 >
-                                    {globalVars.contact_email}
+                                    {globalVariables.contact_email}
                                     <Mail className="ml-2 h-4 w-4" />
                                 </a>
                             </div>
                         )}
 
-                        {globalVars.contact_whatsapp && (
+                        {globalVariables.contact_whatsapp && (
                             <div className="contact-card text-center md:col-span-2 lg:col-span-1">
                                 <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
                                     <MessageCircle className="h-8 w-8 text-amber-400" />
@@ -475,12 +461,12 @@ export default function Home({
                                 <h3 className="mb-4 text-xl font-bold text-white">WhatsApp</h3>
                                 <p className="mb-4 text-zinc-300">Chat langsung untuk respon yang cepat</p>
                                 <a
-                                    href={`https://wa.me/${globalVars.contact_whatsapp}`}
+                                    href={`https://wa.me/${globalVariables.contact_whatsapp}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center font-semibold text-amber-400 hover:text-amber-300"
                                 >
-                                    {globalVars.contact_whatsapp}
+                                    {globalVariables.contact_whatsapp}
                                     <MessageCircle className="ml-2 h-4 w-4" />
                                 </a>
                             </div>
@@ -495,17 +481,17 @@ export default function Home({
                             memulai diskusi.
                         </p>
                         <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                            {globalVars.contact_email && (
+                            {globalVariables.contact_email && (
                                 <Button asChild className="cta-button">
-                                    <a href={`mailto:${globalVars.contact_email}`}>
+                                    <a href={`mailto:${globalVariables.contact_email}`}>
                                         <Mail className="mr-2 h-5 w-5" />
                                         Kirim Email
                                     </a>
                                 </Button>
                             )}
-                            {globalVars.contact_whatsapp && (
+                            {globalVariables.contact_whatsapp && (
                                 <Button asChild className="cta-button-outline">
-                                    <a href={`https://wa.me/${globalVars.contact_whatsapp}`} target="_blank" rel="noopener noreferrer">
+                                    <a href={`https://wa.me/${globalVariables.contact_whatsapp}`} target="_blank" rel="noopener noreferrer">
                                         <MessageCircle className="mr-2 h-5 w-5" />
                                         Chat WhatsApp
                                     </a>

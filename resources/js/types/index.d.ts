@@ -197,7 +197,7 @@ export interface GlobalVariable {
     updated_at: string;
 }
 
-export interface GlobalVars {
+export interface globalVariables {
     [key: string]: string;
 }
 

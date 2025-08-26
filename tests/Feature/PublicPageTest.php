@@ -22,9 +22,9 @@ it('can view about page', function () {
     $response->assertInertia(
         fn ($page) => $page
             ->component('public/about')
-            ->has('globalVars')
-            ->where('globalVars.company_name', 'CIGI Global')
-            ->where('globalVars.company_description', 'Test company description')
+            ->has('globalVariables')
+            ->where('globalVariables.company_name', 'CIGI Global')
+            ->where('globalVariables.company_description', 'Test company description')
     );
 });
 
@@ -48,9 +48,9 @@ it('can view contact page', function () {
     $response->assertInertia(
         fn ($page) => $page
             ->component('public/contact')
-            ->has('globalVars')
-            ->where('globalVars.company_name', 'CIGI Global')
-            ->where('globalVars.contact_email', 'contact@cigiglobal.com')
+            ->has('globalVariables')
+            ->where('globalVariables.company_name', 'CIGI Global')
+            ->where('globalVariables.contact_email', 'contact@cigiglobal.com')
     );
 });
 

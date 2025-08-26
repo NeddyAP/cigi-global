@@ -3,16 +3,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import PublicLayout from '@/layouts/public-layout';
-import { type GlobalVars } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { Clock, Facebook, Instagram, Linkedin, Mail, MapPin, MessageCircle, Phone, Send, Twitter } from 'lucide-react';
 import { useState } from 'react';
 
 interface ContactProps {
-    globalVars: GlobalVars;
+    globalVariables: Record<string, string>;
 }
 
-export default function Contact({ globalVars }: ContactProps) {
+export default function Contact({ globalVariables }: ContactProps) {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -80,18 +79,18 @@ export default function Contact({ globalVars }: ContactProps) {
                         </h1>
 
                         <p className="mb-8 text-lg leading-relaxed text-zinc-300 md:text-xl">
-                            Kami siap mendengar ide dan kebutuhan Anda. Hubungi tim CIGI Global untuk konsultasi gratis dan temukan solusi terbaik
-                            untuk bisnis Anda.
+                            Kami siap mendengar ide dan kebutuhan Anda. Hubungi tim CIGI Global untuk konsultasi dan temukan solusi terbaik untuk
+                            bisnis Anda.
                         </p>
 
                         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-                            {globalVars.contact_whatsapp && (
+                            {globalVariables.contact_whatsapp && (
                                 <Button
                                     asChild
                                     className="transform rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 px-8 py-3 font-semibold text-black transition-all duration-300 hover:scale-105 hover:from-amber-600 hover:to-amber-700"
                                 >
                                     <a
-                                        href={`https://wa.me/${globalVars.contact_whatsapp.replace(/[^0-9]/g, '')}`}
+                                        href={`https://wa.me/${globalVariables.contact_whatsapp.replace(/[^0-9]/g, '')}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
@@ -101,13 +100,13 @@ export default function Contact({ globalVars }: ContactProps) {
                                 </Button>
                             )}
 
-                            {globalVars.contact_email && (
+                            {globalVariables.contact_email && (
                                 <Button
                                     asChild
                                     variant="outline"
                                     className="rounded-lg border-zinc-700 bg-zinc-800/50 px-8 py-3 font-semibold text-white transition-all duration-300 hover:bg-zinc-700"
                                 >
-                                    <a href={`mailto:${globalVars.contact_email}`}>
+                                    <a href={`mailto:${globalVariables.contact_email}`}>
                                         <Mail className="mr-2 h-5 w-5" />
                                         Email
                                     </a>
@@ -131,7 +130,7 @@ export default function Contact({ globalVars }: ContactProps) {
 
                             <div className="space-y-6">
                                 {/* Phone */}
-                                {globalVars.contact_phone && (
+                                {globalVariables.contact_phone && (
                                     <div className="flex items-start gap-4 rounded-xl border border-zinc-800 bg-zinc-800/50 p-6">
                                         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-500/20">
                                             <Phone className="h-6 w-6 text-amber-400" />
@@ -140,17 +139,17 @@ export default function Contact({ globalVars }: ContactProps) {
                                             <h3 className="mb-1 font-semibold text-white">Telepon</h3>
                                             <p className="text-zinc-400">Hubungi kami langsung</p>
                                             <a
-                                                href={`tel:${globalVars.contact_phone}`}
+                                                href={`tel:${globalVariables.contact_phone}`}
                                                 className="text-amber-400 transition-colors hover:text-amber-300"
                                             >
-                                                {globalVars.contact_phone}
+                                                {globalVariables.contact_phone}
                                             </a>
                                         </div>
                                     </div>
                                 )}
 
                                 {/* Email */}
-                                {globalVars.contact_email && (
+                                {globalVariables.contact_email && (
                                     <div className="flex items-start gap-4 rounded-xl border border-zinc-800 bg-zinc-800/50 p-6">
                                         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-500/20">
                                             <Mail className="h-6 w-6 text-amber-400" />
@@ -159,17 +158,17 @@ export default function Contact({ globalVars }: ContactProps) {
                                             <h3 className="mb-1 font-semibold text-white">Email</h3>
                                             <p className="text-zinc-400">Kirim email untuk pertanyaan detail</p>
                                             <a
-                                                href={`mailto:${globalVars.contact_email}`}
+                                                href={`mailto:${globalVariables.contact_email}`}
                                                 className="text-amber-400 transition-colors hover:text-amber-300"
                                             >
-                                                {globalVars.contact_email}
+                                                {globalVariables.contact_email}
                                             </a>
                                         </div>
                                     </div>
                                 )}
 
                                 {/* Address */}
-                                {globalVars.contact_address && (
+                                {globalVariables.contact_address && (
                                     <div className="flex items-start gap-4 rounded-xl border border-zinc-800 bg-zinc-800/50 p-6">
                                         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-500/20">
                                             <MapPin className="h-6 w-6 text-amber-400" />
@@ -177,13 +176,13 @@ export default function Contact({ globalVars }: ContactProps) {
                                         <div>
                                             <h3 className="mb-1 font-semibold text-white">Alamat</h3>
                                             <p className="text-zinc-400">Kunjungi kantor kami</p>
-                                            <p className="text-zinc-300">{globalVars.contact_address}</p>
+                                            <p className="text-zinc-300">{globalVariables.contact_address}</p>
                                         </div>
                                     </div>
                                 )}
 
                                 {/* Office Hours */}
-                                {globalVars.contact_office_hours && (
+                                {globalVariables.contact_office_hours && (
                                     <div className="flex items-start gap-4 rounded-xl border border-zinc-800 bg-zinc-800/50 p-6">
                                         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-500/20">
                                             <Clock className="h-6 w-6 text-amber-400" />
@@ -191,7 +190,7 @@ export default function Contact({ globalVars }: ContactProps) {
                                         <div>
                                             <h3 className="mb-1 font-semibold text-white">Jam Operasional</h3>
                                             <p className="text-zinc-400">Waktu terbaik untuk menghubungi kami</p>
-                                            <p className="text-zinc-300">{globalVars.contact_office_hours}</p>
+                                            <p className="text-zinc-300">{globalVariables.contact_office_hours}</p>
                                         </div>
                                     </div>
                                 )}
@@ -201,9 +200,9 @@ export default function Contact({ globalVars }: ContactProps) {
                             <div className="mt-8">
                                 <h3 className="mb-4 text-xl font-semibold text-white">Ikuti Kami</h3>
                                 <div className="flex gap-4">
-                                    {globalVars.contact_social_facebook && (
+                                    {globalVariables.social_facebook && (
                                         <a
-                                            href={globalVars.contact_social_facebook}
+                                            href={globalVariables.social_facebook}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition-all duration-300 hover:bg-blue-600 hover:text-white"
@@ -211,9 +210,9 @@ export default function Contact({ globalVars }: ContactProps) {
                                             <Facebook className="h-5 w-5" />
                                         </a>
                                     )}
-                                    {globalVars.contact_social_instagram && (
+                                    {globalVariables.social_instagram && (
                                         <a
-                                            href={globalVars.contact_social_instagram}
+                                            href={globalVariables.social_instagram}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition-all duration-300 hover:bg-gradient-to-tr hover:from-purple-600 hover:to-pink-600 hover:text-white"
@@ -221,9 +220,9 @@ export default function Contact({ globalVars }: ContactProps) {
                                             <Instagram className="h-5 w-5" />
                                         </a>
                                     )}
-                                    {globalVars.contact_social_twitter && (
+                                    {globalVariables.social_twitter && (
                                         <a
-                                            href={globalVars.contact_social_twitter}
+                                            href={globalVariables.social_twitter}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition-all duration-300 hover:bg-blue-500 hover:text-white"
@@ -231,9 +230,9 @@ export default function Contact({ globalVars }: ContactProps) {
                                             <Twitter className="h-5 w-5" />
                                         </a>
                                     )}
-                                    {globalVars.contact_social_linkedin && (
+                                    {globalVariables.social_linkedin && (
                                         <a
-                                            href={globalVars.contact_social_linkedin}
+                                            href={globalVariables.social_linkedin}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition-all duration-300 hover:bg-blue-700 hover:text-white"
@@ -369,13 +368,13 @@ export default function Contact({ globalVars }: ContactProps) {
                             </p>
 
                             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-                                {globalVars.contact_whatsapp && (
+                                {globalVariables.contact_whatsapp && (
                                     <Button
                                         asChild
                                         className="transform rounded-lg bg-gradient-to-r from-green-500 to-green-600 px-8 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:from-green-600 hover:to-green-700"
                                     >
                                         <a
-                                            href={`https://wa.me/${globalVars.contact_whatsapp.replace(/[^0-9]/g, '')}`}
+                                            href={`https://wa.me/${globalVariables.contact_whatsapp.replace(/[^0-9]/g, '')}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >

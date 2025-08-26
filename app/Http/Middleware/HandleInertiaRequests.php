@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\BusinessUnit;
 use App\Models\CommunityClub;
+use App\Models\GlobalVariable;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -75,6 +76,9 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            'globalVariables' => GlobalVariable::where('is_public', true)->get(['key', 'value'])->mapWithKeys(function ($item) {
+                return [$item->key => $item->value];
+            })->toArray(),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             ...$navigationData,
             'csrfToken' => csrf_token(),

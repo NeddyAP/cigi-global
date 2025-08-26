@@ -1,8 +1,15 @@
 import AppLogo from '@/components/app-logo';
-import { Link } from '@inertiajs/react';
+import { globalVariables } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
 import { Building2, Mail, MapPin, Newspaper, Phone, Users } from 'lucide-react';
 
+interface PageProps {
+    globalVariables: globalVariables;
+    [key: string]: any;
+}
+
 export default function PublicFooter() {
+    const { globalVariables } = usePage<PageProps>().props;
     const currentYear = new Date().getFullYear();
 
     return (
@@ -13,21 +20,21 @@ export default function PublicFooter() {
                     <div className="space-y-4">
                         <div className="flex items-center space-x-2">
                             <AppLogo />
-                            <span className="text-lg font-bold text-white">CIGI Global</span>
+                            <span className="text-lg font-bold text-white">{globalVariables.company_name}</span>
                         </div>
-                        <p className="text-sm text-white/80">Membangun komunitas global yang berkelanjutan melalui inovasi dan kolaborasi.</p>
+                        <p className="text-sm text-white/80">{globalVariables.company_description}</p>
                         <div className="space-y-2 text-sm text-white/70">
                             <div className="flex items-center space-x-2">
                                 <MapPin className="h-4 w-4" />
-                                <span>Jakarta, Indonesia</span>
+                                <span>{globalVariables.contact_address}</span>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Phone className="h-4 w-4" />
-                                <span>+62 21 1234 5678</span>
+                                <span>{globalVariables.contact_phone}</span>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Mail className="h-4 w-4" />
-                                <span>info@cigi-global.com</span>
+                                <span>{globalVariables.contact_email}</span>
                             </div>
                         </div>
                     </div>

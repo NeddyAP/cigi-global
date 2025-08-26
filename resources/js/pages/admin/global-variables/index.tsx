@@ -78,9 +78,11 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                                     <h3 className="text-lg font-medium text-zinc-900 capitalize dark:text-white">
                                         {category === 'company' && 'Company Information'}
                                         {category === 'contact' && 'Contact Information'}
+                                        {category === 'homepage' && 'Homepage'}
+                                        {category === 'about_us' && 'About Us'}
                                         {category === 'social' && 'Social Media'}
                                         {category === 'general' && 'General'}
-                                        {!['company', 'contact', 'social', 'general'].includes(category) && category}
+                                        {!['company', 'contact', 'social', 'general', 'homepage', 'about_us'].includes(category) && category}
                                     </h3>
                                 </div>
                                 <div className="overflow-x-auto">
