@@ -147,7 +147,7 @@ export default function ShowNews({ news }: ShowNewsProps) {
                         {/* Article Stats */}
                         <FormSection title="Statistik & Info">
                             <InfoGrid cols={1}>
-                                <InfoItem label="Views" value={news.views_count || 0} icon={<Users className="h-4 w-4" />} />
+                                <InfoItem label="Dilihat" value={news.views_count || 0} icon={<Users className="h-4 w-4" />} />
                                 <InfoItem
                                     label="Status"
                                     value={<StatusBadge status={news.is_published ? 'published' : 'draft'} />}
@@ -155,7 +155,7 @@ export default function ShowNews({ news }: ShowNewsProps) {
                                 />
                                 <InfoItem label="Kategori" value={<StatusBadge status={news.category} />} icon={<Tag className="h-4 w-4" />} />
                                 {news.is_featured && (
-                                    <InfoItem label="Featured" value={<StatusBadge status="featured" />} icon={<Star className="h-4 w-4" />} />
+                                    <InfoItem label="Unggulan" value={<StatusBadge status="featured" />} icon={<Star className="h-4 w-4" />} />
                                 )}
                                 <InfoItem label="Penulis" value={news.author?.name || 'Admin'} icon={<User className="h-4 w-4" />} />
                                 <InfoItem label="Dibuat" value={news.created_at} type="datetime" icon={<Calendar className="h-4 w-4" />} />

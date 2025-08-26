@@ -82,13 +82,13 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             image: item.image,
             client: item.client,
             technologies: item.technologies,
-            category: 'Business Services',
+            category: 'Layanan Bisnis',
             completionDate: new Date().toISOString().split('T')[0], // Use current date as fallback
             projectUrl: '#',
             caseStudyUrl: '#',
-            results: ['Successful project delivery', 'Client satisfaction achieved', 'Business objectives met'],
-            challenges: ['Complex requirements', 'Tight timeline', 'Technical constraints'],
-            solutions: ['Agile methodology', 'Expert team deployment', 'Innovative solutions'],
+            results: ['Pengiriman proyek berhasil', 'Kepuasan klien tercapai', 'Tujuan bisnis terpenuhi'],
+            challenges: ['Persyaratan kompleks', 'Jadwal ketat', 'Kendala teknis'],
+            solutions: ['Metodologi agile', 'Penempatan tim ahli', 'Solusi inovatif'],
             isFeatured: index === 0,
             isHighlighted: index === 0,
         })) || [];
@@ -113,39 +113,39 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
     const statistics = [
         {
             id: 1,
-            label: 'Years in Business',
+            label: 'Tahun Beroperasi',
             value: businessUnit.company_stats?.years_in_business || 0,
             suffix: '+',
             icon: '⏰',
             color: 'text-blue-600',
-            description: 'Years of industry experience',
+            description: 'Pengalaman dalam industri',
         },
         {
             id: 2,
-            label: 'Projects Completed',
+            label: 'Proyek Selesai',
             value: businessUnit.company_stats?.projects_completed || 0,
             suffix: '+',
             icon: '🚀',
             color: 'text-green-600',
-            description: 'Successful project deliveries',
+            description: 'Pengiriman proyek berhasil',
         },
         {
             id: 3,
-            label: 'Clients Served',
+            label: 'Klien Terlayani',
             value: businessUnit.company_stats?.clients_served || 0,
             suffix: '+',
             icon: '👥',
             color: 'text-purple-600',
-            description: 'Satisfied clients worldwide',
+            description: 'Klien puas di seluruh dunia',
         },
         {
             id: 4,
-            label: 'Team Size',
+            label: 'Ukuran Tim',
             value: businessUnit.company_stats?.team_size || 0,
             suffix: '+',
             icon: '👨‍💼',
             color: 'text-orange-600',
-            description: 'Expert professionals',
+            description: 'Profesional ahli',
         },
     ];
 
@@ -160,19 +160,19 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
     // CTA buttons for ContactCTASection
     const ctaButtons = [
         {
-            text: 'Get a Quote',
-            link: `mailto:${businessUnit.contact_email || 'info@cigi-global.com'}?subject=Quote Request for ${businessUnit.name}`,
+            text: 'Minta Penawaran',
+            link: `mailto:${businessUnit.contact_email || 'info@cigi-global.com'}?subject=Permintaan Penawaran untuk ${businessUnit.name}`,
             variant: 'primary' as const,
             icon: '💰',
         },
         {
-            text: 'Schedule Consultation',
+            text: 'Jadwalkan Konsultasi',
             link: businessUnit.contact_phone ? `tel:${businessUnit.contact_phone}` : `mailto:${businessUnit.contact_email || 'info@cigi-global.com'}`,
             variant: 'secondary' as const,
             icon: '📅',
         },
         {
-            text: 'Learn More',
+            text: 'Pelajari Lebih Lanjut',
             link: '#about',
             variant: 'outline' as const,
             icon: 'ℹ️',
@@ -188,15 +188,15 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             {/* Enhanced Hero Section */}
             <HeroSection
                 title={businessUnit.name}
-                subtitle="Professional Business Solutions"
+                subtitle="Solusi Bisnis Profesional"
                 description={
                     businessUnit.description ||
-                    `We deliver exceptional business services and solutions tailored to meet your specific needs. Our expertise and commitment to excellence ensure your success.`
+                    `Kami menyediakan layanan dan solusi bisnis unggulan yang disesuaikan dengan kebutuhan Anda. Keahlian dan komitmen kami menjamin keberhasilan proyek Anda.`
                 }
                 backgroundImage={businessUnit.image}
-                ctaText={businessUnit.hero_cta_text || 'Get Started'}
+                ctaText={businessUnit.hero_cta_text || 'Mulai Sekarang'}
                 ctaLink={businessUnit.hero_cta_link || '#contact'}
-                secondaryCtaText={businessUnit.hero_cta_text || 'Learn More'}
+                secondaryCtaText={businessUnit.hero_cta_text || 'Pelajari Lebih Lanjut'}
                 secondaryCtaLink={businessUnit.hero_cta_link || '#about'}
                 className="min-h-screen"
             />
@@ -207,17 +207,17 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     className="inline-flex items-center rounded-lg bg-white/20 px-4 py-2 text-white backdrop-blur-sm transition-colors hover:bg-white/30"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to Business Units
+                    Kembali ke Unit Bisnis
                 </Link>
             </div>
             {/* About Section */}
             <section id="about" className="bg-white py-16 dark:bg-slate-900">
                 <div className="container mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
-                    <h2 className="mb-6 text-3xl font-bold text-slate-900 dark:text-white">About Our Business Unit</h2>
+                    <h2 className="mb-6 text-3xl font-bold text-slate-900 dark:text-white">Tentang Unit Bisnis Kami</h2>
 
                     <p className="mb-8 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
                         {businessUnit.description ||
-                            'Our business unit is dedicated to delivering exceptional value through innovative solutions, expert consultation, and reliable service delivery. We partner with clients to achieve sustainable growth and success.'}
+                            'Unit bisnis kami berdedikasi untuk memberikan nilai luar biasa melalui solusi inovatif, konsultasi ahli, dan layanan yang dapat diandalkan. Kami bekerja sama dengan klien untuk mencapai pertumbuhan dan keberlanjutan.'}
                     </p>
 
                     {businessUnit.more_about?.length && (
@@ -231,9 +231,9 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <header className="mx-auto mb-12 max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Our Services</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Layanan Kami</h2>
                             <p className="text-lg text-slate-600 dark:text-slate-300">
-                                Discover our comprehensive range of business services designed to meet your specific needs.
+                                Temukan rangkaian layanan bisnis kami yang dirancang untuk memenuhi kebutuhan khusus Anda.
                             </p>
                         </header>
 
@@ -248,7 +248,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                                     </div>
                                     <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">{service}</h3>
                                     <p className="text-sm text-slate-600 dark:text-slate-300">
-                                        Professional service delivery with proven methodologies and industry best practices.
+                                        Penyampaian layanan profesional dengan metodologi terbukti dan praktik terbaik industri.
                                     </p>
                                 </article>
                             ))}
@@ -260,8 +260,8 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             {galleryImages.length > 0 ? (
                 <GallerySection
                     images={galleryImages}
-                    title="Our Work Gallery"
-                    subtitle="See Our Projects in Action"
+                    title="Galeri Pekerjaan Kami"
+                    subtitle="Lihat Proyek Kami"
                     layout="grid"
                     showLightbox={true}
                     autoPlay={false}
@@ -272,9 +272,10 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Our Work Gallery</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Galeri Pekerjaan Kami</h2>
                             <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                We're building our project portfolio! Check back soon to see examples of our work and successful implementations.
+                                Kami sedang menyiapkan portofolio proyek. Kunjungi kembali untuk melihat contoh pekerjaan dan implementasi sukses
+                                kami.
                             </p>
                             <div className="flex h-64 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-700">
                                 <div className="text-center text-slate-500 dark:text-slate-400">
@@ -302,9 +303,9 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                 <section className="bg-white py-16 dark:bg-slate-900">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Meet Our Team</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Kenali Tim Kami</h2>
                             <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                Our expert team is ready to serve you. Get to know the professionals behind our success.
+                                Tim ahli kami siap melayani Anda. Kenali para profesional yang mendukung kesuksesan kami.
                             </p>
                             <div className="rounded-xl bg-slate-50 p-8 dark:bg-slate-800">
                                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
@@ -332,9 +333,9 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Client Testimonials</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Testimoni Klien</h2>
                             <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                Our clients are sharing their success stories. Be the next success story!
+                                Klien kami berbagi kisah sukses mereka. Jadilah kisah sukses berikutnya!
                             </p>
                             <div className="rounded-xl bg-white p-8 dark:bg-slate-700">
                                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
@@ -353,8 +354,8 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                 <AchievementsSection
                     achievements={achievements}
                     statistics={statistics}
-                    title="Our Achievements"
-                    subtitle="Recognition & Milestones"
+                    title="Pencapaian Kami"
+                    subtitle="Penghargaan & Tonggak"
                     showTimeline={true}
                     showStatistics={true}
                 />
@@ -362,9 +363,9 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                 <section className="bg-white py-16 dark:bg-slate-900">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Our Achievements</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Pencapaian Kami</h2>
                             <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                We're building our legacy of success. Join us in celebrating our milestones and achievements.
+                                Kami sedang membangun jejak kesuksesan. Bergabunglah merayakan tonggak dan pencapaian kami.
                             </p>
                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
                                 {statistics.map((stat) => (
@@ -387,8 +388,8 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                 <EventsPortfolioSection
                     events={[]}
                     portfolioItems={portfolioItems}
-                    title="Our Portfolio"
-                    subtitle="Successful Projects & Case Studies"
+                    title="Portofolio Kami"
+                    subtitle="Proyek Berhasil & Studi Kasus"
                     showTabs={false}
                     showEvents={false}
                     showPortfolio={true}
@@ -397,18 +398,18 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Our Portfolio</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Portofolio Kami</h2>
                             <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                We're building our project showcase! Check back soon to see examples of our successful implementations.
+                                Kami sedang menyiapkan showcase proyek. Kunjungi kembali untuk melihat contoh implementasi sukses kami.
                             </p>
                             <div className="rounded-xl bg-white p-8 dark:bg-slate-700">
                                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">
                                     <span className="text-2xl">💼</span>
                                 </div>
                                 <p className="mb-4 text-slate-600 dark:text-slate-300">
-                                    Our portfolio is being prepared with detailed case studies and project examples.
+                                    Portofolio sedang disiapkan lengkap dengan studi kasus dan contoh proyek.
                                 </p>
-                                <Button className="bg-blue-600 text-white hover:bg-blue-700">Request Case Study</Button>
+                                <Button className="bg-blue-600 text-white hover:bg-blue-700">Minta Studi Kasus</Button>
                             </div>
                         </div>
                     </div>
@@ -416,9 +417,9 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             )}
             {/* Contact & CTA Section */}
             <ContactCTASection
-                title="Ready to Work Together?"
-                subtitle="Let's Discuss Your Project"
-                description="Whether you need consultation, project implementation, or ongoing support, we're here to help you achieve your business goals."
+                title="Siap Bekerja Bersama?"
+                subtitle="Mari Diskusikan Proyek Anda"
+                description="Apakah Anda membutuhkan konsultasi, pelaksanaan proyek, atau dukungan berkelanjutan — kami siap membantu mencapai tujuan bisnis Anda."
                 contactInfo={contactInfo}
                 ctaButtons={ctaButtons}
                 showMap={false}
@@ -428,9 +429,9 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto mb-12 max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Explore Other Business Units</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Jelajahi Unit Bisnis Lainnya</h2>
                             <p className="text-lg text-slate-600 dark:text-slate-300">
-                                Discover other specialized business units within the CIGI Global ecosystem.
+                                Temukan unit bisnis spesialis lain dalam ekosistem CIGI Global.
                             </p>
                         </div>
 
@@ -456,7 +457,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                                             )}
                                             <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
                                                 <Building2 className="mr-2 h-4 w-4" />
-                                                Business Services
+                                                Layanan Bisnis
                                             </div>
                                         </div>
                                     </div>

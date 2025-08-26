@@ -15,9 +15,9 @@ interface EditGlobalVariableProps {
 }
 
 const variableTypes = [
-    { value: 'text', label: 'Text' },
-    { value: 'textarea', label: 'Textarea' },
-    { value: 'number', label: 'Number' },
+    { value: 'text', label: 'Teks' },
+    { value: 'textarea', label: 'Area Teks' },
+    { value: 'number', label: 'Angka' },
     { value: 'email', label: 'Email' },
     { value: 'url', label: 'URL' },
     { value: 'json', label: 'JSON' },
@@ -25,20 +25,20 @@ const variableTypes = [
 ];
 
 const variableCategories = [
-    { value: 'company', label: 'Company Information' },
-    { value: 'contact', label: 'Contact Information' },
-    { value: 'social', label: 'Social Media' },
-    { value: 'general', label: 'General' },
+    { value: 'company', label: 'Informasi Perusahaan' },
+    { value: 'contact', label: 'Informasi Kontak' },
+    { value: 'social', label: 'Media Sosial' },
+    { value: 'general', label: 'Umum' },
     { value: 'seo', label: 'SEO' },
-    { value: 'config', label: 'Configuration' },
+    { value: 'config', label: 'Konfigurasi' },
 ];
 
 export default function EditGlobalVariable({ variable }: EditGlobalVariableProps) {
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: '/admin' },
-        { title: 'Global Variables', href: '/admin/global-variables' },
+        { title: 'Dasbor', href: '/admin' },
+        { title: 'Variabel Global', href: '/admin/global-variables' },
         { title: variable.key, href: `/admin/global-variables/${variable.id}` },
-        { title: 'Edit', href: `/admin/global-variables/${variable.id}/edit` },
+        { title: 'Ubah', href: `/admin/global-variables/${variable.id}/edit` },
     ];
 
     const { data, setData, put, processing, errors } = useForm({
@@ -57,13 +57,13 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
 
     const getTypeDescription = (type: string) => {
         const descriptions = {
-            text: 'Simple text, maximum 255 characters',
-            textarea: 'Long text with line breaks',
-            number: 'Number (integer or decimal)',
-            email: 'Valid email format',
-            url: 'Valid URL (http/https)',
-            json: 'Data in JSON format',
-            boolean: 'True/False (1/0)',
+            text: 'Teks sederhana, maksimum 255 karakter',
+            textarea: 'Teks panjang dengan baris baru',
+            number: 'Angka (bilangan bulat atau desimal)',
+            email: 'Format email yang valid',
+            url: 'URL yang valid (http/https)',
+            json: 'Data dalam format JSON',
+            boolean: 'Benar/Salah (1/0)',
         };
         return descriptions[type as keyof typeof descriptions] || '';
     };
@@ -76,7 +76,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         id="value"
                         value={data.value}
                         onChange={(e) => setData('value', e.target.value)}
-                        placeholder="Enter variable value..."
+                        placeholder="Masukkan nilai variabel..."
                         rows={4}
                         className={`border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400 ${errors.value ? 'border-red-500' : ''}`}
                     />
@@ -131,11 +131,11 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         <Toggle
                             pressed={data.value === '1'}
                             onPressedChange={(pressed) => setData('value', pressed ? '1' : '0')}
-                            aria-label="Boolean Value"
+                            aria-label="Nilai Boolean"
                         >
-                            {data.value === '1' ? 'True' : 'False'}
+                            {data.value === '1' ? 'Benar' : 'Salah'}
                         </Toggle>
-                        <Label className="text-zinc-300">Boolean Value</Label>
+                        <Label className="text-zinc-300">Nilai Boolean</Label>
                     </div>
                 );
             default:
@@ -144,7 +144,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         id="value"
                         value={data.value}
                         onChange={(e) => setData('value', e.target.value)}
-                        placeholder="Enter variable value..."
+                        placeholder="Masukkan nilai variabel..."
                         className={`border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400 ${errors.value ? 'border-red-500' : ''}`}
                     />
                 );
@@ -153,43 +153,43 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Edit ${variable.key}`} />
+            <Head title={`Ubah ${variable.key}`} />
 
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Edit Global Variable</h1>
-                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">Edit variable "{variable.key}"</p>
+                        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Edit Variabel Global</h1>
+                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">Edit variabel "{variable.key}"</p>
                     </div>
                     <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                         <a href={route('admin.global-variables.show', variable.id)}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Details
+                            Kembali ke Detail
                         </a>
                     </Button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <FormSection title="Basic Information" description="Variable key and category details" icon={<Database className="h-5 w-5" />}>
+                    <FormSection title="Informasi Dasar" description="Kunci variabel dan detail kategori" icon={<Database className="h-5 w-5" />}>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div>
                                 <Label htmlFor="key" className="text-zinc-300">
-                                    Variable Key *
+                                    Kunci Variabel *
                                 </Label>
                                 <Input
                                     id="key"
                                     value={data.key}
                                     onChange={(e) => setData('key', e.target.value)}
-                                    placeholder="company_name"
+                                    placeholder="nama_perusahaan"
                                     className={`border-zinc-700 bg-zinc-800 font-mono text-white placeholder:text-zinc-400 ${errors.key ? 'border-red-500' : ''}`}
                                 />
                                 {errors.key && <p className="mt-1 text-sm text-red-400">{errors.key}</p>}
-                                <p className="mt-1 text-sm text-zinc-500">Use snake_case format (lowercase with underscores)</p>
+                                <p className="mt-1 text-sm text-zinc-500">Gunakan format snake_case (huruf kecil dengan garis bawah)</p>
                             </div>
 
                             <div>
                                 <Label htmlFor="category" className="text-zinc-300">
-                                    Category *
+                                    Kategori *
                                 </Label>
                                 <select
                                     id="category"
@@ -209,13 +209,13 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
 
                         <div>
                             <Label htmlFor="description" className="text-zinc-300">
-                                Description
+                                Deskripsi
                             </Label>
                             <Input
                                 id="description"
                                 value={data.description}
                                 onChange={(e) => setData('description', e.target.value)}
-                                placeholder="Description of this variable usage"
+                                placeholder="Deskripsi penggunaan variabel ini"
                                 className={`border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400 ${errors.description ? 'border-red-500' : ''}`}
                             />
                             {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
@@ -223,7 +223,7 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
 
                         <div>
                             <Label htmlFor="type" className="text-zinc-300">
-                                Data Type *
+                                Tipe Data *
                             </Label>
                             <select
                                 id="type"
@@ -242,32 +242,32 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         </div>
                     </FormSection>
 
-                    <FormSection title="Variable Value" description="Set the variable value" icon={<Settings className="h-5 w-5" />}>
+                    <FormSection title="Nilai Variabel" description="Atur nilai variabel" icon={<Settings className="h-5 w-5" />}>
                         <div>
                             <Label htmlFor="value" className="text-zinc-300">
-                                Value {data.type !== 'boolean' && '*'}
+                                Nilai {data.type !== 'boolean' && '*'}
                             </Label>
                             {renderValueInput()}
                             {errors.value && <p className="mt-1 text-sm text-red-400">{errors.value}</p>}
                             {data.type === 'json' && (
-                                <p className="mt-1 text-sm text-zinc-500">Ensure valid JSON format. Example: {'{"name": "value", "number": 123}'}</p>
+                                <p className="mt-1 text-sm text-zinc-500">Pastikan format JSON valid. Contoh: {'{"name": "value", "number": 123}'}</p>
                             )}
                         </div>
                     </FormSection>
 
-                    <FormSection title="Access Settings" description="Control variable visibility" icon={<Settings className="h-5 w-5" />}>
+                    <FormSection title="Pengaturan Akses" description="Kontrol visibilitas variabel" icon={<Settings className="h-5 w-5" />}>
                         <div className="flex items-start space-x-3">
-                            <Toggle pressed={data.is_public} onPressedChange={(pressed) => setData('is_public', pressed)} aria-label="Public Access">
-                                {data.is_public ? 'Public' : 'Private'}
+                            <Toggle pressed={data.is_public} onPressedChange={(pressed) => setData('is_public', pressed)} aria-label="Akses Publik">
+                                {data.is_public ? 'Publik' : 'Privat'}
                             </Toggle>
                             <div>
-                                <Label className="text-zinc-300">Public Access</Label>
+                                <Label className="text-zinc-300">Akses Publik</Label>
                                 <div className="mt-1 flex items-start">
                                     <Info className="mt-0.5 mr-2 h-4 w-4 flex-shrink-0 text-blue-400" />
                                     <p className="text-sm text-zinc-400">
                                         {data.is_public
-                                            ? 'This variable can be accessed from frontend and public API'
-                                            : 'This variable can only be accessed from backend/admin'}
+                                            ? 'Variabel ini dapat diakses dari frontend dan API publik'
+                                            : 'Variabel ini hanya dapat diakses dari backend/admin'}
                                     </p>
                                 </div>
                             </div>
@@ -280,22 +280,22 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                             <div className="flex items-start">
                                 <Info className="mt-0.5 mr-2 h-5 w-5 flex-shrink-0 text-yellow-400" />
                                 <div className="w-full">
-                                    <h4 className="text-sm font-medium text-yellow-300">Changes Detected</h4>
+                                    <h4 className="text-sm font-medium text-yellow-300">Perubahan Terdeteksi</h4>
                                     <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
                                         <div>
-                                            <p className="text-sm font-medium text-yellow-200">Current Value:</p>
+                                            <p className="text-sm font-medium text-yellow-200">Nilai Saat Ini:</p>
                                             <p className="mt-1 rounded border border-zinc-700 bg-zinc-800 p-2 text-sm text-white">
                                                 {variable.type === 'boolean'
                                                     ? variable.value === '1'
-                                                        ? 'True'
-                                                        : 'False'
-                                                    : variable.value || '(empty)'}
+                                                        ? 'Benar'
+                                                        : 'Salah'
+                                                    : variable.value || '(kosong)'}
                                             </p>
                                         </div>
                                         <div>
-                                            <p className="text-sm font-medium text-yellow-200">New Value:</p>
+                                            <p className="text-sm font-medium text-yellow-200">Nilai Baru:</p>
                                             <p className="mt-1 rounded border border-zinc-700 bg-zinc-800 p-2 text-sm text-white">
-                                                {data.type === 'boolean' ? (data.value === '1' ? 'True' : 'False') : data.value || '(empty)'}
+                                                {data.type === 'boolean' ? (data.value === '1' ? 'Benar' : 'Salah') : data.value || '(kosong)'}
                                             </p>
                                         </div>
                                     </div>
@@ -308,14 +308,14 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                         <div className="flex items-start">
                             <Info className="mt-0.5 mr-2 h-5 w-5 flex-shrink-0 text-blue-400" />
                             <div>
-                                <h4 className="text-sm font-medium text-blue-300">Variable Information</h4>
+                                <h4 className="text-sm font-medium text-blue-300">Informasi Variabel</h4>
                                 <div className="mt-2 text-sm text-blue-200">
                                     <p>
                                         <strong>ID:</strong> {variable.id}
                                     </p>
                                     <p>
-                                        <strong>Created:</strong>{' '}
-                                        {new Date(variable.created_at).toLocaleDateString('en-US', {
+                                        <strong>Dibuat:</strong>{' '}
+                                        {new Date(variable.created_at).toLocaleDateString('id-ID', {
                                             year: 'numeric',
                                             month: 'long',
                                             day: 'numeric',
@@ -325,8 +325,8 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
                                     </p>
                                     {variable.updated_at && (
                                         <p>
-                                            <strong>Last Updated:</strong>{' '}
-                                            {new Date(variable.updated_at).toLocaleDateString('en-US', {
+                                            <strong>Terakhir Diperbarui:</strong>{' '}
+                                            {new Date(variable.updated_at).toLocaleDateString('id-ID', {
                                                 year: 'numeric',
                                                 month: 'long',
                                                 day: 'numeric',
@@ -342,10 +342,10 @@ export default function EditGlobalVariable({ variable }: EditGlobalVariableProps
 
                     <div className="flex justify-end space-x-3">
                         <Button type="button" variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
-                            <a href={route('admin.global-variables.show', variable.id)}>Cancel</a>
+                            <a href={route('admin.global-variables.show', variable.id)}>Batal</a>
                         </Button>
-                        <LoadingButton type="submit" loading={processing} loadingText="Saving..." icon="save" className="cta-button">
-                            Save Changes
+                        <LoadingButton type="submit" loading={processing} loadingText="Menyimpan..." icon="save" className="cta-button">
+                            Simpan Perubahan
                         </LoadingButton>
                     </div>
                 </form>

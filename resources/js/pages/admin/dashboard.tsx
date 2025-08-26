@@ -5,7 +5,7 @@ import { BarChart3, Building2, Eye, FileText, Globe2, MessageSquare, Newspaper, 
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Dasbor',
         href: '/admin',
     },
 ];
@@ -13,19 +13,19 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Dashboard() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard Admin" />
+            <Head title="Dasbor Admin" />
             {/* Hero Section */}
             <div className="relative mb-12 overflow-hidden rounded-2xl border border-amber-500/20 bg-gradient-to-br from-zinc-900 via-zinc-800 to-amber-900/20 p-8 md:p-12">
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent"></div>
                 <div className="relative z-10">
                     <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-600/20 px-4 py-2">
                         <Shield className="h-5 w-5 text-amber-400" />
-                        <span className="text-sm font-medium text-amber-400">Admin Panel - CIGI Global</span>
+                        <span className="text-sm font-medium text-amber-400">Panel Admin - CIGI Global</span>
                     </div>
 
                     <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                        <span className="block text-amber-400">Dashboard</span>
-                        <span className="block text-white">Admin Control</span>
+                        <span className="block text-amber-400">Dasbor</span>
+                        <span className="block text-white">Kontrol Admin</span>
                     </h1>
 
                     <p className="max-w-2xl text-lg leading-relaxed text-zinc-300">
@@ -123,7 +123,7 @@ export default function Dashboard() {
                         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20">
                             <BarChart3 className="h-6 w-6 text-amber-400" />
                         </div>
-                        <h4 className="mb-2 text-lg font-bold text-white">Analytics</h4>
+                        <h4 className="mb-2 text-lg font-bold text-white">Analitik</h4>
                         <p className="text-sm text-zinc-300">Monitor performa website</p>
                     </div>
 
@@ -139,7 +139,7 @@ export default function Dashboard() {
                         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/20">
                             <MessageSquare className="h-6 w-6 text-blue-400" />
                         </div>
-                        <h4 className="mb-2 text-lg font-bold text-white">Messages</h4>
+                        <h4 className="mb-2 text-lg font-bold text-white">Pesan</h4>
                         <p className="text-sm text-zinc-300">Pesan dari pengunjung</p>
                     </div>
 
@@ -147,7 +147,7 @@ export default function Dashboard() {
                         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-violet-500/20">
                             <Zap className="h-6 w-6 text-violet-400" />
                         </div>
-                        <h4 className="mb-2 text-lg font-bold text-white">Performance</h4>
+                        <h4 className="mb-2 text-lg font-bold text-white">Performa</h4>
                         <p className="text-sm text-zinc-300">Status sistem real-time</p>
                     </div>
                 </div>

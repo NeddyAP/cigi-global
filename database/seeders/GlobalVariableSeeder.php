@@ -185,7 +185,6 @@ class GlobalVariableSeeder extends Seeder
                 'description' => 'Deskripsi Kenapa Memilih Kami 4',
             ],
 
-
             // Contact Information
             [
                 'key' => 'contact_address',

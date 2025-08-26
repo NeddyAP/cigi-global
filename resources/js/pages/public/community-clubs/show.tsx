@@ -6,6 +6,7 @@ import {
     HeroSection,
     TestimonialsSection,
 } from '@/components/landing';
+import MoreAboutCards from '@/components/landing/MoreAboutCards';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import PublicLayout from '@/layouts/public-layout';
@@ -64,7 +65,6 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
             role: testimonial.role,
             company: '',
             content: testimonial.content,
-            rating: testimonial.rating || 5,
             image: testimonial.image,
             date: new Date().toISOString().split('T')[0], // Use current date as fallback
             verified: true,
@@ -163,13 +163,13 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
     // CTA buttons for ContactCTASection
     const ctaButtons = [
         {
-            text: 'Join Our Community',
-            link: `mailto:${communityClub.contact_email || 'info@cigi-global.com'}?subject=Joining ${communityClub.name}`,
+            text: 'Bergabung dengan Komunitas Kami',
+            link: `mailto:${communityClub.contact_email || 'info@cigi-global.com'}?subject=Bergabung ${communityClub.name}`,
             variant: 'primary' as const,
             icon: '👥',
         },
         {
-            text: 'Contact Us',
+            text: 'Hubungi Kami',
             link: communityClub.contact_phone
                 ? `tel:${communityClub.contact_phone}`
                 : `mailto:${communityClub.contact_email || 'info@cigi-global.com'}`,
@@ -177,7 +177,7 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
             icon: '📞',
         },
         {
-            text: 'Learn More',
+            text: 'Pelajari Lebih Lanjut',
             link: '#about',
             variant: 'outline' as const,
             icon: 'ℹ️',
@@ -194,25 +194,17 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
             {/* Enhanced Hero Section */}
             <HeroSection
                 title={communityClub.name}
-                subtitle={communityClub.hero_subtitle || `Join our vibrant ${communityClub.type} community`}
+                subtitle={communityClub.hero_subtitle || `Bergabung dengan komunitas ${communityClub.type} yang dinamis`}
                 description={
                     communityClub.description ||
-                    `Be part of our dynamic community where learning, collaboration, and innovation come together. Discover activities, build connections, and grow with like-minded individuals.`
+                    `Jadilah bagian dari komunitas kami yang dinamis — tempat belajar, kolaborasi, dan inovasi bertemu. Temukan aktivitas, bangun koneksi, dan berkembang bersama individu yang sejalan.`
                 }
+                type={communityClub.type}
                 backgroundImage={communityClub.image}
-                ctaText={communityClub.hero_cta_text || 'Join Now'}
+                ctaText={communityClub.hero_cta_text || 'Bergabung Sekarang'}
                 ctaLink={communityClub.hero_cta_link || '#contact'}
-                secondaryCtaText="Learn More"
+                secondaryCtaText="Pelajari Lebih Lanjut"
                 secondaryCtaLink="#about"
-                showRating={true}
-                rating={4.8}
-                ratingCount={communityClub.member_count || 100}
-                features={[
-                    `${communityClub.type} Community`,
-                    `${activities.length}+ Activities`,
-                    `${communityClub.member_count || 100}+ Members`,
-                    communityClub.founded_year ? `${new Date().getFullYear() - communityClub.founded_year}+ Years` : 'Established Community',
-                ]}
                 className="min-h-screen"
             />
 
@@ -223,37 +215,23 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                     className="inline-flex items-center rounded-lg bg-white/20 px-4 py-2 text-white backdrop-blur-sm transition-colors hover:bg-white/30"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to Communities
+                    Kembali ke Komunitas
                 </Link>
             </div>
 
             {/* About Section */}
             <section id="about" className="bg-white py-16 dark:bg-slate-900">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="mx-auto max-w-4xl text-center">
-                        <h2 className="mb-6 text-3xl font-bold text-slate-900 dark:text-white">About Our Community</h2>
-                        <p className="mb-8 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-                            {communityClub.description ||
-                                'Our community is dedicated to fostering meaningful connections, promoting continuous learning, and creating opportunities for personal and professional growth. We believe in the power of collaboration and shared knowledge.'}
-                        </p>
+                <div className="container mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
+                    <h2 className="mb-6 text-3xl font-bold text-slate-900 dark:text-white">Tentang Komunitas Kami</h2>
 
-                        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-                            <div className="rounded-xl bg-slate-50 p-6 dark:bg-slate-800">
-                                <h3 className="mb-3 text-xl font-semibold text-slate-900 dark:text-white">Community Mission</h3>
-                                <p className="text-slate-600 dark:text-slate-300">
-                                    To create an inclusive environment where members can learn, grow, and contribute to the collective success of our
-                                    community.
-                                </p>
-                            </div>
-                            <div className="rounded-xl bg-slate-50 p-6 dark:bg-slate-800">
-                                <h3 className="mb-3 text-xl font-semibold text-slate-900 dark:text-white">What We Offer</h3>
-                                <p className="text-slate-600 dark:text-slate-300">
-                                    Regular activities, networking opportunities, skill development workshops, and a supportive environment for
-                                    personal growth.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <p className="mb-8 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+                        {communityClub.description ||
+                            'Kampung Ramah Lingkungan Cigi adalah program komunitas untuk menciptakan lingkungan yang bersih, hijau, dan berkelanjutan.'}
+                    </p>
+
+                    {communityClub.more_about?.length && (
+                        <MoreAboutCards cards={communityClub.more_about} className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2" />
+                    )}
                 </div>
             </section>
 
@@ -262,9 +240,9 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto mb-12 max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Community Activities</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Aktivitas Komunitas</h2>
                             <p className="text-lg text-slate-600 dark:text-slate-300">
-                                Discover the diverse range of activities and programs we offer to our community members.
+                                Temukan berbagai aktivitas dan program yang kami sediakan untuk anggota komunitas.
                             </p>
                         </div>
 
@@ -289,8 +267,8 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
             {galleryImages.length > 0 ? (
                 <GallerySection
                     images={galleryImages}
-                    title="Community Gallery"
-                    subtitle="Capturing Our Moments Together"
+                    title="Galeri Komunitas"
+                    subtitle="Mengabadikan Momen Kita"
                     layout="grid"
                     showLightbox={true}
                     autoPlay={false}
@@ -301,16 +279,16 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Community Gallery</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Galeri Komunitas</h2>
                             <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                We're building our photo collection! Check back soon to see images from our community activities and events.
+                                Kami sedang menyusun koleksi foto kami. Kunjungi kembali untuk melihat gambar dari aktivitas dan acara komunitas.
                             </p>
                             <div className="flex h-64 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-700">
                                 <div className="text-center text-slate-500 dark:text-slate-400">
                                     <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-300 dark:bg-slate-600">
                                         <span className="text-2xl">📸</span>
                                     </div>
-                                    <p className="text-sm">Gallery coming soon</p>
+                                    <p className="text-sm">Galeri segera hadir</p>
                                 </div>
                             </div>
                         </div>
@@ -322,8 +300,8 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
             {testimonials.length > 0 ? (
                 <TestimonialsSection
                     testimonials={testimonials}
-                    title="What Our Members Say"
-                    subtitle="Community Voices"
+                    title="Pendapat Anggota Kami"
+                    subtitle="Suara Komunitas"
                     autoRotate={true}
                     rotationInterval={6000}
                     showNavigation={true}
@@ -332,9 +310,9 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                 <section className="bg-white py-16 dark:bg-slate-900">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Member Testimonials</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Testimoni Anggota</h2>
                             <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                Our community members are sharing their experiences. Be the first to add your story!
+                                Anggota komunitas kami berbagi pengalaman mereka. Jadilah yang pertama menambahkan cerita Anda!
                             </p>
                             <div className="rounded-xl bg-slate-50 p-8 dark:bg-slate-800">
                                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
@@ -354,8 +332,8 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                 <AchievementsSection
                     achievements={achievements}
                     statistics={statistics}
-                    title="Community Achievements"
-                    subtitle="Celebrating Our Success"
+                    title="Pencapaian Komunitas"
+                    subtitle="Merayakan Keberhasilan Kami"
                     showTimeline={true}
                     showStatistics={true}
                 />
@@ -363,9 +341,9 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Community Achievements</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Pencapaian Komunitas</h2>
                             <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                We're building our legacy of success. Join us in creating meaningful achievements together.
+                                Kami sedang membangun jejak kesuksesan kami. Bergabunglah untuk menciptakan pencapaian bermakna bersama.
                             </p>
                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
                                 {statistics.map((stat) => (
@@ -389,8 +367,8 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                 <EventsPortfolioSection
                     events={events}
                     portfolioItems={[]}
-                    title="Upcoming Events"
-                    subtitle="Join Our Community Activities"
+                    title="Acara Mendatang"
+                    subtitle="Ikuti Aktivitas Komunitas Kami"
                     showTabs={false}
                     showEvents={true}
                     showPortfolio={false}
@@ -399,18 +377,18 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                 <section className="bg-white py-16 dark:bg-slate-900">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Community Events</h2>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Acara Komunitas</h2>
                             <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                We're planning exciting events and activities. Stay tuned for updates!
+                                Kami sedang merencanakan acara dan aktivitas menarik. Nantikan pembaruan!
                             </p>
                             <div className="rounded-xl bg-slate-50 p-8 dark:bg-slate-800">
                                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
                                     <span className="text-2xl">📅</span>
                                 </div>
                                 <p className="mb-4 text-slate-600 dark:text-slate-300">
-                                    Our event calendar is being prepared with exciting activities and networking opportunities.
+                                    Kalender acara kami sedang disiapkan dengan aktivitas menarik dan peluang jaringan.
                                 </p>
-                                <Button className="bg-blue-600 text-white hover:bg-blue-700">Get Notified</Button>
+                                <Button className="bg-blue-600 text-white hover:bg-blue-700">Dapatkan Pemberitahuan</Button>
                             </div>
                         </div>
                     </div>
@@ -419,9 +397,9 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
 
             {/* Contact & CTA Section */}
             <ContactCTASection
-                title="Ready to Join Our Community?"
-                subtitle="Connect With Us Today"
-                description="Whether you're looking to learn new skills, build professional connections, or simply be part of something meaningful, we'd love to have you join our community."
+                title="Siap Bergabung dengan Komunitas Kami?"
+                subtitle="Hubungi Kami Sekarang"
+                description="Apakah Anda ingin belajar keterampilan baru, membangun koneksi profesional, atau menjadi bagian dari sesuatu yang bermakna — kami dengan senang hati mengundang Anda bergabung."
                 contactInfo={contactInfo}
                 ctaButtons={ctaButtons}
                 showMap={false}
@@ -432,10 +410,8 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                 <section className="bg-slate-50 py-16 dark:bg-slate-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto mb-12 max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Explore Other Communities</h2>
-                            <p className="text-lg text-slate-600 dark:text-slate-300">
-                                Discover other vibrant communities within the CIGI Global ecosystem.
-                            </p>
+                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Jelajahi Komunitas Lainnya</h2>
+                            <p className="text-lg text-slate-600 dark:text-slate-300">Temukan komunitas dinamis lain dalam ekosistem CIGI Global.</p>
                         </div>
 
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -463,7 +439,7 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                                             )}
                                             <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
                                                 <Users className="mr-2 h-4 w-4" />
-                                                {club.member_count || 'New'} members
+                                                {club.member_count || 'Baru'} anggota
                                             </div>
                                         </div>
                                     </div>

@@ -145,7 +145,7 @@ export default function CommunityClubsIndex({ communityClubs, clubsByType }: Com
                                             {club.contact_person && (
                                                 <div className="flex items-center">
                                                     <Users className="mr-2 h-4 w-4" />
-                                                    <span>PIC: {club.contact_person}</span>
+                                                    <span>Penanggung Jawab: {club.contact_person}</span>
                                                 </div>
                                             )}
                                         </div>

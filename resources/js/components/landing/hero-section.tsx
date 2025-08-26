@@ -1,10 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
-import { ArrowRight, Play, Star } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
 
 interface HeroSectionProps {
     title: string;
     subtitle?: string;
+    type?: string;
     description?: string;
     backgroundImage?: string;
     ctaText?: string;
@@ -22,6 +23,7 @@ interface HeroSectionProps {
 export default function HeroSection({
     title,
     subtitle,
+    type,
     description,
     backgroundImage,
     ctaText = 'Get Started',
@@ -29,10 +31,6 @@ export default function HeroSection({
     secondaryCtaText,
     secondaryCtaLink,
     showPlayButton = false,
-    showRating = false,
-    rating = 4.8,
-    ratingCount = 1000,
-    features = [],
     className = '',
 }: HeroSectionProps) {
     return (
@@ -50,10 +48,10 @@ export default function HeroSection({
             <div className="relative z-10 container mx-auto px-4 text-center sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-4xl">
                     {/* Subtitle */}
-                    {subtitle && (
+                    {type && (
                         <div className="mb-6">
                             <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white/90 backdrop-blur-sm">
-                                {subtitle}
+                                {type}
                             </span>
                         </div>
                     )}
@@ -63,36 +61,6 @@ export default function HeroSection({
 
                     {/* Description */}
                     {description && <p className="mx-auto mb-8 max-w-3xl text-xl leading-relaxed text-white/90 sm:text-2xl">{description}</p>}
-
-                    {/* Rating */}
-                    {showRating && (
-                        <div className="mb-8 flex items-center justify-center space-x-2">
-                            <div className="flex items-center space-x-1">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star
-                                        key={i}
-                                        className={`h-5 w-5 ${i < Math.floor(rating) ? 'fill-current text-yellow-400' : 'text-white/30'}`}
-                                    />
-                                ))}
-                            </div>
-                            <span className="text-lg text-white/90">
-                                <span className="font-semibold">{rating}</span>
-                                <span className="text-white/70"> ({ratingCount}+ reviews)</span>
-                            </span>
-                        </div>
-                    )}
-
-                    {/* Features */}
-                    {features.length > 0 && (
-                        <div className="mb-8 flex flex-wrap justify-center gap-4">
-                            {features.map((feature, index) => (
-                                <div key={index} className="flex items-center space-x-2 text-sm text-white/80">
-                                    <div className="h-2 w-2 rounded-full bg-green-400" />
-                                    <span>{feature}</span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
 
                     {/* Call to Action Buttons */}
                     <div className="mb-12 flex flex-col items-center justify-center gap-4 sm:flex-row">

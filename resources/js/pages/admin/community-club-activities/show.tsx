@@ -21,7 +21,7 @@ export default function Show({ communityClubActivity }: Props) {
                         <Link href={route('admin.community-club-activities.index')}>
                             <Button variant="outline" size="sm">
                                 <ArrowLeft className="mr-2 h-4 w-4" />
-                                Back to Activities
+                                Kembali ke Aktivitas
                             </Button>
                         </Link>
                         <h1 className="text-3xl font-bold">{communityClubActivity.title}</h1>
@@ -31,19 +31,19 @@ export default function Show({ communityClubActivity }: Props) {
                         <Link href={route('admin.community-club-activities.edit', communityClubActivity.id)}>
                             <Button>
                                 <Edit className="mr-2 h-4 w-4" />
-                                Edit
+                                Ubah
                             </Button>
                         </Link>
                         <Button
                             variant="destructive"
                             onClick={() => {
-                                if (confirm('Are you sure you want to delete this activity?')) {
+                                if (confirm('Apakah Anda yakin ingin menghapus aktivitas ini?')) {
                                     // Handle delete
                                 }
                             }}
                         >
                             <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
+                            Hapus
                         </Button>
                     </div>
                 </div>
@@ -53,12 +53,12 @@ export default function Show({ communityClubActivity }: Props) {
                     <div className="space-y-6 lg:col-span-2">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Activity Details</CardTitle>
+                                <CardTitle>Detail Aktivitas</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                     <div>
-                                        <label className="text-sm font-medium text-gray-500">Community Club</label>
+                                        <label className="text-sm font-medium text-gray-500">Komunitas</label>
                                         <p className="text-lg">{communityClubActivity.community_club?.name}</p>
                                     </div>
 
@@ -73,35 +73,35 @@ export default function Show({ communityClubActivity }: Props) {
 
                                     {communityClubActivity.max_participants && (
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Max Participants</label>
+                                            <label className="text-sm font-medium text-gray-500">Jumlah Peserta Maks</label>
                                             <p className="text-lg">{communityClubActivity.max_participants}</p>
                                         </div>
                                     )}
 
                                     {communityClubActivity.duration && (
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Duration</label>
+                                            <label className="text-sm font-medium text-gray-500">Durasi</label>
                                             <p className="text-lg">{communityClubActivity.duration}</p>
                                         </div>
                                     )}
                                 </div>
 
                                 <div>
-                                    <label className="text-sm font-medium text-gray-500">Description</label>
+                                    <label className="text-sm font-medium text-gray-500">Deskripsi</label>
                                     <p className="mt-1 text-gray-700">{communityClubActivity.description}</p>
                                 </div>
 
                                 {communityClubActivity.short_description && (
                                     <div>
-                                        <label className="text-sm font-medium text-gray-500">Short Description</label>
+                                        <label className="text-sm font-medium text-gray-500">Deskripsi Singkat</label>
                                         <p className="mt-1 text-gray-700">{communityClubActivity.short_description}</p>
                                     </div>
                                 )}
 
                                 <div className="flex items-center space-x-2">
-                                    <label className="text-sm font-medium text-gray-500">Featured Activity</label>
+                                    <label className="text-sm font-medium text-gray-500">Aktivitas Unggulan</label>
                                     <Badge variant={communityClubActivity.featured ? 'destructive' : 'secondary'}>
-                                        {communityClubActivity.featured ? 'Yes' : 'No'}
+                                        {communityClubActivity.featured ? 'Ya' : 'Tidak'}
                                     </Badge>
                                 </div>
                             </CardContent>
@@ -111,26 +111,26 @@ export default function Show({ communityClubActivity }: Props) {
                         {(communityClubActivity.schedule || communityClubActivity.location || communityClubActivity.contact_info) && (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Activity Information</CardTitle>
+                                    <CardTitle>Informasi Aktivitas</CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     {communityClubActivity.schedule && (
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Schedule</label>
+                                            <label className="text-sm font-medium text-gray-500">Jadwal</label>
                                             <p className="mt-1 text-gray-700">{communityClubActivity.schedule}</p>
                                         </div>
                                     )}
 
                                     {communityClubActivity.location && (
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Location</label>
+                                            <label className="text-sm font-medium text-gray-500">Lokasi</label>
                                             <p className="mt-1 text-gray-700">{communityClubActivity.location}</p>
                                         </div>
                                     )}
 
                                     {communityClubActivity.contact_info && (
                                         <div>
-                                            <label className="text-sm font-medium text-gray-500">Contact Information</label>
+                                            <label className="text-sm font-medium text-gray-500">Informasi Kontak</label>
                                             <p className="mt-1 text-gray-700">{communityClubActivity.contact_info}</p>
                                         </div>
                                     )}
@@ -142,7 +142,7 @@ export default function Show({ communityClubActivity }: Props) {
                         {communityClubActivity.benefits && communityClubActivity.benefits.length > 0 && (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Benefits</CardTitle>
+                                    <CardTitle>Manfaat</CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <ul className="space-y-2">
@@ -161,7 +161,7 @@ export default function Show({ communityClubActivity }: Props) {
                         {communityClubActivity.requirements && communityClubActivity.requirements.length > 0 && (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Requirements</CardTitle>
+                                    <CardTitle>Persyaratan</CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <ul className="space-y-2">
@@ -183,7 +183,7 @@ export default function Show({ communityClubActivity }: Props) {
                         {communityClubActivity.image && (
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Activity Image</CardTitle>
+                                    <CardTitle>Gambar Aktivitas</CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="relative">
@@ -207,13 +207,13 @@ export default function Show({ communityClubActivity }: Props) {
                         {/* Quick Actions */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Quick Actions</CardTitle>
+                                <CardTitle>Aksi Cepat</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-3">
                                 <Link href={route('admin.community-club-activities.edit', communityClubActivity.id)} className="w-full">
                                     <Button variant="outline" className="w-full">
                                         <Edit className="mr-2 h-4 w-4" />
-                                        Edit Activity
+                                        Ubah Aktivitas
                                     </Button>
                                 </Link>
 
@@ -221,13 +221,13 @@ export default function Show({ communityClubActivity }: Props) {
                                     variant="destructive"
                                     className="w-full"
                                     onClick={() => {
-                                        if (confirm('Are you sure you want to delete this activity?')) {
+                                        if (confirm('Apakah Anda yakin ingin menghapus aktivitas ini?')) {
                                             // Handle delete
                                         }
                                     }}
                                 >
                                     <Trash2 className="mr-2 h-4 w-4" />
-                                    Delete Activity
+                                    Hapus Aktivitas
                                 </Button>
                             </CardContent>
                         </Card>
@@ -235,15 +235,15 @@ export default function Show({ communityClubActivity }: Props) {
                         {/* Activity Stats */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Activity Information</CardTitle>
+                                <CardTitle>Informasi Aktivitas</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-3">
                                 <div className="flex justify-between">
-                                    <span className="text-sm text-gray-500">Created</span>
+                                    <span className="text-sm text-gray-500">Dibuat</span>
                                     <span className="text-sm">{new Date(communityClubActivity.created_at).toLocaleDateString()}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-sm text-gray-500">Last Updated</span>
+                                    <span className="text-sm text-gray-500">Terakhir Diperbarui</span>
                                     <span className="text-sm">{new Date(communityClubActivity.updated_at).toLocaleDateString()}</span>
                                 </div>
                                 <div className="flex justify-between">

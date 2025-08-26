@@ -31,6 +31,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
 
     const handleDelete = () => {
         if (confirm('Hapus pesan ini? Tindakan ini tidak dapat dibatalkan.')) {
+            // This string was already translated in the original file. No change needed.
             router.delete(route('admin.contact-messages.destroy', contactMessage.id));
         }
     };
@@ -75,7 +76,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
 
     return (
         <AppLayout>
-            <Head title={`Message from ${contactMessage.name} - Admin`} />
+            <Head title={`Pesan dari ${contactMessage.name} - Admin`} />
 
             {/* Email Header */}
             <div className="relative mb-8 overflow-hidden rounded-2xl border border-amber-500/20 bg-gradient-to-br from-zinc-900 via-zinc-800 to-amber-900/20 p-6">
@@ -91,12 +92,12 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                             >
                                 <Link href={route('admin.contact-messages.index')}>
                                     <ArrowLeft className="mr-2 h-4 w-4" />
-                                    Back to Inbox
+                                    Kembali ke Kotak Masuk
                                 </Link>
                             </Button>
                             <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-600/20 px-4 py-2">
                                 <Shield className="h-4 w-4 text-amber-400" />
-                                <span className="text-sm font-medium text-amber-400">Contact Message</span>
+                                <span className="text-sm font-medium text-amber-400">Pesan Kontak</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -106,7 +107,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                                 className="border-green-500/30 bg-green-500/10 text-green-400 hover:bg-green-500/20"
                             >
                                 <Reply className="mr-2 h-4 w-4" />
-                                Reply
+                                Balas
                             </Button>
                             <Button
                                 variant="outline"
@@ -114,14 +115,14 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                                 className="border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20"
                             >
                                 <Trash2 className="mr-2 h-4 w-4" />
-                                Delete
+                                Hapus
                             </Button>
                         </div>
                     </div>
 
                     <h1 className="mb-2 text-3xl font-bold text-white">{contactMessage.subject}</h1>
                     <p className="text-lg text-zinc-300">
-                        Message from <span className="font-semibold text-amber-400">{contactMessage.name}</span>
+                        Pesan dari <span className="font-semibold text-amber-400">{contactMessage.name}</span>
                     </p>
                 </div>
             </div>
@@ -180,7 +181,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                     <div className="section-card">
                         <div className="mb-4 flex items-center gap-3">
                             {getStatusIcon(status)}
-                            <h3 className="text-lg font-bold text-white">Message Content</h3>
+                            <h3 className="text-lg font-bold text-white">Konten Pesan</h3>
                         </div>
 
                         <div className="rounded-lg bg-zinc-800/30 p-6">
@@ -192,14 +193,14 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
 
                     {/* Technical Information */}
                     <div className="section-card">
-                        <h3 className="mb-4 text-lg font-bold text-white">Technical Information</h3>
+                        <h3 className="mb-4 text-lg font-bold text-white">Informasi Teknis</h3>
                         <div className="space-y-4">
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 {contactMessage.ip_address && (
                                     <div className="flex items-center gap-3 rounded-lg bg-zinc-800/50 p-3">
                                         <Globe className="h-4 w-4 text-blue-400" />
                                         <div>
-                                            <p className="text-sm font-medium text-zinc-300">IP Address</p>
+                                            <p className="text-sm font-medium text-zinc-300">Alamat IP</p>
                                             <p className="text-sm text-zinc-500">{contactMessage.ip_address}</p>
                                         </div>
                                     </div>
@@ -208,7 +209,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                                 <div className="flex items-center gap-3 rounded-lg bg-zinc-800/50 p-3">
                                     <Calendar className="h-4 w-4 text-green-400" />
                                     <div>
-                                        <p className="text-sm font-medium text-zinc-300">Sent Date</p>
+                                        <p className="text-sm font-medium text-zinc-300">Tanggal Dikirim</p>
                                         <p className="text-sm text-zinc-500">{formatDate(contactMessage.created_at)}</p>
                                     </div>
                                 </div>
@@ -217,7 +218,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                                     <div className="flex items-center gap-3 rounded-lg bg-zinc-800/50 p-3">
                                         <MailCheck className="h-4 w-4 text-amber-400" />
                                         <div>
-                                            <p className="text-sm font-medium text-zinc-300">Read At</p>
+                                            <p className="text-sm font-medium text-zinc-300">Dibaca Pada</p>
                                             <p className="text-sm text-zinc-500">{formatDate(contactMessage.read_at)}</p>
                                         </div>
                                     </div>
@@ -226,7 +227,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
 
                             {contactMessage.user_agent && (
                                 <div className="rounded-lg bg-zinc-800/50 p-4">
-                                    <p className="mb-2 text-sm font-medium text-zinc-300">User Agent</p>
+                                    <p className="mb-2 text-sm font-medium text-zinc-300">Agen Pengguna</p>
                                     <p className="font-mono text-xs break-all text-zinc-500">{contactMessage.user_agent}</p>
                                 </div>
                             )}
@@ -243,19 +244,19 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                                 <User className="h-6 w-6 text-amber-400" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-white">Sender Info</h3>
-                                <p className="text-sm text-zinc-400">Contact details</p>
+                                <h3 className="text-lg font-bold text-white">Info Pengirim</h3>
+                                <p className="text-sm text-zinc-400">Detail kontak</p>
                             </div>
                         </div>
 
                         <div className="space-y-3">
                             <div className="rounded-lg bg-zinc-800/50 p-4">
-                                <p className="mb-2 text-sm font-medium text-zinc-300">Full Name</p>
+                                <p className="mb-2 text-sm font-medium text-zinc-300">Nama Lengkap</p>
                                 <p className="font-semibold text-white">{contactMessage.name}</p>
                             </div>
 
                             <div className="rounded-lg bg-zinc-800/50 p-4">
-                                <p className="mb-2 text-sm font-medium text-zinc-300">Email Address</p>
+                                <p className="mb-2 text-sm font-medium text-zinc-300">Alamat Email</p>
                                 <a href={`mailto:${contactMessage.email}`} className="font-medium text-amber-400 hover:text-amber-300">
                                     {contactMessage.email}
                                 </a>
@@ -263,7 +264,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
 
                             {contactMessage.phone && (
                                 <div className="rounded-lg bg-zinc-800/50 p-4">
-                                    <p className="mb-2 text-sm font-medium text-zinc-300">Phone Number</p>
+                                    <p className="mb-2 text-sm font-medium text-zinc-300">Nomor Telepon</p>
                                     <a href={`tel:${contactMessage.phone}`} className="font-medium text-amber-400 hover:text-amber-300">
                                         {contactMessage.phone}
                                     </a>
@@ -279,14 +280,14 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                                 <MailCheck className="h-6 w-6 text-blue-400" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-white">Status Management</h3>
-                                <p className="text-sm text-zinc-400">Change message status</p>
+                                <h3 className="text-lg font-bold text-white">Manajemen Status</h3>
+                                <p className="text-sm text-zinc-400">Ubah status pesan</p>
                             </div>
                         </div>
 
                         <div className="space-y-4">
                             <div>
-                                <label className="mb-2 block text-sm font-medium text-zinc-300">Message Status</label>
+                                <label className="mb-2 block text-sm font-medium text-zinc-300">Status Pesan</label>
                                 <Select value={status} onValueChange={handleStatusChange}>
                                     <SelectTrigger className="border-zinc-600 bg-zinc-800/50 text-zinc-100">
                                         <SelectValue />
@@ -300,7 +301,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                             </div>
 
                             <div className="rounded-lg bg-zinc-800/50 p-4">
-                                <p className="text-sm text-zinc-400">Change message status to manage your contact workflow efficiently.</p>
+                                <p className="text-sm text-zinc-400">Ubah status pesan untuk mengelola alur kerja kontak Anda secara efisien.</p>
                             </div>
                         </div>
                     </div>
@@ -312,8 +313,8 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                                 <Reply className="h-6 w-6 text-green-400" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-white">Quick Actions</h3>
-                                <p className="text-sm text-zinc-400">Respond to message</p>
+                                <h3 className="text-lg font-bold text-white">Tindakan Cepat</h3>
+                                <p className="text-sm text-zinc-400">Tanggapi pesan</p>
                             </div>
                         </div>
 
@@ -325,7 +326,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                             >
                                 <a href={`mailto:${contactMessage.email}?subject=Re: ${contactMessage.subject}`}>
                                     <Mail className="mr-3 h-4 w-4" />
-                                    Reply via Email
+                                    Balas via Email
                                 </a>
                             </Button>
 
@@ -337,7 +338,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                                 >
                                     <a href={`tel:${contactMessage.phone}`}>
                                         <Phone className="mr-3 h-4 w-4" />
-                                        Call Phone
+                                        Telepon
                                     </a>
                                 </Button>
                             )}
@@ -349,7 +350,7 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                                 disabled={status === 'archived'}
                             >
                                 <Archive className="mr-3 h-4 w-4" />
-                                Archive Message
+                                Arsipkan Pesan
                             </Button>
                         </div>
                     </div>

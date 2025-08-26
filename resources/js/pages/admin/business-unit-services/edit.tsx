@@ -104,24 +104,24 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                     <Link href={route('admin.business-unit-services.index')}>
                         <Button variant="outline" size="sm">
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Services
+                            Kembali ke Layanan
                         </Button>
                     </Link>
-                    <h1 className="text-3xl font-bold">Edit Business Unit Service</h1>
+                    <h1 className="text-3xl font-bold">Ubah Layanan Unit Bisnis</h1>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Basic Information</CardTitle>
+                            <CardTitle>Informasi Dasar</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <div>
-                                    <Label htmlFor="business_unit_id">Business Unit *</Label>
+                                    <Label htmlFor="business_unit_id">Unit Bisnis *</Label>
                                     <Select value={formData.business_unit_id} onValueChange={(value) => handleInputChange('business_unit_id', value)}>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select Business Unit" />
+                                            <SelectValue placeholder="Pilih Unit Bisnis" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {businessUnits.map((unit) => (
@@ -135,36 +135,36 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="title">Title *</Label>
+                                    <Label htmlFor="title">Judul *</Label>
                                     <Input
                                         id="title"
                                         value={formData.title}
                                         onChange={(e) => handleInputChange('title', e.target.value)}
-                                        placeholder="Service title"
+                                        placeholder="Judul layanan"
                                     />
                                     {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
                                 </div>
                             </div>
 
                             <div>
-                                <Label htmlFor="description">Description *</Label>
+                                <Label htmlFor="description">Deskripsi *</Label>
                                 <Textarea
                                     id="description"
                                     value={formData.description}
                                     onChange={(e) => handleInputChange('description', e.target.value)}
-                                    placeholder="Service description"
+                                    placeholder="Deskripsi layanan"
                                     rows={4}
                                 />
                                 {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
                             </div>
 
                             <div>
-                                <Label htmlFor="short_description">Short Description</Label>
+                                <Label htmlFor="short_description">Deskripsi Singkat</Label>
                                 <Textarea
                                     id="short_description"
                                     value={formData.short_description}
                                     onChange={(e) => handleInputChange('short_description', e.target.value)}
-                                    placeholder="Brief description for listings"
+                                    placeholder="Deskripsi singkat untuk daftar"
                                     rows={2}
                                 />
                                 {errors.short_description && <p className="mt-1 text-sm text-red-600">{errors.short_description}</p>}
@@ -172,7 +172,7 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
 
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                                 <div>
-                                    <Label htmlFor="price">Price</Label>
+                                    <Label htmlFor="price">Harga</Label>
                                     <Input
                                         id="price"
                                         type="number"
@@ -185,12 +185,12 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="duration">Duration</Label>
+                                    <Label htmlFor="duration">Durasi</Label>
                                     <Input
                                         id="duration"
                                         value={formData.duration}
                                         onChange={(e) => handleInputChange('duration', e.target.value)}
-                                        placeholder="e.g., 2 weeks"
+                                        placeholder="mis., 2 minggu"
                                     />
                                     {errors.duration && <p className="mt-1 text-sm text-red-600">{errors.duration}</p>}
                                 </div>
@@ -202,8 +202,8 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="active">Active</SelectItem>
-                                            <SelectItem value="inactive">Inactive</SelectItem>
+                                            <SelectItem value="active">Aktif</SelectItem>
+                                            <SelectItem value="inactive">Nonaktif</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     {errors.status && <p className="mt-1 text-sm text-red-600">{errors.status}</p>}
@@ -216,28 +216,32 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                                     checked={formData.featured}
                                     onCheckedChange={(checked) => handleInputChange('featured', checked)}
                                 />
-                                <Label htmlFor="featured">Featured Service</Label>
+                                <Label htmlFor="featured">Layanan Unggulan</Label>
                             </div>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Service Image</CardTitle>
+                            <CardTitle>Gambar Layanan</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {currentImage && (
                                 <div className="flex items-center gap-4">
-                                    <img src={`/storage/${currentImage}`} alt="Current service image" className="h-32 w-32 rounded-lg object-cover" />
+                                    <img
+                                        src={`/storage/${currentImage}`}
+                                        alt="Gambar layanan saat ini"
+                                        className="h-32 w-32 rounded-lg object-cover"
+                                    />
                                     <div className="flex items-center gap-2">
                                         <Eye className="h-4 w-4" />
-                                        <span className="text-sm text-gray-600">Current image</span>
+                                        <span className="text-sm text-gray-600">Gambar saat ini</span>
                                     </div>
                                 </div>
                             )}
 
                             <div>
-                                <Label htmlFor="image">Update Service Image</Label>
+                                <Label htmlFor="image">Perbarui Gambar Layanan</Label>
                                 <Input
                                     id="image"
                                     type="file"
@@ -251,7 +255,7 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Features</CardTitle>
+                            <CardTitle>Fitur</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {formData.features.map((feature, index) => (
@@ -259,7 +263,7 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                                     <Input
                                         value={feature}
                                         onChange={(e) => handleArrayChange('features', index, e.target.value)}
-                                        placeholder="Feature description"
+                                        placeholder="Deskripsi fitur"
                                     />
                                     <Button type="button" variant="outline" size="sm" onClick={() => removeArrayItem('features', index)}>
                                         <X className="h-4 w-4" />
@@ -268,14 +272,14 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                             ))}
                             <Button type="button" variant="outline" onClick={() => addArrayItem('features')}>
                                 <Plus className="mr-2 h-4 w-4" />
-                                Add Feature
+                                Tambah Fitur
                             </Button>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Technologies</CardTitle>
+                            <CardTitle>Teknologi</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {formData.technologies.map((tech, index) => (
@@ -283,7 +287,7 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                                     <Input
                                         value={tech}
                                         onChange={(e) => handleArrayChange('technologies', index, e.target.value)}
-                                        placeholder="Technology name"
+                                        placeholder="Nama teknologi"
                                     />
                                     <Button type="button" variant="outline" size="sm" onClick={() => removeArrayItem('technologies', index)}>
                                         <X className="h-4 w-4" />
@@ -292,14 +296,14 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                             ))}
                             <Button type="button" variant="outline" onClick={() => addArrayItem('technologies')}>
                                 <Plus className="mr-2 h-4 w-4" />
-                                Add Technology
+                                Tambah Teknologi
                             </Button>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Process Steps</CardTitle>
+                            <CardTitle>Langkah Proses</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {formData.process_steps.map((step, index) => (
@@ -308,13 +312,13 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                                         <Input
                                             value={step.title}
                                             onChange={(e) => handleArrayChange('process_steps', index, { ...step, title: e.target.value })}
-                                            placeholder="Step title"
+                                            placeholder="Judul langkah"
                                         />
                                         <Input
                                             type="number"
                                             value={step.order}
                                             onChange={(e) => handleArrayChange('process_steps', index, { ...step, order: parseInt(e.target.value) })}
-                                            placeholder="Order"
+                                            placeholder="Urutan"
                                             className="w-20"
                                         />
                                         <Button type="button" variant="outline" size="sm" onClick={() => removeArrayItem('process_steps', index)}>
@@ -324,23 +328,23 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                                     <Textarea
                                         value={step.description}
                                         onChange={(e) => handleArrayChange('process_steps', index, { ...step, description: e.target.value })}
-                                        placeholder="Step description"
+                                        placeholder="Deskripsi langkah"
                                         rows={2}
                                     />
                                 </div>
                             ))}
                             <Button type="button" variant="outline" onClick={() => addArrayItem('process_steps')}>
                                 <Plus className="mr-2 h-4 w-4" />
-                                Add Process Step
+                                Tambah Langkah Proses
                             </Button>
                         </CardContent>
                     </Card>
 
                     <div className="flex justify-end gap-4">
                         <Link href={route('admin.business-unit-services.index')}>
-                            <Button variant="outline">Cancel</Button>
+                            <Button variant="outline">Batal</Button>
                         </Link>
-                        <Button type="submit">Update Service</Button>
+                        <Button type="submit">Perbarui Layanan</Button>
                     </div>
                 </form>
             </div>

@@ -54,8 +54,8 @@ export default function MediaShow({ media }: MediaShowProps) {
     const [copiedUrl, setCopiedUrl] = useState(false);
 
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: '/admin' },
-        { title: 'Media Manager', href: '/admin/media' },
+        { title: 'Dasbor', href: '/admin' },
+        { title: 'Manajer Media', href: '/admin/media' },
         { title: media.title || media.original_filename, href: `/admin/media/${media.id}` },
     ];
 
@@ -149,7 +149,7 @@ export default function MediaShow({ media }: MediaShowProps) {
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">{media.title || media.original_filename}</h1>
-                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">Media file details and properties</p>
+                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">Detail dan properti file media</p>
                     </div>
 
                     <div className="flex space-x-3">

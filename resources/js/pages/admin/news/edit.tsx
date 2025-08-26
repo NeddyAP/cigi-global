@@ -166,7 +166,7 @@ export default function EditNews({ news, auth }: EditNewsProps) {
                                         onPressedChange={(pressed) => setData('is_published', pressed)}
                                         aria-label="Publikasikan Artikel"
                                     >
-                                        {data.is_published ? 'Published' : 'Draft'}
+                                        {data.is_published ? 'Diterbitkan' : 'Draf'}
                                     </Toggle>
                                     <Label>Status Publikasi</Label>
                                 </div>
@@ -177,7 +177,7 @@ export default function EditNews({ news, auth }: EditNewsProps) {
                                         onPressedChange={(pressed) => setData('is_featured', pressed)}
                                         aria-label="Artikel Unggulan"
                                     >
-                                        {data.is_featured ? 'Featured' : 'Normal'}
+                                        {data.is_featured ? 'Unggulan' : 'Normal'}
                                     </Toggle>
                                     <Label>Artikel Unggulan</Label>
                                 </div>
@@ -288,7 +288,7 @@ export default function EditNews({ news, auth }: EditNewsProps) {
                             <a href={route('admin.news.show', news.slug)}>Batal</a>
                         </Button>
                         <LoadingButton type="submit" loading={processing} loadingText="Menyimpan..." icon="save" className="cta-button">
-                            {data.is_published ? 'Update & Publish' : 'Simpan Draft'}
+                            {data.is_published ? 'Perbarui & Terbitkan' : 'Simpan Draft'}
                         </LoadingButton>
                     </div>
                 </form>

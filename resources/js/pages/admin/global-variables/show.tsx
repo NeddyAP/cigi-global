@@ -14,13 +14,13 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
     const [copied, setCopied] = useState(false);
 
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: '/admin' },
-        { title: 'Global Variables', href: '/admin/global-variables' },
+        { title: 'Dasbor', href: '/admin' },
+        { title: 'Variabel Global', href: '/admin/global-variables' },
         { title: variable.key, href: `/admin/global-variables/${variable.id}` },
     ];
 
     const handleDelete = () => {
-        if (confirm(`Are you sure you want to delete variable ${variable.key}?`)) {
+        if (confirm(`Apakah Anda yakin ingin menghapus variabel ${variable.key}?`)) {
             router.delete(route('admin.global-variables.destroy', variable.id));
         }
     };
@@ -31,7 +31,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
-            console.error('Failed to copy: ', err);
+            console.error('Gagal menyalin: ', err);
         }
     };
 
@@ -50,22 +50,22 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
 
     const getCategoryLabel = (category: string) => {
         const labels = {
-            company: 'Company Information',
-            contact: 'Contact Information',
-            social: 'Social Media',
-            general: 'General',
+            company: 'Informasi Perusahaan',
+            contact: 'Informasi Kontak',
+            social: 'Media Sosial',
+            general: 'Umum',
             seo: 'SEO',
-            config: 'Configuration',
+            config: 'Konfigurasi',
         };
         return labels[category as keyof typeof labels] || category;
     };
 
     const formatValue = (value: string, type: string) => {
-        if (!value) return '(empty)';
+        if (!value) return '(kosong)';
 
         switch (type) {
             case 'boolean':
-                return value === '1' ? 'True' : 'False';
+                return value === '1' ? 'Benar' : 'Salah';
             case 'json':
                 try {
                     return JSON.stringify(JSON.parse(value), null, 2);
@@ -103,35 +103,35 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                 {variable.is_public ? (
                                     <>
                                         <Globe className="mr-1 h-4 w-4 text-green-400" />
-                                        <span className="text-sm text-green-400">Public</span>
+                                        <span className="text-sm text-green-400">Publik</span>
                                     </>
                                 ) : (
                                     <>
                                         <Lock className="mr-1 h-4 w-4 text-red-400" />
-                                        <span className="text-sm text-red-400">Private</span>
+                                        <span className="text-sm text-red-400">Privat</span>
                                     </>
                                 )}
                             </div>
                         </div>
-                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">{variable.description || 'Global variable details'}</p>
+                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">{variable.description || 'Detail variabel global'}</p>
                     </div>
 
                     <div className="flex space-x-3">
                         <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                             <Link href={route('admin.global-variables.index')}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
-                                Back to List
+                                Kembali ke Daftar
                             </Link>
                         </Button>
                         <Button variant="outline" asChild className="border-amber-600 text-amber-400 hover:bg-amber-600 hover:text-white">
                             <Link href={route('admin.global-variables.edit', variable.id)}>
                                 <Edit className="mr-2 h-4 w-4" />
-                                Edit
+                                Ubah
                             </Link>
                         </Button>
                         <Button variant="destructive" onClick={handleDelete}>
                             <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
+                            Hapus
                         </Button>
                     </div>
                 </div>
@@ -142,12 +142,12 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                         {/* Variable Info */}
                         <div className="section-card p-6">
                             <div className="mb-6 border-b border-zinc-700 pb-4">
-                                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Variable Information</h3>
+                                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Informasi Variabel</h3>
                             </div>
                             <div className="space-y-6">
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div>
-                                        <label className="mb-2 block text-sm font-medium text-zinc-300">Key</label>
+                                        <label className="mb-2 block text-sm font-medium text-zinc-300">Kunci</label>
                                         <div className="flex items-center space-x-2">
                                             <p className="rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 font-mono text-sm text-white">
                                                 {variable.key}
@@ -158,13 +158,13 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                                 onClick={() => copyToClipboard(variable.key)}
                                                 className="border-zinc-700 text-zinc-300 hover:bg-zinc-700"
                                             >
-                                                {copied ? 'Copied!' : <Copy className="h-3 w-3" />}
+                                                {copied ? 'Disalin!' : <Copy className="h-3 w-3" />}
                                             </Button>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label className="mb-2 block text-sm font-medium text-zinc-300">Data Type</label>
+                                        <label className="mb-2 block text-sm font-medium text-zinc-300">Tipe Data</label>
                                         <div>
                                             <span
                                                 className={`inline-flex rounded-full border px-3 py-1 text-sm font-semibold ${getTypeColor(variable.type)}`}
@@ -175,7 +175,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                     </div>
 
                                     <div>
-                                        <label className="mb-2 block text-sm font-medium text-zinc-300">Category</label>
+                                        <label className="mb-2 block text-sm font-medium text-zinc-300">Kategori</label>
                                         <div>
                                             <span className="inline-flex items-center rounded-full border border-zinc-700 bg-zinc-800 px-3 py-1 text-sm font-medium text-zinc-300">
                                                 <Tag className="mr-1 h-3 w-3" />
@@ -185,17 +185,17 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                     </div>
 
                                     <div>
-                                        <label className="mb-2 block text-sm font-medium text-zinc-300">Access</label>
+                                        <label className="mb-2 block text-sm font-medium text-zinc-300">Akses</label>
                                         <div className="flex items-center">
                                             {variable.is_public ? (
                                                 <>
                                                     <Globe className="mr-1 h-4 w-4 text-green-400" />
-                                                    <span className="text-sm text-green-400">Public</span>
+                                                    <span className="text-sm text-green-400">Publik</span>
                                                 </>
                                             ) : (
                                                 <>
                                                     <Lock className="mr-1 h-4 w-4 text-red-400" />
-                                                    <span className="text-sm text-red-400">Private</span>
+                                                    <span className="text-sm text-red-400">Privat</span>
                                                 </>
                                             )}
                                         </div>
@@ -204,7 +204,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
 
                                 {variable.description && (
                                     <div>
-                                        <label className="mb-2 block text-sm font-medium text-zinc-300">Description</label>
+                                        <label className="mb-2 block text-sm font-medium text-zinc-300">Deskripsi</label>
                                         <p className="mt-1 text-sm text-zinc-300">{variable.description}</p>
                                     </div>
                                 )}
@@ -215,7 +215,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                         <div className="section-card p-6">
                             <div className="mb-6 border-b border-zinc-700 pb-4">
                                 <div className="flex items-center justify-between">
-                                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Variable Value</h3>
+                                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Nilai Variabel</h3>
                                     <div className="flex items-center space-x-2">
                                         <Button
                                             variant="outline"
@@ -226,12 +226,12 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                             {showValue ? (
                                                 <>
                                                     <EyeOff className="mr-1 h-3 w-3" />
-                                                    Hide
+                                                    Sembunyikan
                                                 </>
                                             ) : (
                                                 <>
                                                     <Eye className="mr-1 h-3 w-3" />
-                                                    Show
+                                                    Tampilkan
                                                 </>
                                             )}
                                         </Button>
@@ -243,7 +243,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                                 className="border-zinc-700 text-zinc-300 hover:bg-zinc-700"
                                             >
                                                 <Copy className="mr-1 h-3 w-3" />
-                                                {copied ? 'Copied!' : 'Copy'}
+                                                {copied ? 'Disalin!' : 'Salin'}
                                             </Button>
                                         )}
                                     </div>
@@ -261,7 +261,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                                             : 'border-red-500/30 bg-red-500/20 text-red-400'
                                                     }`}
                                                 >
-                                                    {variable.value === '1' ? 'True' : 'False'}
+                                                    {variable.value === '1' ? 'Benar' : 'Salah'}
                                                 </span>
                                             </div>
                                         ) : (
@@ -285,7 +285,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                                     className="border-zinc-700 text-zinc-300 hover:bg-zinc-700"
                                                 >
                                                     <a href={variable.value} target="_blank" rel="noopener noreferrer">
-                                                        Visit URL
+                                                        Kunjungi URL
                                                     </a>
                                                 </Button>
                                             </div>
@@ -294,8 +294,8 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                 ) : (
                                     <div className="py-8 text-center text-zinc-500">
                                         <Lock className="mx-auto mb-2 h-8 w-8" />
-                                        <p>Value hidden</p>
-                                        <p className="text-sm">Click "Show" to reveal value</p>
+                                        <p>Nilai disembunyikan</p>
+                                        <p className="text-sm">Klik "Tampilkan" untuk melihat nilai</p>
                                     </div>
                                 )}
                             </div>
@@ -304,7 +304,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                         {/* Usage Examples */}
                         <div className="section-card p-6">
                             <div className="mb-6 border-b border-zinc-700 pb-4">
-                                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Usage Examples</h3>
+                                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Contoh Penggunaan</h3>
                             </div>
                             <div className="space-y-4">
                                 {variable.is_public ? (
@@ -312,7 +312,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                         <h4 className="mb-2 text-sm font-medium text-zinc-300">Frontend (React/JavaScript)</h4>
                                         <div className="rounded-lg border border-zinc-700 bg-zinc-800 p-3">
                                             <code className="text-sm text-zinc-300">
-                                                {`// Using global helper\nconst value = globalVar('${variable.key}');\n\n// Or from props\nconst value = globalVariables.${variable.key};`}
+                                                {`// Menggunakan helper global\nconst value = globalVar('${variable.key}');\n\n// Atau dari props\nconst value = globalVariables.${variable.key};`}
                                             </code>
                                         </div>
                                     </div>
@@ -320,7 +320,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                     <div className="rounded-lg border border-yellow-600/30 bg-yellow-500/10 p-4">
                                         <p className="text-sm text-yellow-400">
                                             <Lock className="mr-1 inline h-4 w-4" />
-                                            This variable is private and can only be accessed from backend/controller.
+                                            Variabel ini privat dan hanya dapat diakses dari backend/controller.
                                         </p>
                                     </div>
                                 )}
@@ -329,7 +329,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                     <h4 className="mb-2 text-sm font-medium text-zinc-300">Backend (Laravel/PHP)</h4>
                                     <div className="rounded-lg border border-zinc-700 bg-zinc-800 p-3">
                                         <code className="text-sm text-zinc-300">
-                                            {`// Using helper\n$value = globalVar('${variable.key}');\n\n// Or model GlobalVariable\n$value = GlobalVariable::getValue('${variable.key}');`}
+                                            {`// Menggunakan helper\n$value = globalVar('${variable.key}');\n\n// Atau model GlobalVariable\n$value = GlobalVariable::getValue('${variable.key}');`}
                                         </code>
                                     </div>
                                 </div>
@@ -342,7 +342,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                         {/* Quick Stats */}
                         <div className="section-card p-6">
                             <div className="mb-6 border-b border-zinc-700 pb-4">
-                                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Statistics</h3>
+                                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Statistik</h3>
                             </div>
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
@@ -351,14 +351,14 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                                 </div>
 
                                 <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
-                                    <span className="text-sm text-zinc-400">Value Length</span>
-                                    <span className="text-sm font-medium text-white">{variable.value ? variable.value.length : 0} characters</span>
+                                    <span className="text-sm text-zinc-400">Panjang Nilai</span>
+                                    <span className="text-sm font-medium text-white">{variable.value ? variable.value.length : 0} karakter</span>
                                 </div>
 
                                 <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
-                                    <span className="text-sm text-zinc-400">Access Level</span>
+                                    <span className="text-sm text-zinc-400">Tingkat Akses</span>
                                     <span className={`text-sm font-medium ${variable.is_public ? 'text-green-400' : 'text-red-400'}`}>
-                                        {variable.is_public ? 'Public' : 'Private'}
+                                        {variable.is_public ? 'Publik' : 'Privat'}
                                     </span>
                                 </div>
                             </div>
@@ -371,7 +371,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                             </div>
                             <div className="space-y-4">
                                 <div className="rounded-lg bg-zinc-800 p-3">
-                                    <label className="mb-1 block text-sm font-medium text-zinc-400">Created</label>
+                                    <label className="mb-1 block text-sm font-medium text-zinc-400">Dibuat</label>
                                     <div className="flex items-center">
                                         <Calendar className="mr-2 h-4 w-4 text-zinc-500" />
                                         <p className="text-sm text-white">{formatDate(variable.created_at)}</p>
@@ -380,7 +380,7 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
 
                                 {variable.updated_at && (
                                     <div className="rounded-lg bg-zinc-800 p-3">
-                                        <label className="mb-1 block text-sm font-medium text-zinc-400">Last Updated</label>
+                                        <label className="mb-1 block text-sm font-medium text-zinc-400">Terakhir Diperbarui</label>
                                         <div className="flex items-center">
                                             <Calendar className="mr-2 h-4 w-4 text-zinc-500" />
                                             <p className="text-sm text-white">{formatDate(variable.updated_at)}</p>
@@ -393,25 +393,25 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                         {/* Quick Actions */}
                         <div className="section-card p-6">
                             <div className="mb-6 border-b border-zinc-700 pb-4">
-                                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Quick Actions</h3>
+                                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Tindakan Cepat</h3>
                             </div>
                             <div className="space-y-3">
                                 <Button variant="outline" asChild className="w-full border-zinc-700 text-zinc-300 hover:bg-zinc-700">
                                     <Link href={route('admin.global-variables.edit', variable.id)}>
                                         <Edit className="mr-2 h-4 w-4" />
-                                        Edit Variable
+                                        Edit Variabel
                                     </Link>
                                 </Button>
 
                                 <Button variant="destructive" onClick={handleDelete} className="w-full">
                                     <Trash2 className="mr-2 h-4 w-4" />
-                                    Delete Variable
+                                    Hapus Variabel
                                 </Button>
 
                                 <Button variant="outline" asChild className="w-full border-zinc-700 text-zinc-300 hover:bg-zinc-700">
                                     <Link href={route('admin.global-variables.create')}>
                                         <Plus className="mr-2 h-4 w-4" />
-                                        Create New Variable
+                                        Buat Variabel Baru
                                     </Link>
                                 </Button>
                             </div>

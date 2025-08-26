@@ -138,7 +138,7 @@ export default function About({ globalVariables }: AboutProps) {
                             <div className="aspect-square overflow-hidden rounded-2xl border border-zinc-800">
                                 <img
                                     src="/assets/cigi-global.jpg"
-                                    alt="CIGI Global Office"
+                                    alt="Kantor CIGI Global"
                                     className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                                 />
                             </div>
@@ -226,7 +226,7 @@ export default function About({ globalVariables }: AboutProps) {
 
                             <img
                                 src={globalVariables.commitment_image}
-                                alt="Commitment"
+                                alt="Komitmen"
                                 className="mx-auto h-96 w-96 rounded-lg object-cover"
                                 loading="lazy"
                                 decoding="async"

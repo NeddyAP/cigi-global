@@ -164,7 +164,7 @@ export default function CreateNews({ auth }: CreateNewsProps) {
                                         onPressedChange={(pressed) => setData('is_published', pressed)}
                                         aria-label="Publikasikan Artikel"
                                     >
-                                        {data.is_published ? 'Publish' : 'Draft'}
+                                        {data.is_published ? 'Terbitkan' : 'Draf'}
                                     </Toggle>
                                     <Label>Status Publikasi</Label>
                                 </div>
@@ -175,7 +175,7 @@ export default function CreateNews({ auth }: CreateNewsProps) {
                                         onPressedChange={(pressed) => setData('is_featured', pressed)}
                                         aria-label="Artikel Unggulan"
                                     >
-                                        {data.is_featured ? 'Featured' : 'Normal'}
+                                        {data.is_featured ? 'Unggulan' : 'Normal'}
                                     </Toggle>
                                     <Label>Artikel Unggulan</Label>
                                 </div>

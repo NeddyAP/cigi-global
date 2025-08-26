@@ -142,17 +142,17 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                 <div className="relative z-10">
                     <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-600/20 px-4 py-2">
                         <Shield className="h-5 w-5 text-amber-400" />
-                        <span className="text-sm font-medium text-amber-400">Inbox - CIGI Global</span>
+                        <span className="text-sm font-medium text-amber-400">Kotak Masuk - CIGI Global</span>
                     </div>
 
                     <h1 className="mb-4 text-4xl font-bold">
-                        <span className="block text-amber-400">Contact</span>
-                        <span className="block text-white">Messages</span>
+                        <span className="block text-amber-400">Pesan</span>
+                        <span className="block text-white">Kontak</span>
                     </h1>
 
                     <p className="max-w-2xl text-lg leading-relaxed text-zinc-300">
-                        Kelola dan balas pesan kontak dari pengunjung website.
-                        <span className="font-semibold text-amber-400"> Inbox terintegrasi</span> untuk komunikasi yang efektif.
+                        Kelola dan balas pesan kontak dari pengunjung situs web.
+                        <span className="font-semibold text-amber-400"> Kotak masuk terintegrasi</span> untuk komunikasi yang efektif.
                     </p>
                 </div>
             </div>
@@ -175,36 +175,36 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                                 <Mail className="h-6 w-6 text-amber-400" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-white">Inbox Stats</h3>
-                                <p className="text-sm text-zinc-400">Message overview</p>
+                                <h3 className="text-lg font-bold text-white">Statistik Kotak Masuk</h3>
+                                <p className="text-sm text-zinc-400">Ikhtisar pesan</p>
                             </div>
                         </div>
                         <div className="space-y-3">
                             <div className="flex items-center justify-between rounded-lg bg-zinc-800/50 p-3">
                                 <div className="flex items-center gap-3">
                                     <Inbox className="h-4 w-4 text-blue-400" />
-                                    <span className="text-sm text-zinc-300">Total Messages</span>
+                                    <span className="text-sm text-zinc-300">Total Pesan</span>
                                 </div>
                                 <span className="font-semibold text-white">{stats.total}</span>
                             </div>
                             <div className="flex items-center justify-between rounded-lg bg-zinc-800/50 p-3">
                                 <div className="flex items-center gap-3">
                                     <MailOpen className="h-4 w-4 text-orange-400" />
-                                    <span className="text-sm text-zinc-300">Unread</span>
+                                    <span className="text-sm text-zinc-300">Belum Dibaca</span>
                                 </div>
                                 <span className="font-semibold text-orange-400">{stats.unread}</span>
                             </div>
                             <div className="flex items-center justify-between rounded-lg bg-zinc-800/50 p-3">
                                 <div className="flex items-center gap-3">
                                     <MailCheck className="h-4 w-4 text-green-400" />
-                                    <span className="text-sm text-zinc-300">Read</span>
+                                    <span className="text-sm text-zinc-300">Sudah Dibaca</span>
                                 </div>
                                 <span className="font-semibold text-green-400">{stats.read}</span>
                             </div>
                             <div className="flex items-center justify-between rounded-lg bg-zinc-800/50 p-3">
                                 <div className="flex items-center gap-3">
                                     <Archive className="h-4 w-4 text-zinc-400" />
-                                    <span className="text-sm text-zinc-300">Archived</span>
+                                    <span className="text-sm text-zinc-300">Diarsipkan</span>
                                 </div>
                                 <span className="font-semibold text-zinc-400">{stats.archived}</span>
                             </div>
@@ -213,38 +213,38 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
 
                     {/* Filters */}
                     <div className="section-card">
-                        <h3 className="mb-4 text-lg font-bold text-white">Filters & Search</h3>
+                        <h3 className="mb-4 text-lg font-bold text-white">Filter & Pencarian</h3>
                         <div className="space-y-4">
                             <div>
-                                <label className="mb-2 block text-sm font-medium text-zinc-300">Search Messages</label>
+                                <label className="mb-2 block text-sm font-medium text-zinc-300">Cari Pesan</label>
                                 <div className="relative">
                                     <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400" />
                                     <Input
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                        placeholder="Search by name, email, subject..."
+                                        placeholder="Cari berdasarkan nama, email, subjek..."
                                         className="border-zinc-600 bg-zinc-800/50 pl-10 text-zinc-100 placeholder-zinc-500"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="mb-2 block text-sm font-medium text-zinc-300">Message Status</label>
+                                <label className="mb-2 block text-sm font-medium text-zinc-300">Status Pesan</label>
                                 <Select value={statusFilter} onValueChange={setStatusFilter}>
                                     <SelectTrigger className="border-zinc-600 bg-zinc-800/50 text-zinc-100">
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">All Messages</SelectItem>
-                                        <SelectItem value="unread">Unread Only</SelectItem>
-                                        <SelectItem value="read">Read Only</SelectItem>
-                                        <SelectItem value="archived">Archived Only</SelectItem>
+                                        <SelectItem value="all">Semua Pesan</SelectItem>
+                                        <SelectItem value="unread">Hanya Belum Dibaca</SelectItem>
+                                        <SelectItem value="read">Hanya Sudah Dibaca</SelectItem>
+                                        <SelectItem value="archived">Hanya Diarsipkan</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
                             <Button onClick={handleSearch} className="w-full bg-amber-600 hover:bg-amber-700">
                                 <Search className="mr-2 h-4 w-4" />
-                                Apply Filters
+                                Terapkan Filter
                             </Button>
                         </div>
                     </div>
@@ -256,7 +256,7 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                     {selectedIds.length > 0 && (
                         <div className="section-card border-amber-500/20 bg-amber-500/10">
                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-medium text-amber-400">{selectedIds.length} messages selected</span>
+                                <span className="text-sm font-medium text-amber-400">{selectedIds.length} pesan terpilih</span>
                                 <div className="flex gap-2">
                                     <Button
                                         size="sm"
@@ -265,7 +265,7 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                                         className="border-green-500/30 bg-green-500/10 text-green-400 hover:bg-green-500/20"
                                     >
                                         <MailCheck className="mr-2 h-4 w-4" />
-                                        Mark Read
+                                        Tandai Dibaca
                                     </Button>
                                     <Button
                                         size="sm"
@@ -274,7 +274,7 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                                         className="border-zinc-500/30 bg-zinc-500/10 text-zinc-400 hover:bg-zinc-500/20"
                                     >
                                         <Archive className="mr-2 h-4 w-4" />
-                                        Archive
+                                        Arsipkan
                                     </Button>
                                     <Button
                                         size="sm"
@@ -283,7 +283,7 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                                         className="border-red-500/30 bg-red-500/20 text-red-400 hover:bg-red-500/30"
                                     >
                                         <Trash2 className="mr-2 h-4 w-4" />
-                                        Delete
+                                        Hapus
                                     </Button>
                                 </div>
                             </div>
@@ -295,7 +295,7 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                         <div className="mb-4 flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <Checkbox checked={selectedIds.length === contactMessages.data.length} onCheckedChange={handleSelectAll} />
-                                <h3 className="text-lg font-bold text-white">Inbox Messages</h3>
+                                <h3 className="text-lg font-bold text-white">Pesan Kotak Masuk</h3>
                                 <Badge className="border border-amber-500/30 bg-amber-500/20 text-amber-400">{contactMessages.total} total</Badge>
                             </div>
                         </div>
@@ -372,7 +372,7 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                                             >
                                                 <Link href={route('admin.contact-messages.show', message.id)}>
                                                     <Eye className="mr-2 h-3 w-3" />
-                                                    View
+                                                    Lihat
                                                 </Link>
                                             </Button>
                                             <Button
@@ -384,14 +384,14 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                                                 }}
                                             >
                                                 <Send className="mr-2 h-3 w-3" />
-                                                Reply
+                                                Balas
                                             </Button>
                                             <Button
                                                 size="sm"
                                                 variant="outline"
                                                 className="border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20"
                                                 onClick={() => {
-                                                    if (confirm('Delete this message?')) {
+                                                    if (confirm('Hapus pesan ini?')) {
                                                         router.delete(route('admin.contact-messages.destroy', message.id));
                                                     }
                                                 }}
@@ -410,8 +410,8 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                                 <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-zinc-800/50">
                                     <Mail className="h-10 w-10 text-zinc-500" />
                                 </div>
-                                <h3 className="mb-2 text-xl font-semibold text-white">No Messages</h3>
-                                <p className="text-zinc-400">Your inbox is empty. New contact messages will appear here.</p>
+                                <h3 className="mb-2 text-xl font-semibold text-white">Tidak Ada Pesan</h3>
+                                <p className="text-zinc-400">Kotak masuk Anda kosong. Pesan kontak baru akan muncul di sini.</p>
                             </div>
                         )}
                     </div>
@@ -421,7 +421,7 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                         <div className="section-card">
                             <div className="flex items-center justify-between">
                                 <div className="text-sm text-zinc-400">
-                                    Showing {contactMessages.from} to {contactMessages.to} of {contactMessages.total} messages
+                                    Menampilkan {contactMessages.from} hingga {contactMessages.to} dari {contactMessages.total} pesan
                                 </div>
                                 <div className="flex items-center space-x-2">
                                     {contactMessages.links.map((link, index) => (

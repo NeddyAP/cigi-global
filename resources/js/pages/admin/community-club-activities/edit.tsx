@@ -88,34 +88,34 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
 
     return (
         <AdminLayout>
-            <Head title={`Edit ${communityClubActivity.title}`} />
+            <Head title={`Ubah ${communityClubActivity.title}`} />
 
             <div className="space-y-6">
                 <div className="flex items-center gap-4">
                     <Link href={route('admin.community-club-activities.index')}>
                         <Button variant="outline" size="sm">
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Activities
+                            Kembali ke Aktivitas
                         </Button>
                     </Link>
-                    <h1 className="text-3xl font-bold">Edit Community Club Activity</h1>
+                    <h1 className="text-3xl font-bold">Ubah Aktivitas Komunitas</h1>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Basic Information</CardTitle>
+                            <CardTitle>Informasi Dasar</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <div>
-                                    <Label htmlFor="community_club_id">Community Club *</Label>
+                                    <Label htmlFor="community_club_id">Komunitas *</Label>
                                     <Select
                                         value={formData.community_club_id}
                                         onValueChange={(value) => handleInputChange('community_club_id', value)}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select Community Club" />
+                                            <SelectValue placeholder="Pilih Komunitas" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {communityClubs.map((club) => (
@@ -129,36 +129,36 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="title">Title *</Label>
+                                    <Label htmlFor="title">Judul *</Label>
                                     <Input
                                         id="title"
                                         value={formData.title}
                                         onChange={(e) => handleInputChange('title', e.target.value)}
-                                        placeholder="Activity title"
+                                        placeholder="Judul aktivitas"
                                     />
                                     {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
                                 </div>
                             </div>
 
                             <div>
-                                <Label htmlFor="description">Description *</Label>
+                                <Label htmlFor="description">Deskripsi *</Label>
                                 <Textarea
                                     id="description"
                                     value={formData.description}
                                     onChange={(e) => handleInputChange('description', e.target.value)}
-                                    placeholder="Activity description"
+                                    placeholder="Deskripsi aktivitas"
                                     rows={4}
                                 />
                                 {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
                             </div>
 
                             <div>
-                                <Label htmlFor="short_description">Short Description</Label>
+                                <Label htmlFor="short_description">Deskripsi Singkat</Label>
                                 <Textarea
                                     id="short_description"
                                     value={formData.short_description}
                                     onChange={(e) => handleInputChange('short_description', e.target.value)}
-                                    placeholder="Brief description for listings"
+                                    placeholder="Deskripsi singkat untuk daftar"
                                     rows={2}
                                 />
                                 {errors.short_description && <p className="mt-1 text-sm text-red-600">{errors.short_description}</p>}
@@ -166,24 +166,24 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
 
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                                 <div>
-                                    <Label htmlFor="max_participants">Max Participants</Label>
+                                    <Label htmlFor="max_participants">Jumlah Peserta Maks</Label>
                                     <Input
                                         id="max_participants"
                                         type="number"
                                         value={formData.max_participants}
                                         onChange={(e) => handleInputChange('max_participants', e.target.value)}
-                                        placeholder="e.g., 20"
+                                        placeholder="contoh: 20"
                                     />
                                     {errors.max_participants && <p className="mt-1 text-sm text-red-600">{errors.max_participants}</p>}
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="duration">Duration</Label>
+                                    <Label htmlFor="duration">Durasi</Label>
                                     <Input
                                         id="duration"
                                         value={formData.duration}
                                         onChange={(e) => handleInputChange('duration', e.target.value)}
-                                        placeholder="e.g., 2 hours"
+                                        placeholder="contoh: 2 jam"
                                     />
                                     {errors.duration && <p className="mt-1 text-sm text-red-600">{errors.duration}</p>}
                                 </div>
@@ -195,8 +195,8 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="active">Active</SelectItem>
-                                            <SelectItem value="inactive">Inactive</SelectItem>
+                                            <SelectItem value="active">Aktif</SelectItem>
+                                            <SelectItem value="inactive">Nonaktif</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     {errors.status && <p className="mt-1 text-sm text-red-600">{errors.status}</p>}
@@ -209,47 +209,47 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
                                     checked={formData.featured}
                                     onCheckedChange={(checked) => handleInputChange('featured', checked)}
                                 />
-                                <Label htmlFor="featured">Featured Activity</Label>
+                                <Label htmlFor="featured">Aktivitas Unggulan</Label>
                             </div>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Activity Details</CardTitle>
+                            <CardTitle>Detail Aktivitas</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <div>
-                                    <Label htmlFor="schedule">Schedule</Label>
+                                    <Label htmlFor="schedule">Jadwal</Label>
                                     <Input
                                         id="schedule"
                                         value={formData.schedule}
                                         onChange={(e) => handleInputChange('schedule', e.target.value)}
-                                        placeholder="e.g., Every Tuesday at 7 PM"
+                                        placeholder="contoh: Setiap Selasa jam 19:00"
                                     />
                                     {errors.schedule && <p className="mt-1 text-sm text-red-600">{errors.schedule}</p>}
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="location">Location</Label>
+                                    <Label htmlFor="location">Lokasi</Label>
                                     <Input
                                         id="location"
                                         value={formData.location}
                                         onChange={(e) => handleInputChange('location', e.target.value)}
-                                        placeholder="e.g., Community Center"
+                                        placeholder="contoh: Pusat Komunitas"
                                     />
                                     {errors.location && <p className="mt-1 text-sm text-red-600">{errors.location}</p>}
                                 </div>
                             </div>
 
                             <div>
-                                <Label htmlFor="contact_info">Contact Information</Label>
+                                <Label htmlFor="contact_info">Informasi Kontak</Label>
                                 <Input
                                     id="contact_info"
                                     value={formData.contact_info}
                                     onChange={(e) => handleInputChange('contact_info', e.target.value)}
-                                    placeholder="e.g., john@example.com or (555) 123-4567"
+                                    placeholder="mis., john@example.com atau (555) 123-4567"
                                 />
                                 {errors.contact_info && <p className="mt-1 text-sm text-red-600">{errors.contact_info}</p>}
                             </div>
@@ -265,12 +265,12 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
                                 <div className="flex items-center gap-4">
                                     <img
                                         src={`/storage/${currentImage}`}
-                                        alt="Current activity image"
+                                        alt="Gambar aktivitas saat ini"
                                         className="h-32 w-32 rounded-lg object-cover"
                                     />
                                     <div className="flex items-center gap-2">
                                         <Eye className="h-4 w-4" />
-                                        <span className="text-sm text-gray-600">Current image</span>
+                                        <span className="text-sm text-gray-600">Gambar saat ini</span>
                                     </div>
                                 </div>
                             )}
@@ -290,7 +290,7 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Benefits</CardTitle>
+                            <CardTitle>Manfaat</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {formData.benefits.map((benefit, index) => (
@@ -298,7 +298,7 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
                                     <Input
                                         value={benefit}
                                         onChange={(e) => handleArrayChange('benefits', index, e.target.value)}
-                                        placeholder="Benefit description"
+                                        placeholder="Deskripsi manfaat"
                                     />
                                     <Button type="button" variant="outline" size="sm" onClick={() => removeArrayItem('benefits', index)}>
                                         <X className="h-4 w-4" />
@@ -307,14 +307,14 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
                             ))}
                             <Button type="button" variant="outline" onClick={() => addArrayItem('benefits')}>
                                 <Plus className="mr-2 h-4 w-4" />
-                                Add Benefit
+                                Tambah Manfaat
                             </Button>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Requirements</CardTitle>
+                            <CardTitle>Persyaratan</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {formData.requirements.map((requirement, index) => (
@@ -322,7 +322,7 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
                                     <Input
                                         value={requirement}
                                         onChange={(e) => handleArrayChange('requirements', index, e.target.value)}
-                                        placeholder="Requirement description"
+                                        placeholder="Deskripsi persyaratan"
                                     />
                                     <Button type="button" variant="outline" size="sm" onClick={() => removeArrayItem('requirements', index)}>
                                         <X className="h-4 w-4" />
@@ -331,16 +331,16 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
                             ))}
                             <Button type="button" variant="outline" onClick={() => addArrayItem('requirements')}>
                                 <Plus className="mr-2 h-4 w-4" />
-                                Add Requirement
+                                Tambah Persyaratan
                             </Button>
                         </CardContent>
                     </Card>
 
                     <div className="flex justify-end gap-4">
                         <Link href={route('admin.community-club-activities.index')}>
-                            <Button variant="outline">Cancel</Button>
+                            <Button variant="outline">Batal</Button>
                         </Link>
-                        <Button type="submit">Update Activity</Button>
+                        <Button type="submit">Perbarui Aktivitas</Button>
                     </div>
                 </form>
             </div>

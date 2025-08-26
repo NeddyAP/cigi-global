@@ -125,6 +125,10 @@ export interface CommunityClub {
     description?: string;
     type: string;
     activities?: string;
+    more_about?: Array<{
+        title: string;
+        description: string;
+    }>;
     image?: string;
     contact_person?: string;
     contact_phone?: string;

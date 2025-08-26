@@ -9,13 +9,13 @@ interface AdminGlobalVariablesIndexProps {
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/admin' },
-    { title: 'Global Variables', href: '/admin/global-variables' },
+    { title: 'Dasbor', href: '/admin' },
+    { title: 'Variabel Global', href: '/admin/global-variables' },
 ];
 
 export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVariablesIndexProps) {
     const handleDelete = (variable: GlobalVariable) => {
-        if (confirm(`Are you sure you want to delete variable ${variable.key}?`)) {
+        if (confirm(`Apakah Anda yakin ingin menghapus variabel ${variable.key}?`)) {
             router.delete(route('admin.global-variables.destroy', variable.id));
         }
     };
@@ -46,14 +46,14 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Global Variables</h1>
-                        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">Manage global settings and website information</p>
+                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Variabel Global</h1>
+                        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">Kelola pengaturan global dan informasi situs web</p>
                     </div>
 
                     <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                         <Link href={route('admin.global-variables.create')}>
                             <Plus className="mr-2 h-4 w-4" />
-                            Add Variable
+                            Tambah Variabel
                         </Link>
                     </Button>
                 </div>
@@ -61,11 +61,11 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                 {Object.keys(variables).length === 0 ? (
                     <div className="section-card p-12">
                         <div className="text-center">
-                            <div className="text-zinc-500 dark:text-zinc-400">No global variables registered yet.</div>
+                            <div className="text-zinc-500 dark:text-zinc-400">Belum ada variabel global yang terdaftar.</div>
                             <Button variant="outline" asChild className="mt-4 border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                                 <Link href={route('admin.global-variables.create')}>
                                     <Plus className="mr-2 h-4 w-4" />
-                                    Add First Variable
+                                    Tambah Variabel Pertama
                                 </Link>
                             </Button>
                         </div>
@@ -76,12 +76,12 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                             <div key={category} className="section-card">
                                 <div className="border-b border-zinc-700 px-6 py-4">
                                     <h3 className="text-lg font-medium text-zinc-900 capitalize dark:text-white">
-                                        {category === 'company' && 'Company Information'}
-                                        {category === 'contact' && 'Contact Information'}
-                                        {category === 'homepage' && 'Homepage'}
-                                        {category === 'about_us' && 'About Us'}
-                                        {category === 'social' && 'Social Media'}
-                                        {category === 'general' && 'General'}
+                                        {category === 'company' && 'Informasi Perusahaan'}
+                                        {category === 'contact' && 'Informasi Kontak'}
+                                        {category === 'homepage' && 'Halaman Utama'}
+                                        {category === 'about_us' && 'Tentang Kami'}
+                                        {category === 'social' && 'Media Sosial'}
+                                        {category === 'general' && 'Umum'}
                                         {!['company', 'contact', 'social', 'general', 'homepage', 'about_us'].includes(category) && category}
                                     </h3>
                                 </div>
@@ -90,19 +90,19 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                                         <thead className="bg-zinc-800">
                                             <tr>
                                                 <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-zinc-300 uppercase">
-                                                    Key
+                                                    Kunci
                                                 </th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-zinc-300 uppercase">
-                                                    Value
+                                                    Nilai
                                                 </th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-zinc-300 uppercase">
-                                                    Type
+                                                    Tipe
                                                 </th>
                                                 <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-zinc-300 uppercase">
-                                                    Visibility
+                                                    Visibilitas
                                                 </th>
                                                 <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-zinc-300 uppercase">
-                                                    Actions
+                                                    Tindakan
                                                 </th>
                                             </tr>
                                         </thead>
@@ -125,7 +125,7 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                                                                             : 'border-red-500/30 bg-red-500/20 text-red-400'
                                                                     }`}
                                                                 >
-                                                                    {variable.value === '1' ? 'Yes' : 'No'}
+                                                                    {variable.value === '1' ? 'Ya' : 'Tidak'}
                                                                 </span>
                                                             ) : (
                                                                 <span className={variable.type === 'textarea' ? 'whitespace-pre-wrap' : ''}>
@@ -146,12 +146,12 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                                                             {variable.is_public ? (
                                                                 <>
                                                                     <Globe className="mr-1 h-4 w-4 text-green-400" />
-                                                                    <span className="text-sm text-green-400">Public</span>
+                                                                    <span className="text-sm text-green-400">Publik</span>
                                                                 </>
                                                             ) : (
                                                                 <>
                                                                     <Lock className="mr-1 h-4 w-4 text-red-400" />
-                                                                    <span className="text-sm text-red-400">Private</span>
+                                                                    <span className="text-sm text-red-400">Privat</span>
                                                                 </>
                                                             )}
                                                         </div>
@@ -161,21 +161,21 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                                                             <Link
                                                                 href={route('admin.global-variables.show', variable.id)}
                                                                 className="text-blue-400 transition-colors hover:text-blue-300"
-                                                                title="View Details"
+                                                                title="Lihat Detail"
                                                             >
                                                                 <Eye className="h-4 w-4" />
                                                             </Link>
                                                             <Link
                                                                 href={route('admin.global-variables.edit', variable.id)}
                                                                 className="text-amber-400 transition-colors hover:text-amber-300"
-                                                                title="Edit"
+                                                                title="Ubah"
                                                             >
                                                                 <Edit className="h-4 w-4" />
                                                             </Link>
                                                             <button
                                                                 onClick={() => handleDelete(variable)}
                                                                 className="text-red-400 transition-colors hover:text-red-300"
-                                                                title="Delete"
+                                                                title="Hapus"
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
                                                             </button>

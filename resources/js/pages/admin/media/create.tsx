@@ -13,9 +13,9 @@ import { ArrowLeft, FileText, FolderOpen, Tags, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/admin' },
-    { title: 'Media Manager', href: '/admin/media' },
-    { title: 'Upload Files', href: '/admin/media/create' },
+    { title: 'Dasbor', href: '/admin' },
+    { title: 'Manajer Media', href: '/admin/media' },
+    { title: 'Unggah Berkas', href: '/admin/media/create' },
 ];
 
 interface MediaUploadProps {
@@ -47,7 +47,7 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
         e.preventDefault();
 
         if (selectedFiles.length === 0) {
-            setError('Please select at least one file to upload.');
+            setError('Mohon pilih setidaknya satu berkas untuk diunggah.');
             return;
         }
 
@@ -89,29 +89,29 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
                 setProcessing(false);
             },
             onError: (errors) => {
-                console.error('Upload failed:', errors);
+                console.error('Gagal mengunggah:', errors);
                 setProcessing(false);
-                setError('Upload failed. Please check the console for details.');
+                setError('Gagal mengunggah. Mohon periksa konsol untuk detail.');
             },
         });
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Upload Media Files" />
+            <Head title="Unggah Berkas Media" />
 
             <div className="space-y-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Upload Media Files</h1>
-                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">Upload multiple files to your media library</p>
+                        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Unggah Berkas Media</h1>
+                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">Unggah beberapa berkas ke pustaka media Anda</p>
                     </div>
 
                     <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                         <a href={route('admin.media.index')}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Media
+                            Kembali ke Media
                         </a>
                     </Button>
                 </div>
@@ -140,7 +140,7 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                         {/* Upload Zone */}
                         <div className="lg:col-span-2">
-                            <FormSection title="Select Files" description="Choose files to upload" icon={<Upload className="h-5 w-5" />}>
+                            <FormSection title="Pilih Berkas" description="Pilih berkas untuk diunggah" icon={<Upload className="h-5 w-5" />}>
                                 <MediaUploadZone
                                     onUpload={handleFilesSelected}
                                     acceptedTypes={['image/*', 'application/pdf', 'text/plain']}
@@ -152,7 +152,7 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
 
                             {/* File Preview */}
                             {selectedFiles.length > 0 && (
-                                <FormSection title="Selected Files" description="Files ready for upload" icon={<FolderOpen className="h-5 w-5" />}>
+                                <FormSection title="Berkas Terpilih" description="Berkas siap diunggah" icon={<FolderOpen className="h-5 w-5" />}>
                                     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                                         {selectedFiles.map((file, index) => (
                                             <div key={index} className="group relative rounded-lg border border-zinc-700 bg-zinc-800 p-3">
@@ -192,50 +192,50 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
                         {/* Metadata and Tags */}
                         <div className="space-y-6">
                             <FormSection
-                                title="File Information"
-                                description="Default settings for uploaded files"
+                                title="Informasi Berkas"
+                                description="Pengaturan default untuk berkas yang diunggah"
                                 icon={<FileText className="h-5 w-5" />}
                             >
                                 <div className="space-y-4">
                                     <div>
                                         <Label htmlFor="title" className="text-zinc-300">
-                                            Default Title
+                                            Judul Default
                                         </Label>
                                         <Input
                                             id="title"
                                             value={title}
                                             onChange={(e) => setTitle(e.target.value)}
-                                            placeholder="Optional default title for all files"
+                                            placeholder="Judul default opsional untuk semua berkas"
                                             className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                         />
                                         <p className="mt-1 text-xs text-zinc-500">
-                                            If provided, this will be used as the default title for all uploaded files
+                                            Jika disediakan, ini akan digunakan sebagai judul default untuk semua berkas yang diunggah
                                         </p>
                                     </div>
 
                                     <div>
                                         <Label htmlFor="alt_text" className="text-zinc-300">
-                                            Default Alt Text
+                                            Teks Alt Default
                                         </Label>
                                         <Input
                                             id="alt_text"
                                             value={altText}
                                             onChange={(e) => setAltText(e.target.value)}
-                                            placeholder="Optional default alt text for images"
+                                            placeholder="Teks alt default opsional untuk gambar"
                                             className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                         />
-                                        <p className="mt-1 text-xs text-zinc-500">Alt text for accessibility (images only)</p>
+                                        <p className="mt-1 text-xs text-zinc-500">Teks alt untuk aksesibilitas (hanya gambar)</p>
                                     </div>
 
                                     <div>
                                         <Label htmlFor="description" className="text-zinc-300">
-                                            Default Description
+                                            Deskripsi Default
                                         </Label>
                                         <Textarea
                                             id="description"
                                             value={description}
                                             onChange={(e) => setDescription(e.target.value)}
-                                            placeholder="Optional default description"
+                                            placeholder="Deskripsi default opsional"
                                             rows={3}
                                             className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                         />
@@ -245,14 +245,14 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
 
                             {/* Tag Selection */}
                             <FormSection
-                                title="Tags"
-                                description="Select relevant business units and community clubs"
+                                title="Tag"
+                                description="Pilih unit bisnis dan klub komunitas yang relevan"
                                 icon={<Tags className="h-5 w-5" />}
                             >
                                 <div className="space-y-4">
-                                    {/* Business Units */}
+                                    {/* Unit Bisnis */}
                                     <div>
-                                        <h4 className="mb-3 text-sm font-medium text-amber-400">Business Units</h4>
+                                        <h4 className="mb-3 text-sm font-medium text-amber-400">Unit Bisnis</h4>
                                         <div className="grid grid-cols-2 gap-2">
                                             {businessUnits.map((unit) => (
                                                 <label key={unit.id} className="flex items-center space-x-2">
@@ -267,9 +267,9 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
                                         </div>
                                     </div>
 
-                                    {/* Community Clubs */}
+                                    {/* Klub Komunitas */}
                                     <div>
-                                        <h4 className="mb-3 text-sm font-medium text-amber-400">Community Clubs</h4>
+                                        <h4 className="mb-3 text-sm font-medium text-amber-400">Klub Komunitas</h4>
                                         <div className="grid grid-cols-2 gap-2">
                                             {communityClubs.map((club) => (
                                                 <label key={club.id} className="flex items-center space-x-2">
@@ -292,12 +292,12 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
                                     <LoadingButton
                                         type="submit"
                                         loading={processing}
-                                        loadingText="Uploading..."
+                                        loadingText="Mengunggah..."
                                         disabled={selectedFiles.length === 0 || processing}
                                         className="cta-button w-full"
                                         icon="save"
                                     >
-                                        {processing ? 'Uploading...' : `Upload ${selectedFiles.length} Files`}
+                                        {processing ? 'Mengunggah...' : `Unggah ${selectedFiles.length} Berkas`}
                                     </LoadingButton>
                                 </div>
                             )}
@@ -306,26 +306,26 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
 
                     {/* Upload Instructions */}
                     <div className="section-card p-6">
-                        <h4 className="mb-3 font-semibold text-amber-400">Upload Guidelines</h4>
+                        <h4 className="mb-3 font-semibold text-amber-400">Panduan Unggah</h4>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div className="space-y-2">
                                 <div className="flex items-center text-sm text-zinc-300">
                                     <span className="mr-2 h-2 w-2 rounded-full bg-amber-400"></span>
-                                    Maximum file size: 10MB per file
+                                    Ukuran berkas maksimum: 10MB per berkas
                                 </div>
                                 <div className="flex items-center text-sm text-zinc-300">
                                     <span className="mr-2 h-2 w-2 rounded-full bg-amber-400"></span>
-                                    Images will be automatically optimized
+                                    Gambar akan dioptimalkan secara otomatis
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <div className="flex items-center text-sm text-zinc-300">
                                     <span className="mr-2 h-2 w-2 rounded-full bg-amber-400"></span>
-                                    Supported: Images, PDF, Text files
+                                    Didukung: Gambar, PDF, Berkas Teks
                                 </div>
                                 <div className="flex items-center text-sm text-zinc-300">
                                     <span className="mr-2 h-2 w-2 rounded-full bg-amber-400"></span>
-                                    Edit individual file details after upload
+                                    Edit detail berkas individual setelah diunggah
                                 </div>
                             </div>
                         </div>

@@ -42,15 +42,15 @@ export default function Index({ communityClubActivities, communityClubs, filters
 
     return (
         <AdminLayout>
-            <Head title="Community Club Activities" />
+            <Head title="Aktivitas Komunitas" />
 
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold">Community Club Activities</h1>
+                    <h1 className="text-3xl font-bold">Aktivitas Komunitas</h1>
                     <Link href={route('admin.community-club-activities.create')}>
                         <Button>
                             <Plus className="mr-2 h-4 w-4" />
-                            Add Activity
+                            Tambah Aktivitas
                         </Button>
                     </Link>
                 </div>
@@ -60,17 +60,17 @@ export default function Index({ communityClubActivities, communityClubs, filters
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Filter className="h-5 w-5" />
-                            Filters
+                            Filter
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div>
-                                <label className="mb-2 block text-sm font-medium">Search</label>
+                                <label className="mb-2 block text-sm font-medium">Cari</label>
                                 <div className="relative">
                                     <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
                                     <Input
-                                        placeholder="Search activities..."
+                                        placeholder="Cari aktivitas..."
                                         defaultValue={filters.search}
                                         onChange={(e) => handleSearch(e.target.value)}
                                         className="pl-10"
@@ -79,13 +79,13 @@ export default function Index({ communityClubActivities, communityClubs, filters
                             </div>
 
                             <div>
-                                <label className="mb-2 block text-sm font-medium">Community Club</label>
+                                <label className="mb-2 block text-sm font-medium">Komunitas</label>
                                 <Select value={filters.community_club_id} onValueChange={(value) => handleFilter('community_club_id', value)}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="All Clubs" />
+                                        <SelectValue placeholder="Semua Komunitas" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All Clubs</SelectItem>
+                                        <SelectItem value="">Semua Komunitas</SelectItem>
                                         {communityClubs.map((club) => (
                                             <SelectItem key={club.id} value={club.id.toString()}>
                                                 {club.name}
@@ -98,7 +98,7 @@ export default function Index({ communityClubActivities, communityClubs, filters
 
                         <div className="flex justify-end">
                             <Button variant="outline" onClick={clearFilters}>
-                                Clear Filters
+                                Hapus Filter
                             </Button>
                         </div>
                     </CardContent>
@@ -114,15 +114,15 @@ export default function Index({ communityClubActivities, communityClubs, filters
                                         <div className="mb-2 flex items-center gap-3">
                                             <h3 className="text-xl font-semibold">{activity.title}</h3>
                                             <Badge variant={activity.status === 'active' ? 'default' : 'secondary'}>{activity.status}</Badge>
-                                            {activity.featured && <Badge variant="destructive">Featured</Badge>}
+                                            {activity.featured && <Badge variant="destructive">Unggulan</Badge>}
                                         </div>
 
                                         <p className="mb-3 text-gray-600">{activity.description}</p>
 
                                         <div className="flex items-center gap-4 text-sm text-gray-500">
-                                            <span>Community Club: {activity.community_club?.name}</span>
-                                            {activity.max_participants && <span>Max Participants: {activity.max_participants}</span>}
-                                            {activity.duration && <span>Duration: {activity.duration}</span>}
+                                            <span>Komunitas: {activity.community_club?.name}</span>
+                                            {activity.max_participants && <span>Jumlah Peserta Maks: {activity.max_participants}</span>}
+                                            {activity.duration && <span>Durasi: {activity.duration}</span>}
                                         </div>
 
                                         {activity.benefits && activity.benefits.length > 0 && (
@@ -159,7 +159,7 @@ export default function Index({ communityClubActivities, communityClubs, filters
                                             variant="outline"
                                             size="sm"
                                             onClick={() => {
-                                                if (confirm('Are you sure you want to delete this activity?')) {
+                                                if (confirm('Apakah Anda yakin ingin menghapus aktivitas ini?')) {
                                                     router.delete(route('admin.community-club-activities.destroy', activity.id));
                                                 }
                                             }}
@@ -174,7 +174,7 @@ export default function Index({ communityClubActivities, communityClubs, filters
 
                     {communityClubActivities.length === 0 && (
                         <Card>
-                            <CardContent className="p-6 text-center text-gray-500">No activities found matching your criteria.</CardContent>
+                            <CardContent className="p-6 text-center text-gray-500">Tidak ada aktivitas yang sesuai dengan kriteria Anda.</CardContent>
                         </Card>
                     )}
                 </div>

@@ -17,10 +17,10 @@ interface MediaEditProps {
 
 export default function MediaEdit({ media, businessUnits, communityClubs }: MediaEditProps) {
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: '/admin' },
-        { title: 'Media Manager', href: '/admin/media' },
+        { title: 'Dasbor', href: '/admin' },
+        { title: 'Manajer Media', href: '/admin/media' },
         { title: media.title || media.original_filename, href: `/admin/media/${media.id}` },
-        { title: 'Edit', href: `/admin/media/${media.id}/edit` },
+        { title: 'Ubah', href: `/admin/media/${media.id}/edit` },
     ];
 
     const [selectedTags, setSelectedTags] = useState<string[]>(media.tags || []);
@@ -85,20 +85,20 @@ export default function MediaEdit({ media, businessUnits, communityClubs }: Medi
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Edit - ${media.title || media.original_filename}`} />
+            <Head title={`Ubah - ${media.title || media.original_filename}`} />
 
             <div className="space-y-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Edit Media</h1>
-                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">Update media file details and properties</p>
+                        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Ubah Media</h1>
+                        <p className="mt-2 text-lg text-zinc-600 dark:text-zinc-400">Perbarui detail dan properti file media</p>
                     </div>
 
                     <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                         <Link href={route('admin.media.index')}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Media
+                            Kembali ke Media
                         </Link>
                     </Button>
                 </div>
@@ -107,18 +107,18 @@ export default function MediaEdit({ media, businessUnits, communityClubs }: Medi
                     {/* Preview */}
                     <div className="lg:col-span-1">
                         <div className="section-card p-6">
-                            <h3 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">Preview</h3>
-                            <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">Current media file preview</p>
+                            <h3 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">Pratinjau</h3>
+                            <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">Pratinjau file media saat ini</p>
                             {renderPreview()}
 
                             <div className="mt-4 space-y-2 text-sm">
                                 <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
-                                    <span className="text-zinc-400">File name:</span>
+                                    <span className="text-zinc-400">Nama file:</span>
                                     <span className="font-medium text-white">{media.original_filename}</span>
                                 </div>
 
                                 <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
-                                    <span className="text-zinc-400">File size:</span>
+                                    <span className="text-zinc-400">Ukuran file:</span>
                                     <span className="font-medium text-amber-400">{media.human_size}</span>
                                 </div>
 
@@ -131,7 +131,7 @@ export default function MediaEdit({ media, businessUnits, communityClubs }: Medi
 
                                 {media.dimensions && (
                                     <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
-                                        <span className="text-zinc-400">Dimensions:</span>
+                                        <span className="text-zinc-400">Dimensi:</span>
                                         <span className="font-medium text-white">
                                             {media.dimensions.width} × {media.dimensions.height}
                                         </span>
@@ -144,58 +144,58 @@ export default function MediaEdit({ media, businessUnits, communityClubs }: Medi
                     {/* Edit Form */}
                     <div className="lg:col-span-2">
                         <div className="section-card p-6">
-                            <h3 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">Edit Details</h3>
+                            <h3 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">Ubah Detail</h3>
                             <p className="mb-6 text-sm text-zinc-600 dark:text-zinc-400">
-                                Update the media file information. Note: The actual file cannot be changed, only the metadata.
+                                Perbarui informasi file media. Catatan: File sebenarnya tidak dapat diubah, hanya metadata.
                             </p>
 
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div>
                                     <Label htmlFor="title" className="text-zinc-300">
-                                        Title
+                                        Judul
                                     </Label>
                                     <Input
                                         id="title"
                                         value={data.title}
                                         onChange={(e) => setData('title', e.target.value)}
-                                        placeholder="Enter a descriptive title"
+                                        placeholder="Masukkan judul yang deskriptif"
                                         className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                     />
                                     {errors.title && <p className="mt-1 text-sm text-red-400">{errors.title}</p>}
-                                    <p className="mt-1 text-xs text-zinc-500">A human-readable title for this media file</p>
+                                    <p className="mt-1 text-xs text-zinc-500">Judul yang mudah dibaca untuk file media ini</p>
                                 </div>
 
                                 {media.is_image && (
                                     <div>
                                         <Label htmlFor="alt_text" className="text-zinc-300">
-                                            Alt Text
+                                            Teks Alt
                                         </Label>
                                         <Input
                                             id="alt_text"
                                             value={data.alt_text}
                                             onChange={(e) => setData('alt_text', e.target.value)}
-                                            placeholder="Describe the image for accessibility"
+                                            placeholder="Jelaskan gambar untuk aksesibilitas"
                                             className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                         />
                                         {errors.alt_text && <p className="mt-1 text-sm text-red-400">{errors.alt_text}</p>}
-                                        <p className="mt-1 text-xs text-zinc-500">Alternative text for screen readers and accessibility</p>
+                                        <p className="mt-1 text-xs text-zinc-500">Teks alternatif untuk pembaca layar dan aksesibilitas</p>
                                     </div>
                                 )}
 
                                 <div>
                                     <Label htmlFor="description" className="text-zinc-300">
-                                        Description
+                                        Deskripsi
                                     </Label>
                                     <Textarea
                                         id="description"
                                         value={data.description}
                                         onChange={(e) => setData('description', e.target.value)}
-                                        placeholder="Enter a detailed description of the media file"
+                                        placeholder="Masukkan deskripsi detail file media"
                                         rows={4}
                                         className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                     />
                                     {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
-                                    <p className="mt-1 text-xs text-zinc-500">Optional detailed description of the media content</p>
+                                    <p className="mt-1 text-xs text-zinc-500">Deskripsi detail opsional dari konten media</p>
                                 </div>
 
                                 {/* Tag Selection */}
@@ -237,13 +237,13 @@ export default function MediaEdit({ media, businessUnits, communityClubs }: Medi
                                         </div>
 
                                         {errors.tags && <p className="mt-1 text-sm text-red-400">{errors.tags}</p>}
-                                        <p className="text-xs text-zinc-500">Select relevant business units and community clubs for this media</p>
+                                        <p className="text-xs text-zinc-500">Pilih unit bisnis dan komunitas yang relevan untuk media ini</p>
                                     </div>
                                 </div>
 
                                 <div className="flex space-x-4 pt-6">
                                     <Button type="submit" disabled={processing} className="cta-button flex-1">
-                                        {processing ? 'Saving...' : 'Save Changes'}
+                                        {processing ? 'Menyimpan...' : 'Simpan Perubahan'}
                                     </Button>
 
                                     <Button
@@ -252,7 +252,7 @@ export default function MediaEdit({ media, businessUnits, communityClubs }: Medi
                                         asChild
                                         className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-700"
                                     >
-                                        <Link href={route('admin.media.index')}>Cancel</Link>
+                                        <Link href={route('admin.media.index')}>Batal</Link>
                                     </Button>
                                 </div>
                             </form>

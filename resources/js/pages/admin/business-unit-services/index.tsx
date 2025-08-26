@@ -44,15 +44,15 @@ export default function Index({ businessUnitServices, businessUnits, filters }: 
 
     return (
         <AdminLayout>
-            <Head title="Business Unit Services" />
+            <Head title="Layanan Unit Bisnis" />
 
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold">Business Unit Services</h1>
+                    <h1 className="text-3xl font-bold">Layanan Unit Bisnis</h1>
                     <Link href={route('admin.business-unit-services.create')}>
                         <Button>
                             <Plus className="mr-2 h-4 w-4" />
-                            Add Service
+                            Tambah Layanan
                         </Button>
                     </Link>
                 </div>
@@ -62,17 +62,17 @@ export default function Index({ businessUnitServices, businessUnits, filters }: 
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Filter className="h-5 w-5" />
-                            Filters
+                            Filter
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                             <div>
-                                <label className="mb-2 block text-sm font-medium">Search</label>
+                                <label className="mb-2 block text-sm font-medium">Cari</label>
                                 <div className="relative">
                                     <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
                                     <Input
-                                        placeholder="Search services..."
+                                        placeholder="Cari layanan..."
                                         defaultValue={filters.search}
                                         onChange={(e) => handleSearch(e.target.value)}
                                         className="pl-10"
@@ -81,13 +81,13 @@ export default function Index({ businessUnitServices, businessUnits, filters }: 
                             </div>
 
                             <div>
-                                <label className="mb-2 block text-sm font-medium">Business Unit</label>
+                                <label className="mb-2 block text-sm font-medium">Unit Bisnis</label>
                                 <Select value={filters.business_unit_id} onValueChange={(value) => handleFilter('business_unit_id', value)}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="All Units" />
+                                        <SelectValue placeholder="Semua Unit" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All Units</SelectItem>
+                                        <SelectItem value="">Semua Unit</SelectItem>
                                         {businessUnits.map((unit) => (
                                             <SelectItem key={unit.id} value={unit.id.toString()}>
                                                 {unit.name}
@@ -101,26 +101,26 @@ export default function Index({ businessUnitServices, businessUnits, filters }: 
                                 <label className="mb-2 block text-sm font-medium">Status</label>
                                 <Select value={filters.status} onValueChange={(value) => handleFilter('status', value)}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="All Statuses" />
+                                        <SelectValue placeholder="Semua Status" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All Statuses</SelectItem>
-                                        <SelectItem value="active">Active</SelectItem>
-                                        <SelectItem value="inactive">Inactive</SelectItem>
+                                        <SelectItem value="">Semua Status</SelectItem>
+                                        <SelectItem value="active">Aktif</SelectItem>
+                                        <SelectItem value="inactive">Nonaktif</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
 
                             <div>
-                                <label className="mb-2 block text-sm font-medium">Featured</label>
+                                <label className="mb-2 block text-sm font-medium">Unggulan</label>
                                 <Select value={filters.featured} onValueChange={(value) => handleFilter('featured', value)}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="All" />
+                                        <SelectValue placeholder="Semua" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All</SelectItem>
-                                        <SelectItem value="1">Featured</SelectItem>
-                                        <SelectItem value="0">Not Featured</SelectItem>
+                                        <SelectItem value="">Semua</SelectItem>
+                                        <SelectItem value="1">Unggulan</SelectItem>
+                                        <SelectItem value="0">Tidak Unggulan</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -128,7 +128,7 @@ export default function Index({ businessUnitServices, businessUnits, filters }: 
 
                         <div className="flex justify-end">
                             <Button variant="outline" onClick={clearFilters}>
-                                Clear Filters
+                                Hapus Filter
                             </Button>
                         </div>
                     </CardContent>
@@ -143,16 +143,18 @@ export default function Index({ businessUnitServices, businessUnits, filters }: 
                                     <div className="flex-1">
                                         <div className="mb-2 flex items-center gap-3">
                                             <h3 className="text-xl font-semibold">{service.title}</h3>
-                                            <Badge variant={service.status === 'active' ? 'default' : 'secondary'}>{service.status}</Badge>
-                                            {service.featured && <Badge variant="destructive">Featured</Badge>}
+                                            <Badge variant={service.status === 'active' ? 'default' : 'secondary'}>
+                                                {service.status === 'active' ? 'Aktif' : 'Nonaktif'}
+                                            </Badge>
+                                            {service.featured && <Badge variant="destructive">Unggulan</Badge>}
                                         </div>
 
                                         <p className="mb-3 text-gray-600">{service.description}</p>
 
                                         <div className="flex items-center gap-4 text-sm text-gray-500">
-                                            <span>Business Unit: {service.business_unit?.name}</span>
-                                            {service.price && <span>Price: ${service.price}</span>}
-                                            {service.duration && <span>Duration: {service.duration}</span>}
+                                            <span>Unit Bisnis: {service.business_unit?.name}</span>
+                                            {service.price && <span>Harga: ${service.price}</span>}
+                                            {service.duration && <span>Durasi: {service.duration}</span>}
                                         </div>
                                     </div>
 
@@ -171,7 +173,7 @@ export default function Index({ businessUnitServices, businessUnits, filters }: 
                                             variant="outline"
                                             size="sm"
                                             onClick={() => {
-                                                if (confirm('Are you sure you want to delete this service?')) {
+                                                if (confirm('Apakah Anda yakin ingin menghapus layanan ini?')) {
                                                     router.delete(route('admin.business-unit-services.destroy', service.id));
                                                 }
                                             }}
@@ -186,7 +188,7 @@ export default function Index({ businessUnitServices, businessUnits, filters }: 
 
                     {businessUnitServices.length === 0 && (
                         <Card>
-                            <CardContent className="p-6 text-center text-gray-500">No services found matching your criteria.</CardContent>
+                            <CardContent className="p-6 text-center text-gray-500">Tidak ada layanan yang sesuai dengan kriteria Anda.</CardContent>
                         </Card>
                     )}
                 </div>

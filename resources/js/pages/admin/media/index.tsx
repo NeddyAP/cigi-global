@@ -20,8 +20,8 @@ import { Search, Trash2, Upload } from 'lucide-react';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/admin' },
-    { title: 'Media Manager', href: '/admin/media' },
+    { title: 'Dasbor', href: '/admin' },
+    { title: 'Manajer Media', href: '/admin/media' },
 ];
 
 interface PageLink {
@@ -104,20 +104,20 @@ export default function MediaIndex({ media, filters }: MediaPageProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Media Manager" />
+            <Head title="Manajer Media" />
 
             <div className="space-y-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Media Manager</h1>
-                        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">Manage your media files</p>
+                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Manajer Media</h1>
+                        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">Kelola file media Anda</p>
                     </div>
 
                     <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
                         <a href={route('admin.media.create')}>
                             <Upload className="mr-2 h-4 w-4" />
-                            Upload Files
+                            Unggah File
                         </a>
                     </Button>
                 </div>
@@ -127,13 +127,13 @@ export default function MediaIndex({ media, filters }: MediaPageProps) {
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                         <div>
                             <Label htmlFor="search" className="text-zinc-300">
-                                Search
+                                Cari
                             </Label>
                             <div className="relative">
                                 <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400" />
                                 <Input
                                     id="search"
-                                    placeholder="Search files..."
+                                    placeholder="Cari file..."
                                     value={data.search}
                                     onChange={(e) => setData('search', e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -144,23 +144,23 @@ export default function MediaIndex({ media, filters }: MediaPageProps) {
 
                         <div>
                             <Label htmlFor="type" className="text-zinc-300">
-                                File Type
+                                Tipe File
                             </Label>
                             <Select value={data.type} onValueChange={(value) => setData('type', value)}>
                                 <SelectTrigger className="border-zinc-700 bg-zinc-800 text-white">
-                                    <SelectValue placeholder="All types" />
+                                    <SelectValue placeholder="Semua tipe" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all-types">All types</SelectItem>
-                                    <SelectItem value="image">Images</SelectItem>
-                                    <SelectItem value="application">Documents</SelectItem>
+                                    <SelectItem value="all-types">Semua tipe</SelectItem>
+                                    <SelectItem value="image">Gambar</SelectItem>
+                                    <SelectItem value="application">Dokumen</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
 
                         <div className="flex items-end">
                             <Button onClick={handleSearch} disabled={processing} className="cta-button flex-1">
-                                Search
+                                Cari
                             </Button>
                         </div>
                     </div>
@@ -170,13 +170,13 @@ export default function MediaIndex({ media, filters }: MediaPageProps) {
                 {selectedItems.length > 0 && (
                     <div className="flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
                         <span className="text-sm font-medium text-amber-700 dark:text-amber-300">
-                            {selectedItems.length} item{selectedItems.length !== 1 ? 's' : ''} selected
+                            {selectedItems.length} item{selectedItems.length !== 1 ? '' : ''} dipilih
                         </span>
 
                         <div className="flex space-x-2">
                             <Button size="sm" variant="destructive" onClick={handleBulkDelete}>
                                 <Trash2 className="mr-2 h-4 w-4" />
-                                Delete
+                                Hapus
                             </Button>
                         </div>
                     </div>
@@ -215,15 +215,15 @@ export default function MediaIndex({ media, filters }: MediaPageProps) {
                 <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle className="text-zinc-900 dark:text-white">Delete Media File</AlertDialogTitle>
+                            <AlertDialogTitle className="text-zinc-900 dark:text-white">Hapus File Media</AlertDialogTitle>
                             <AlertDialogDescription className="text-zinc-600 dark:text-zinc-400">
-                                Are you sure you want to delete "{itemToDelete?.alt_text || itemToDelete?.original_filename}"? This action cannot be
-                                undone.
+                                Apakah Anda yakin ingin menghapus "{itemToDelete?.alt_text || itemToDelete?.original_filename}"? Tindakan ini tidak
+                                dapat dibatalkan.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={confirmDelete}>Delete</AlertDialogAction>
+                            <AlertDialogCancel>Batal</AlertDialogCancel>
+                            <AlertDialogAction onClick={confirmDelete}>Hapus</AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
