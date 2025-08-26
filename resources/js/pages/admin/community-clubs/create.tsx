@@ -264,10 +264,8 @@ export default function CreateCommunityClub() {
                                         name="image"
                                         value={data.image}
                                         onChange={(value) => setData('image', value?.toString() || '')}
-                                        placeholder="Pilih atau upload gambar utama komunitas"
                                         error={errors.image}
                                         showPreview={true}
-                                        autoUpload={true}
                                         multiple={false}
                                     />
                                 </div>

@@ -542,10 +542,8 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                     name="image"
                                     value={data.image}
                                     onChange={(value) => setData('image', value ? String(value) : '')}
-                                    placeholder="Pilih atau upload gambar utama unit bisnis"
                                     error={errors.image}
                                     showPreview={true}
-                                    autoUpload={true}
                                     multiple={false}
                                 />
 

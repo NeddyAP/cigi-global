@@ -235,10 +235,8 @@ export default function CreateNews({ auth }: CreateNewsProps) {
                                     name="featured_image"
                                     value={data.featured_image}
                                     onChange={(value) => setData('featured_image', value ? String(value) : '')}
-                                    placeholder="Pilih atau upload gambar artikel"
                                     error={errors.featured_image}
                                     showPreview={true}
-                                    autoUpload={true}
                                 />
                                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
                                     Gambar akan ditampilkan di halaman listing dan detail artikel

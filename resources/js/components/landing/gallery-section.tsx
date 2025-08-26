@@ -145,11 +145,11 @@ export default function GallerySection({
 
     if (images.length === 0) {
         return (
-            <section className={`bg-gray-50 py-16 ${className}`}>
+            <section className={`section-dark py-16 ${className}`}>
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
-                    <h2 className="mb-4 text-3xl font-bold text-gray-900">{title}</h2>
-                    <p className="mb-8 text-lg text-gray-600">{subtitle}</p>
-                    <p className="text-gray-500">No images available in the gallery.</p>
+                    <h2 className="section-heading">{title}</h2>
+                    <p className="section-subheading">{subtitle}</p>
+                    <p className="text-zinc-400">No images available in the gallery.</p>
                 </div>
             </section>
         );
@@ -158,12 +158,12 @@ export default function GallerySection({
     // Grid layout
     if (layout === 'grid') {
         return (
-            <section className={`bg-gray-50 py-16 ${className}`}>
+            <section className={`section-dark py-16 ${className}`}>
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Header */}
                     <div className="mb-12 text-center">
-                        <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h2>
-                        {subtitle && <p className="mx-auto max-w-2xl text-lg text-gray-600">{subtitle}</p>}
+                        <h2 className="section-heading">{title}</h2>
+                        {subtitle && <p className="section-subheading">{subtitle}</p>}
                     </div>
 
                     {/* Grid */}
@@ -171,13 +171,13 @@ export default function GallerySection({
                         {images.map((image, index) => (
                             <Card
                                 key={image.id}
-                                className="group cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-xl"
+                                className="section-card group cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1"
                                 onClick={() => openLightbox(index)}
                             >
                                 <CardContent className="p-0">
                                     <div className="relative aspect-square overflow-hidden">
                                         {/* Lazy loading placeholder */}
-                                        {!loadedImages.has(image.id) && <div className="absolute inset-0 animate-pulse bg-gray-200" />}
+                                        {!loadedImages.has(image.id) && <div className="absolute inset-0 animate-pulse bg-zinc-700" />}
 
                                         <img
                                             src={image.thumbnail?.url || image.url}
@@ -196,7 +196,7 @@ export default function GallerySection({
                                                     <Button
                                                         size="sm"
                                                         variant="secondary"
-                                                        className="bg-white/90 text-gray-900 hover:bg-white"
+                                                        className="bg-amber-500/90 text-black hover:bg-amber-500"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             openLightbox(index);
@@ -209,7 +209,7 @@ export default function GallerySection({
                                                     <Button
                                                         size="sm"
                                                         variant="secondary"
-                                                        className="bg-white/90 text-gray-900 hover:bg-white"
+                                                        className="bg-zinc-800/90 text-white hover:bg-zinc-800"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             handleDownload(image);
@@ -222,7 +222,7 @@ export default function GallerySection({
                                                     <Button
                                                         size="sm"
                                                         variant="secondary"
-                                                        className="bg-white/90 text-gray-900 hover:bg-white"
+                                                        className="bg-zinc-800/90 text-white hover:bg-zinc-800"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             handleShare(image);
@@ -238,7 +238,7 @@ export default function GallerySection({
                                     {/* Caption */}
                                     {image.caption && (
                                         <div className="p-4">
-                                            <p className="text-center text-sm text-gray-600">{image.caption}</p>
+                                            <p className="text-center text-sm text-zinc-300">{image.caption}</p>
                                         </div>
                                     )}
                                 </CardContent>
@@ -265,12 +265,12 @@ export default function GallerySection({
     // Carousel layout
     if (layout === 'carousel') {
         return (
-            <section className={`bg-gray-50 py-16 ${className}`}>
+            <section className={`section-dark py-16 ${className}`}>
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Header */}
                     <div className="mb-12 text-center">
-                        <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h2>
-                        {subtitle && <p className="mx-auto max-w-2xl text-lg text-gray-600">{subtitle}</p>}
+                        <h2 className="section-heading">{title}</h2>
+                        {subtitle && <p className="section-subheading">{subtitle}</p>}
                     </div>
 
                     {/* Carousel */}
@@ -311,7 +311,7 @@ export default function GallerySection({
                                         variant="ghost"
                                         size="sm"
                                         onClick={goToPrevious}
-                                        className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/90 text-gray-900 shadow-lg hover:bg-white"
+                                        className="absolute top-1/2 left-4 -translate-y-1/2 bg-amber-500/90 text-black shadow-lg hover:bg-amber-500"
                                         disabled={currentIndex === 0}
                                     >
                                         <ChevronLeft className="h-6 w-6" />
@@ -321,7 +321,7 @@ export default function GallerySection({
                                         variant="ghost"
                                         size="sm"
                                         onClick={goToNext}
-                                        className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/90 text-gray-900 shadow-lg hover:bg-white"
+                                        className="absolute top-1/2 right-4 -translate-y-1/2 bg-amber-500/90 text-black shadow-lg hover:bg-amber-500"
                                         disabled={currentIndex === images.length - 1}
                                     >
                                         <ChevronRight className="h-6 w-6" />
@@ -337,7 +337,7 @@ export default function GallerySection({
                                             key={index}
                                             onClick={() => goToSlide(index)}
                                             className={`h-3 w-3 rounded-full transition-all duration-300 ${
-                                                index === currentIndex ? 'scale-125 bg-white' : 'bg-white/50 hover:bg-white/75'
+                                                index === currentIndex ? 'scale-125 bg-amber-400' : 'bg-zinc-600 hover:bg-zinc-500'
                                             }`}
                                         />
                                     ))}
@@ -353,7 +353,7 @@ export default function GallerySection({
                                         key={image.id}
                                         onClick={() => goToSlide(index)}
                                         className={`h-16 w-16 overflow-hidden rounded-lg transition-all duration-300 ${
-                                            index === currentIndex ? 'scale-110 ring-2 ring-blue-500' : 'opacity-60 hover:opacity-100'
+                                            index === currentIndex ? 'scale-110 ring-2 ring-amber-500' : 'opacity-60 hover:opacity-100'
                                         }`}
                                     >
                                         <img src={image.thumbnail?.url || image.url} alt={image.alt || ''} className="h-full w-full object-cover" />
@@ -381,13 +381,13 @@ export default function GallerySection({
 
     // Masonry layout (fallback to grid for now)
     return (
-        <section className={`bg-gray-50 py-16 ${className}`}>
+        <section className={`section-dark py-16 ${className}`}>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="mb-12 text-center">
-                    <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h2>
-                    {subtitle && <p className="mx-auto max-w-2xl text-lg text-gray-600">{subtitle}</p>}
+                    <h2 className="section-heading">{title}</h2>
+                    {subtitle && <p className="section-subheading">{subtitle}</p>}
                 </div>
-                <p className="text-center text-gray-500">Masonry layout coming soon!</p>
+                <p className="text-center text-zinc-400">Masonry layout coming soon!</p>
             </div>
         </section>
     );

@@ -27,7 +27,6 @@ interface MediaUploadZoneProps {
 
 export default function MediaUploadZone({
     onUpload,
-    onFileUploadProgress,
     onFileUploadComplete,
     acceptedTypes = ['image/*'],
     maxFileSize = 10,
@@ -75,7 +74,7 @@ export default function MediaUploadZone({
                 const response = await fetch('/admin/media/ajax-upload', {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': (window as any).csrfToken || '',
+                        'X-CSRF-TOKEN': (window as { csrfToken?: string }).csrfToken || '',
                         Accept: 'application/json',
                     },
                     body: formData,

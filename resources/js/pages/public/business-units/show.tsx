@@ -117,7 +117,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             value: businessUnit.company_stats?.years_in_business || 0,
             suffix: '+',
             icon: '⏰',
-            color: 'text-blue-600',
+            color: 'text-amber-600',
             description: 'Pengalaman dalam industri',
         },
         {
@@ -126,7 +126,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             value: businessUnit.company_stats?.projects_completed || 0,
             suffix: '+',
             icon: '🚀',
-            color: 'text-green-600',
+            color: 'text-amber-600',
             description: 'Pengiriman proyek berhasil',
         },
         {
@@ -135,7 +135,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             value: businessUnit.company_stats?.clients_served || 0,
             suffix: '+',
             icon: '👥',
-            color: 'text-purple-600',
+            color: 'text-amber-600',
             description: 'Klien puas di seluruh dunia',
         },
         {
@@ -144,7 +144,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             value: businessUnit.company_stats?.team_size || 0,
             suffix: '+',
             icon: '👨‍💼',
-            color: 'text-orange-600',
+            color: 'text-amber-600',
             description: 'Profesional ahli',
         },
     ];
@@ -204,18 +204,18 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             <div className="fixed top-23 left-4 z-50">
                 <Link
                     href={route('business-units.index')}
-                    className="inline-flex items-center rounded-lg bg-white/20 px-4 py-2 text-white backdrop-blur-sm transition-colors hover:bg-white/30"
+                    className="20 hover:30 inline-flex items-center rounded-lg px-4 py-2 text-white backdrop-blur-sm transition-colors"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Kembali ke Unit Bisnis
                 </Link>
             </div>
             {/* About Section */}
-            <section id="about" className="bg-white py-16 dark:bg-slate-900">
+            <section id="about" className="section-dark py-16">
                 <div className="container mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
-                    <h2 className="mb-6 text-3xl font-bold text-slate-900 dark:text-white">Tentang Unit Bisnis Kami</h2>
+                    <h2 className="section-heading">Tentang Unit Bisnis Kami</h2>
 
-                    <p className="mb-8 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+                    <p className="section-subheading">
                         {businessUnit.description ||
                             'Unit bisnis kami berdedikasi untuk memberikan nilai luar biasa melalui solusi inovatif, konsultasi ahli, dan layanan yang dapat diandalkan. Kami bekerja sama dengan klien untuk mencapai pertumbuhan dan keberlanjutan.'}
                     </p>
@@ -228,26 +228,23 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
 
             {/* Services Section */}
             {services?.length && (
-                <section className="bg-slate-50 py-16 dark:bg-slate-800">
+                <section className="bg-zinc-900 py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <header className="mx-auto mb-12 max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Layanan Kami</h2>
-                            <p className="text-lg text-slate-600 dark:text-slate-300">
+                            <h2 className="section-heading">Layanan Kami</h2>
+                            <p className="section-subheading">
                                 Temukan rangkaian layanan bisnis kami yang dirancang untuk memenuhi kebutuhan khusus Anda.
                             </p>
                         </header>
 
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {services.map((service, idx) => (
-                                <article
-                                    key={idx}
-                                    className="flex flex-col rounded-xl bg-white p-6 shadow-lg transition-shadow hover:shadow-xl dark:bg-slate-700"
-                                >
-                                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30">
-                                        <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
+                                <article key={idx} className="section-card flex flex-col">
+                                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-amber-500/20">
+                                        <CheckCircle className="h-6 w-6 text-amber-400" />
                                     </div>
-                                    <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">{service}</h3>
-                                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                                    <h3 className="mb-2 text-lg font-semibold text-white">{service}</h3>
+                                    <p className="text-sm text-zinc-300">
                                         Penyampaian layanan profesional dengan metodologi terbukti dan praktik terbaik industri.
                                     </p>
                                 </article>
@@ -269,17 +266,17 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     showShare={true}
                 />
             ) : (
-                <section className="bg-slate-50 py-16 dark:bg-slate-800">
+                <section className="py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Galeri Pekerjaan Kami</h2>
-                            <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
+                            <h2 className="section-heading">Galeri Pekerjaan Kami</h2>
+                            <p className="section-subheading">
                                 Kami sedang menyiapkan portofolio proyek. Kunjungi kembali untuk melihat contoh pekerjaan dan implementasi sukses
                                 kami.
                             </p>
-                            <div className="flex h-64 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-700">
-                                <div className="text-center text-slate-500 dark:text-slate-400">
-                                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-300 dark:bg-slate-600">
+                            <div className="flex h-64 items-center justify-center rounded-xl bg-zinc-800">
+                                <div className="text-center text-zinc-400">
+                                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
                                         <span className="text-2xl">🖼️</span>
                                     </div>
                                     <p className="text-sm">Portfolio coming soon</p>
@@ -300,18 +297,18 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     showContactInfo={false}
                 />
             ) : (
-                <section className="bg-white py-16 dark:bg-slate-900">
+                <section className="py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Kenali Tim Kami</h2>
-                            <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
+                            <h2 className="section-heading">Kenali Tim Kami</h2>
+                            <p className="section-subheading">
                                 Tim ahli kami siap melayani Anda. Kenali para profesional yang mendukung kesuksesan kami.
                             </p>
-                            <div className="rounded-xl bg-slate-50 p-8 dark:bg-slate-800">
-                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+                            <div className="rounded-xl bg-zinc-800 p-8">
+                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
                                     <span className="text-2xl">👥</span>
                                 </div>
-                                <p className="text-slate-600 dark:text-slate-300">
+                                <p className="text-zinc-300">
                                     Our team profiles are being prepared. Contact us to learn more about our expertise and experience.
                                 </p>
                             </div>
@@ -330,18 +327,16 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     showNavigation={true}
                 />
             ) : (
-                <section className="bg-slate-50 py-16 dark:bg-slate-800">
+                <section className="py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Testimoni Klien</h2>
-                            <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                Klien kami berbagi kisah sukses mereka. Jadilah kisah sukses berikutnya!
-                            </p>
-                            <div className="rounded-xl bg-white p-8 dark:bg-slate-700">
-                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+                            <h2 className="section-heading">Testimoni Klien</h2>
+                            <p className="section-subheading">Klien kami berbagi kisah sukses mereka. Jadilah kisah sukses berikutnya!</p>
+                            <div className="rounded-xl bg-zinc-800 p-8">
+                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
                                     <span className="text-2xl">💬</span>
                                 </div>
-                                <p className="text-slate-600 dark:text-slate-300">
+                                <p className="text-zinc-300">
                                     Share your experience working with us and help others discover the value of our services.
                                 </p>
                             </div>
@@ -356,26 +351,25 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     statistics={statistics}
                     title="Pencapaian Kami"
                     subtitle="Penghargaan & Tonggak"
-                    showTimeline={true}
                     showStatistics={true}
                 />
             ) : (
-                <section className="bg-white py-16 dark:bg-slate-900">
+                <section className="py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Pencapaian Kami</h2>
-                            <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
+                            <h2 className="section-heading">Pencapaian Kami</h2>
+                            <p className="section-subheading">
                                 Kami sedang membangun jejak kesuksesan. Bergabunglah merayakan tonggak dan pencapaian kami.
                             </p>
                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
                                 {statistics.map((stat) => (
-                                    <div key={stat.id} className="rounded-xl bg-slate-50 p-6 text-center dark:bg-slate-800">
+                                    <div key={stat.id} className="rounded-xl bg-zinc-800 p-6 text-center">
                                         <div className="mb-2 text-3xl">{stat.icon}</div>
-                                        <div className="mb-1 text-2xl font-bold text-slate-900 dark:text-white">
+                                        <div className="mb-1 text-2xl font-bold text-white">
                                             {stat.value}
                                             {stat.suffix}
                                         </div>
-                                        <div className="text-sm text-slate-600 dark:text-slate-300">{stat.label}</div>
+                                        <div className="text-sm text-zinc-300">{stat.label}</div>
                                     </div>
                                 ))}
                             </div>
@@ -395,21 +389,19 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                     showPortfolio={true}
                 />
             ) : (
-                <section className="bg-slate-50 py-16 dark:bg-slate-800">
+                <section className="py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Portofolio Kami</h2>
-                            <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
+                            <h2 className="section-heading">Portofolio Kami</h2>
+                            <p className="section-subheading">
                                 Kami sedang menyiapkan showcase proyek. Kunjungi kembali untuk melihat contoh implementasi sukses kami.
                             </p>
-                            <div className="rounded-xl bg-white p-8 dark:bg-slate-700">
-                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">
+                            <div className="rounded-xl bg-zinc-800 p-8">
+                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
                                     <span className="text-2xl">💼</span>
                                 </div>
-                                <p className="mb-4 text-slate-600 dark:text-slate-300">
-                                    Portofolio sedang disiapkan lengkap dengan studi kasus dan contoh proyek.
-                                </p>
-                                <Button className="bg-blue-600 text-white hover:bg-blue-700">Minta Studi Kasus</Button>
+                                <p className="mb-4 text-zinc-300">Portofolio sedang disiapkan lengkap dengan studi kasus dan contoh proyek.</p>
+                                <Button className="cta-button">Minta Studi Kasus</Button>
                             </div>
                         </div>
                     </div>
@@ -426,19 +418,17 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             />
             {/* Related Business Units */}
             {relatedUnits.length > 0 && (
-                <section className="bg-slate-50 py-16 dark:bg-slate-800">
+                <section className="section-dark py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto mb-12 max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Jelajahi Unit Bisnis Lainnya</h2>
-                            <p className="text-lg text-slate-600 dark:text-slate-300">
-                                Temukan unit bisnis spesialis lain dalam ekosistem CIGI Global.
-                            </p>
+                            <h2 className="section-heading">Jelajahi Unit Bisnis Lainnya</h2>
+                            <p className="section-subheading">Temukan unit bisnis spesialis lain dalam ekosistem CIGI Global.</p>
                         </div>
 
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {relatedUnits.slice(0, 3).map((unit) => (
                                 <Link key={unit.id} href={route('business-units.show', unit.slug)} className="group">
-                                    <div className="overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-slate-700">
+                                    <div className="section-card group overflow-hidden transition-all duration-300 hover:-translate-y-1">
                                         {unit.image && (
                                             <div className="relative h-48 overflow-hidden">
                                                 <img
@@ -449,13 +439,11 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
                                             </div>
                                         )}
                                         <div className="p-6">
-                                            <h3 className="mb-3 text-xl font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-white">
+                                            <h3 className="mb-3 text-xl font-bold text-white transition-colors group-hover:text-amber-400">
                                                 {unit.name}
                                             </h3>
-                                            {unit.description && (
-                                                <p className="mb-4 line-clamp-3 text-slate-600 dark:text-slate-300">{unit.description}</p>
-                                            )}
-                                            <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
+                                            {unit.description && <p className="mb-4 line-clamp-3 text-zinc-300">{unit.description}</p>}
+                                            <div className="flex items-center text-sm text-zinc-400">
                                                 <Building2 className="mr-2 h-4 w-4" />
                                                 Layanan Bisnis
                                             </div>

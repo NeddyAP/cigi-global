@@ -18,10 +18,10 @@ export default function MoreAboutCards({ cards, className = '' }: MoreAboutCards
             {cards.map((card, index) => (
                 <div
                     key={index}
-                    className="rounded-lg border border-gray-200 bg-white p-6 shadow-md transition-shadow duration-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
+                    className="rounded-lg border border-amber-200 p-6 shadow-md transition-all duration-300 hover:border-amber-300 hover:shadow-lg dark:border-amber-800 dark:hover:border-amber-700"
                 >
-                    <h3 className="mb-3 text-xl font-semibold text-gray-900 dark:text-white">{card.title}</h3>
-                    <p className="leading-relaxed text-gray-600 dark:text-gray-300">{card.description}</p>
+                    <h3 className="mb-3 text-xl font-semibold text-zinc-900 dark:text-white">{card.title}</h3>
+                    <p className="leading-relaxed text-zinc-600 dark:text-zinc-300">{card.description}</p>
                 </div>
             ))}
         </div>

@@ -88,11 +88,11 @@ export default function TestimonialsSection({
 
     if (testimonials.length === 0) {
         return (
-            <section className={`bg-white py-16 ${className}`}>
+            <section className={`section-dark py-16 ${className}`}>
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
-                    <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h2>
-                    <p className="mb-8 text-lg text-gray-600">{subtitle}</p>
-                    <p className="text-gray-500">No testimonials available at the moment.</p>
+                    <h2 className="section-heading">{title}</h2>
+                    <p className="section-subheading">{subtitle}</p>
+                    <p className="text-zinc-400">No testimonials available at the moment.</p>
                 </div>
             </section>
         );
@@ -101,12 +101,12 @@ export default function TestimonialsSection({
     const visibleTestimonials = testimonials.slice(currentIndex, currentIndex + maxVisible);
 
     return (
-        <section className={`bg-white py-16 ${className}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <section className={`section-dark py-16 ${className}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-12 text-center">
-                    <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h2>
-                    {subtitle && <p className="mx-auto max-w-2xl text-lg text-gray-600">{subtitle}</p>}
+                    <h2 className="section-heading">{title}</h2>
+                    {subtitle && <p className="section-subheading">{subtitle}</p>}
                 </div>
 
                 {/* Testimonials Grid */}
@@ -115,14 +115,14 @@ export default function TestimonialsSection({
                         {visibleTestimonials.map((testimonial, index) => (
                             <Card
                                 key={testimonial.id}
-                                className="group relative overflow-hidden transition-all duration-500 hover:shadow-xl"
+                                className="section-card group relative overflow-hidden"
                                 style={{
                                     animationDelay: `${index * 100}ms`,
                                 }}
                             >
                                 <CardContent className="p-6">
                                     {/* Quote Icon */}
-                                    <div className="mb-4 text-4xl text-blue-100 transition-colors duration-300 group-hover:text-blue-200">
+                                    <div className="mb-4 text-4xl text-amber-500/20 transition-colors duration-300 group-hover:text-amber-500/30">
                                         <Quote className="h-8 w-8" />
                                     </div>
 
@@ -132,23 +132,21 @@ export default function TestimonialsSection({
                                             {[...Array(5)].map((_, i) => (
                                                 <Star
                                                     key={i}
-                                                    className={`h-4 w-4 ${
-                                                        i < testimonial.rating! ? 'fill-current text-yellow-400' : 'text-gray-300'
-                                                    }`}
+                                                    className={`h-4 w-4 ${i < testimonial.rating! ? 'fill-current text-amber-400' : 'text-zinc-600'}`}
                                                 />
                                             ))}
-                                            <span className="ml-2 text-sm text-gray-500">{testimonial.rating}/5</span>
+                                            <span className="ml-2 text-sm text-zinc-400">{testimonial.rating}/5</span>
                                         </div>
                                     )}
 
                                     {/* Content */}
-                                    <blockquote className="mb-6 leading-relaxed text-gray-700">"{testimonial.content}"</blockquote>
+                                    <blockquote className="mb-6 leading-relaxed text-zinc-300">"{testimonial.content}"</blockquote>
 
                                     {/* Author Information */}
                                     <div className="flex items-center space-x-3">
                                         <Avatar className="h-12 w-12">
                                             <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                                            <AvatarFallback className="bg-blue-100 font-semibold text-blue-600">
+                                            <AvatarFallback className="bg-amber-500 font-semibold text-black">
                                                 {testimonial.name
                                                     .split(' ')
                                                     .map((n) => n[0])
@@ -159,25 +157,25 @@ export default function TestimonialsSection({
 
                                         <div className="min-w-0 flex-1">
                                             <div className="flex items-center space-x-2">
-                                                <h4 className="truncate font-semibold text-gray-900">{testimonial.name}</h4>
+                                                <h4 className="truncate font-semibold text-white">{testimonial.name}</h4>
                                                 {showVerified && testimonial.verified && (
-                                                    <Badge variant="secondary" className="bg-green-100 text-xs text-green-800">
+                                                    <Badge variant="secondary" className="bg-amber-500/20 text-xs text-amber-400">
                                                         ✓ Verified
                                                     </Badge>
                                                 )}
                                             </div>
 
                                             {showCompany && testimonial.company && (
-                                                <p className="truncate text-sm text-gray-600">
+                                                <p className="truncate text-sm text-zinc-400">
                                                     {testimonial.role && `${testimonial.role} at `}
                                                     {testimonial.company}
                                                 </p>
                                             )}
 
-                                            {!showCompany && testimonial.role && <p className="truncate text-sm text-gray-600">{testimonial.role}</p>}
+                                            {!showCompany && testimonial.role && <p className="truncate text-sm text-zinc-400">{testimonial.role}</p>}
 
                                             {showDate && testimonial.date && (
-                                                <p className="mt-1 text-xs text-gray-500">{new Date(testimonial.date).toLocaleDateString()}</p>
+                                                <p className="mt-1 text-xs text-zinc-500">{new Date(testimonial.date).toLocaleDateString()}</p>
                                             )}
                                         </div>
                                     </div>
@@ -193,7 +191,7 @@ export default function TestimonialsSection({
                                 variant="ghost"
                                 size="sm"
                                 onClick={goToPrevious}
-                                className="absolute top-1/2 left-0 -translate-x-12 -translate-y-1/2 border border-gray-200 bg-white shadow-lg hover:bg-gray-50"
+                                className="absolute top-1/2 left-0 -translate-x-12 -translate-y-1/2 border border-zinc-600 bg-zinc-800 text-zinc-300 shadow-lg hover:bg-zinc-700 hover:text-white"
                                 disabled={currentIndex === 0}
                             >
                                 <ChevronLeft className="h-5 w-5" />
@@ -203,7 +201,7 @@ export default function TestimonialsSection({
                                 variant="ghost"
                                 size="sm"
                                 onClick={goToNext}
-                                className="absolute top-1/2 right-0 translate-x-12 -translate-y-1/2 border border-gray-200 bg-white shadow-lg hover:bg-gray-50"
+                                className="absolute top-1/2 right-0 translate-x-12 -translate-y-1/2 border border-zinc-600 bg-zinc-800 text-zinc-300 shadow-lg hover:bg-zinc-700 hover:text-white"
                                 disabled={currentIndex >= testimonials.length - maxVisible}
                             >
                                 <ChevronRight className="h-5 w-5" />
@@ -220,7 +218,7 @@ export default function TestimonialsSection({
                                 key={index}
                                 onClick={() => goToSlide(index)}
                                 className={`h-3 w-3 rounded-full transition-all duration-300 ${
-                                    index === currentIndex ? 'scale-125 bg-blue-600' : 'bg-gray-300 hover:bg-gray-400'
+                                    index === currentIndex ? 'scale-125 bg-amber-500' : 'bg-zinc-600 hover:bg-zinc-500'
                                 }`}
                             />
                         ))}
@@ -230,9 +228,9 @@ export default function TestimonialsSection({
                 {/* Progress Bar */}
                 {autoRotate && testimonials.length > maxVisible && (
                     <div className="mx-auto mt-6 max-w-md">
-                        <div className="h-1 overflow-hidden rounded-full bg-gray-200">
+                        <div className="h-1 overflow-hidden rounded-full bg-zinc-700">
                             <div
-                                className="h-full rounded-full bg-blue-600 transition-all duration-300 ease-linear"
+                                className="h-full rounded-full bg-amber-500 transition-all duration-300 ease-linear"
                                 style={{
                                     width: `${((currentIndex + 1) / (testimonials.length - maxVisible + 1)) * 100}%`,
                                 }}

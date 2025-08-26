@@ -1,4 +1,3 @@
-import { AdvancedFilters, type FilterField } from '@/components/ui/advanced-filters';
 import { Button } from '@/components/ui/button';
 import { DataTable, type ColumnDef } from '@/components/ui/data-table';
 import AppLayout from '@/layouts/app-layout';
@@ -37,7 +36,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Berita', href: '/admin/news' },
 ];
 
-export default function AdminNewsIndex({ news, categories = [], filters = {} }: AdminNewsIndexProps) {
+export default function AdminNewsIndex({ news, filters = {} }: AdminNewsIndexProps) {
     const handleDelete = (newsItem: News) => {
         if (confirm(`Apakah Anda yakin ingin menghapus artikel "${newsItem.title}"?`)) {
             router.delete(route('admin.news.destroy', newsItem.slug));
@@ -62,32 +61,6 @@ export default function AdminNewsIndex({ news, categories = [], filters = {} }: 
             day: 'numeric',
         });
     };
-
-    const filterFields: FilterField[] = [
-        {
-            key: 'category',
-            label: 'Kategori',
-            type: 'select',
-            options: [
-                ...(categories || []).map((category) => ({
-                    value: category,
-                    label: category.charAt(0).toUpperCase() + category.slice(1),
-                })),
-            ],
-            placeholder: 'Pilih kategori',
-        },
-        {
-            key: 'status',
-            label: 'Status',
-            type: 'select',
-            options: [
-                { value: 'published', label: 'Dipublikasi' },
-                { value: 'draft', label: 'Draft' },
-                { value: 'featured', label: 'Unggulan' },
-            ],
-            placeholder: 'Pilih status',
-        },
-    ];
 
     const columns: ColumnDef<News>[] = [
         {
@@ -233,11 +206,6 @@ export default function AdminNewsIndex({ news, categories = [], filters = {} }: 
                 </div>
             </div>
 
-            {/* Advanced Filters */}
-            <div className="mb-6">
-                <AdvancedFilters filters={filters} fields={filterFields} routeName="admin.news.index" searchPlaceholder="Cari berita..." />
-            </div>
-
             {/* Data Table */}
             <DataTable
                 data={news?.data || []}
@@ -254,7 +222,6 @@ export default function AdminNewsIndex({ news, categories = [], filters = {} }: 
                     }
                 }
                 filters={filters}
-                searchPlaceholder="Cari berita..."
                 emptyState={emptyState}
                 routeName="admin.news.index"
             />

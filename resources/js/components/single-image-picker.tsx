@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { Media } from '@/types';
 import { Upload } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 interface SingleImagePickerProps {
     isOpen: boolean;
@@ -34,11 +34,6 @@ interface UploadMetadata {
     tags: string[];
 }
 
-interface GlobalData {
-    navBusinessUnits: Array<{ id: number; name: string; slug: string; image?: string }>;
-    navCommunityClubs: Array<{ id: number; name: string; slug: string; image?: string; type?: string }>;
-}
-
 interface ControllerData {
     businessUnits: Array<{ id: number; name: string; slug: string; type?: string }>;
     communityClubs: Array<{ id: number; name: string; slug: string; type?: string }>;
@@ -56,7 +51,7 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
         description: '',
         tags: [],
     });
-    const [showUploadConfirmation, setShowUploadConfirmation] = useState(false);
+
     const [controllerData, setControllerData] = useState<ControllerData>({
         businessUnits: [],
         communityClubs: [],
@@ -65,25 +60,37 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
     // Access global data from Inertia (fallback)
     const getGlobalData = useCallback(() => {
         // Try multiple ways to access global data
-        const data = (window as any).initialPage?.props || (window as any).__INERTIA__?.props || (window as any).page?.props;
+        const data =
+            (window as { initialPage?: { props?: unknown }; __INERTIA__?: { props?: unknown }; page?: { props?: unknown } }).initialPage?.props ||
+            (window as { initialPage?: { props?: unknown }; __INERTIA__?: { props?: unknown }; page?: { props?: unknown } }).__INERTIA__?.props ||
+            (window as { initialPage?: { props?: unknown }; __INERTIA__?: { props?: unknown }; page?: { props?: unknown } }).page?.props;
 
         return {
-            navBusinessUnits: data?.navBusinessUnits || [],
-            navCommunityClubs: data?.navCommunityClubs || [],
+            navBusinessUnits:
+                (data as { navBusinessUnits?: Array<{ id: number; name: string; slug: string; image?: string }> })?.navBusinessUnits || [],
+            navCommunityClubs:
+                (data as { navCommunityClubs?: Array<{ id: number; name: string; slug: string; image?: string; type?: string }> })
+                    ?.navCommunityClubs || [],
         };
     }, []);
 
     // Get global data with fallback
     const { navBusinessUnits, navCommunityClubs } = getGlobalData();
-    const businessUnits = controllerData.businessUnits.length > 0 ? controllerData.businessUnits : navBusinessUnits || [];
-    const communityClubs = controllerData.communityClubs.length > 0 ? controllerData.communityClubs : navCommunityClubs || [];
+    const businessUnits = useMemo(
+        () => (controllerData.businessUnits.length > 0 ? controllerData.businessUnits : navBusinessUnits || []),
+        [controllerData.businessUnits, navBusinessUnits],
+    );
+    const communityClubs = useMemo(
+        () => (controllerData.communityClubs.length > 0 ? controllerData.communityClubs : navCommunityClubs || []),
+        [controllerData.communityClubs, navCommunityClubs],
+    );
 
     // Debug global data access
     useEffect(() => {
         console.log('SingleImagePicker - Global data access:');
-        console.log('- window.initialPage?.props:', (window as any).initialPage?.props);
-        console.log('- window.__INERTIA__?.props:', (window as any).__INERTIA__?.props);
-        console.log('- window.page?.props:', (window as any).page?.props);
+        console.log('- window.initialPage?.props:', (window as { initialPage?: { props?: unknown } }).initialPage?.props);
+        console.log('- window.__INERTIA__?.props:', (window as { __INERTIA__?: { props?: unknown } }).__INERTIA__?.props);
+        console.log('- window.page?.props:', (window as { page?: { props?: unknown } }).page?.props);
         console.log('- Global Business Units:', navBusinessUnits);
         console.log('- Global Community Clubs:', navCommunityClubs);
         console.log('- Final businessUnits:', businessUnits);
@@ -100,7 +107,11 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
             console.log('Response headers:', response.headers);
 
             if (response.ok) {
-                const data = await response.json();
+                const data = (await response.json()) as {
+                    media?: { data?: Media[] };
+                    businessUnits?: Array<{ id: number; name: string; slug: string; type?: string }>;
+                    communityClubs?: Array<{ id: number; name: string; slug: string; type?: string }>;
+                };
                 console.log('Media data received:', data);
                 console.log('Media array structure:', data.media);
                 console.log('Media data array:', data.media?.data);
@@ -177,9 +188,10 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
             }
 
             // Debug CSRF token
-            const csrfToken = (window as any).csrfToken || document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const csrfToken =
+                (window as { csrfToken?: string }).csrfToken || document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
             console.log('CSRF Token sources:');
-            console.log('- window.csrfToken:', (window as any).csrfToken);
+            console.log('- window.csrfToken:', (window as { csrfToken?: string }).csrfToken);
             console.log('- meta[name="csrf-token"] content:', document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'));
             console.log('- Final CSRF Token:', csrfToken);
             console.log('Uploading file:', uploadFile.file.name);
@@ -204,7 +216,7 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
                     throw new Error(errorData.message || 'Upload failed');
                 }
 
-                const result = await response.json();
+                const result = (await response.json()) as { success: boolean; media?: { id: number; path?: string; url?: string }; message?: string };
                 console.log('Upload success result:', result);
 
                 if (result.success && result.media) {
@@ -215,8 +227,8 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
                                       ...file,
                                       status: 'success',
                                       progress: 100,
-                                      mediaId: result.media.id,
-                                      mediaUrl: result.media.path || result.media.url,
+                                      mediaId: result.media?.id || 0,
+                                      mediaUrl: result.media?.path || result.media?.url || '',
                                   }
                                 : file,
                         ),
@@ -241,7 +253,6 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
 
     // Handle upload confirmation
     const handleUploadConfirm = useCallback(() => {
-        setShowUploadConfirmation(false);
         // Start uploading all pending files
         uploadFiles.forEach((file) => {
             if (file.status === 'pending') {
@@ -262,7 +273,6 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
         }));
 
         setUploadFiles((prev) => [...prev, ...newUploadFiles]);
-        setShowUploadConfirmation(true);
     }, []);
 
     // Handle drag and drop

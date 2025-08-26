@@ -13,15 +13,12 @@ interface ImageInputProps {
     name: string;
     value?: string | number;
     onChange: (value: string | number | null) => void;
-    placeholder?: string;
     error?: string;
     showPreview?: boolean;
-    autoUpload?: boolean;
     multiple?: boolean; // New prop to determine picker type
     required?: boolean;
     disabled?: boolean;
     className?: string;
-    accept?: string;
 }
 
 export default function ImageInput({
@@ -29,15 +26,12 @@ export default function ImageInput({
     name,
     value,
     onChange,
-    placeholder,
     error,
     showPreview = false,
-    autoUpload = false,
     multiple = false,
     required = false,
     disabled = false,
     className,
-    accept = 'image/*',
 }: ImageInputProps) {
     const [showMediaPicker, setShowMediaPicker] = useState(false);
     const [showSingleImagePicker, setShowSingleImagePicker] = useState(false);

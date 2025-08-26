@@ -22,7 +22,6 @@ interface HeroSectionProps {
 
 export default function HeroSection({
     title,
-    subtitle,
     type,
     description,
     backgroundImage,

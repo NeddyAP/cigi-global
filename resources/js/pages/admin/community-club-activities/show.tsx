@@ -165,12 +165,12 @@ export default function Show({ communityClubActivity }: Props) {
                                 </CardHeader>
                                 <CardContent>
                                     <ul className="space-y-2">
-                                        {communityClubActivity.requirements.map((requirement, index) => (
-                                            <li key={index} className="flex items-center gap-2">
+                                        {communityClubActivity.requirements && (
+                                            <li className="flex items-center gap-2">
                                                 <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-                                                <span>{requirement}</span>
+                                                <span>{communityClubActivity.requirements}</span>
                                             </li>
-                                        ))}
+                                        )}
                                     </ul>
                                 </CardContent>
                             </Card>

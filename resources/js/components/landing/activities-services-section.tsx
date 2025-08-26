@@ -51,7 +51,7 @@ export default function ActivitiesServicesSection({
 
     if (allItems.length === 0) {
         return (
-            <section className={`bg-gray-50 py-16 ${className}`}>
+            <section className={`py-16 ${className}`}>
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
                     <h2 className="mb-4 text-3xl font-bold text-gray-900">{title}</h2>
                     <p className="mb-8 text-lg text-gray-600">{subtitle}</p>
@@ -62,7 +62,7 @@ export default function ActivitiesServicesSection({
     }
 
     return (
-        <section className={`bg-gray-50 py-16 ${className}`}>
+        <section className={`py-16 ${className}`}>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-12 text-center">

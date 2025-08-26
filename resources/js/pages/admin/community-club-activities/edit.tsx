@@ -44,24 +44,42 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
     };
 
     const handleArrayChange = (field: string, index: number, value: string) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: prev[field as keyof typeof prev].map((item: string, i: number) => (i === index ? value : item)),
-        }));
+        setFormData((prev) => {
+            const currentValue = prev[field as keyof typeof prev];
+            if (Array.isArray(currentValue)) {
+                return {
+                    ...prev,
+                    [field]: currentValue.map((item, i) => (i === index ? value : item)),
+                };
+            }
+            return prev;
+        });
     };
 
     const addArrayItem = (field: string) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: [...prev[field as keyof typeof prev], ''],
-        }));
+        setFormData((prev) => {
+            const currentValue = prev[field as keyof typeof prev];
+            if (Array.isArray(currentValue)) {
+                return {
+                    ...prev,
+                    [field]: [...currentValue, ''],
+                };
+            }
+            return prev;
+        });
     };
 
     const removeArrayItem = (field: string, index: number) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: prev[field as keyof typeof prev].filter((_: string, i: number) => i !== index),
-        }));
+        setFormData((prev) => {
+            const currentValue = prev[field as keyof typeof prev];
+            if (Array.isArray(currentValue)) {
+                return {
+                    ...prev,
+                    [field]: currentValue.filter((_, i) => i !== index),
+                };
+            }
+            return prev;
+        });
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -71,7 +89,10 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
         Object.entries(formData).forEach(([key, value]) => {
             if (value !== null && value !== '') {
                 if (key === 'benefits' || key === 'requirements') {
-                    data.append(key, JSON.stringify(value.filter((item: string) => item.trim() !== '')));
+                    const stringArray = value as string[];
+                    if (Array.isArray(stringArray)) {
+                        data.append(key, JSON.stringify(stringArray.filter((item: string) => item.trim() !== '')));
+                    }
                 } else if (key === 'image' && value instanceof File) {
                     data.append(key, value);
                 } else if (key !== 'image') {
@@ -317,7 +338,7 @@ export default function Edit({ communityClubActivity, communityClubs, errors }: 
                             <CardTitle>Persyaratan</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            {formData.requirements.map((requirement, index) => (
+                            {(formData.requirements as string[]).map((requirement: string, index: number) => (
                                 <div key={index} className="flex gap-2">
                                     <Input
                                         value={requirement}

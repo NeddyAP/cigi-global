@@ -5,7 +5,7 @@ import { Building2, Mail, MapPin, Newspaper, Phone, Users } from 'lucide-react';
 
 interface PageProps {
     globalVariables: globalVariables;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export default function PublicFooter() {

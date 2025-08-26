@@ -34,7 +34,7 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
 
     // Transform gallery images for the GallerySection component
     const galleryImages =
-        communityClub.gallery_images?.map((image: any, index: number) => {
+        communityClub.gallery_images?.map((image: unknown, index: number) => {
             // gallery_images may be an array of strings (urls) or objects { id, url, alt, caption }
             if (typeof image === 'string') {
                 return {
@@ -47,12 +47,13 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
             }
 
             // If image is an object, safely read properties
-            const imgUrl = image?.url ?? (typeof image === 'string' ? image : '');
+            const imageObj = image as { url?: string; id?: string | number; alt?: string; caption?: string };
+            const imgUrl = imageObj?.url ?? (typeof image === 'string' ? image : '');
             return {
-                id: image?.id ?? `img-${index + 1}`,
+                id: imageObj?.id ?? `img-${index + 1}`,
                 url: imgUrl,
-                alt: image?.alt ?? `${communityClub.name} - Image ${index + 1}`,
-                caption: image?.caption ?? `${communityClub.name} community activities and events`,
+                alt: imageObj?.alt ?? `${communityClub.name} - Image ${index + 1}`,
+                caption: imageObj?.caption ?? `${communityClub.name} community activities and events`,
                 thumbnail: { url: imgUrl },
             };
         }) || [];
@@ -220,11 +221,11 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
             </div>
 
             {/* About Section */}
-            <section id="about" className="bg-white py-16 dark:bg-slate-900">
+            <section id="about" className="section-dark py-16">
                 <div className="container mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
-                    <h2 className="mb-6 text-3xl font-bold text-slate-900 dark:text-white">Tentang Komunitas Kami</h2>
+                    <h2 className="section-heading">Tentang Komunitas Kami</h2>
 
-                    <p className="mb-8 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+                    <p className="section-subheading">
                         {communityClub.description ||
                             'Kampung Ramah Lingkungan Cigi adalah program komunitas untuk menciptakan lingkungan yang bersih, hijau, dan berkelanjutan.'}
                     </p>
@@ -237,23 +238,21 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
 
             {/* Activities Section */}
             {activities.length > 0 && (
-                <section className="bg-slate-50 py-16 dark:bg-slate-800">
+                <section className="bg-zinc-900 py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto mb-12 max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Aktivitas Komunitas</h2>
-                            <p className="text-lg text-slate-600 dark:text-slate-300">
-                                Temukan berbagai aktivitas dan program yang kami sediakan untuk anggota komunitas.
-                            </p>
+                            <h2 className="section-heading">Aktivitas Komunitas</h2>
+                            <p className="section-subheading">Temukan berbagai aktivitas dan program yang kami sediakan untuk anggota komunitas.</p>
                         </div>
 
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {activities.map((activity, index) => (
-                                <div key={index} className="rounded-xl bg-white p-6 shadow-lg transition-shadow hover:shadow-xl dark:bg-slate-700">
-                                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
-                                        <Activity className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                                <div key={index} className="section-card">
+                                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-amber-500/20">
+                                        <Activity className="h-6 w-6 text-amber-400" />
                                     </div>
-                                    <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">{activity}</h3>
-                                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                                    <h3 className="mb-2 text-lg font-semibold text-white">{activity}</h3>
+                                    <p className="text-sm text-zinc-300">
                                         Join our community members in this engaging activity designed to foster connections and learning.
                                     </p>
                                 </div>
@@ -276,16 +275,16 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                     showShare={true}
                 />
             ) : (
-                <section className="bg-slate-50 py-16 dark:bg-slate-800">
+                <section className="py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Galeri Komunitas</h2>
-                            <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
+                            <h2 className="section-heading">Galeri Komunitas</h2>
+                            <p className="section-subheading">
                                 Kami sedang menyusun koleksi foto kami. Kunjungi kembali untuk melihat gambar dari aktivitas dan acara komunitas.
                             </p>
-                            <div className="flex h-64 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-700">
-                                <div className="text-center text-slate-500 dark:text-slate-400">
-                                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-300 dark:bg-slate-600">
+                            <div className="flex h-64 items-center justify-center rounded-xl bg-zinc-800">
+                                <div className="text-center text-zinc-400">
+                                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
                                         <span className="text-2xl">📸</span>
                                     </div>
                                     <p className="text-sm">Galeri segera hadir</p>
@@ -307,18 +306,18 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                     showNavigation={true}
                 />
             ) : (
-                <section className="bg-white py-16 dark:bg-slate-900">
+                <section className="py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Testimoni Anggota</h2>
-                            <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
+                            <h2 className="section-heading">Testimoni Anggota</h2>
+                            <p className="section-subheading">
                                 Anggota komunitas kami berbagi pengalaman mereka. Jadilah yang pertama menambahkan cerita Anda!
                             </p>
-                            <div className="rounded-xl bg-slate-50 p-8 dark:bg-slate-800">
-                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+                            <div className="rounded-xl bg-zinc-800 p-8">
+                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
                                     <span className="text-2xl">💬</span>
                                 </div>
-                                <p className="text-slate-600 dark:text-slate-300">
+                                <p className="text-zinc-300">
                                     Share your experience with our community and help others discover the value of joining us.
                                 </p>
                             </div>
@@ -334,26 +333,25 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                     statistics={statistics}
                     title="Pencapaian Komunitas"
                     subtitle="Merayakan Keberhasilan Kami"
-                    showTimeline={true}
                     showStatistics={true}
                 />
             ) : (
-                <section className="bg-slate-50 py-16 dark:bg-slate-800">
+                <section className="py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Pencapaian Komunitas</h2>
-                            <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
+                            <h2 className="section-heading">Pencapaian Komunitas</h2>
+                            <p className="section-subheading">
                                 Kami sedang membangun jejak kesuksesan kami. Bergabunglah untuk menciptakan pencapaian bermakna bersama.
                             </p>
                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
                                 {statistics.map((stat) => (
-                                    <div key={stat.id} className="rounded-xl bg-white p-6 text-center dark:bg-slate-700">
+                                    <div key={stat.id} className="rounded-xl bg-zinc-800 p-6 text-center">
                                         <div className="mb-2 text-3xl">{stat.icon}</div>
-                                        <div className="mb-1 text-2xl font-bold text-slate-900 dark:text-white">
+                                        <div className="mb-1 text-2xl font-bold text-white">
                                             {stat.value}
                                             {stat.suffix}
                                         </div>
-                                        <div className="text-sm text-slate-600 dark:text-slate-300">{stat.label}</div>
+                                        <div className="text-sm text-zinc-300">{stat.label}</div>
                                     </div>
                                 ))}
                             </div>
@@ -374,21 +372,19 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                     showPortfolio={false}
                 />
             ) : (
-                <section className="bg-white py-16 dark:bg-slate-900">
+                <section className="py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Acara Komunitas</h2>
-                            <p className="mb-8 text-lg text-slate-600 dark:text-slate-300">
-                                Kami sedang merencanakan acara dan aktivitas menarik. Nantikan pembaruan!
-                            </p>
-                            <div className="rounded-xl bg-slate-50 p-8 dark:bg-slate-800">
-                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+                            <h2 className="section-heading">Acara Komunitas</h2>
+                            <p className="section-subheading">Kami sedang merencanakan acara dan aktivitas menarik. Nantikan pembaruan!</p>
+                            <div className="rounded-xl bg-zinc-800 p-8">
+                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
                                     <span className="text-2xl">📅</span>
                                 </div>
-                                <p className="mb-4 text-slate-600 dark:text-slate-300">
+                                <p className="mb-4 text-zinc-300">
                                     Kalender acara kami sedang disiapkan dengan aktivitas menarik dan peluang jaringan.
                                 </p>
-                                <Button className="bg-blue-600 text-white hover:bg-blue-700">Dapatkan Pemberitahuan</Button>
+                                <Button className="cta-button">Dapatkan Pemberitahuan</Button>
                             </div>
                         </div>
                     </div>
@@ -407,17 +403,17 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
 
             {/* Related Clubs */}
             {relatedClubs.length > 0 && (
-                <section className="bg-slate-50 py-16 dark:bg-slate-800">
+                <section className="section-dark py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto mb-12 max-w-4xl text-center">
-                            <h2 className="mb-4 text-3xl font-bold text-slate-900 dark:text-white">Jelajahi Komunitas Lainnya</h2>
-                            <p className="text-lg text-slate-600 dark:text-slate-300">Temukan komunitas dinamis lain dalam ekosistem CIGI Global.</p>
+                            <h2 className="section-heading">Jelajahi Komunitas Lainnya</h2>
+                            <p className="section-subheading">Temukan komunitas dinamis lain dalam ekosistem CIGI Global.</p>
                         </div>
 
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {relatedClubs.slice(0, 3).map((club) => (
                                 <Link key={club.id} href={route('community-clubs.show', club.slug)} className="group">
-                                    <div className="overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-slate-700">
+                                    <div className="section-card group overflow-hidden transition-all duration-300 hover:-translate-y-1">
                                         {club.image && (
                                             <div className="relative h-48 overflow-hidden">
                                                 <img
@@ -426,18 +422,16 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                                                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                                 />
                                                 <div className="absolute top-3 right-3">
-                                                    <Badge className="bg-green-500 text-white">{club.type}</Badge>
+                                                    <Badge className="bg-amber-500 text-black">{club.type}</Badge>
                                                 </div>
                                             </div>
                                         )}
                                         <div className="p-6">
-                                            <h3 className="mb-3 text-xl font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-white">
+                                            <h3 className="mb-3 text-xl font-bold text-white transition-colors group-hover:text-amber-400">
                                                 {club.name}
                                             </h3>
-                                            {club.description && (
-                                                <p className="mb-4 line-clamp-3 text-slate-600 dark:text-slate-300">{club.description}</p>
-                                            )}
-                                            <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
+                                            {club.description && <p className="mb-4 line-clamp-3 text-zinc-300">{club.description}</p>}
+                                            <div className="flex items-center text-sm text-zinc-400">
                                                 <Users className="mr-2 h-4 w-4" />
                                                 {club.member_count || 'Baru'} anggota
                                             </div>

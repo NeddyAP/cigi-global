@@ -117,15 +117,15 @@ export default function EventsPortfolioSection({
     const getStatusColor = useCallback((status: string) => {
         switch (status) {
             case 'featured':
-                return 'bg-yellow-500 text-white';
+                return 'bg-amber-500 text-black';
             case 'upcoming':
-                return 'bg-green-500 text-white';
+                return 'bg-amber-400 text-black';
             case 'past':
-                return 'bg-gray-500 text-white';
+                return 'bg-zinc-600 text-white';
             case 'ongoing':
-                return 'bg-blue-500 text-white';
+                return 'bg-amber-600 text-black';
             default:
-                return 'bg-gray-500 text-white';
+                return 'bg-zinc-500 text-white';
         }
     }, []);
 
@@ -157,12 +157,7 @@ export default function EventsPortfolioSection({
         const isUpcoming = isEventUpcoming(event);
 
         return (
-            <Card
-                key={event.id}
-                className={`group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                    event.isFeatured ? 'ring-2 ring-yellow-400' : ''
-                }`}
-            >
+            <Card key={event.id} className={`section-card group relative overflow-hidden ${event.isFeatured ? 'ring-2 ring-amber-500' : ''}`}>
                 <CardHeader className="p-0">
                     {/* Event Image */}
                     <div className="relative h-48 overflow-hidden">
@@ -173,8 +168,8 @@ export default function EventsPortfolioSection({
                                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                             />
                         ) : (
-                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
-                                <Calendar className="h-16 w-16 text-blue-400" />
+                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900">
+                                <Calendar className="h-16 w-16 text-amber-400" />
                             </div>
                         )}
 
@@ -186,7 +181,7 @@ export default function EventsPortfolioSection({
                         {/* Featured Badge */}
                         {event.isFeatured && (
                             <div className="absolute top-3 right-3">
-                                <Badge className="bg-yellow-500 text-white">
+                                <Badge className="bg-amber-500 text-black">
                                     <Star className="mr-1 h-3 w-3" />
                                     Featured
                                 </Badge>
@@ -196,7 +191,7 @@ export default function EventsPortfolioSection({
                         {/* Registration Status */}
                         {isUpcoming && event.maxParticipants && event.currentParticipants && (
                             <div className="absolute right-3 bottom-3">
-                                <Badge variant="secondary" className="bg-white/90 text-gray-900">
+                                <Badge variant="secondary" className="bg-zinc-800/90 text-white">
                                     {event.currentParticipants}/{event.maxParticipants} spots
                                 </Badge>
                             </div>
@@ -207,27 +202,27 @@ export default function EventsPortfolioSection({
                 <CardContent className="p-6">
                     {/* Event Meta */}
                     <div className="mb-3 flex items-center justify-between">
-                        <div className="flex items-center space-x-2 text-sm text-gray-500">
+                        <div className="flex items-center space-x-2 text-sm text-zinc-400">
                             <Calendar className="h-4 w-4" />
                             <span>{formatDate(event.date)}</span>
                         </div>
                         {event.price && (
-                            <Badge variant="outline" className="border-green-200 text-green-600">
+                            <Badge variant="outline" className="border-amber-500/30 text-amber-400">
                                 {event.price}
                             </Badge>
                         )}
                     </div>
 
                     {/* Title */}
-                    <CardTitle className="mb-3 text-xl font-semibold text-gray-900 transition-colors duration-300 group-hover:text-blue-600">
+                    <CardTitle className="mb-3 text-xl font-semibold text-white transition-colors duration-300 group-hover:text-amber-400">
                         {event.title}
                     </CardTitle>
 
                     {/* Description */}
-                    <p className="mb-4 line-clamp-3 leading-relaxed text-gray-600">{event.description}</p>
+                    <p className="mb-4 line-clamp-3 leading-relaxed text-zinc-300">{event.description}</p>
 
                     {/* Event Details */}
-                    <div className="mb-4 space-y-2 text-sm text-gray-500">
+                    <div className="mb-4 space-y-2 text-sm text-zinc-400">
                         {event.time && (
                             <div className="flex items-center space-x-2">
                                 <Clock className="h-4 w-4" />
@@ -272,7 +267,7 @@ export default function EventsPortfolioSection({
                     {/* Action Buttons */}
                     <div className="flex space-x-2">
                         {isUpcoming && event.registrationUrl && (
-                            <Button size="sm" className="flex-1 bg-blue-600 hover:bg-blue-700" asChild>
+                            <Button size="sm" className="cta-button flex-1" asChild>
                                 <a href={event.registrationUrl} target="_blank" rel="noopener noreferrer">
                                     Register Now
                                     <ExternalLink className="ml-2 h-4 w-4" />
@@ -281,7 +276,7 @@ export default function EventsPortfolioSection({
                         )}
 
                         {!isUpcoming && (
-                            <Button variant="outline" size="sm" className="flex-1">
+                            <Button variant="outline" size="sm" className="cta-button-outline flex-1">
                                 View Details
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>
@@ -293,12 +288,7 @@ export default function EventsPortfolioSection({
     };
 
     const renderPortfolioCard = (item: PortfolioItem) => (
-        <Card
-            key={item.id}
-            className={`group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                item.isHighlighted ? 'ring-2 ring-blue-400' : ''
-            }`}
-        >
+        <Card key={item.id} className={`section-card group relative overflow-hidden ${item.isHighlighted ? 'ring-2 ring-amber-500' : ''}`}>
             <CardHeader className="p-0">
                 {/* Portfolio Image */}
                 <div className="relative h-48 overflow-hidden">
@@ -309,15 +299,15 @@ export default function EventsPortfolioSection({
                             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                     ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-green-50 to-blue-50">
-                            <Building className="h-16 w-16 text-green-400" />
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900">
+                            <Building className="h-16 w-16 text-amber-400" />
                         </div>
                     )}
 
                     {/* Featured Badge */}
                     {item.isFeatured && (
                         <div className="absolute top-3 left-3">
-                            <Badge className="bg-yellow-500 text-white">
+                            <Badge className="bg-amber-500 text-black">
                                 <Star className="mr-1 h-3 w-3" />
                                 Featured
                             </Badge>
@@ -327,7 +317,7 @@ export default function EventsPortfolioSection({
                     {/* Category Badge */}
                     {item.category && (
                         <div className="absolute top-3 right-3">
-                            <Badge variant="secondary" className="bg-white/90 text-gray-900">
+                            <Badge variant="secondary" className="bg-zinc-800/90 text-white">
                                 {item.category}
                             </Badge>
                         </div>
@@ -338,35 +328,35 @@ export default function EventsPortfolioSection({
             <CardContent className="p-6">
                 {/* Client */}
                 {item.client && (
-                    <div className="mb-3 flex items-center space-x-2 text-sm text-gray-500">
+                    <div className="mb-3 flex items-center space-x-2 text-sm text-zinc-400">
                         <User className="h-4 w-4" />
                         <span>Client: {item.client}</span>
                     </div>
                 )}
 
                 {/* Title */}
-                <CardTitle className="mb-3 text-xl font-semibold text-gray-900 transition-colors duration-300 group-hover:text-blue-600">
+                <CardTitle className="mb-3 text-xl font-semibold text-white transition-colors duration-300 group-hover:text-amber-400">
                     {item.title}
                 </CardTitle>
 
                 {/* Description */}
-                <p className="mb-4 line-clamp-3 leading-relaxed text-gray-600">{item.description}</p>
+                <p className="mb-4 line-clamp-3 leading-relaxed text-zinc-300">{item.description}</p>
 
                 {/* Technologies */}
                 {item.technologies && item.technologies.length > 0 && (
                     <div className="mb-4">
-                        <div className="mb-2 flex items-center space-x-2 text-sm font-medium text-gray-700">
+                        <div className="mb-2 flex items-center space-x-2 text-sm font-medium text-zinc-300">
                             <Tag className="h-4 w-4" />
                             <span>Technologies</span>
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {item.technologies.slice(0, 4).map((tech, index) => (
-                                <Badge key={index} variant="outline" className="text-xs">
+                                <Badge key={index} variant="outline" className="border-zinc-600 text-xs text-zinc-300">
                                     {tech}
                                 </Badge>
                             ))}
                             {item.technologies.length > 4 && (
-                                <Badge variant="outline" className="text-xs">
+                                <Badge variant="outline" className="border-zinc-600 text-xs text-zinc-300">
                                     +{item.technologies.length - 4} more
                                 </Badge>
                             )}
@@ -377,14 +367,14 @@ export default function EventsPortfolioSection({
                 {/* Results */}
                 {item.results && item.results.length > 0 && (
                     <div className="mb-4">
-                        <div className="mb-2 flex items-center space-x-2 text-sm font-medium text-gray-700">
+                        <div className="mb-2 flex items-center space-x-2 text-sm font-medium text-zinc-300">
                             <TrendingUp className="h-4 w-4" />
                             <span>Key Results</span>
                         </div>
                         <ul className="space-y-1">
                             {item.results.slice(0, 2).map((result, index) => (
-                                <li key={index} className="flex items-start space-x-2 text-xs text-gray-600">
-                                    <div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-500" />
+                                <li key={index} className="flex items-start space-x-2 text-xs text-zinc-400">
+                                    <div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-amber-500" />
                                     <span>{result}</span>
                                 </li>
                             ))}
@@ -395,7 +385,7 @@ export default function EventsPortfolioSection({
                 {/* Action Buttons */}
                 <div className="flex space-x-2">
                     {item.caseStudyUrl && (
-                        <Button variant="outline" size="sm" className="flex-1" asChild>
+                        <Button variant="outline" size="sm" className="cta-button-outline flex-1" asChild>
                             <a href={item.caseStudyUrl} target="_blank" rel="noopener noreferrer">
                                 Case Study
                                 <ExternalLink className="ml-2 h-4 w-4" />
@@ -404,7 +394,7 @@ export default function EventsPortfolioSection({
                     )}
 
                     {item.projectUrl && (
-                        <Button size="sm" className="flex-1 bg-blue-600 hover:bg-blue-700" asChild>
+                        <Button size="sm" className="cta-button flex-1" asChild>
                             <a href={item.projectUrl} target="_blank" rel="noopener noreferrer">
                                 View Project
                                 <ExternalLink className="ml-2 h-4 w-4" />
@@ -413,7 +403,7 @@ export default function EventsPortfolioSection({
                     )}
 
                     {!item.caseStudyUrl && !item.projectUrl && (
-                        <Button variant="outline" size="sm" className="w-full">
+                        <Button variant="outline" size="sm" className="cta-button-outline w-full">
                             View Details
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
@@ -425,11 +415,11 @@ export default function EventsPortfolioSection({
 
     if (!showEvents && !showPortfolio) {
         return (
-            <section className={`bg-gray-50 py-16 ${className}`}>
+            <section className={`section-dark py-16 ${className}`}>
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
-                    <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h2>
-                    <p className="mb-8 text-lg text-gray-600">{subtitle}</p>
-                    <p className="text-gray-500">No content available at the moment.</p>
+                    <h2 className="section-heading">{title}</h2>
+                    <p className="section-subheading">{subtitle}</p>
+                    <p className="text-zinc-400">No content available at the moment.</p>
                 </div>
             </section>
         );
@@ -440,15 +430,15 @@ export default function EventsPortfolioSection({
         const content = showEvents ? (
             <div>
                 <div className="mb-8 text-center">
-                    <h3 className="mb-4 text-2xl font-bold text-gray-900">Upcoming Events</h3>
-                    <p className="text-gray-600">Join us for these exciting community events</p>
+                    <h3 className="mb-4 text-2xl font-bold text-white">Upcoming Events</h3>
+                    <p className="text-zinc-300">Join us for these exciting community events</p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">{events.slice(0, visibleEvents).map(renderEventCard)}</div>
 
                 {visibleEvents < events.length && (
                     <div className="mt-8 text-center">
-                        <Button variant="outline" onClick={loadMoreEvents}>
+                        <Button variant="outline" className="cta-button-outline" onClick={loadMoreEvents}>
                             Load More Events
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
@@ -457,18 +447,13 @@ export default function EventsPortfolioSection({
             </div>
         ) : (
             <div>
-                <div className="mb-8 text-center">
-                    <h3 className="mb-4 text-2xl font-bold text-gray-900">Our Portfolio</h3>
-                    <p className="text-gray-600">Explore our successful projects and case studies</p>
-                </div>
-
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {portfolioItems.slice(0, visiblePortfolio).map(renderPortfolioCard)}
                 </div>
 
                 {visiblePortfolio < portfolioItems.length && (
                     <div className="mt-8 text-center">
-                        <Button variant="outline" onClick={loadMorePortfolio}>
+                        <Button variant="outline" className="cta-button-outline" onClick={loadMorePortfolio}>
                             Load More Projects
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
@@ -478,12 +463,12 @@ export default function EventsPortfolioSection({
         );
 
         return (
-            <section className={`bg-gray-50 py-16 ${className}`}>
+            <section className={`section-dark py-16 ${className}`}>
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Header */}
                     <div className="mb-12 text-center">
-                        <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h2>
-                        {subtitle && <p className="mx-auto max-w-2xl text-lg text-gray-600">{subtitle}</p>}
+                        <h2 className="section-heading">{title}</h2>
+                        {subtitle && <p className="section-subheading">{subtitle}</p>}
                     </div>
 
                     {content}
@@ -494,12 +479,12 @@ export default function EventsPortfolioSection({
 
     // Use tabs when both types are shown
     return (
-        <section className={`bg-gray-50 py-16 ${className}`}>
+        <section className={`section-dark py-16 ${className}`}>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-12 text-center">
-                    <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h2>
-                    {subtitle && <p className="mx-auto max-w-2xl text-lg text-gray-600">{subtitle}</p>}
+                    <h2 className="section-heading">{title}</h2>
+                    {subtitle && <p className="section-subheading">{subtitle}</p>}
                 </div>
 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -521,7 +506,7 @@ export default function EventsPortfolioSection({
 
                         {visibleEvents < events.length && (
                             <div className="mt-8 text-center">
-                                <Button variant="outline" onClick={loadMoreEvents}>
+                                <Button variant="outline" className="cta-button-outline" onClick={loadMoreEvents}>
                                     Load More Events
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>
@@ -530,11 +515,7 @@ export default function EventsPortfolioSection({
 
                         {showViewAll && events.length > 0 && (
                             <div className="mt-8 text-center">
-                                <Button
-                                    variant="outline"
-                                    className="px-8 py-3 text-lg font-semibold transition-all duration-300 hover:border-blue-600 hover:bg-blue-600 hover:text-white"
-                                    asChild
-                                >
+                                <Button variant="outline" className="cta-button-outline px-8 py-3 text-lg font-semibold" asChild>
                                     <a href={viewAllEventsLink}>
                                         View All Events
                                         <ArrowRight className="ml-2 h-5 w-5" />
@@ -551,7 +532,7 @@ export default function EventsPortfolioSection({
 
                         {visiblePortfolio < portfolioItems.length && (
                             <div className="mt-8 text-center">
-                                <Button variant="outline" onClick={loadMorePortfolio}>
+                                <Button variant="outline" className="cta-button-outline" onClick={loadMorePortfolio}>
                                     Load More Projects
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>
@@ -560,11 +541,7 @@ export default function EventsPortfolioSection({
 
                         {showViewAll && portfolioItems.length > 0 && (
                             <div className="mt-8 text-center">
-                                <Button
-                                    variant="outline"
-                                    className="px-8 py-3 text-lg font-semibold transition-all duration-300 hover:border-blue-600 hover:bg-blue-600 hover:text-white"
-                                    asChild
-                                >
+                                <Button variant="outline" className="cta-button-outline px-8 py-3 text-lg font-semibold" asChild>
                                     <a href={viewAllPortfolioLink}>
                                         View All Projects
                                         <ArrowRight className="ml-2 h-5 w-5" />

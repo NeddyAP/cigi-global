@@ -47,28 +47,61 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
-    const handleArrayChange = (field: string, index: number, value: string) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: prev[field as keyof typeof prev].map((item: string | ProcessStep, i: number) => (i === index ? value : item)),
-        }));
+    const handleArrayChange = (field: string, index: number, value: string | ProcessStep) => {
+        setFormData((prev) => {
+            const currentValue = prev[field as keyof typeof prev];
+            if (Array.isArray(currentValue)) {
+                if (field === 'features' || field === 'technologies') {
+                    const stringArray = currentValue as string[];
+                    return {
+                        ...prev,
+                        [field]: stringArray.map((item, i) => (i === index ? (value as string) : item)),
+                    };
+                } else if (field === 'process_steps') {
+                    const processArray = currentValue as ProcessStep[];
+                    return {
+                        ...prev,
+                        [field]: processArray.map((item, i) => (i === index ? (value as ProcessStep) : item)),
+                    };
+                }
+            }
+            return prev;
+        });
     };
 
     const addArrayItem = (field: string) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: [
-                ...prev[field as keyof typeof prev],
-                field === 'process_steps' ? { title: '', description: '', order: prev.process_steps.length + 1 } : '',
-            ],
-        }));
+        setFormData((prev) => {
+            const currentValue = prev[field as keyof typeof prev];
+            if (Array.isArray(currentValue)) {
+                if (field === 'process_steps') {
+                    const processArray = currentValue as ProcessStep[];
+                    return {
+                        ...prev,
+                        [field]: [...processArray, { title: '', description: '', order: processArray.length + 1 }],
+                    };
+                } else {
+                    const stringArray = currentValue as string[];
+                    return {
+                        ...prev,
+                        [field]: [...stringArray, ''],
+                    };
+                }
+            }
+            return prev;
+        });
     };
 
     const removeArrayItem = (field: string, index: number) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: prev[field as keyof typeof prev].filter((_: string | ProcessStep, i: number) => i !== index),
-        }));
+        setFormData((prev) => {
+            const currentValue = prev[field as keyof typeof prev];
+            if (Array.isArray(currentValue)) {
+                return {
+                    ...prev,
+                    [field]: currentValue.filter((_, i) => i !== index),
+                };
+            }
+            return prev;
+        });
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -78,9 +111,15 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
         Object.entries(formData).forEach(([key, value]) => {
             if (value !== null && value !== '') {
                 if (key === 'features' || key === 'technologies') {
-                    data.append(key, JSON.stringify(value.filter((item: string) => item.trim() !== '')));
+                    const stringArray = value as string[];
+                    if (Array.isArray(stringArray)) {
+                        data.append(key, JSON.stringify(stringArray.filter((item: string) => item.trim() !== '')));
+                    }
                 } else if (key === 'process_steps') {
-                    data.append(key, JSON.stringify(value.filter((item: ProcessStep) => item.title.trim() !== '')));
+                    const processArray = value as ProcessStep[];
+                    if (Array.isArray(processArray)) {
+                        data.append(key, JSON.stringify(processArray.filter((item: ProcessStep) => item.title.trim() !== '')));
+                    }
                 } else if (key === 'image' && value instanceof File) {
                     data.append(key, value);
                 } else if (key !== 'image') {
@@ -311,13 +350,17 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                                     <div className="flex gap-2">
                                         <Input
                                             value={step.title}
-                                            onChange={(e) => handleArrayChange('process_steps', index, { ...step, title: e.target.value })}
+                                            onChange={(e) =>
+                                                handleArrayChange('process_steps', index, { ...step, title: e.target.value } as ProcessStep)
+                                            }
                                             placeholder="Judul langkah"
                                         />
                                         <Input
                                             type="number"
                                             value={step.order}
-                                            onChange={(e) => handleArrayChange('process_steps', index, { ...step, order: parseInt(e.target.value) })}
+                                            onChange={(e) =>
+                                                handleArrayChange('process_steps', index, { ...step, order: parseInt(e.target.value) } as ProcessStep)
+                                            }
                                             placeholder="Urutan"
                                             className="w-20"
                                         />
@@ -327,7 +370,9 @@ export default function Edit({ businessUnitService, businessUnits, errors }: Pro
                                     </div>
                                     <Textarea
                                         value={step.description}
-                                        onChange={(e) => handleArrayChange('process_steps', index, { ...step, description: e.target.value })}
+                                        onChange={(e) =>
+                                            handleArrayChange('process_steps', index, { ...step, description: e.target.value } as ProcessStep)
+                                        }
                                         placeholder="Deskripsi langkah"
                                         rows={2}
                                     />

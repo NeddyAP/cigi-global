@@ -550,10 +550,8 @@ export default function CreateBusinessUnit() {
                                         name="image"
                                         value={data.image}
                                         onChange={(value) => setData('image', value?.toString() || '')}
-                                        placeholder="Pilih atau upload gambar unit bisnis"
                                         error={errors.image}
                                         showPreview={true}
-                                        autoUpload={true}
                                         multiple={false}
                                     />
                                 </div>

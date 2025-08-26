@@ -35,11 +35,9 @@ interface AchievementsSectionProps {
     subtitle?: string;
     achievements: Achievement[];
     statistics?: Statistic[];
-    showTimeline?: boolean;
     showStatistics?: boolean;
     showCategories?: boolean;
     maxVisible?: number;
-    showViewAll?: boolean;
     viewAllLink?: string;
     className?: string;
 }
@@ -49,11 +47,9 @@ export default function AchievementsSection({
     statistics = [],
     title = 'Achievements & Recognition',
     subtitle = 'Celebrating Our Success',
-    showTimeline = true,
     showStatistics = true,
     showCategories = true,
     maxVisible = 6,
-    showViewAll = true,
     className = '',
 }: AchievementsSectionProps) {
     const [visibleAchievements, setVisibleAchievements] = useState(maxVisible);
@@ -105,34 +101,34 @@ export default function AchievementsSection({
     const getCategoryIcon = (category: string) => {
         switch (category) {
             case 'award':
-                return <Trophy className="h-6 w-6 text-yellow-500" />;
+                return <Trophy className="h-6 w-6 text-amber-500" />;
             case 'milestone':
-                return <Target className="h-6 w-6 text-blue-500" />;
+                return <Target className="h-6 w-6 text-amber-400" />;
             case 'recognition':
-                return <Star className="h-6 w-6 text-purple-500" />;
+                return <Star className="h-6 w-6 text-amber-600" />;
             case 'certification':
-                return <CheckCircle className="h-6 w-6 text-green-500" />;
+                return <CheckCircle className="h-6 w-6 text-amber-300" />;
             case 'achievement':
-                return <Award className="h-6 w-6 text-orange-500" />;
+                return <Award className="h-6 w-6 text-amber-500" />;
             default:
-                return <Trophy className="h-6 w-6 text-gray-500" />;
+                return <Trophy className="h-6 w-6 text-zinc-400" />;
         }
     };
 
     const getCategoryColor = (category: string) => {
         switch (category) {
             case 'award':
-                return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+                return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
             case 'milestone':
-                return 'bg-blue-100 text-blue-800 border-blue-200';
+                return 'bg-amber-400/20 text-amber-300 border-amber-400/30';
             case 'recognition':
-                return 'bg-purple-100 text-purple-800 border-purple-200';
+                return 'bg-amber-600/20 text-amber-500 border-amber-600/30';
             case 'certification':
-                return 'bg-green-100 text-green-800 border-green-200';
+                return 'bg-amber-300/20 text-amber-200 border-amber-300/30';
             case 'achievement':
-                return 'bg-orange-100 text-orange-800 border-orange-200';
+                return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
             default:
-                return 'bg-gray-100 text-gray-800 border-gray-200';
+                return 'bg-zinc-700 text-zinc-300 border-zinc-600';
         }
     };
 
@@ -141,13 +137,13 @@ export default function AchievementsSection({
             case 'bronze':
                 return 'bg-amber-600';
             case 'silver':
-                return 'bg-gray-400';
+                return 'bg-zinc-400';
             case 'gold':
-                return 'bg-yellow-500';
+                return 'bg-amber-500';
             case 'platinum':
-                return 'bg-slate-500';
+                return 'bg-zinc-300';
             default:
-                return 'bg-gray-400';
+                return 'bg-zinc-400';
         }
     };
 
@@ -166,23 +162,23 @@ export default function AchievementsSection({
 
     if (achievements.length === 0 && statistics.length === 0) {
         return (
-            <section className={`bg-white py-16 ${className}`}>
+            <section className={`section-dark py-16 ${className}`}>
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
-                    <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h2>
-                    <p className="mb-8 text-lg text-gray-600">{subtitle}</p>
-                    <p className="text-gray-500">No achievements or statistics available at the moment.</p>
+                    <h2 className="section-heading">{title}</h2>
+                    <p className="section-subheading">{subtitle}</p>
+                    <p className="text-zinc-400">No achievements or statistics available at the moment.</p>
                 </div>
             </section>
         );
     }
 
     return (
-        <section className={`bg-white py-16 ${className}`}>
+        <section className={`section-dark py-16 ${className}`}>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-12 text-center">
-                    <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">{title}</h2>
-                    {subtitle && <p className="mx-auto max-w-2xl text-lg text-gray-600">{subtitle}</p>}
+                    <h2 className="section-heading">{title}</h2>
+                    {subtitle && <p className="section-subheading">{subtitle}</p>}
                 </div>
 
                 {/* Statistics Section */}
@@ -190,33 +186,33 @@ export default function AchievementsSection({
                     <div ref={statsRef} className="mb-16">
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                             {statistics.map((stat) => (
-                                <Card key={stat.id} className="text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                                <Card key={stat.id} className="section-card text-center">
                                     <CardContent className="p-6">
                                         <div className="mb-4 flex justify-center">
                                             {stat.icon ? (
                                                 <div
-                                                    className={`flex h-16 w-16 items-center justify-center rounded-full ${stat.color || 'bg-blue-100'}`}
+                                                    className={`flex h-16 w-16 items-center justify-center rounded-full ${stat.color || 'bg-amber-500/20'}`}
                                                 >
                                                     <span className="text-2xl">{stat.icon}</span>
                                                 </div>
                                             ) : (
-                                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-                                                    <TrendingUp className="h-8 w-8 text-blue-600" />
+                                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/20">
+                                                    <TrendingUp className="h-8 w-8 text-amber-400" />
                                                 </div>
                                             )}
                                         </div>
 
-                                        <div className="mb-2 text-3xl font-bold text-gray-900">
+                                        <div className="mb-2 text-3xl font-bold text-white">
                                             {stat.prefix}
                                             {animatedStats[stat.id] || 0}
                                             {stat.suffix}
                                         </div>
 
-                                        <p className="mb-2 text-sm font-medium text-gray-600">{stat.label}</p>
+                                        <p className="mb-2 text-sm font-medium text-zinc-300">{stat.label}</p>
 
-                                        {stat.unit && <p className="text-xs text-gray-500">{stat.unit}</p>}
+                                        {stat.unit && <p className="text-xs text-zinc-400">{stat.unit}</p>}
 
-                                        {stat.description && <p className="mt-2 text-xs text-gray-500">{stat.description}</p>}
+                                        {stat.description && <p className="mt-2 text-xs text-zinc-400">{stat.description}</p>}
                                     </CardContent>
                                 </Card>
                             ))}
@@ -230,9 +226,7 @@ export default function AchievementsSection({
                         {achievements.slice(0, visibleAchievements).map((achievement) => (
                             <Card
                                 key={achievement.id}
-                                className={`group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                                    achievement.isHighlighted ? 'ring-2 ring-yellow-400' : ''
-                                }`}
+                                className={`section-card group relative overflow-hidden ${achievement.isHighlighted ? 'ring-2 ring-amber-500' : ''}`}
                             >
                                 <CardHeader className="p-0">
                                     {/* Achievement Image or Icon */}
@@ -244,7 +238,7 @@ export default function AchievementsSection({
                                                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             />
                                         ) : (
-                                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
+                                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900">
                                                 {getCategoryIcon(achievement.category)}
                                             </div>
                                         )}
@@ -256,7 +250,7 @@ export default function AchievementsSection({
 
                                         {/* Highlight Badge */}
                                         {achievement.isHighlighted && (
-                                            <Badge className="absolute top-3 left-3 bg-yellow-500 text-white hover:bg-yellow-600">
+                                            <Badge className="absolute top-3 left-3 bg-amber-500 text-black hover:bg-amber-600">
                                                 <Star className="mr-1 h-3 w-3" />
                                                 Featured
                                             </Badge>
@@ -275,15 +269,15 @@ export default function AchievementsSection({
                                     )}
 
                                     {/* Title */}
-                                    <CardTitle className="mb-3 text-xl font-semibold text-gray-900 transition-colors duration-300 group-hover:text-blue-600">
+                                    <CardTitle className="mb-3 text-xl font-semibold text-white transition-colors duration-300 group-hover:text-amber-400">
                                         {achievement.title}
                                     </CardTitle>
 
                                     {/* Description */}
-                                    <p className="mb-4 leading-relaxed text-gray-600">{achievement.description}</p>
+                                    <p className="mb-4 leading-relaxed text-zinc-300">{achievement.description}</p>
 
                                     {/* Meta Information */}
-                                    <div className="space-y-2 text-sm text-gray-500">
+                                    <div className="space-y-2 text-sm text-zinc-400">
                                         <div className="flex items-center space-x-2">
                                             <Calendar className="h-4 w-4" />
                                             <span>{formatDate(achievement.date)}</span>
@@ -311,80 +305,13 @@ export default function AchievementsSection({
                     {/* Load More Button */}
                     {visibleAchievements < achievements.length && (
                         <div className="mt-8 text-center">
-                            <Button
-                                variant="outline"
-                                onClick={loadMore}
-                                className="px-8 py-3 text-lg font-semibold transition-all duration-300 hover:border-blue-600 hover:bg-blue-600 hover:text-white"
-                            >
+                            <Button variant="outline" onClick={loadMore} className="cta-button-outline px-8 py-3 text-lg font-semibold">
                                 Load More Achievements
                                 <ArrowRight className="ml-2 h-5 w-5" />
                             </Button>
                         </div>
                     )}
                 </div>
-
-                {/* Timeline View */}
-                {showTimeline && achievements.length > 0 && (
-                    <div className="mt-16">
-                        <h3 className="mb-8 text-center text-2xl font-bold text-gray-900">Achievement Timeline</h3>
-                        <div className="relative">
-                            {/* Timeline Line */}
-                            <div className="absolute top-0 bottom-0 left-1/2 w-0.5 -translate-x-1/2 bg-gray-200" />
-
-                            {/* Timeline Items */}
-                            <div className="space-y-8">
-                                {achievements
-                                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                                    .slice(0, 8)
-                                    .map((achievement, index) => (
-                                        <div
-                                            key={achievement.id}
-                                            className={`relative flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
-                                        >
-                                            {/* Timeline Dot */}
-                                            <div className="absolute left-1/2 z-10 h-4 w-4 -translate-x-1/2 rounded-full border-4 border-white bg-blue-500 shadow-lg" />
-
-                                            {/* Content Card */}
-                                            <div className={`w-5/12 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
-                                                <Card className="group transition-all duration-300 hover:shadow-lg">
-                                                    <CardContent className="p-4">
-                                                        <div className="mb-2 flex items-center space-x-2">
-                                                            {getCategoryIcon(achievement.category)}
-                                                            <Badge variant="outline" className={`text-xs ${getCategoryColor(achievement.category)}`}>
-                                                                {achievement.category.charAt(0).toUpperCase() + achievement.category.slice(1)}
-                                                            </Badge>
-                                                        </div>
-
-                                                        <h4 className="mb-2 font-semibold text-gray-900 transition-colors duration-300 group-hover:text-blue-600">
-                                                            {achievement.title}
-                                                        </h4>
-
-                                                        <p className="mb-2 line-clamp-2 text-sm text-gray-600">{achievement.description}</p>
-
-                                                        <p className="text-xs text-gray-500">{formatDate(achievement.date)}</p>
-                                                    </CardContent>
-                                                </Card>
-                                            </div>
-                                        </div>
-                                    ))}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* View All Button */}
-                {showViewAll && achievements.length > 0 && (
-                    <div className="mt-12 text-center">
-                        <Button
-                            size="lg"
-                            variant="outline"
-                            className="px-8 py-3 text-lg font-semibold transition-all duration-300 hover:border-blue-600 hover:bg-blue-600 hover:text-white"
-                        >
-                            View All Achievements
-                            <ArrowRight className="ml-2 h-5 w-5" />
-                        </Button>
-                    </div>
-                )}
             </div>
         </section>
     );

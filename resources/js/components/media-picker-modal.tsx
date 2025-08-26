@@ -90,14 +90,11 @@ export default function MediaPickerModal({ isOpen, onClose, onSelect, multiple =
         setSelectedItems([]);
     };
 
-    const handleUploadComplete = useCallback(
-        async (files: File[]) => {
-            // After upload, refresh the media list and switch to gallery tab
-            setActiveTab('gallery');
-            await loadMedia();
-        },
-        [loadMedia],
-    );
+    const handleUploadComplete = useCallback(async () => {
+        // After upload, refresh the media list and switch to gallery tab
+        setActiveTab('gallery');
+        await loadMedia();
+    }, [loadMedia]);
 
     const handleFileUploadComplete = useCallback(
         async (fileId: string, success: boolean, error?: string, mediaId?: number, mediaUrl?: string) => {
