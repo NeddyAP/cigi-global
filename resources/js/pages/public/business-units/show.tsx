@@ -80,7 +80,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [], glob
                     active: service.active !== false,
                 }));
             }
-        } catch (error) {
+        } catch {
             // Fallback to old format (comma-separated)
             console.log('Services not in JSON format, using fallback parsing');
         }
@@ -399,14 +399,16 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [], glob
                                                     <span>Proses Kerja</span>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    {service.process_steps.slice(0, 3).map((step: any, stepIdx: number) => (
-                                                        <div key={stepIdx} className="flex items-center gap-2 text-xs text-zinc-400">
-                                                            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-700 text-xs font-bold">
-                                                                {step.order || stepIdx + 1}
-                                                            </span>
-                                                            <span className="line-clamp-1">{step.step || `Langkah ${stepIdx + 1}`}</span>
-                                                        </div>
-                                                    ))}
+                                                    {service.process_steps
+                                                        .slice(0, 3)
+                                                        .map((step: { order?: number; step?: string }, stepIdx: number) => (
+                                                            <div key={stepIdx} className="flex items-center gap-2 text-xs text-zinc-400">
+                                                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-700 text-xs font-bold">
+                                                                    {step.order || stepIdx + 1}
+                                                                </span>
+                                                                <span className="line-clamp-1">{step.step || `Langkah ${stepIdx + 1}`}</span>
+                                                            </div>
+                                                        ))}
                                                     {service.process_steps.length > 3 && (
                                                         <div className="text-xs text-zinc-500">
                                                             +{service.process_steps.length - 3} langkah lainnya

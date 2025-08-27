@@ -85,6 +85,7 @@ export interface BusinessUnit {
         image?: string;
         technologies: string[];
         client: string;
+        is_show?: boolean;
     }>;
     certifications?: Array<{
         name: string;
@@ -92,12 +93,14 @@ export interface BusinessUnit {
         date: string;
         image?: string;
         description: string;
+        is_show?: boolean;
     }>;
     company_stats?: {
         years_in_business?: number;
         projects_completed?: number;
         clients_served?: number;
         team_size?: number;
+        is_show?: boolean;
     };
     gallery_images?: string[];
     achievements?: Array<{
@@ -110,10 +113,17 @@ export interface BusinessUnit {
         title: string;
         description: string;
         icon?: string;
+        is_show?: boolean;
     }>;
     hero_subtitle?: string;
     hero_cta_text?: string;
     hero_cta_link?: string;
+    // Show/hide flags for sections
+    portfolio_is_show?: boolean;
+    certifications_is_show?: boolean;
+    company_stats_is_show?: boolean;
+    core_values_is_show?: boolean;
+    achievements_is_show?: boolean;
     created_at: string;
     updated_at: string;
 }
@@ -166,6 +176,7 @@ export interface CommunityClub {
         date: string;
         description: string;
         image?: string;
+        is_show?: boolean;
     }>;
     hero_subtitle?: string;
     hero_cta_text?: string;

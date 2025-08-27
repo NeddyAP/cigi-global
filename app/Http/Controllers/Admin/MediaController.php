@@ -32,15 +32,15 @@ class MediaController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('original_filename', 'like', "%{$search}%")
-                  ->orWhere('alt_text', 'like', "%{$search}%");
+                    ->orWhere('original_filename', 'like', "%{$search}%")
+                    ->orWhere('alt_text', 'like', "%{$search}%");
             });
         }
 
         // Filter by tags if provided
         if ($request->filled('tags') && is_array($request->tags) && count($request->tags) > 0) {
             $tags = array_filter($request->tags); // Remove empty values
-            if (!empty($tags)) {
+            if (! empty($tags)) {
                 $query->where(function ($q) use ($tags) {
                     foreach ($tags as $tag) {
                         $q->whereJsonContains('tags', $tag);
@@ -282,8 +282,8 @@ class MediaController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('original_filename', 'like', "%{$search}%")
-                  ->orWhere('alt_text', 'like', "%{$search}%");
+                    ->orWhere('original_filename', 'like', "%{$search}%")
+                    ->orWhere('alt_text', 'like', "%{$search}%");
             });
         }
 
@@ -398,12 +398,12 @@ class MediaController extends Controller
     private function formatFileSize(int $bytes): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        
+
         for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
             $bytes /= 1024;
         }
-        
-        return round($bytes, 2) . ' ' . $units[$i];
+
+        return round($bytes, 2).' '.$units[$i];
     }
 
     /**
@@ -419,7 +419,7 @@ class MediaController extends Controller
      */
     private function getImageDimensions(Media $media): ?array
     {
-        if (!$this->isImage($media->mime_type)) {
+        if (! $this->isImage($media->mime_type)) {
             return null;
         }
 
@@ -432,7 +432,7 @@ class MediaController extends Controller
         }
 
         // Try to get dimensions from file path
-        $filePath = storage_path('app/public/' . $media->path);
+        $filePath = storage_path('app/public/'.$media->path);
         if (file_exists($filePath)) {
             $imageInfo = getimagesize($filePath);
             if ($imageInfo) {
@@ -452,7 +452,7 @@ class MediaController extends Controller
     private function formatPaginationLinks($paginator): array
     {
         $links = [];
-        
+
         // Previous page
         if ($paginator->previousPageUrl()) {
             $links[] = [

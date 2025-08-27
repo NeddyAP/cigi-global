@@ -339,23 +339,25 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
 
     const servicesArray = parseServices(data.services);
 
-    const handleServicesChange = (services: Array<{
-        id: string;
-        title: string;
-        description: string;
-        image?: string | number;
-        price_range?: string;
-        duration?: string;
-        features?: string[];
-        technologies?: string[];
-        process_steps?: Array<{
-            step: string;
+    const handleServicesChange = (
+        services: Array<{
+            id: string;
+            title: string;
             description: string;
-            order: number;
-        }>;
-        featured?: boolean;
-        active?: boolean;
-    }>) => {
+            image?: string | number;
+            price_range?: string;
+            duration?: string;
+            features?: string[];
+            technologies?: string[];
+            process_steps?: Array<{
+                step: string;
+                description: string;
+                order: number;
+            }>;
+            featured?: boolean;
+            active?: boolean;
+        }>,
+    ) => {
         // Convert services array to JSON string for storage
         const servicesString = JSON.stringify(services);
         setData('services', servicesString);
@@ -450,6 +452,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                         projects_completed: '',
                                         clients_served: '',
                                         team_size: '',
+                                        is_show: false,
                                     },
                                     gallery_images: transformGalleryImages(businessUnit.gallery_images),
                                     achievements: businessUnit.achievements || [],
@@ -1015,7 +1018,6 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                             description: '',
                                                                             technologies: [],
                                                                             client: '',
-                                                                            is_show: true,
                                                                         };
                                                                     }
                                                                     portfolio[index - 1].title = e.target.value;
@@ -1037,7 +1039,6 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                             description: '',
                                                                             technologies: [],
                                                                             client: '',
-                                                                            is_show: true,
                                                                         };
                                                                     }
                                                                     portfolio[index - 1].client = e.target.value;
@@ -1060,7 +1061,6 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                         description: '',
                                                                         technologies: [],
                                                                         client: '',
-                                                                        is_show: true,
                                                                     };
                                                                 }
                                                                 portfolio[index - 1].description = e.target.value;
@@ -1107,7 +1107,6 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                             issuer: '',
                                                                             date: '',
                                                                             description: '',
-                                                                            is_show: true,
                                                                         };
                                                                     }
                                                                     certs[index - 1].name = e.target.value;
@@ -1265,7 +1264,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                 onChange={(e) => {
                                                                     const values = [...(data.core_values || [])];
                                                                     if (!values[index - 1])
-                                                                        values[index - 1] = { title: '', description: '', icon: '', is_show: true };
+                                                                        values[index - 1] = { title: '', description: '', icon: '' };
                                                                     values[index - 1].title = e.target.value;
                                                                     setData('core_values', values);
                                                                 }}
@@ -1280,7 +1279,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                 onChange={(e) => {
                                                                     const values = [...(data.core_values || [])];
                                                                     if (!values[index - 1])
-                                                                        values[index - 1] = { title: '', description: '', icon: '', is_show: true };
+                                                                        values[index - 1] = { title: '', description: '', icon: '' };
                                                                     values[index - 1].icon = e.target.value;
                                                                     setData('core_values', values);
                                                                 }}
@@ -1295,8 +1294,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                             value={data.core_values?.[index - 1]?.description || ''}
                                                             onChange={(e) => {
                                                                 const values = [...(data.core_values || [])];
-                                                                if (!values[index - 1])
-                                                                    values[index - 1] = { title: '', description: '', icon: '', is_show: true };
+                                                                if (!values[index - 1]) values[index - 1] = { title: '', description: '', icon: '' };
                                                                 values[index - 1].description = e.target.value;
                                                                 setData('core_values', values);
                                                             }}
@@ -1341,7 +1339,6 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                             date: '',
                                                                             description: '',
                                                                             image: '',
-                                                                            is_show: true,
                                                                         };
                                                                     achievements[index - 1].title = e.target.value;
                                                                     setData('achievements', achievements);
@@ -1363,7 +1360,6 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                             date: '',
                                                                             description: '',
                                                                             image: '',
-                                                                            is_show: true,
                                                                         };
                                                                     achievements[index - 1].date = e.target.value;
                                                                     setData('achievements', achievements);
@@ -1384,7 +1380,6 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                         date: '',
                                                                         description: '',
                                                                         image: '',
-                                                                        is_show: true,
                                                                     };
                                                                 achievements[index - 1].description = e.target.value;
                                                                 setData('achievements', achievements);

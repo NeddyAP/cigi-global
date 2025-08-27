@@ -18,6 +18,7 @@ class CommunityClubActivitySeeder extends Seeder
 
         if ($communityClubs->isEmpty()) {
             $this->command->info('No community clubs found. Please run CommunityClubSeeder first.');
+
             return;
         }
 
@@ -33,14 +34,14 @@ class CommunityClubActivitySeeder extends Seeder
                     'Meningkatkan skill bulutangkis',
                     'Networking dengan anggota komunitas',
                     'Fisik lebih sehat dan bugar',
-                    'Kesempatan memenangkan hadiah'
+                    'Kesempatan memenangkan hadiah',
                 ],
                 'status' => 'active',
                 'featured' => true,
                 'is_active' => true,
                 'schedule' => 'Setiap Sabtu jam 19:00',
                 'location' => 'GOR Bulutangkis Cigi',
-                'contact_info' => 'Hubungi Pak Budi di 0812-3456-7890'
+                'contact_info' => 'Hubungi Pak Budi di 0812-3456-7890',
             ],
             [
                 'title' => 'Latihan Bersama Pemula',
@@ -53,14 +54,14 @@ class CommunityClubActivitySeeder extends Seeder
                     'Belajar teknik dasar bulutangkis',
                     'Latihan dengan pelatih berpengalaman',
                     'Membangun kepercayaan diri',
-                    'Persiapan untuk turnamen'
+                    'Persiapan untuk turnamen',
                 ],
                 'status' => 'active',
                 'featured' => false,
                 'is_active' => true,
                 'schedule' => 'Setiap Selasa dan Kamis jam 18:00',
                 'location' => 'GOR Bulutangkis Cigi',
-                'contact_info' => 'Hubungi Ibu Sari di 0812-3456-7891'
+                'contact_info' => 'Hubungi Ibu Sari di 0812-3456-7891',
             ],
             [
                 'title' => 'Klinik Teknik Lanjutan',
@@ -73,14 +74,14 @@ class CommunityClubActivitySeeder extends Seeder
                     'Teknik smash yang lebih powerful',
                     'Strategi permainan ganda',
                     'Teknik defense yang efektif',
-                    'Mental game dan konsentrasi'
+                    'Mental game dan konsentrasi',
                 ],
                 'status' => 'active',
                 'featured' => true,
                 'is_active' => true,
                 'schedule' => 'Setiap Minggu jam 15:00',
                 'location' => 'GOR Bulutangkis Cigi',
-                'contact_info' => 'Hubungi Coach Ahmad di 0812-3456-7892'
+                'contact_info' => 'Hubungi Coach Ahmad di 0812-3456-7892',
             ],
             [
                 'title' => 'Fun Games & Social Event',
@@ -93,24 +94,24 @@ class CommunityClubActivitySeeder extends Seeder
                     'Bersosialisasi dengan anggota komunitas',
                     'Permainan santai dan menyenangkan',
                     'Sharing makanan dan cerita',
-                    'Membangun persahabatan'
+                    'Membangun persahabatan',
                 ],
                 'status' => 'active',
                 'featured' => false,
                 'is_active' => true,
                 'schedule' => 'Setiap bulan pada hari Sabtu terakhir',
                 'location' => 'GOR Bulutangkis Cigi',
-                'contact_info' => 'Hubungi Ketua Komunitas di 0812-3456-7893'
-            ]
+                'contact_info' => 'Hubungi Ketua Komunitas di 0812-3456-7893',
+            ],
         ];
 
         foreach ($activities as $activityData) {
             // Assign to random community club
             $communityClub = $communityClubs->random();
-            
+
             CommunityClubActivity::create([
                 'community_club_id' => $communityClub->id,
-                ...$activityData
+                ...$activityData,
             ]);
         }
 

@@ -32,7 +32,7 @@ return new class extends Migration
                 'certifications_is_show',
                 'company_stats_is_show',
                 'core_values_is_show',
-                'achievements_is_show'
+                'achievements_is_show',
             ]);
         });
     }

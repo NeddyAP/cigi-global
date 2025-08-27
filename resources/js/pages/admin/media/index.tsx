@@ -83,7 +83,7 @@ export default function MediaIndex({ media, allTags, filters }: MediaPageProps) 
         }, 500);
 
         return () => clearTimeout(timeoutId);
-    }, [searchQuery]);
+    }, [searchQuery, filters.search, selectedTags, homepageFilter]);
 
     // Handle tags filter immediately
     useEffect(() => {
@@ -102,7 +102,7 @@ export default function MediaIndex({ media, allTags, filters }: MediaPageProps) 
                 },
             );
         }
-    }, [selectedTags]);
+    }, [selectedTags, filters.tags, searchQuery, homepageFilter]);
 
     // Handle homepage filter immediately
     useEffect(() => {
@@ -121,7 +121,7 @@ export default function MediaIndex({ media, allTags, filters }: MediaPageProps) 
                 },
             );
         }
-    }, [homepageFilter]);
+    }, [homepageFilter, filters.show_homepage, searchQuery, selectedTags]);
 
     const hasActiveFilters = filters.search || (filters.tags && filters.tags.length > 0) || filters.show_homepage !== 'all';
 

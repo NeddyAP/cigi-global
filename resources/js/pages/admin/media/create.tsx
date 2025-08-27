@@ -10,7 +10,7 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, BusinessUnit, CommunityClub } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { ArrowLeft, FileText, FolderOpen, Tags, Upload } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dasbor', href: '/admin' },
@@ -45,7 +45,9 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
             }
 
             if (files.length > remaining) {
-                setError(`Hanya ${remaining} dari ${files.length} berkas yang akan tersimpan. batas maksimum berkas yang dapat diunggah adalah ${MAX_FILES}.`);
+                setError(
+                    `Hanya ${remaining} dari ${files.length} berkas yang akan tersimpan. batas maksimum berkas yang dapat diunggah adalah ${MAX_FILES}.`,
+                );
                 return [...prev, ...files.slice(0, remaining)];
             }
 
@@ -172,17 +174,16 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
                         {/* Upload Zone */}
                         <div className="lg:col-span-2">
                             <div className="mb-3">
-
-                            <FormSection title="Pilih Berkas" description="Pilih berkas untuk diunggah" icon={<Upload className="h-5 w-5" />}>
-                                <MediaUploadZone
-                                    onUpload={handleFilesSelected}
-                                    acceptedTypes={['image/*']}
-                                    maxFileSize={10}
-                                    multiple={true}
-                                    disabled={processing}
-                                />
-                            </FormSection>
-                                    </div>
+                                <FormSection title="Pilih Berkas" description="Pilih berkas untuk diunggah" icon={<Upload className="h-5 w-5" />}>
+                                    <MediaUploadZone
+                                        onUpload={handleFilesSelected}
+                                        acceptedTypes={['image/*']}
+                                        maxFileSize={10}
+                                        multiple={true}
+                                        disabled={processing}
+                                    />
+                                </FormSection>
+                            </div>
 
                             {/* File Preview */}
                             {selectedFiles.length > 0 && (

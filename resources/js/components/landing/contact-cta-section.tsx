@@ -62,14 +62,7 @@ export default function ContactCTASection({
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [errors, setErrors] = useState<Partial<ContactFormData>>({});
 
-    const interestOptions = [
-        'Layanan Bisnis',
-        'Kegiatan Komunitas',
-        'Peluang Kemitraan',
-        'Pertanyaan Umum',
-        'Permintaan Dukungan',
-        'Masukan',
-    ];
+    const interestOptions = ['Layanan Bisnis', 'Kegiatan Komunitas', 'Peluang Kemitraan', 'Pertanyaan Umum', 'Permintaan Dukungan', 'Masukan'];
 
     const handleInputChange = (field: keyof ContactFormData, value: string | string[]) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
@@ -281,7 +274,9 @@ export default function ContactCTASection({
                                                         onChange={(e) => handleInputChange('preferredContact', e.target.value)}
                                                         className="h-4 w-4 border-zinc-600 text-amber-500 focus:ring-amber-500"
                                                     />
-                                                    <span className="ml-2 text-sm text-zinc-300">{method === 'email' ? 'Email' : method === 'phone' ? 'Telepon' : 'Keduanya'}</span>
+                                                    <span className="ml-2 text-sm text-zinc-300">
+                                                        {method === 'email' ? 'Email' : method === 'phone' ? 'Telepon' : 'Keduanya'}
+                                                    </span>
                                                 </label>
                                             ))}
                                         </div>

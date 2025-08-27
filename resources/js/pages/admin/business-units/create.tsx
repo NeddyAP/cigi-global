@@ -251,23 +251,25 @@ export default function CreateBusinessUnit() {
 
     const servicesArray = parseServices(data.services);
 
-    const handleServicesChange = (services: Array<{
-        id: string;
-        title: string;
-        description: string;
-        image?: string | number;
-        price_range?: string;
-        duration?: string;
-        features?: string[];
-        technologies?: string[];
-        process_steps?: Array<{
-            step: string;
+    const handleServicesChange = (
+        services: Array<{
+            id: string;
+            title: string;
             description: string;
-            order: number;
-        }>;
-        featured?: boolean;
-        active?: boolean;
-    }>) => {
+            image?: string | number;
+            price_range?: string;
+            duration?: string;
+            features?: string[];
+            technologies?: string[];
+            process_steps?: Array<{
+                step: string;
+                description: string;
+                order: number;
+            }>;
+            featured?: boolean;
+            active?: boolean;
+        }>,
+    ) => {
         // Convert services array to JSON string for storage
         const servicesString = JSON.stringify(services);
         setData('services', servicesString);

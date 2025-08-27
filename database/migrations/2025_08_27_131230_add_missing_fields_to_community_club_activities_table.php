@@ -36,7 +36,7 @@ return new class extends Migration
                 'is_active',
                 'schedule',
                 'location',
-                'contact_info'
+                'contact_info',
             ]);
         });
     }

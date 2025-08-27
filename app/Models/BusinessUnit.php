@@ -131,17 +131,17 @@ class BusinessUnit extends Model
     public function getServicesList(): array
     {
         $value = $this->getAttribute('services');
-        
-        if (!$value) {
+
+        if (! $value) {
             return [];
         }
-        
+
         // Try to parse as JSON first (new format)
         $services = json_decode($value, true);
         if (is_array($services)) {
             return $services;
         }
-        
+
         // Fallback: treat as newline-separated string (old format)
         return array_filter(array_map('trim', explode("\n", $value)));
     }
