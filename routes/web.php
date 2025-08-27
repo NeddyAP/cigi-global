@@ -8,6 +8,11 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PublicPageController;
 use Illuminate\Support\Facades\Route;
 
+// Route::get('/generate', function(){
+//   \Illuminate\Support\Facades\Artisan::call('storage:link');   
+//   echo 'ok';
+// });
+
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/landing-demo', [HomeController::class, 'landingDemo'])->name('landing-demo');
@@ -58,5 +63,5 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('media/bulk-delete', [\App\Http\Controllers\Admin\MediaController::class, 'bulkDelete'])->name('media.bulk-delete');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';

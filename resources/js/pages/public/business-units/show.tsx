@@ -24,13 +24,29 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
 
     // Transform gallery images for the GallerySection component
     const galleryImages =
-        businessUnit.gallery_images?.map((image, index) => ({
-            id: index + 1,
-            url: image,
-            alt: `${businessUnit.name} - Image ${index + 1}`,
-            caption: `${businessUnit.name} business operations and projects`,
-            thumbnail: { url: image },
-        })) || [];
+        businessUnit.gallery_images?.map((image: unknown, index: number) => {
+            // gallery_images may be an array of strings (urls) or objects { id, url, alt, caption }
+            if (typeof image === 'string') {
+                return {
+                    id: `img-${index + 1}`,
+                    url: image,
+                    alt: `${businessUnit.name} - Image ${index + 1}`,
+                    caption: `${businessUnit.name} community activities and events`,
+                    thumbnail: { url: image },
+                };
+            }
+
+            // If image is an object, safely read properties
+            const imageObj = image as { url?: string; id?: string | number; alt?: string; caption?: string };
+            const imgUrl = imageObj?.url ?? (typeof image === 'string' ? image : '');
+            return {
+                id: imageObj?.id ?? `img-${index + 1}`,
+                url: imgUrl,
+                alt: imageObj?.alt ?? `${businessUnit.name} - Image ${index + 1}`,
+                caption: imageObj?.caption ?? `${businessUnit.name} community activities and events`,
+                thumbnail: { url: imgUrl },
+            };
+        }) || [];
 
     // Transform client testimonials for the TestimonialsSection component
     const testimonials =
