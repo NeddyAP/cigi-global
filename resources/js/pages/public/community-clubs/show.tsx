@@ -1,25 +1,64 @@
-import {
-    AchievementsSection,
-    ContactCTASection,
-    EventsPortfolioSection,
-    GallerySection,
-    HeroSection,
-    TestimonialsSection,
-} from '@/components/landing';
+import { AchievementsSection, EventsPortfolioSection, GallerySection, HeroSection, TestimonialsSection } from '@/components/landing';
 import MoreAboutCards from '@/components/landing/MoreAboutCards';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import PublicLayout from '@/layouts/public-layout';
 import { type CommunityClub } from '@/types';
-import { Head, Link } from '@inertiajs/react';
-import { Activity, ArrowLeft, Users } from 'lucide-react';
+import { Head, Link, router } from '@inertiajs/react';
+import { Activity, ArrowLeft, Clock, Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitter, Users } from 'lucide-react';
+import { useState } from 'react';
 
 interface CommunityClubShowProps {
     communityClub: CommunityClub;
     relatedClubs?: CommunityClub[];
+    globalVariables?: Record<string, string>;
 }
 
-export default function CommunityClubShow({ communityClub, relatedClubs = [] }: CommunityClubShowProps) {
+export default function CommunityClubShow({ communityClub, relatedClubs = [], globalVariables = {} }: CommunityClubShowProps) {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: '',
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+
+        router.post(route('contact.store'), formData, {
+            onSuccess: () => {
+                setFormData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    subject: '',
+                    message: '',
+                });
+                setIsSubmitting(false);
+            },
+            onError: () => {
+                setIsSubmitting(false);
+            },
+            onFinish: () => {
+                setIsSubmitting(false);
+            },
+        });
+    };
+
     const getClubActivities = (): string[] => {
         if (!communityClub.activities) return [];
         try {
@@ -153,37 +192,13 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
         },
     ];
 
-    // Contact information for ContactCTASection
+    // Contact information
     const contactInfo = {
         address: communityClub.location,
         phone: communityClub.contact_phone,
         email: communityClub.contact_email,
         hours: communityClub.meeting_schedule,
     };
-
-    // CTA buttons for ContactCTASection
-    const ctaButtons = [
-        {
-            text: 'Bergabung dengan Komunitas Kami',
-            link: `mailto:${communityClub.contact_email || 'info@cigi-global.com'}?subject=Bergabung ${communityClub.name}`,
-            variant: 'primary' as const,
-            icon: '👥',
-        },
-        {
-            text: 'Hubungi Kami',
-            link: communityClub.contact_phone
-                ? `tel:${communityClub.contact_phone}`
-                : `mailto:${communityClub.contact_email || 'info@cigi-global.com'}`,
-            variant: 'secondary' as const,
-            icon: '📞',
-        },
-        {
-            text: 'Pelajari Lebih Lanjut',
-            link: '#about',
-            variant: 'outline' as const,
-            icon: 'ℹ️',
-        },
-    ];
 
     return (
         <PublicLayout
@@ -202,10 +217,10 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                 }
                 type={communityClub.type}
                 backgroundImage={communityClub.image}
-                ctaText={communityClub.hero_cta_text || 'Bergabung Sekarang'}
-                ctaLink={communityClub.hero_cta_link || '#contact'}
-                secondaryCtaText="Pelajari Lebih Lanjut"
+                ctaText="Get Started"
+                ctaLink="#about"
                 secondaryCtaLink="#about"
+                contactSectionId="contact"
                 className="min-h-screen"
             />
 
@@ -391,15 +406,239 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [] }: 
                 </section>
             )}
 
-            {/* Contact & CTA Section */}
-            <ContactCTASection
-                title="Siap Bergabung dengan Komunitas Kami?"
-                subtitle="Hubungi Kami Sekarang"
-                description="Apakah Anda ingin belajar keterampilan baru, membangun koneksi profesional, atau menjadi bagian dari sesuatu yang bermakna — kami dengan senang hati mengundang Anda bergabung."
-                contactInfo={contactInfo}
-                ctaButtons={ctaButtons}
-                showMap={false}
-            />
+            {/* Contact Information & Form */}
+            <section id="contact" className="bg-zinc-900 py-20">
+                <div className="container mx-auto px-4">
+                    <div className="grid gap-12 lg:grid-cols-2">
+                        {/* Contact Information */}
+                        <div>
+                            <div className="mb-8">
+                                <h2 className="mb-4 text-3xl font-bold text-white">Informasi Kontak - {communityClub.name}</h2>
+                                <p className="text-lg text-zinc-300">Berikut adalah berbagai cara untuk menghubungi tim {communityClub.name}</p>
+                            </div>
+
+                            <div className="space-y-6">
+                                {/* Phone */}
+                                {contactInfo.phone && (
+                                    <div className="flex items-start gap-4 rounded-xl border border-zinc-800 bg-zinc-800/50 p-6">
+                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-500/20">
+                                            <Phone className="h-6 w-6 text-amber-400" />
+                                        </div>
+                                        <div>
+                                            <h3 className="mb-1 font-semibold text-white">Telepon</h3>
+                                            <p className="text-zinc-400">Hubungi kami langsung</p>
+                                            <a href={`tel:${contactInfo.phone}`} className="text-amber-400 transition-colors hover:text-amber-300">
+                                                {contactInfo.phone}
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Email */}
+                                {contactInfo.email && (
+                                    <div className="flex items-start gap-4 rounded-xl border border-zinc-800 bg-zinc-800/50 p-6">
+                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-500/20">
+                                            <Mail className="h-6 w-6 text-amber-400" />
+                                        </div>
+                                        <div>
+                                            <h3 className="mb-1 font-semibold text-white">Email</h3>
+                                            <p className="text-zinc-400">Kirim email untuk pertanyaan detail</p>
+                                            <a href={`mailto:${contactInfo.email}`} className="text-amber-400 transition-colors hover:text-amber-300">
+                                                {contactInfo.email}
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Address */}
+                                {contactInfo.address && (
+                                    <div className="flex items-start gap-4 rounded-xl border border-zinc-800 bg-zinc-800/50 p-6">
+                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-500/20">
+                                            <MapPin className="h-6 w-6 text-amber-400" />
+                                        </div>
+                                        <div>
+                                            <h3 className="mb-1 font-semibold text-white">Alamat</h3>
+                                            <p className="text-zinc-400">Kunjungi kantor kami</p>
+                                            <p className="text-zinc-300">{contactInfo.address}</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Office Hours */}
+                                {contactInfo.hours && (
+                                    <div className="flex items-start gap-4 rounded-xl border border-zinc-800 bg-zinc-800/50 p-6">
+                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-500/20">
+                                            <Clock className="h-6 w-6 text-amber-400" />
+                                        </div>
+                                        <div>
+                                            <h3 className="mb-1 font-semibold text-white">Jam Operasional</h3>
+                                            <p className="text-zinc-400">Waktu terbaik untuk menghubungi kami</p>
+                                            <p className="text-zinc-300">{contactInfo.hours}</p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Social Media */}
+                            <div className="mt-8">
+                                <h3 className="mb-4 text-xl font-semibold text-white">Ikuti Kami</h3>
+                                <div className="flex gap-4">
+                                    {globalVariables.social_facebook && (
+                                        <a
+                                            href={globalVariables.social_facebook}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition-all duration-300 hover:bg-blue-600 hover:text-white"
+                                        >
+                                            <Facebook className="h-5 w-5" />
+                                        </a>
+                                    )}
+                                    {globalVariables.social_instagram && (
+                                        <a
+                                            href={globalVariables.social_instagram}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition-all duration-300 hover:bg-gradient-to-tr hover:from-purple-600 hover:to-pink-600 hover:text-white"
+                                        >
+                                            <Instagram className="h-5 w-5" />
+                                        </a>
+                                    )}
+                                    {globalVariables.social_twitter && (
+                                        <a
+                                            href={globalVariables.social_twitter}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition-all duration-300 hover:bg-blue-500 hover:text-white"
+                                        >
+                                            <Twitter className="h-5 w-5" />
+                                        </a>
+                                    )}
+                                    {globalVariables.social_linkedin && (
+                                        <a
+                                            href={globalVariables.social_linkedin}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition-all duration-300 hover:bg-blue-700 hover:text-white"
+                                        >
+                                            <Linkedin className="h-5 w-5" />
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Contact Form */}
+                        <div>
+                            <div className="rounded-2xl border border-zinc-800 bg-zinc-800/50 p-8">
+                                <div className="mb-6">
+                                    <h2 className="mb-2 text-2xl font-bold text-white">Kirim Pesan</h2>
+                                    <p className="text-zinc-400">Isi formulir di bawah dan kami akan segera menghubungi Anda</p>
+                                </div>
+
+                                <form onSubmit={handleSubmit} className="space-y-6">
+                                    <div className="grid gap-4 md:grid-cols-2">
+                                        <div>
+                                            <Label htmlFor="name" className="text-white">
+                                                Nama Lengkap *
+                                            </Label>
+                                            <Input
+                                                id="name"
+                                                name="name"
+                                                type="text"
+                                                value={formData.name}
+                                                onChange={handleInputChange}
+                                                required
+                                                className="mt-1 border-zinc-700 bg-zinc-900 text-white placeholder:text-zinc-400 focus:border-amber-500 focus:ring-amber-500"
+                                                placeholder="Masukkan nama lengkap"
+                                            />
+                                        </div>
+                                        <div>
+                                            <Label htmlFor="phone" className="text-white">
+                                                Nomor Telepon
+                                            </Label>
+                                            <Input
+                                                id="phone"
+                                                name="phone"
+                                                type="tel"
+                                                value={formData.phone}
+                                                onChange={handleInputChange}
+                                                className="mt-1 border-zinc-700 bg-zinc-900 text-white placeholder:text-zinc-400 focus:border-amber-500 focus:ring-amber-500"
+                                                placeholder="Contoh: +62 812-3456-7890"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="email" className="text-white">
+                                            Email *
+                                        </Label>
+                                        <Input
+                                            id="email"
+                                            name="email"
+                                            type="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="mt-1 border-zinc-700 bg-zinc-900 text-white placeholder:text-zinc-400 focus:border-amber-500 focus:ring-amber-500"
+                                            placeholder="nama@email.com"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="subject" className="text-white">
+                                            Subjek *
+                                        </Label>
+                                        <Input
+                                            id="subject"
+                                            name="subject"
+                                            type="text"
+                                            value={formData.subject}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="mt-1 border-zinc-700 bg-zinc-900 text-white placeholder:text-zinc-400 focus:border-amber-500 focus:ring-amber-500"
+                                            placeholder="Topik pesan Anda"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="message" className="text-white">
+                                            Pesan *
+                                        </Label>
+                                        <Textarea
+                                            id="message"
+                                            name="message"
+                                            value={formData.message}
+                                            onChange={handleInputChange}
+                                            required
+                                            rows={6}
+                                            className="mt-1 resize-none border-zinc-700 bg-zinc-900 text-white placeholder:text-zinc-400 focus:border-amber-500 focus:ring-amber-500"
+                                            placeholder="Jelaskan kebutuhan atau pertanyaan Anda secara detail..."
+                                        />
+                                    </div>
+
+                                    <Button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full transform rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 px-8 py-3 font-semibold text-black transition-all duration-300 hover:scale-105 hover:from-amber-600 hover:to-amber-700 disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                        {isSubmitting ? (
+                                            <div className="flex items-center gap-2">
+                                                <div className="h-4 w-4 animate-spin rounded-full border-2 border-black/30 border-t-black" />
+                                                Mengirim...
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-2">
+                                                <Send className="h-5 w-5" />
+                                                Kirim Pesan
+                                            </div>
+                                        )}
+                                    </Button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* Related Clubs */}
             {relatedClubs.length > 0 && (

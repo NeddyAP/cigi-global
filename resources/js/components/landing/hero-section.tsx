@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Link } from '@inertiajs/react';
 import { ArrowRight, Play } from 'lucide-react';
 
 interface HeroSectionProps {
@@ -12,6 +11,7 @@ interface HeroSectionProps {
     ctaLink?: string;
     secondaryCtaText?: string;
     secondaryCtaLink?: string;
+    contactSectionId?: string;
     showPlayButton?: boolean;
     showRating?: boolean;
     rating?: number;
@@ -29,9 +29,17 @@ export default function HeroSection({
     ctaLink = '#',
     secondaryCtaText,
     secondaryCtaLink,
+    contactSectionId,
     showPlayButton = false,
     className = '',
 }: HeroSectionProps) {
+    const scrollToSection = (sectionId: string) => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <section className={`relative flex min-h-screen items-center justify-center overflow-hidden ${className}`}>
             {/* Background Image */}
@@ -64,27 +72,36 @@ export default function HeroSection({
                     {/* Call to Action Buttons */}
                     <div className="mb-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
                         {ctaText && ctaLink && (
-                            <Link href={ctaLink}>
-                                <Button
-                                    size="lg"
-                                    className="transform rounded-full bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all duration-300 hover:scale-105 hover:bg-white/90 hover:shadow-xl"
-                                >
-                                    {ctaText}
-                                    <ArrowRight className="ml-2 h-5 w-5" />
-                                </Button>
-                            </Link>
+                            <Button
+                                size="lg"
+                                onClick={() => scrollToSection(ctaLink.replace('#', ''))}
+                                className="transform rounded-full bg-white px-8 py-4 text-lg font-semibold text-black shadow-lg transition-all duration-300 hover:scale-105 hover:bg-white/90 hover:shadow-xl"
+                            >
+                                {ctaText}
+                                <ArrowRight className="ml-2 h-5 w-5" />
+                            </Button>
                         )}
 
                         {secondaryCtaText && secondaryCtaLink && (
-                            <Link href={secondaryCtaLink}>
-                                <Button
-                                    variant="outline"
-                                    size="lg"
-                                    className="rounded-full border-white/30 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/10"
-                                >
-                                    {secondaryCtaText}
-                                </Button>
-                            </Link>
+                            <Button
+                                variant="outline"
+                                size="lg"
+                                onClick={() => scrollToSection(secondaryCtaLink.replace('#', ''))}
+                                className="rounded-full border-white/30 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/10"
+                            >
+                                {secondaryCtaText}
+                            </Button>
+                        )}
+
+                        {contactSectionId && (
+                            <Button
+                                variant="outline"
+                                size="lg"
+                                onClick={() => scrollToSection(contactSectionId)}
+                                className="rounded-full border-white/30 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/10"
+                            >
+                                Contact Us
+                            </Button>
                         )}
 
                         {showPlayButton && (
