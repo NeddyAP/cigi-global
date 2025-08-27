@@ -38,6 +38,11 @@ class BusinessUnit extends Model
         'hero_subtitle',
         'hero_cta_text',
         'hero_cta_link',
+        'portfolio_is_show',
+        'certifications_is_show',
+        'company_stats_is_show',
+        'core_values_is_show',
+        'achievements_is_show',
     ];
 
     protected function casts(): array
@@ -54,6 +59,11 @@ class BusinessUnit extends Model
             'gallery_images' => 'array',
             'achievements' => 'array',
             'core_values' => 'array',
+            'portfolio_is_show' => 'boolean',
+            'certifications_is_show' => 'boolean',
+            'company_stats_is_show' => 'boolean',
+            'core_values_is_show' => 'boolean',
+            'achievements_is_show' => 'boolean',
         ];
     }
 
@@ -118,13 +128,29 @@ class BusinessUnit extends Model
     }
 
     // Accessors & Mutators
+    public function getServicesList(): array
+    {
+        $value = $this->getAttribute('services');
+        
+        if (!$value) {
+            return [];
+        }
+        
+        // Try to parse as JSON first (new format)
+        $services = json_decode($value, true);
+        if (is_array($services)) {
+            return $services;
+        }
+        
+        // Fallback: treat as newline-separated string (old format)
+        return array_filter(array_map('trim', explode("\n", $value)));
+    }
+
     protected function servicesArray(): Attribute
     {
         return Attribute::make(
             get: function () {
-                $value = $this->getAttribute('services');
-
-                return $value ? array_filter(array_map('trim', explode(',', $value))) : [];
+                return $this->getServicesList();
             },
         );
     }

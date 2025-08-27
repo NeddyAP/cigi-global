@@ -58,7 +58,50 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [], glob
         });
     };
 
-    const services = businessUnit.services ? businessUnit.services.split(',').map((s) => s.trim()) : [];
+    // Parse services from JSON string or fallback to comma-separated
+    const parseServices = (servicesString: string | undefined) => {
+        if (!servicesString) return [];
+
+        try {
+            // Try to parse as JSON first (new format)
+            const services = JSON.parse(servicesString);
+            if (Array.isArray(services)) {
+                return services.map((service) => ({
+                    id: service.id || `service_${Math.random()}`,
+                    title: service.title || 'Layanan',
+                    description: service.description || '',
+                    image: service.image || '',
+                    price_range: service.price_range || '',
+                    duration: service.duration || '',
+                    features: service.features || [],
+                    technologies: service.technologies || [],
+                    process_steps: service.process_steps || [],
+                    featured: service.featured || false,
+                    active: service.active !== false,
+                }));
+            }
+        } catch (error) {
+            // Fallback to old format (comma-separated)
+            console.log('Services not in JSON format, using fallback parsing');
+        }
+
+        // Fallback: treat as comma-separated string
+        return servicesString.split(',').map((s, index) => ({
+            id: `service_${index}`,
+            title: s.trim(),
+            description: '',
+            image: '',
+            price_range: '',
+            duration: '',
+            features: [],
+            technologies: [],
+            process_steps: [],
+            featured: false,
+            active: true,
+        }));
+    };
+
+    const services = parseServices(businessUnit.services);
 
     // Transform gallery images for the GallerySection component
     const galleryImages =
@@ -262,7 +305,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [], glob
             </section>
 
             {/* Services Section */}
-            {services?.length && (
+            {services?.length > 0 && (
                 <section className="bg-zinc-900 py-16">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <header className="mx-auto mb-12 max-w-4xl text-center">
@@ -274,14 +317,115 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [], glob
 
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {services.map((service, idx) => (
-                                <article key={idx} className="section-card flex flex-col">
-                                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-amber-500/20">
-                                        <CheckCircle className="h-6 w-6 text-amber-400" />
+                                <article
+                                    key={service.id || idx}
+                                    className="section-card group overflow-hidden transition-all duration-300 hover:-translate-y-1"
+                                >
+                                    {/* Service Image */}
+                                    {service.image && (
+                                        <div className="relative h-48 overflow-hidden">
+                                            <img
+                                                src={typeof service.image === 'string' ? service.image : `/storage/${service.image}`}
+                                                alt={service.title}
+                                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                            />
+                                            {service.featured && (
+                                                <div className="absolute top-3 right-3 rounded-full bg-amber-500 px-2 py-1 text-xs font-bold text-black">
+                                                    ⭐ Featured
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    <div className="p-6">
+                                        {/* Service Header */}
+                                        <div className="mb-4 flex items-start justify-between">
+                                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-500/20">
+                                                <CheckCircle className="h-6 w-6 text-amber-400" />
+                                            </div>
+                                            {service.featured && !service.image && (
+                                                <div className="rounded-full bg-amber-500 px-2 py-1 text-xs font-bold text-black">⭐ Featured</div>
+                                            )}
+                                        </div>
+
+                                        {/* Service Title & Description */}
+                                        <h3 className="mb-3 text-xl font-bold text-white transition-colors group-hover:text-amber-400">
+                                            {service.title}
+                                        </h3>
+                                        <p className="mb-4 line-clamp-3 text-sm text-zinc-300">
+                                            {service.description || 'Layanan profesional dengan metodologi terbukti dan praktik terbaik industri.'}
+                                        </p>
+
+                                        {/* Service Details */}
+                                        <div className="space-y-3">
+                                            {/* Price Range */}
+                                            {service.price_range && (
+                                                <div className="flex items-center gap-2 text-sm">
+                                                    <span className="text-amber-400">💰</span>
+                                                    <span className="text-zinc-300">{service.price_range}</span>
+                                                </div>
+                                            )}
+
+                                            {/* Duration */}
+                                            {service.duration && (
+                                                <div className="flex items-center gap-2 text-sm">
+                                                    <span className="text-amber-400">⏱️</span>
+                                                    <span className="text-zinc-300">{service.duration}</span>
+                                                </div>
+                                            )}
+
+                                            {/* Features Count */}
+                                            {service.features && service.features.length > 0 && (
+                                                <div className="flex items-center gap-2 text-sm">
+                                                    <span className="text-amber-400">✨</span>
+                                                    <span className="text-zinc-300">{service.features.length} fitur utama</span>
+                                                </div>
+                                            )}
+
+                                            {/* Technologies Count */}
+                                            {service.technologies && service.technologies.length > 0 && (
+                                                <div className="flex items-center gap-2 text-sm">
+                                                    <span className="text-amber-400">🔧</span>
+                                                    <span className="text-zinc-300">{service.technologies.length} teknologi</span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Process Steps Preview */}
+                                        {service.process_steps && service.process_steps.length > 0 && (
+                                            <div className="mt-4 border-t border-zinc-700 pt-4">
+                                                <div className="mb-2 flex items-center gap-2 text-sm text-amber-400">
+                                                    <span>📋</span>
+                                                    <span>Proses Kerja</span>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    {service.process_steps.slice(0, 3).map((step: any, stepIdx: number) => (
+                                                        <div key={stepIdx} className="flex items-center gap-2 text-xs text-zinc-400">
+                                                            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-700 text-xs font-bold">
+                                                                {step.order || stepIdx + 1}
+                                                            </span>
+                                                            <span className="line-clamp-1">{step.step || `Langkah ${stepIdx + 1}`}</span>
+                                                        </div>
+                                                    ))}
+                                                    {service.process_steps.length > 3 && (
+                                                        <div className="text-xs text-zinc-500">
+                                                            +{service.process_steps.length - 3} langkah lainnya
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Call to Action */}
+                                        <div className="mt-6">
+                                            <Button
+                                                className="w-full bg-amber-500 text-black transition-colors hover:bg-amber-600"
+                                                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                                            >
+                                                Konsultasi Sekarang
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <h3 className="mb-2 text-lg font-semibold text-white">{service}</h3>
-                                    <p className="text-sm text-zinc-300">
-                                        Penyampaian layanan profesional dengan metodologi terbukti dan praktik terbaik industri.
-                                    </p>
                                 </article>
                             ))}
                         </div>

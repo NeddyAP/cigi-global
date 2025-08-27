@@ -170,6 +170,37 @@ class BusinessUnitController extends Controller
             }, $data['team_members']);
         }
 
+        // Handle portfolio section visibility
+        if (isset($data['portfolio_items']) && is_array($data['portfolio_items'])) {
+            $data['portfolio_is_show'] = !empty(array_filter($data['portfolio_items'], function($item) {
+                return !empty($item['title']) || !empty($item['description']);
+            }));
+        }
+
+        if (isset($data['certifications']) && is_array($data['certifications'])) {
+            $data['certifications_is_show'] = !empty(array_filter($data['certifications'], function($cert) {
+                return !empty($cert['name']) || !empty($cert['description']);
+            }));
+        }
+
+        if (isset($data['company_stats']) && is_array($data['company_stats'])) {
+            $data['company_stats_is_show'] = !empty(array_filter($data['company_stats'], function($stat) {
+                return !empty($stat['value']);
+            }));
+        }
+
+        if (isset($data['core_values']) && is_array($data['core_values'])) {
+            $data['core_values_is_show'] = !empty(array_filter($data['core_values'], function($value) {
+                return !empty($value['title']) || !empty($value['description']);
+            }));
+        }
+
+        if (isset($data['achievements']) && is_array($data['achievements'])) {
+            $data['achievements_is_show'] = !empty(array_filter($data['achievements'], function($achievement) {
+                return !empty($achievement['title']) || !empty($achievement['description']);
+            }));
+        }
+
         // Transform company stats
         if (isset($data['company_stats'])) {
             // Check if data is already in the correct format (has label and value)

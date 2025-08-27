@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { GripVertical, Plus, Star, Trash2, User } from 'lucide-react';
+import { Building2, GripVertical, Plus, Quote, Star, Trash2, User } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
 
 interface Testimonial {
@@ -137,7 +137,7 @@ export default function TestimonialManager({
 
     const renderStars = (rating: number, onRatingChange?: (rating: number) => void) => {
         return (
-            <div className="flex space-x-1">
+            <div className="flex gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                     <button
                         key={star}
@@ -145,12 +145,12 @@ export default function TestimonialManager({
                         onClick={() => onRatingChange?.(star)}
                         disabled={disabled || !onRatingChange}
                         className={cn(
-                            'h-4 w-4 transition-colors',
-                            star <= rating ? 'text-yellow-400' : 'text-gray-300',
-                            onRatingChange && !disabled && 'hover:text-yellow-300',
+                            'h-5 w-5 transition-all duration-200 hover:scale-110',
+                            star <= rating ? 'text-yellow-400' : 'text-zinc-300 dark:text-zinc-600',
+                            onRatingChange && !disabled && 'cursor-pointer hover:text-yellow-300',
                         )}
                     >
-                        <Star className="h-4 w-4 fill-current" />
+                        <Star className="h-5 w-5 fill-current" />
                     </button>
                 ))}
             </div>
@@ -158,28 +158,47 @@ export default function TestimonialManager({
     };
 
     return (
-        <div className={cn('space-y-4', className)}>
+        <div className={cn('space-y-6', className)}>
             {label && (
-                <Label htmlFor={name}>
-                    {label}
-                    {required && <span className="ml-1 text-red-500">*</span>}
-                    <span className="ml-2 text-sm text-gray-500">
-                        ({value.length}/{maxTestimonials})
-                    </span>
-                </Label>
+                <div className="flex items-center justify-between">
+                    <Label htmlFor={name} className="text-lg font-semibold text-zinc-700 dark:text-zinc-300">
+                        {label}
+                        {required && <span className="ml-1 text-red-500">*</span>}
+                    </Label>
+                    <div className="flex items-center gap-2 rounded-full bg-zinc-100 px-3 py-1 dark:bg-zinc-800">
+                        <Quote className="h-4 w-4 text-zinc-500" />
+                        <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                            {value.length}/{maxTestimonials}
+                        </span>
+                    </div>
+                </div>
             )}
 
             {/* Add Button */}
             {canAddMore && (
-                <Button type="button" variant="outline" size="sm" onClick={addTestimonial} disabled={disabled}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Testimonial
+                <Button
+                    type="button"
+                    variant="outline"
+                    size="lg"
+                    onClick={addTestimonial}
+                    disabled={disabled}
+                    className="group w-full border-2 border-dashed border-zinc-300 bg-white py-6 text-zinc-600 transition-all hover:border-orange-400 hover:bg-orange-50 hover:text-orange-600 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:border-orange-500 dark:hover:bg-orange-900/20 dark:hover:text-orange-400"
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-600 transition-all group-hover:bg-orange-200 dark:bg-orange-900/20 dark:text-orange-400">
+                            <Plus className="h-5 w-5" />
+                        </div>
+                        <div className="text-left">
+                            <div className="font-semibold">Tambah Testimoni</div>
+                            <div className="text-sm text-zinc-500">Klik untuk menambah testimoni baru</div>
+                        </div>
+                    </div>
                 </Button>
             )}
 
             {/* Testimonials List */}
             {value.length > 0 && (
-                <div className="space-y-3">
+                <div className="space-y-4">
                     {value.map((testimonial, index) => {
                         const isExpanded = expandedIndex === index;
                         const isEmpty = !testimonial.name && !testimonial.content;
@@ -193,42 +212,75 @@ export default function TestimonialManager({
                                 onDragLeave={handleDragLeave}
                                 onDrop={(e) => handleDrop(e, index)}
                                 className={cn(
-                                    'transition-all',
-                                    dragOverIndex === index && 'border-blue-500 bg-blue-50 dark:bg-blue-950',
+                                    'group overflow-hidden transition-all duration-200 hover:shadow-lg',
+                                    dragOverIndex === index && 'border-2 border-orange-500 bg-orange-50/50 dark:bg-orange-950/20',
                                     !disabled && 'cursor-move',
-                                    isEmpty && 'border-dashed',
+                                    isEmpty && 'border-2 border-dashed border-zinc-300',
+                                    isExpanded && 'ring-2 ring-orange-500/20',
                                 )}
                             >
-                                <CardHeader className="pb-2">
+                                <CardHeader className="pb-3">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                            {!disabled && <GripVertical className="h-4 w-4 text-gray-400" />}
-                                            <CardTitle className="text-sm">
-                                                {testimonial.name || `Testimonial ${index + 1}`}
-                                                {testimonial.featured && (
-                                                    <span className="ml-2 rounded-full bg-yellow-100 px-2 py-1 text-xs text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                                        Featured
-                                                    </span>
-                                                )}
-                                            </CardTitle>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            {showRatings && testimonial.rating && (
-                                                <div className="flex items-center space-x-1">
-                                                    {renderStars(testimonial.rating)}
-                                                    <span className="text-xs text-gray-500">{testimonial.rating}/5</span>
+                                        <div className="flex items-center gap-3">
+                                            {!disabled && (
+                                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-400 transition-all group-hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-500 dark:group-hover:bg-zinc-600">
+                                                    <GripVertical className="h-4 w-4" />
                                                 </div>
                                             )}
-                                            <Button type="button" variant="ghost" size="sm" onClick={() => toggleExpanded(index)}>
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-red-600 text-lg font-bold text-white shadow-lg">
+                                                    {testimonial.image ? (
+                                                        <img
+                                                            src={typeof testimonial.image === 'string' ? testimonial.image : ''}
+                                                            alt={testimonial.name}
+                                                            className="h-12 w-12 rounded-full object-cover"
+                                                        />
+                                                    ) : testimonial.name ? (
+                                                        testimonial.name.charAt(0).toUpperCase()
+                                                    ) : (
+                                                        index + 1
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <CardTitle className="text-lg font-semibold text-zinc-900 dark:text-white">
+                                                        {testimonial.name || `Testimoni ${index + 1}`}
+                                                    </CardTitle>
+                                                    <div className="mt-1 flex items-center gap-2">
+                                                        {testimonial.featured && (
+                                                            <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-200">
+                                                                <Star className="h-3 w-3" />
+                                                                Featured
+                                                            </span>
+                                                        )}
+                                                        {testimonial.rating && showRatings && (
+                                                            <div className="flex items-center gap-1">
+                                                                {renderStars(testimonial.rating)}
+                                                                <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                                                                    {testimonial.rating}/5
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => toggleExpanded(index)}
+                                                className="border-zinc-300 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                                            >
                                                 {isExpanded ? 'Collapse' : 'Edit'}
                                             </Button>
                                             {!disabled && (
                                                 <Button
                                                     type="button"
-                                                    variant="ghost"
+                                                    variant="outline"
                                                     size="sm"
                                                     onClick={() => removeTestimonial(index)}
-                                                    className="text-red-600 hover:text-red-700"
+                                                    className="border-red-200 bg-red-50 text-red-600 hover:border-red-300 hover:bg-red-100 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
                                                 >
                                                     <Trash2 className="h-4 w-4" />
                                                 </Button>
@@ -238,14 +290,30 @@ export default function TestimonialManager({
 
                                     {/* Preview when collapsed */}
                                     {!isExpanded && testimonial.content && (
-                                        <div className="mt-2">
-                                            <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">"{testimonial.content}"</p>
+                                        <div className="mt-3 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
+                                            <div className="flex items-start gap-2">
+                                                <Quote className="mt-1 h-4 w-4 flex-shrink-0 text-orange-500" />
+                                                <p className="line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">"{testimonial.content}"</p>
+                                            </div>
                                             {(testimonial.role || testimonial.company) && (
-                                                <p className="mt-1 text-xs text-gray-500">
-                                                    — {testimonial.role}
-                                                    {testimonial.role && testimonial.company && ', '}
-                                                    {testimonial.company}
-                                                </p>
+                                                <div className="mt-2 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+                                                    <span className="font-medium">— {testimonial.name}</span>
+                                                    {testimonial.role && (
+                                                        <>
+                                                            <span>•</span>
+                                                            <span>{testimonial.role}</span>
+                                                        </>
+                                                    )}
+                                                    {testimonial.company && (
+                                                        <>
+                                                            <span>•</span>
+                                                            <span className="flex items-center gap-1">
+                                                                <Building2 className="h-3 w-3" />
+                                                                {testimonial.company}
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </div>
                                             )}
                                         </div>
                                     )}
@@ -253,11 +321,16 @@ export default function TestimonialManager({
 
                                 {/* Expanded Form */}
                                 {isExpanded && (
-                                    <CardContent className="space-y-4">
+                                    <CardContent className="space-y-6 border-t border-zinc-200/60 bg-gradient-to-br from-zinc-50/50 to-white/50 pt-6 dark:border-zinc-600/60 dark:from-zinc-800/30 dark:to-zinc-700/30">
                                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                             {/* Name */}
-                                            <div>
-                                                <Label htmlFor={`${name}_name_${index}`}>Name *</Label>
+                                            <div className="space-y-2">
+                                                <Label
+                                                    htmlFor={`${name}_name_${index}`}
+                                                    className="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                                                >
+                                                    Name <span className="text-red-500">*</span>
+                                                </Label>
                                                 <Input
                                                     id={`${name}_name_${index}`}
                                                     type="text"
@@ -266,12 +339,18 @@ export default function TestimonialManager({
                                                     placeholder="Customer name"
                                                     disabled={disabled}
                                                     required
+                                                    className="h-11 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-orange-500 focus:ring-orange-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                 />
                                             </div>
 
                                             {/* Role */}
-                                            <div>
-                                                <Label htmlFor={`${name}_role_${index}`}>Role</Label>
+                                            <div className="space-y-2">
+                                                <Label
+                                                    htmlFor={`${name}_role_${index}`}
+                                                    className="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                                                >
+                                                    Role
+                                                </Label>
                                                 <Input
                                                     id={`${name}_role_${index}`}
                                                     type="text"
@@ -279,13 +358,19 @@ export default function TestimonialManager({
                                                     onChange={(e) => updateTestimonial(index, 'role', e.target.value)}
                                                     placeholder="Job title or role"
                                                     disabled={disabled}
+                                                    className="h-11 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-orange-500 focus:ring-orange-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                 />
                                             </div>
 
                                             {/* Company */}
                                             {showCompany && (
-                                                <div>
-                                                    <Label htmlFor={`${name}_company_${index}`}>Company</Label>
+                                                <div className="space-y-2">
+                                                    <Label
+                                                        htmlFor={`${name}_company_${index}`}
+                                                        className="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                                                    >
+                                                        Company
+                                                    </Label>
                                                     <Input
                                                         id={`${name}_company_${index}`}
                                                         type="text"
@@ -293,14 +378,15 @@ export default function TestimonialManager({
                                                         onChange={(e) => updateTestimonial(index, 'company', e.target.value)}
                                                         placeholder="Company name"
                                                         disabled={disabled}
+                                                        className="h-11 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-orange-500 focus:ring-orange-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                     />
                                                 </div>
                                             )}
 
                                             {/* Rating */}
                                             {showRatings && (
-                                                <div>
-                                                    <Label>Rating</Label>
+                                                <div className="space-y-2">
+                                                    <Label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Rating</Label>
                                                     <div className="mt-1">
                                                         {renderStars(testimonial.rating || 5, (rating) => updateTestimonial(index, 'rating', rating))}
                                                     </div>
@@ -309,8 +395,13 @@ export default function TestimonialManager({
                                         </div>
 
                                         {/* Content */}
-                                        <div>
-                                            <Label htmlFor={`${name}_content_${index}`}>Testimonial Content *</Label>
+                                        <div className="space-y-2">
+                                            <Label
+                                                htmlFor={`${name}_content_${index}`}
+                                                className="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                                            >
+                                                Testimonial Content <span className="text-red-500">*</span>
+                                            </Label>
                                             <Textarea
                                                 id={`${name}_content_${index}`}
                                                 value={testimonial.content}
@@ -319,6 +410,7 @@ export default function TestimonialManager({
                                                 disabled={disabled}
                                                 rows={4}
                                                 required
+                                                className="rounded-lg border-zinc-300 bg-white px-4 py-3 text-zinc-900 placeholder-zinc-500 focus:border-orange-500 focus:ring-orange-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                             />
                                         </div>
 
@@ -337,16 +429,19 @@ export default function TestimonialManager({
                                         )}
 
                                         {/* Featured Toggle */}
-                                        <div className="flex items-center space-x-2">
+                                        <div className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-600 dark:bg-zinc-800">
                                             <input
                                                 type="checkbox"
                                                 id={`${name}_featured_${index}`}
                                                 checked={testimonial.featured || false}
                                                 onChange={(e) => updateTestimonial(index, 'featured', e.target.checked)}
                                                 disabled={disabled}
-                                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                className="h-4 w-4 rounded border-zinc-300 text-orange-600 focus:ring-orange-500 dark:border-zinc-600"
                                             />
-                                            <Label htmlFor={`${name}_featured_${index}`} className="text-sm">
+                                            <Label
+                                                htmlFor={`${name}_featured_${index}`}
+                                                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                                            >
                                                 Featured testimonial
                                             </Label>
                                         </div>
@@ -360,17 +455,19 @@ export default function TestimonialManager({
 
             {/* Empty State */}
             {value.length === 0 && (
-                <div className="rounded-lg border-2 border-dashed border-gray-300 p-8 text-center dark:border-gray-700">
-                    <User className="mx-auto h-12 w-12 text-gray-400" />
-                    <p className="mt-2 text-sm text-gray-500">No testimonials added yet</p>
-                    <p className="text-xs text-gray-400">Add testimonials to showcase customer feedback</p>
+                <div className="rounded-xl border-2 border-dashed border-zinc-300 bg-gradient-to-br from-zinc-50 to-zinc-100 p-12 text-center dark:border-zinc-600 dark:from-zinc-800/50 dark:to-zinc-700/50">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700">
+                        <User className="h-8 w-8 text-zinc-400" />
+                    </div>
+                    <h3 className="mt-4 text-lg font-semibold text-zinc-700 dark:text-zinc-300">Belum ada testimoni</h3>
+                    <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Tambahkan testimoni untuk menampilkan feedback pelanggan</p>
                 </div>
             )}
 
             {/* Hidden Input for Form Submission */}
             <Input type="hidden" name={name} value={JSON.stringify(value)} />
 
-            {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         </div>
     );
 }

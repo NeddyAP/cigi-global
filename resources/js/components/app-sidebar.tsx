@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Building2, Folder, Image, LayoutGrid, Mail, Settings, Users } from 'lucide-react';
+import { BookOpen, Building2, Globe, Image, LayoutGrid, Mail, Settings, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -47,14 +47,9 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: 'Lihat Website',
+        href: 'https://cigiglobal.com',
+        icon: Globe,
     },
 ];
 
@@ -67,6 +62,10 @@ export function AppSidebar() {
                         <SidebarMenuButton size="lg" asChild>
                             <Link href="/dashboard" prefetch>
                                 <AppLogo />
+                                <div className="flex flex-col">
+                                    <div className="text-sm font-medium">CIGI Global</div>
+                                    <span className="text-xs text-zinc-500">Admin Panel</span>
+                                </div>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

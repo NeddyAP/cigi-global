@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { GripVertical, Plus, Settings, Trash2 } from 'lucide-react';
+import { EyeOff, GripVertical, Plus, Settings, Star, Trash2 } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
 
 interface ProcessStep {
@@ -228,28 +228,47 @@ export default function ServiceManager({
     };
 
     return (
-        <div className={cn('space-y-4', className)}>
+        <div className={cn('space-y-6', className)}>
             {label && (
-                <Label htmlFor={name}>
-                    {label}
-                    {required && <span className="ml-1 text-red-500">*</span>}
-                    <span className="ml-2 text-sm text-gray-500">
-                        ({value.length}/{maxServices})
-                    </span>
-                </Label>
+                <div className="flex items-center justify-between">
+                    <Label htmlFor={name} className="text-lg font-semibold text-zinc-700 dark:text-zinc-300">
+                        {label}
+                        {required && <span className="ml-1 text-red-500">*</span>}
+                    </Label>
+                    <div className="flex items-center gap-2 rounded-full bg-zinc-100 px-3 py-1 dark:bg-zinc-800">
+                        <Settings className="h-4 w-4 text-zinc-500" />
+                        <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                            {value.length}/{maxServices}
+                        </span>
+                    </div>
+                </div>
             )}
 
             {/* Add Button */}
             {canAddMore && (
-                <Button type="button" variant="outline" size="sm" onClick={addService} disabled={disabled}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Service
+                <Button
+                    type="button"
+                    variant="outline"
+                    size="lg"
+                    onClick={addService}
+                    disabled={disabled}
+                    className="group w-full border-2 border-dashed border-zinc-300 bg-white py-6 text-zinc-600 transition-all hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:border-blue-500 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-all group-hover:bg-blue-200 dark:bg-blue-900/20 dark:text-blue-400">
+                            <Plus className="h-5 w-5" />
+                        </div>
+                        <div className="text-left">
+                            <div className="font-semibold">Tambah Layanan Baru</div>
+                            <div className="text-sm text-zinc-500">Klik untuk menambah layanan baru</div>
+                        </div>
+                    </div>
                 </Button>
             )}
 
             {/* Services List */}
             {value.length > 0 && (
-                <div className="space-y-3">
+                <div className="space-y-4">
                     {value.map((service, index) => {
                         const isExpanded = expandedIndex === index;
                         const isEmpty = !service.title && !service.description;
@@ -263,43 +282,63 @@ export default function ServiceManager({
                                 onDragLeave={handleDragLeave}
                                 onDrop={(e) => handleDrop(e, index)}
                                 className={cn(
-                                    'transition-all',
-                                    dragOverIndex === index && 'border-blue-500 bg-blue-50 dark:bg-blue-950',
+                                    'group overflow-hidden transition-all duration-200 hover:shadow-lg',
+                                    dragOverIndex === index && 'border-2 border-blue-500 bg-blue-50/50 dark:bg-blue-950/20',
                                     !disabled && 'cursor-move',
-                                    isEmpty && 'border-dashed',
+                                    isEmpty && 'border-2 border-dashed border-zinc-300',
+                                    isExpanded && 'ring-2 ring-blue-500/20',
                                 )}
                             >
-                                <CardHeader className="pb-2">
+                                <CardHeader className="pb-3">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                            {!disabled && <GripVertical className="h-4 w-4 text-gray-400" />}
-                                            <CardTitle className="text-sm">
-                                                {service.title || `Service ${index + 1}`}
-                                                <div className="mt-1 flex space-x-2">
-                                                    {service.featured && (
-                                                        <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                                            Featured
-                                                        </span>
-                                                    )}
-                                                    {service.active === false && (
-                                                        <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-800 dark:bg-gray-900 dark:text-gray-200">
-                                                            Inactive
-                                                        </span>
-                                                    )}
+                                        <div className="flex items-center gap-3">
+                                            {!disabled && (
+                                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-400 transition-all group-hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-500 dark:group-hover:bg-zinc-600">
+                                                    <GripVertical className="h-4 w-4" />
                                                 </div>
-                                            </CardTitle>
+                                            )}
+                                            <div className="flex items-center gap-2">
+                                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-sm font-bold text-white">
+                                                    {index + 1}
+                                                </div>
+                                                <div>
+                                                    <CardTitle className="text-lg font-semibold text-zinc-900 dark:text-white">
+                                                        {service.title || `Layanan ${index + 1}`}
+                                                    </CardTitle>
+                                                    <div className="mt-1 flex items-center gap-2">
+                                                        {service.featured && (
+                                                            <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-200">
+                                                                <Star className="h-3 w-3" />
+                                                                Featured
+                                                            </span>
+                                                        )}
+                                                        {service.active === false && (
+                                                            <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2 py-1 text-xs font-medium text-zinc-800 dark:bg-zinc-900/20 dark:text-zinc-200">
+                                                                <EyeOff className="h-3 w-3" />
+                                                                Inactive
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center space-x-2">
-                                            <Button type="button" variant="ghost" size="sm" onClick={() => toggleExpanded(index)}>
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => toggleExpanded(index)}
+                                                className="border-zinc-300 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                                            >
                                                 {isExpanded ? 'Collapse' : 'Edit'}
                                             </Button>
                                             {!disabled && (
                                                 <Button
                                                     type="button"
-                                                    variant="ghost"
+                                                    variant="outline"
                                                     size="sm"
                                                     onClick={() => removeService(index)}
-                                                    className="text-red-600 hover:text-red-700"
+                                                    className="border-red-200 bg-red-50 text-red-600 hover:border-red-300 hover:bg-red-100 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
                                                 >
                                                     <Trash2 className="h-4 w-4" />
                                                 </Button>
@@ -309,12 +348,24 @@ export default function ServiceManager({
 
                                     {/* Preview when collapsed */}
                                     {!isExpanded && service.description && (
-                                        <div className="mt-2">
-                                            <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">{service.description}</p>
-                                            <div className="mt-1 flex space-x-4 text-xs text-gray-500">
-                                                {service.price_range && <span>Price: {service.price_range}</span>}
-                                                {service.duration && <span>Duration: {service.duration}</span>}
-                                                {service.features && service.features.length > 0 && <span>{service.features.length} features</span>}
+                                        <div className="mt-3 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
+                                            <p className="line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">{service.description}</p>
+                                            <div className="mt-2 flex flex-wrap gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+                                                {service.price_range && (
+                                                    <span className="flex items-center gap-1 rounded-full bg-white px-2 py-1 shadow-sm dark:bg-zinc-700">
+                                                        💰 {service.price_range}
+                                                    </span>
+                                                )}
+                                                {service.duration && (
+                                                    <span className="flex items-center gap-1 rounded-full bg-white px-2 py-1 shadow-sm dark:bg-zinc-700">
+                                                        ⏱️ {service.duration}
+                                                    </span>
+                                                )}
+                                                {service.features && service.features.length > 0 && (
+                                                    <span className="flex items-center gap-1 rounded-full bg-white px-2 py-1 shadow-sm dark:bg-zinc-700">
+                                                        ✨ {service.features.length} features
+                                                    </span>
+                                                )}
                                             </div>
                                         </div>
                                     )}
@@ -322,11 +373,16 @@ export default function ServiceManager({
 
                                 {/* Expanded Form */}
                                 {isExpanded && (
-                                    <CardContent className="space-y-4">
+                                    <CardContent className="space-y-6 border-t border-zinc-200/60 bg-gradient-to-br from-zinc-50/50 to-white/50 pt-6 dark:border-zinc-600/60 dark:from-zinc-800/30 dark:to-zinc-700/30">
                                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                             {/* Title */}
-                                            <div>
-                                                <Label htmlFor={`${name}_title_${index}`}>Service Title *</Label>
+                                            <div className="space-y-2">
+                                                <Label
+                                                    htmlFor={`${name}_title_${index}`}
+                                                    className="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                                                >
+                                                    Service Title <span className="text-red-500">*</span>
+                                                </Label>
                                                 <Input
                                                     id={`${name}_title_${index}`}
                                                     type="text"
@@ -335,12 +391,18 @@ export default function ServiceManager({
                                                     placeholder="Service name"
                                                     disabled={disabled}
                                                     required
+                                                    className="h-11 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                 />
                                             </div>
 
                                             {/* Price Range */}
-                                            <div>
-                                                <Label htmlFor={`${name}_price_range_${index}`}>Price Range</Label>
+                                            <div className="space-y-2">
+                                                <Label
+                                                    htmlFor={`${name}_price_range_${index}`}
+                                                    className="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                                                >
+                                                    Price Range
+                                                </Label>
                                                 <Input
                                                     id={`${name}_price_range_${index}`}
                                                     type="text"
@@ -348,12 +410,18 @@ export default function ServiceManager({
                                                     onChange={(e) => updateService(index, 'price_range', e.target.value)}
                                                     placeholder="e.g., $500-$2000, Starting at $100"
                                                     disabled={disabled}
+                                                    className="h-11 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                 />
                                             </div>
 
                                             {/* Duration */}
-                                            <div>
-                                                <Label htmlFor={`${name}_duration_${index}`}>Duration</Label>
+                                            <div className="space-y-2">
+                                                <Label
+                                                    htmlFor={`${name}_duration_${index}`}
+                                                    className="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                                                >
+                                                    Duration
+                                                </Label>
                                                 <Input
                                                     id={`${name}_duration_${index}`}
                                                     type="text"
@@ -361,13 +429,19 @@ export default function ServiceManager({
                                                     onChange={(e) => updateService(index, 'duration', e.target.value)}
                                                     placeholder="e.g., 2-4 weeks, Ongoing"
                                                     disabled={disabled}
+                                                    className="h-11 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                 />
                                             </div>
                                         </div>
 
                                         {/* Description */}
-                                        <div>
-                                            <Label htmlFor={`${name}_description_${index}`}>Description *</Label>
+                                        <div className="space-y-2">
+                                            <Label
+                                                htmlFor={`${name}_description_${index}`}
+                                                className="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                                            >
+                                                Description <span className="text-red-500">*</span>
+                                            </Label>
                                             <Textarea
                                                 id={`${name}_description_${index}`}
                                                 value={service.description}
@@ -376,19 +450,21 @@ export default function ServiceManager({
                                                 disabled={disabled}
                                                 rows={4}
                                                 required
+                                                className="rounded-lg border-zinc-300 bg-white px-4 py-3 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                             />
                                         </div>
 
                                         {/* Features */}
-                                        <div>
+                                        <div className="space-y-3">
                                             <div className="flex items-center justify-between">
-                                                <Label>Features</Label>
+                                                <Label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Features</Label>
                                                 <Button
                                                     type="button"
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => addFeature(index)}
                                                     disabled={disabled}
+                                                    className="border-zinc-300 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
                                                 >
                                                     <Plus className="mr-1 h-3 w-3" />
                                                     Add Feature
@@ -396,24 +472,24 @@ export default function ServiceManager({
                                             </div>
 
                                             {service.features && service.features.length > 0 && (
-                                                <div className="mt-2 space-y-2">
+                                                <div className="space-y-2">
                                                     {service.features.map((feature, featureIndex) => (
-                                                        <div key={featureIndex} className="flex space-x-2">
+                                                        <div key={featureIndex} className="flex gap-2">
                                                             <Input
                                                                 type="text"
                                                                 value={feature}
                                                                 onChange={(e) => updateFeature(index, featureIndex, e.target.value)}
                                                                 placeholder="Service feature or benefit"
                                                                 disabled={disabled}
-                                                                className="flex-1"
+                                                                className="flex-1 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                             />
                                                             <Button
                                                                 type="button"
-                                                                variant="ghost"
+                                                                variant="outline"
                                                                 size="sm"
                                                                 onClick={() => removeFeature(index, featureIndex)}
                                                                 disabled={disabled}
-                                                                className="text-red-600 hover:text-red-700"
+                                                                className="h-11 w-11 rounded-lg border-red-200 bg-red-50 p-0 text-red-600 hover:border-red-300 hover:bg-red-100 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
                                                             </Button>
@@ -424,15 +500,16 @@ export default function ServiceManager({
                                         </div>
 
                                         {/* Technologies */}
-                                        <div>
+                                        <div className="space-y-3">
                                             <div className="flex items-center justify-between">
-                                                <Label>Technologies</Label>
+                                                <Label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Technologies</Label>
                                                 <Button
                                                     type="button"
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => addTechnology(index)}
                                                     disabled={disabled}
+                                                    className="border-zinc-300 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
                                                 >
                                                     <Plus className="mr-1 h-3 w-3" />
                                                     Add Technology
@@ -440,24 +517,24 @@ export default function ServiceManager({
                                             </div>
 
                                             {service.technologies && service.technologies.length > 0 && (
-                                                <div className="mt-2 space-y-2">
+                                                <div className="space-y-2">
                                                     {service.technologies.map((tech, techIndex) => (
-                                                        <div key={techIndex} className="flex space-x-2">
+                                                        <div key={techIndex} className="flex gap-2">
                                                             <Input
                                                                 type="text"
                                                                 value={tech}
                                                                 onChange={(e) => updateTechnology(index, techIndex, e.target.value)}
                                                                 placeholder="Technology or tool used"
                                                                 disabled={disabled}
-                                                                className="flex-1"
+                                                                className="flex-1 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                             />
                                                             <Button
                                                                 type="button"
-                                                                variant="ghost"
+                                                                variant="outline"
                                                                 size="sm"
                                                                 onClick={() => removeTechnology(index, techIndex)}
                                                                 disabled={disabled}
-                                                                className="text-red-600 hover:text-red-700"
+                                                                className="h-11 w-11 rounded-lg border-red-200 bg-red-50 p-0 text-red-600 hover:border-red-300 hover:bg-red-100 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
                                                             </Button>
@@ -468,15 +545,16 @@ export default function ServiceManager({
                                         </div>
 
                                         {/* Process Steps */}
-                                        <div>
+                                        <div className="space-y-3">
                                             <div className="flex items-center justify-between">
-                                                <Label>Process Steps</Label>
+                                                <Label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Process Steps</Label>
                                                 <Button
                                                     type="button"
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => addProcessStep(index)}
                                                     disabled={disabled}
+                                                    className="border-zinc-300 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
                                                 >
                                                     <Plus className="mr-1 h-3 w-3" />
                                                     Add Step
@@ -484,25 +562,33 @@ export default function ServiceManager({
                                             </div>
 
                                             {service.process_steps && service.process_steps.length > 0 && (
-                                                <div className="mt-2 space-y-3">
+                                                <div className="space-y-3">
                                                     {service.process_steps.map((step, stepIndex) => (
-                                                        <div key={stepIndex} className="rounded-lg border p-3">
-                                                            <div className="mb-2 flex items-center justify-between">
-                                                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                                    Step {step.order}
-                                                                </span>
+                                                        <div
+                                                            key={stepIndex}
+                                                            className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-600 dark:bg-zinc-800"
+                                                        >
+                                                            <div className="mb-3 flex items-center justify-between">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
+                                                                        {step.order}
+                                                                    </div>
+                                                                    <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                                                                        Step {step.order}
+                                                                    </span>
+                                                                </div>
                                                                 <Button
                                                                     type="button"
-                                                                    variant="ghost"
+                                                                    variant="outline"
                                                                     size="sm"
                                                                     onClick={() => removeProcessStep(index, stepIndex)}
                                                                     disabled={disabled}
-                                                                    className="text-red-600 hover:text-red-700"
+                                                                    className="h-8 w-8 rounded-lg border-red-200 bg-red-50 p-0 text-red-600 hover:border-red-300 hover:bg-red-100 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
                                                                 >
-                                                                    <Trash2 className="h-4 w-4" />
+                                                                    <Trash2 className="h-3 w-3" />
                                                                 </Button>
                                                             </div>
-                                                            <div className="space-y-2">
+                                                            <div className="space-y-3">
                                                                 <Input
                                                                     type="text"
                                                                     value={step.step}
@@ -510,6 +596,7 @@ export default function ServiceManager({
                                                                     placeholder="Step title"
                                                                     disabled={disabled}
                                                                     required
+                                                                    className="rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                                 />
                                                                 <Textarea
                                                                     value={step.description || ''}
@@ -519,6 +606,7 @@ export default function ServiceManager({
                                                                     placeholder="Step description (optional)"
                                                                     disabled={disabled}
                                                                     rows={2}
+                                                                    className="rounded-lg border-zinc-300 bg-white px-4 py-3 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                                 />
                                                             </div>
                                                         </div>
@@ -540,31 +628,37 @@ export default function ServiceManager({
                                         </div>
 
                                         {/* Status Toggles */}
-                                        <div className="flex space-x-6">
-                                            <div className="flex items-center space-x-2">
+                                        <div className="flex flex-wrap gap-6 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-600 dark:bg-zinc-800">
+                                            <div className="flex items-center gap-3">
                                                 <input
                                                     type="checkbox"
                                                     id={`${name}_featured_${index}`}
                                                     checked={service.featured || false}
                                                     onChange={(e) => updateService(index, 'featured', e.target.checked)}
                                                     disabled={disabled}
-                                                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                    className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500 dark:border-zinc-600"
                                                 />
-                                                <Label htmlFor={`${name}_featured_${index}`} className="text-sm">
+                                                <Label
+                                                    htmlFor={`${name}_featured_${index}`}
+                                                    className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                                                >
                                                     Featured service
                                                 </Label>
                                             </div>
 
-                                            <div className="flex items-center space-x-2">
+                                            <div className="flex items-center gap-3">
                                                 <input
                                                     type="checkbox"
                                                     id={`${name}_active_${index}`}
                                                     checked={service.active !== false}
                                                     onChange={(e) => updateService(index, 'active', e.target.checked)}
                                                     disabled={disabled}
-                                                    className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                                                    className="h-4 w-4 rounded border-zinc-300 text-green-600 focus:ring-green-500 dark:border-zinc-600"
                                                 />
-                                                <Label htmlFor={`${name}_active_${index}`} className="text-sm">
+                                                <Label
+                                                    htmlFor={`${name}_active_${index}`}
+                                                    className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                                                >
                                                     Active (visible to users)
                                                 </Label>
                                             </div>
@@ -579,17 +673,21 @@ export default function ServiceManager({
 
             {/* Empty State */}
             {value.length === 0 && (
-                <div className="rounded-lg border-2 border-dashed border-gray-300 p-8 text-center dark:border-gray-700">
-                    <Settings className="mx-auto h-12 w-12 text-gray-400" />
-                    <p className="mt-2 text-sm text-gray-500">No services added yet</p>
-                    <p className="text-xs text-gray-400">Add services to showcase what your business unit offers</p>
+                <div className="rounded-xl border-2 border-dashed border-zinc-300 bg-gradient-to-br from-zinc-50 to-zinc-100 p-12 text-center dark:border-zinc-600 dark:from-zinc-800/50 dark:to-zinc-700/50">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700">
+                        <Settings className="h-8 w-8 text-zinc-400" />
+                    </div>
+                    <h3 className="mt-4 text-lg font-semibold text-zinc-700 dark:text-zinc-300">Belum ada layanan</h3>
+                    <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+                        Tambahkan layanan untuk menampilkan apa yang ditawarkan unit bisnis Anda
+                    </p>
                 </div>
             )}
 
             {/* Hidden Input for Form Submission */}
             <Input type="hidden" name={name} value={JSON.stringify(value)} />
 
-            {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         </div>
     );
 }

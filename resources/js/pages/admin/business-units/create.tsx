@@ -101,6 +101,11 @@ export default function CreateBusinessUnit() {
             title: string;
             description: string;
         }>,
+        portfolio_is_show: false,
+        certifications_is_show: false,
+        company_stats_is_show: false,
+        core_values_is_show: false,
+        achievements_is_show: false,
     });
 
     const [activeTab, setActiveTab] = useState('basic');
@@ -246,9 +251,25 @@ export default function CreateBusinessUnit() {
 
     const servicesArray = parseServices(data.services);
 
-    const handleServicesChange = (services: Array<{ title: string }>) => {
-        // Convert back to string format for backward compatibility
-        const servicesString = services.map((service) => service.title).join('\n');
+    const handleServicesChange = (services: Array<{
+        id: string;
+        title: string;
+        description: string;
+        image?: string | number;
+        price_range?: string;
+        duration?: string;
+        features?: string[];
+        technologies?: string[];
+        process_steps?: Array<{
+            step: string;
+            description: string;
+            order: number;
+        }>;
+        featured?: boolean;
+        active?: boolean;
+    }>) => {
+        // Convert services array to JSON string for storage
+        const servicesString = JSON.stringify(services);
         setData('services', servicesString);
     };
 
@@ -285,12 +306,20 @@ export default function CreateBusinessUnit() {
                     </div>
                 )}
 
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Tambah Unit Bisnis Baru</h1>
-                        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">Isi form di bawah untuk menambah unit bisnis baru</p>
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-lg">
+                                <Building2 className="h-6 w-6" />
+                            </div>
+                            <div>
+                                <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Tambah Unit Bisnis</h1>
+                                <p className="text-lg font-medium text-green-600 dark:text-green-400">Buat unit bisnis baru</p>
+                            </div>
+                        </div>
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400">Isi form di bawah untuk menambah unit bisnis baru ke dalam sistem</p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col gap-2 sm:flex-row">
                         <Button
                             variant="outline"
                             onClick={() => {
@@ -325,15 +354,32 @@ export default function CreateBusinessUnit() {
                                     hero_cta_text: '',
                                     hero_cta_link: '',
                                     more_about: [],
+                                    portfolio_is_show: true,
+                                    certifications_is_show: true,
+                                    company_stats_is_show: true,
+                                    core_values_is_show: true,
+                                    achievements_is_show: true,
                                 });
                                 clearErrors();
                             }}
                             disabled={processing}
-                            className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700"
+                            className="border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
                         >
-                            Reset
+                            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                />
+                            </svg>
+                            Reset Form
                         </Button>
-                        <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
+                        <Button
+                            variant="outline"
+                            asChild
+                            className="border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                        >
                             <a href={route('admin.business-units.index')}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 Kembali
@@ -386,42 +432,94 @@ export default function CreateBusinessUnit() {
                         </div>
                     )}
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                        <TabsList className="grid w-full grid-cols-7">
-                            <TabsTrigger value="basic">Dasar</TabsTrigger>
-                            <TabsTrigger value="services">Layanan</TabsTrigger>
-                            <TabsTrigger value="team">Tim</TabsTrigger>
-                            <TabsTrigger value="media">Media</TabsTrigger>
-                            <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
-                            <TabsTrigger value="contact">Kontak</TabsTrigger>
-                            <TabsTrigger value="settings">Pengaturan</TabsTrigger>
-                        </TabsList>
+                        <div className="mb-6">
+                            <TabsList className="grid h-fit w-full grid-cols-2 gap-2 bg-zinc-100 p-1 lg:grid-cols-7 dark:bg-zinc-800">
+                                <TabsTrigger
+                                    value="basic"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Building2 className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Dasar</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="services"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Target className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Layanan</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="team"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Users className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Tim</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="media"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Image className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Media</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="portfolio"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Award className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Portfolio</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="contact"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Phone className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Kontak</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="settings"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Settings className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Pengaturan</span>
+                                </TabsTrigger>
+                            </TabsList>
+                        </div>
 
                         {/* Basic Information Tab */}
-                        <TabsContent value="basic" className="space-y-6">
-                            <FormSection title="Informasi Dasar" description="Detail utama unit bisnis" icon={<Building2 className="h-5 w-5" />}>
-                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                    <div>
-                                        <Label htmlFor="name">Nama Unit Bisnis *</Label>
+                        <TabsContent value="basic" className="space-y-8">
+                            <FormSection title="Informasi Dasar" description="Detail utama unit bisnis" icon={<Building2 className="h-6 w-6" />}>
+                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="name" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                                            Nama Unit Bisnis <span className="text-red-500">*</span>
+                                        </Label>
                                         <Input
                                             id="name"
                                             value={data.name}
                                             onChange={(e) => handleNameChange(e.target.value)}
                                             placeholder="Contoh: Cigi Net"
-                                            className={errors.name ? 'border-red-500' : ''}
+                                            className={`h-11 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400 ${
+                                                errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                                            }`}
                                         />
-                                        {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+                                        {errors.name && <p className="text-sm text-red-600 dark:text-red-400">{errors.name}</p>}
                                     </div>
 
-                                    <div>
-                                        <Label htmlFor="slug">Slug URL *</Label>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="slug" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                                            Slug URL <span className="text-red-500">*</span>
+                                        </Label>
                                         <Input
                                             id="slug"
                                             value={data.slug}
                                             onChange={(e) => setData('slug', e.target.value)}
                                             placeholder="contoh: cigi-net"
-                                            className={errors.slug ? 'border-red-500' : ''}
+                                            className={`h-11 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400 ${
+                                                errors.slug ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                                            }`}
                                         />
-                                        {errors.slug && <p className="mt-1 text-sm text-red-600">{errors.slug}</p>}
+                                        {errors.slug && <p className="text-sm text-red-600 dark:text-red-400">{errors.slug}</p>}
                                     </div>
                                 </div>
 
@@ -713,16 +811,86 @@ export default function CreateBusinessUnit() {
                         {/* Portfolio Tab */}
                         <TabsContent value="portfolio" className="space-y-6">
                             <FormSection
-                                title="Portfolio & Pencapaian"
-                                description="Portfolio proyek dan pencapaian"
-                                icon={<Award className="h-5 w-5" />}
+                                title="Pengaturan Portfolio"
+                                description="Kontrol visibility untuk semua section portfolio"
+                                icon={<Settings className="h-5 w-5" />}
                             >
-                                <div className="space-y-4">
-                                    <div>
-                                        <Label>Portfolio Proyek</Label>
-                                        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
-                                            Tambahkan portfolio proyek yang telah diselesaikan
-                                        </p>
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                    <div className="flex items-center space-x-3">
+                                        <Toggle
+                                            pressed={data.portfolio_is_show}
+                                            onPressedChange={(pressed) => setData('portfolio_is_show', pressed)}
+                                            aria-label="Tampilkan Portfolio"
+                                            className="data-[state=on]:bg-blue-500 data-[state=on]:text-white"
+                                        >
+                                            {data.portfolio_is_show ? 'Ditampilkan' : 'Disembunyikan'}
+                                        </Toggle>
+                                        <Label className="text-sm">Portfolio Proyek</Label>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <Toggle
+                                            pressed={data.certifications_is_show}
+                                            onPressedChange={(pressed) => setData('certifications_is_show', pressed)}
+                                            aria-label="Tampilkan Sertifikasi"
+                                            className="data-[state=on]:bg-green-500 data-[state=on]:text-white"
+                                        >
+                                            {data.certifications_is_show ? 'Ditampilkan' : 'Disembunyikan'}
+                                        </Toggle>
+                                        <Label className="text-sm">Sertifikasi & Penghargaan</Label>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <Toggle
+                                            pressed={data.company_stats_is_show}
+                                            onPressedChange={(pressed) => setData('company_stats_is_show', pressed)}
+                                            aria-label="Tampilkan Statistik"
+                                            className="data-[state=on]:bg-purple-500 data-[state=on]:text-white"
+                                        >
+                                            {data.company_stats_is_show ? 'Ditampilkan' : 'Disembunyikan'}
+                                        </Toggle>
+                                        <Label className="text-sm">Statistik Perusahaan</Label>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <Toggle
+                                            pressed={data.core_values_is_show}
+                                            onPressedChange={(pressed) => setData('core_values_is_show', pressed)}
+                                            aria-label="Tampilkan Nilai"
+                                            className="data-[state=on]:bg-orange-500 data-[state=on]:text-white"
+                                        >
+                                            {data.core_values_is_show ? 'Ditampilkan' : 'Disembunyikan'}
+                                        </Toggle>
+                                        <Label className="text-sm">Nilai-Nilai Inti</Label>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <Toggle
+                                            pressed={data.achievements_is_show}
+                                            onPressedChange={(pressed) => setData('achievements_is_show', pressed)}
+                                            aria-label="Tampilkan Prestasi"
+                                            className="data-[state=on]:bg-red-500 data-[state=on]:text-white"
+                                        >
+                                            {data.achievements_is_show ? 'Ditampilkan' : 'Disembunyikan'}
+                                        </Toggle>
+                                        <Label className="text-sm">Prestasi & Pencapaian</Label>
+                                    </div>
+                                </div>
+                            </FormSection>
+
+                            {data.portfolio_is_show && (
+                                <FormSection
+                                    title="Portfolio & Pencapaian"
+                                    description="Portfolio proyek dan pencapaian"
+                                    icon={<Award className="h-5 w-5" />}
+                                >
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label>Portfolio Proyek</Label>
+                                            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                                                Tambahkan portfolio proyek yang telah diselesaikan
+                                            </p>
+                                        </div>
                                         <div className="space-y-3">
                                             {[1, 2, 3].map((index) => (
                                                 <div key={index} className="space-y-3 rounded-lg border p-4">
@@ -791,14 +959,20 @@ export default function CreateBusinessUnit() {
                                             ))}
                                         </div>
                                     </div>
-                                </div>
-                            </FormSection>
+                                </FormSection>
+                            )}
 
-                            <FormSection title="Sertifikasi" description="Sertifikasi dan akreditasi perusahaan" icon={<Award className="h-5 w-5" />}>
-                                <div className="space-y-4">
-                                    <div>
-                                        <Label>Sertifikasi Perusahaan</Label>
-                                        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Tambahkan sertifikasi dan akreditasi</p>
+                            {data.certifications_is_show && (
+                                <FormSection
+                                    title="Sertifikasi"
+                                    description="Sertifikasi dan akreditasi perusahaan"
+                                    icon={<Award className="h-5 w-5" />}
+                                >
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label>Sertifikasi Perusahaan</Label>
+                                            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Tambahkan sertifikasi dan akreditasi</p>
+                                        </div>
                                         <div className="space-y-3">
                                             {[1, 2, 3].map((index) => (
                                                 <div key={index} className="space-y-3 rounded-lg border p-4">
@@ -874,14 +1048,16 @@ export default function CreateBusinessUnit() {
                                             ))}
                                         </div>
                                     </div>
-                                </div>
-                            </FormSection>
+                                </FormSection>
+                            )}
 
-                            <FormSection title="Nilai-Nilai Inti" description="Nilai-nilai inti perusahaan" icon={<Target className="h-5 w-5" />}>
-                                <div className="space-y-4">
-                                    <div>
-                                        <Label>Nilai-Nilai Inti</Label>
-                                        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Tambahkan nilai-nilai inti perusahaan</p>
+                            {data.core_values_is_show && (
+                                <FormSection title="Nilai-Nilai Inti" description="Nilai-nilai inti perusahaan" icon={<Target className="h-5 w-5" />}>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label>Nilai-Nilai Inti</Label>
+                                            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Tambahkan nilai-nilai inti perusahaan</p>
+                                        </div>
                                         <div className="space-y-3">
                                             {[1, 2, 3].map((index) => (
                                                 <div key={index} className="space-y-3 rounded-lg border p-4">
@@ -940,8 +1116,8 @@ export default function CreateBusinessUnit() {
                                             ))}
                                         </div>
                                     </div>
-                                </div>
-                            </FormSection>
+                                </FormSection>
+                            )}
                         </TabsContent>
 
                         {/* Contact Tab */}
@@ -1047,13 +1223,29 @@ export default function CreateBusinessUnit() {
                         </TabsContent>
                     </Tabs>
 
-                    <div className="flex justify-end space-x-3">
-                        <Button type="button" variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
-                            <a href={route('admin.business-units.index')}>Batal</a>
-                        </Button>
-                        <LoadingButton type="submit" loading={processing} loadingText="Menyimpan..." icon="save" className="cta-button">
-                            Simpan Unit Bisnis
-                        </LoadingButton>
+                    <div className="sticky bottom-0 z-10 -mx-6 border-t border-zinc-200 bg-white/80 px-6 py-4 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/80">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                asChild
+                                className="border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                            >
+                                <a href={route('admin.business-units.index')}>Batal</a>
+                            </Button>
+                            <LoadingButton
+                                type="submit"
+                                loading={processing}
+                                loadingText="Menyimpan..."
+                                icon="save"
+                                className="bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg hover:from-green-700 hover:to-emerald-700 focus:ring-green-500 dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600"
+                            >
+                                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                                Simpan Unit Bisnis
+                            </LoadingButton>
+                        </div>
                     </div>
                 </form>
             </div>

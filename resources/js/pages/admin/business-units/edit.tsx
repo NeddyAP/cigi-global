@@ -163,6 +163,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                 image?: string;
                 technologies: string[];
                 client: string;
+                is_show?: boolean;
             }>),
         certifications:
             businessUnit.certifications ||
@@ -172,12 +173,14 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                 date: string;
                 image?: string;
                 description: string;
+                is_show?: boolean;
             }>),
         company_stats: businessUnit.company_stats || {
             years_in_business: '',
             projects_completed: '',
             clients_served: '',
             team_size: '',
+            is_show: false,
         },
         gallery_images: transformGalleryImages(businessUnit.gallery_images),
         achievements:
@@ -187,6 +190,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                 date: string;
                 description: string;
                 image?: string;
+                is_show?: boolean;
             }>),
         core_values:
             businessUnit.core_values ||
@@ -194,6 +198,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                 title: string;
                 description: string;
                 icon?: string;
+                is_show?: boolean;
             }>),
         hero_subtitle: businessUnit.hero_subtitle || '',
         hero_cta_text: businessUnit.hero_cta_text || '',
@@ -204,6 +209,11 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                 title: string;
                 description: string;
             }>),
+        portfolio_is_show: businessUnit.portfolio_is_show || false,
+        certifications_is_show: businessUnit.certifications_is_show || false,
+        company_stats_is_show: businessUnit.company_stats_is_show || false,
+        core_values_is_show: businessUnit.core_values_is_show || false,
+        achievements_is_show: businessUnit.achievements_is_show || false,
     });
 
     const [activeTab, setActiveTab] = useState('basic');
@@ -329,9 +339,25 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
 
     const servicesArray = parseServices(data.services);
 
-    const handleServicesChange = (services: Array<{ title: string }>) => {
-        // Convert back to string format for backward compatibility
-        const servicesString = services.map((service) => service.title).join('\n');
+    const handleServicesChange = (services: Array<{
+        id: string;
+        title: string;
+        description: string;
+        image?: string | number;
+        price_range?: string;
+        duration?: string;
+        features?: string[];
+        technologies?: string[];
+        process_steps?: Array<{
+            step: string;
+            description: string;
+            order: number;
+        }>;
+        featured?: boolean;
+        active?: boolean;
+    }>) => {
+        // Convert services array to JSON string for storage
+        const servicesString = JSON.stringify(services);
         setData('services', servicesString);
     };
 
@@ -368,12 +394,20 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                     </div>
                 )}
 
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Edit Unit Bisnis: {businessUnit.name}</h1>
-                        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">Perbarui informasi unit bisnis</p>
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg">
+                                <Building2 className="h-6 w-6" />
+                            </div>
+                            <div>
+                                <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Edit Unit Bisnis</h1>
+                                <p className="text-lg font-medium text-blue-600 dark:text-blue-400">{businessUnit.name}</p>
+                            </div>
+                        </div>
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400">Perbarui informasi lengkap unit bisnis Anda</p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col gap-2 sm:flex-row">
                         <Button
                             variant="outline"
                             onClick={() => {
@@ -424,15 +458,32 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                     hero_cta_text: businessUnit.hero_cta_text || '',
                                     hero_cta_link: businessUnit.hero_cta_link || '',
                                     more_about: businessUnit.more_about || [],
+                                    portfolio_is_show: businessUnit.portfolio_is_show || false,
+                                    certifications_is_show: businessUnit.certifications_is_show || false,
+                                    company_stats_is_show: businessUnit.company_stats_is_show || false,
+                                    core_values_is_show: businessUnit.core_values_is_show || false,
+                                    achievements_is_show: businessUnit.achievements_is_show || false,
                                 });
                                 clearErrors();
                             }}
                             disabled={processing}
-                            className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700"
+                            className="border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
                         >
-                            Reset
+                            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                />
+                            </svg>
+                            Reset Form
                         </Button>
-                        <Button variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
+                        <Button
+                            variant="outline"
+                            asChild
+                            className="border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                        >
                             <a href={route('admin.business-units.index')}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 Kembali
@@ -485,56 +536,112 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                         </div>
                     )}
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                        <TabsList className="grid w-full grid-cols-7">
-                            <TabsTrigger value="basic">Dasar</TabsTrigger>
-                            <TabsTrigger value="services">Layanan</TabsTrigger>
-                            <TabsTrigger value="team">Tim</TabsTrigger>
-                            <TabsTrigger value="media">Media</TabsTrigger>
-                            <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
-                            <TabsTrigger value="contact">Kontak</TabsTrigger>
-                            <TabsTrigger value="settings">Pengaturan</TabsTrigger>
-                        </TabsList>
+                        <div className="mb-6">
+                            <TabsList className="grid h-fit w-full grid-cols-2 gap-2 bg-zinc-100 p-1 lg:grid-cols-7 dark:bg-zinc-800">
+                                <TabsTrigger
+                                    value="basic"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Building2 className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Dasar</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="services"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Target className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Layanan</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="team"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Users className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Tim</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="media"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Image className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Media</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="portfolio"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Award className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Portfolio</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="contact"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Phone className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Kontak</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="settings"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-white hover:shadow-sm dark:hover:bg-zinc-700"
+                                >
+                                    <Settings className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Pengaturan</span>
+                                </TabsTrigger>
+                            </TabsList>
+                        </div>
 
                         {/* Basic Information Tab */}
-                        <TabsContent value="basic" className="space-y-6">
-                            <FormSection title="Informasi Dasar" description="Detail utama unit bisnis" icon={<Building2 className="h-5 w-5" />}>
-                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                    <div>
-                                        <Label htmlFor="name">Nama Unit Bisnis *</Label>
+                        <TabsContent value="basic" className="space-y-8">
+                            <FormSection title="Informasi Dasar" description="Detail utama unit bisnis" icon={<Building2 className="h-6 w-6" />}>
+                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="name" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                                            Nama Unit Bisnis <span className="text-red-500">*</span>
+                                        </Label>
                                         <Input
                                             id="name"
                                             value={data.name}
                                             onChange={(e) => setData('name', e.target.value)}
                                             placeholder="Contoh: Cigi Net"
-                                            className={errors.name ? 'border-red-500' : ''}
+                                            className={`h-11 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400 ${
+                                                errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                                            }`}
                                         />
-                                        {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+                                        {errors.name && <p className="text-sm text-red-600 dark:text-red-400">{errors.name}</p>}
                                     </div>
 
-                                    <div>
-                                        <Label htmlFor="slug">Slug URL *</Label>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="slug" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                                            Slug URL <span className="text-red-500">*</span>
+                                        </Label>
                                         <Input
                                             id="slug"
                                             value={data.slug}
                                             onChange={(e) => setData('slug', e.target.value)}
                                             placeholder="contoh: cigi-net"
-                                            className={errors.slug ? 'border-red-500' : ''}
+                                            className={`h-11 rounded-lg border-zinc-300 bg-white px-4 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400 ${
+                                                errors.slug ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                                            }`}
                                         />
-                                        {errors.slug && <p className="mt-1 text-sm text-red-600">{errors.slug}</p>}
+                                        {errors.slug && <p className="text-sm text-red-600 dark:text-red-400">{errors.slug}</p>}
                                     </div>
                                 </div>
 
-                                <div>
-                                    <Label htmlFor="description">Deskripsi</Label>
+                                <div className="space-y-2">
+                                    <Label htmlFor="description" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                                        Deskripsi
+                                    </Label>
                                     <Textarea
                                         id="description"
                                         value={data.description}
                                         onChange={(e) => setData('description', e.target.value)}
                                         placeholder="Deskripsi singkat tentang unit bisnis"
-                                        rows={3}
-                                        className={errors.description ? 'border-red-500' : ''}
+                                        rows={4}
+                                        className={`rounded-lg border-zinc-300 bg-white px-4 py-3 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400 ${
+                                            errors.description ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                                        }`}
                                     />
-                                    {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
+                                    {errors.description && <p className="text-sm text-red-600 dark:text-red-400">{errors.description}</p>}
                                 </div>
 
                                 <ImageInput
@@ -547,54 +654,94 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                     multiple={false}
                                 />
 
-                                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                                    <div>
-                                        <Label htmlFor="hero_subtitle">Subtitle Hero</Label>
-                                        <Input
-                                            id="hero_subtitle"
-                                            value={data.hero_subtitle}
-                                            onChange={(e) => setData('hero_subtitle', e.target.value)}
-                                            placeholder="Subtitle untuk halaman utama"
-                                            className={errors.hero_subtitle ? 'border-red-500' : ''}
-                                        />
-                                        {errors.hero_subtitle && <p className="mt-1 text-sm text-red-600">{errors.hero_subtitle}</p>}
+                                <div className="rounded-xl border border-zinc-200 bg-gradient-to-r from-blue-50 to-purple-50 p-6 dark:border-zinc-700 dark:from-zinc-800 dark:to-zinc-800">
+                                    <div className="mb-4 flex items-center gap-2">
+                                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
+                                            <Target className="h-4 w-4" />
+                                        </div>
+                                        <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">Hero Section</h3>
                                     </div>
+                                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="hero_subtitle" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                                Subtitle Hero
+                                            </Label>
+                                            <Input
+                                                id="hero_subtitle"
+                                                value={data.hero_subtitle}
+                                                onChange={(e) => setData('hero_subtitle', e.target.value)}
+                                                placeholder="Subtitle untuk halaman utama"
+                                                className={`h-10 rounded-lg border-zinc-300 bg-white px-3 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400 ${
+                                                    errors.hero_subtitle ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                                                }`}
+                                            />
+                                            {errors.hero_subtitle && <p className="text-sm text-red-600 dark:text-red-400">{errors.hero_subtitle}</p>}
+                                        </div>
 
-                                    <div>
-                                        <Label htmlFor="hero_cta_text">Teks CTA</Label>
-                                        <Input
-                                            id="hero_cta_text"
-                                            value={data.hero_cta_text}
-                                            onChange={(e) => setData('hero_cta_text', e.target.value)}
-                                            placeholder="Hubungi Kami"
-                                            className={errors.hero_cta_text ? 'border-red-500' : ''}
-                                        />
-                                        {errors.hero_cta_text && <p className="mt-1 text-sm text-red-600">{errors.hero_cta_text}</p>}
-                                    </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="hero_cta_text" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                                Teks CTA
+                                            </Label>
+                                            <Input
+                                                id="hero_cta_text"
+                                                value={data.hero_cta_text}
+                                                onChange={(e) => setData('hero_cta_text', e.target.value)}
+                                                placeholder="Hubungi Kami"
+                                                className={`h-10 rounded-lg border-zinc-300 bg-white px-3 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400 ${
+                                                    errors.hero_cta_text ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                                                }`}
+                                            />
+                                            {errors.hero_cta_text && <p className="text-sm text-red-600 dark:text-red-400">{errors.hero_cta_text}</p>}
+                                        </div>
 
-                                    <div>
-                                        <Label htmlFor="hero_cta_link">Link CTA</Label>
-                                        <Input
-                                            id="hero_cta_link"
-                                            value={data.hero_cta_link}
-                                            onChange={(e) => setData('hero_cta_link', e.target.value)}
-                                            placeholder="/kontak atau https://..."
-                                            className={errors.hero_cta_link ? 'border-red-500' : ''}
-                                        />
-                                        {errors.hero_cta_link && <p className="mt-1 text-sm text-red-600">{errors.hero_cta_link}</p>}
+                                        <div className="space-y-2">
+                                            <Label htmlFor="hero_cta_link" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                                Link CTA
+                                            </Label>
+                                            <Input
+                                                id="hero_cta_link"
+                                                value={data.hero_cta_link}
+                                                onChange={(e) => setData('hero_cta_link', e.target.value)}
+                                                placeholder="/kontak atau https://..."
+                                                className={`h-10 rounded-lg border-zinc-300 bg-white px-3 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400 ${
+                                                    errors.hero_cta_link ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+                                                }`}
+                                            />
+                                            {errors.hero_cta_link && <p className="text-sm text-red-600 dark:text-red-400">{errors.hero_cta_link}</p>}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <Label>Informasi Tambahan</Label>
-                                    <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                                <div className="rounded-xl border border-zinc-200 bg-gradient-to-r from-green-50 to-emerald-50 p-6 dark:border-zinc-700 dark:from-zinc-800 dark:to-zinc-800">
+                                    <div className="mb-4 flex items-center gap-2">
+                                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400">
+                                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                                />
+                                            </svg>
+                                        </div>
+                                        <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">Informasi Tambahan</h3>
+                                    </div>
+                                    <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
                                         Tambahkan informasi tambahan seperti misi, visi, nilai-nilai, dll. dalam bentuk card
                                     </p>
-                                    <div className="space-y-3">
+                                    <div className="space-y-4">
                                         {data.more_about.map((item, index) => (
-                                            <div key={index} className="space-y-3 rounded-lg border p-4">
-                                                <div className="flex items-center justify-between">
-                                                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Card {index + 1}</h4>
+                                            <div
+                                                key={index}
+                                                className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:border-zinc-600 dark:bg-zinc-800"
+                                            >
+                                                <div className="mb-3 flex items-center justify-between">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
+                                                            <span className="text-xs font-bold">{index + 1}</span>
+                                                        </div>
+                                                        <h4 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Card {index + 1}</h4>
+                                                    </div>
                                                     <Button
                                                         type="button"
                                                         variant="outline"
@@ -604,14 +751,26 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                             newItems.splice(index, 1);
                                                             setData('more_about', newItems);
                                                         }}
-                                                        className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                                                        className="h-8 w-8 rounded-full border-red-200 bg-red-50 p-0 text-red-600 hover:border-red-300 hover:bg-red-100 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
                                                     >
-                                                        Hapus
+                                                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={2}
+                                                                d="M6 18L18 6M6 6l12 12"
+                                                            />
+                                                        </svg>
                                                     </Button>
                                                 </div>
-                                                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                                                    <div>
-                                                        <Label htmlFor={`more_about_title_${index}`}>Judul</Label>
+                                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                                    <div className="space-y-2">
+                                                        <Label
+                                                            htmlFor={`more_about_title_${index}`}
+                                                            className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                                                        >
+                                                            Judul
+                                                        </Label>
                                                         <Input
                                                             id={`more_about_title_${index}`}
                                                             value={item.title}
@@ -621,10 +780,16 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                 setData('more_about', newItems);
                                                             }}
                                                             placeholder="Contoh: Misi Kami"
+                                                            className="h-10 rounded-lg border-zinc-300 bg-white px-3 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                         />
                                                     </div>
-                                                    <div>
-                                                        <Label htmlFor={`more_about_description_${index}`}>Deskripsi</Label>
+                                                    <div className="space-y-2">
+                                                        <Label
+                                                            htmlFor={`more_about_description_${index}`}
+                                                            className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                                                        >
+                                                            Deskripsi
+                                                        </Label>
                                                         <Textarea
                                                             id={`more_about_description_${index}`}
                                                             value={item.description}
@@ -635,6 +800,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                             }}
                                                             placeholder="Deskripsi singkat..."
                                                             rows={2}
+                                                            className="rounded-lg border-zinc-300 bg-white px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-400"
                                                         />
                                                     </div>
                                                 </div>
@@ -646,9 +812,21 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                             onClick={() => {
                                                 setData('more_about', [...data.more_about, { title: '', description: '' }]);
                                             }}
-                                            className="w-full border-dashed border-gray-300 text-gray-600 hover:border-gray-400 hover:text-gray-700"
+                                            className="group w-full rounded-xl border-2 border-dashed border-zinc-300 bg-white py-4 text-zinc-600 transition-all hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:border-blue-500 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
                                         >
-                                            + Tambah Card Baru
+                                            <div className="flex items-center justify-center gap-2">
+                                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-all group-hover:bg-blue-200 dark:bg-blue-900/20 dark:text-blue-400">
+                                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                                <span className="font-medium">Tambah Card Baru</span>
+                                            </div>
                                         </Button>
                                     </div>
                                 </div>
@@ -740,16 +918,86 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                         {/* Portfolio Tab */}
                         <TabsContent value="portfolio" className="space-y-6">
                             <FormSection
-                                title="Portfolio & Proyek"
-                                description="Portfolio dan proyek yang telah diselesaikan"
-                                icon={<Target className="h-5 w-5" />}
+                                title="Pengaturan Portfolio"
+                                description="Kontrol visibility untuk semua section portfolio"
+                                icon={<Settings className="h-5 w-5" />}
                             >
-                                <div className="space-y-4">
-                                    <div>
-                                        <Label>Portfolio Proyek</Label>
-                                        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
-                                            Tambahkan portfolio dan proyek yang telah diselesaikan
-                                        </p>
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                    <div className="flex items-center space-x-3">
+                                        <Toggle
+                                            pressed={data.portfolio_is_show}
+                                            onPressedChange={(pressed) => setData('portfolio_is_show', pressed)}
+                                            aria-label="Tampilkan Portfolio"
+                                            className="data-[state=on]:bg-blue-500 data-[state=on]:text-white"
+                                        >
+                                            {data.portfolio_is_show ? 'Ditampilkan' : 'Disembunyikan'}
+                                        </Toggle>
+                                        <Label className="text-sm">Portfolio Proyek</Label>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <Toggle
+                                            pressed={data.certifications_is_show}
+                                            onPressedChange={(pressed) => setData('certifications_is_show', pressed)}
+                                            aria-label="Tampilkan Sertifikasi"
+                                            className="data-[state=on]:bg-green-500 data-[state=on]:text-white"
+                                        >
+                                            {data.certifications_is_show ? 'Ditampilkan' : 'Disembunyikan'}
+                                        </Toggle>
+                                        <Label className="text-sm">Sertifikasi & Penghargaan</Label>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <Toggle
+                                            pressed={data.company_stats_is_show}
+                                            onPressedChange={(pressed) => setData('company_stats_is_show', pressed)}
+                                            aria-label="Tampilkan Statistik"
+                                            className="data-[state=on]:bg-purple-500 data-[state=on]:text-white"
+                                        >
+                                            {data.company_stats_is_show ? 'Ditampilkan' : 'Disembunyikan'}
+                                        </Toggle>
+                                        <Label className="text-sm">Statistik Perusahaan</Label>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <Toggle
+                                            pressed={data.core_values_is_show}
+                                            onPressedChange={(pressed) => setData('core_values_is_show', pressed)}
+                                            aria-label="Tampilkan Nilai"
+                                            className="data-[state=on]:bg-orange-500 data-[state=on]:text-white"
+                                        >
+                                            {data.core_values_is_show ? 'Ditampilkan' : 'Disembunyikan'}
+                                        </Toggle>
+                                        <Label className="text-sm">Nilai-Nilai Inti</Label>
+                                    </div>
+
+                                    <div className="flex items-center space-x-3">
+                                        <Toggle
+                                            pressed={data.achievements_is_show}
+                                            onPressedChange={(pressed) => setData('achievements_is_show', pressed)}
+                                            aria-label="Tampilkan Prestasi"
+                                            className="data-[state=on]:bg-red-500 data-[state=on]:text-white"
+                                        >
+                                            {data.achievements_is_show ? 'Ditampilkan' : 'Disembunyikan'}
+                                        </Toggle>
+                                        <Label className="text-sm">Prestasi & Pencapaian</Label>
+                                    </div>
+                                </div>
+                            </FormSection>
+
+                            {data.portfolio_is_show && (
+                                <FormSection
+                                    title="Portfolio & Proyek"
+                                    description="Portfolio dan proyek yang telah diselesaikan"
+                                    icon={<Target className="h-5 w-5" />}
+                                >
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label>Portfolio Proyek</Label>
+                                            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                                                Tambahkan portfolio dan proyek yang telah diselesaikan
+                                            </p>
+                                        </div>
                                         <div className="space-y-3">
                                             {[1, 2, 3].map((index) => (
                                                 <div key={index} className="space-y-3 rounded-lg border p-4">
@@ -767,6 +1015,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                             description: '',
                                                                             technologies: [],
                                                                             client: '',
+                                                                            is_show: true,
                                                                         };
                                                                     }
                                                                     portfolio[index - 1].title = e.target.value;
@@ -788,6 +1037,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                             description: '',
                                                                             technologies: [],
                                                                             client: '',
+                                                                            is_show: true,
                                                                         };
                                                                     }
                                                                     portfolio[index - 1].client = e.target.value;
@@ -810,6 +1060,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                         description: '',
                                                                         technologies: [],
                                                                         client: '',
+                                                                        is_show: true,
                                                                     };
                                                                 }
                                                                 portfolio[index - 1].description = e.target.value;
@@ -823,20 +1074,22 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                             ))}
                                         </div>
                                     </div>
-                                </div>
-                            </FormSection>
+                                </FormSection>
+                            )}
 
-                            <FormSection
-                                title="Sertifikasi & Penghargaan"
-                                description="Sertifikasi dan penghargaan yang dimiliki"
-                                icon={<Award className="h-5 w-5" />}
-                            >
-                                <div className="space-y-4">
-                                    <div>
-                                        <Label>Sertifikasi & Penghargaan</Label>
-                                        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
-                                            Tambahkan sertifikasi dan penghargaan yang dimiliki
-                                        </p>
+                            {data.certifications_is_show && (
+                                <FormSection
+                                    title="Sertifikasi & Penghargaan"
+                                    description="Sertifikasi dan penghargaan yang dimiliki"
+                                    icon={<Award className="h-5 w-5" />}
+                                >
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label>Sertifikasi & Penghargaan</Label>
+                                            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                                                Tambahkan sertifikasi dan penghargaan yang dimiliki
+                                            </p>
+                                        </div>
                                         <div className="space-y-3">
                                             {[1, 2, 3].map((index) => (
                                                 <div key={index} className="space-y-3 rounded-lg border p-4">
@@ -849,7 +1102,13 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                 onChange={(e) => {
                                                                     const certs = [...(data.certifications || [])];
                                                                     if (!certs[index - 1]) {
-                                                                        certs[index - 1] = { name: '', issuer: '', date: '', description: '' };
+                                                                        certs[index - 1] = {
+                                                                            name: '',
+                                                                            issuer: '',
+                                                                            date: '',
+                                                                            description: '',
+                                                                            is_show: true,
+                                                                        };
                                                                     }
                                                                     certs[index - 1].name = e.target.value;
                                                                     setData('certifications', certs);
@@ -865,7 +1124,13 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                 onChange={(e) => {
                                                                     const certs = [...(data.certifications || [])];
                                                                     if (!certs[index - 1]) {
-                                                                        certs[index - 1] = { name: '', issuer: '', date: '', description: '' };
+                                                                        certs[index - 1] = {
+                                                                            name: '',
+                                                                            issuer: '',
+                                                                            date: '',
+                                                                            description: '',
+                                                                            is_show: true,
+                                                                        };
                                                                     }
                                                                     certs[index - 1].issuer = e.target.value;
                                                                     setData('certifications', certs);
@@ -882,7 +1147,13 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                             onChange={(e) => {
                                                                 const certs = [...(data.certifications || [])];
                                                                 if (!certs[index - 1]) {
-                                                                    certs[index - 1] = { name: '', issuer: '', date: '', description: '' };
+                                                                    certs[index - 1] = {
+                                                                        name: '',
+                                                                        issuer: '',
+                                                                        date: '',
+                                                                        description: '',
+                                                                        is_show: true,
+                                                                    };
                                                                 }
                                                                 certs[index - 1].description = e.target.value;
                                                                 setData('certifications', certs);
@@ -895,18 +1166,20 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                             ))}
                                         </div>
                                     </div>
-                                </div>
-                            </FormSection>
+                                </FormSection>
+                            )}
 
-                            <FormSection
-                                title="Statistik Perusahaan"
-                                description="Statistik dan data perusahaan"
-                                icon={<BarChart3 className="h-5 w-5" />}
-                            >
-                                <div className="space-y-4">
-                                    <div>
-                                        <Label>Statistik Perusahaan</Label>
-                                        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Tambahkan statistik dan data perusahaan</p>
+                            {data.company_stats_is_show && (
+                                <FormSection
+                                    title="Statistik Perusahaan"
+                                    description="Statistik dan data perusahaan"
+                                    icon={<BarChart3 className="h-5 w-5" />}
+                                >
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label>Statistik Perusahaan</Label>
+                                            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Tambahkan statistik dan data perusahaan</p>
+                                        </div>
                                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                             <div>
                                                 <Label htmlFor="years_in_business">Tahun Beroperasi</Label>
@@ -970,14 +1243,16 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </FormSection>
+                                </FormSection>
+                            )}
 
-                            <FormSection title="Nilai-Nilai Inti" description="Nilai-nilai inti perusahaan" icon={<Target className="h-5 w-5" />}>
-                                <div className="space-y-4">
-                                    <div>
-                                        <Label>Nilai-Nilai Inti</Label>
-                                        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Tambahkan nilai-nilai inti perusahaan</p>
+                            {data.core_values_is_show && (
+                                <FormSection title="Nilai-Nilai Inti" description="Nilai-nilai inti perusahaan" icon={<Target className="h-5 w-5" />}>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label>Nilai-Nilai Inti</Label>
+                                            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Tambahkan nilai-nilai inti perusahaan</p>
+                                        </div>
                                         <div className="space-y-3">
                                             {[1, 2, 3, 4].map((index) => (
                                                 <div key={index} className="space-y-3 rounded-lg border p-4">
@@ -990,7 +1265,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                 onChange={(e) => {
                                                                     const values = [...(data.core_values || [])];
                                                                     if (!values[index - 1])
-                                                                        values[index - 1] = { title: '', description: '', icon: '' };
+                                                                        values[index - 1] = { title: '', description: '', icon: '', is_show: true };
                                                                     values[index - 1].title = e.target.value;
                                                                     setData('core_values', values);
                                                                 }}
@@ -1005,7 +1280,7 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                 onChange={(e) => {
                                                                     const values = [...(data.core_values || [])];
                                                                     if (!values[index - 1])
-                                                                        values[index - 1] = { title: '', description: '', icon: '' };
+                                                                        values[index - 1] = { title: '', description: '', icon: '', is_show: true };
                                                                     values[index - 1].icon = e.target.value;
                                                                     setData('core_values', values);
                                                                 }}
@@ -1020,7 +1295,8 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                             value={data.core_values?.[index - 1]?.description || ''}
                                                             onChange={(e) => {
                                                                 const values = [...(data.core_values || [])];
-                                                                if (!values[index - 1]) values[index - 1] = { title: '', description: '', icon: '' };
+                                                                if (!values[index - 1])
+                                                                    values[index - 1] = { title: '', description: '', icon: '', is_show: true };
                                                                 values[index - 1].description = e.target.value;
                                                                 setData('core_values', values);
                                                             }}
@@ -1032,18 +1308,22 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                             ))}
                                         </div>
                                     </div>
-                                </div>
-                            </FormSection>
+                                </FormSection>
+                            )}
 
-                            <FormSection
-                                title="Prestasi & Pencapaian"
-                                description="Prestasi dan pencapaian perusahaan"
-                                icon={<Award className="h-5 w-5" />}
-                            >
-                                <div className="space-y-4">
-                                    <div>
-                                        <Label>Prestasi Perusahaan</Label>
-                                        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Tambahkan prestasi dan pencapaian perusahaan</p>
+                            {data.achievements_is_show && (
+                                <FormSection
+                                    title="Prestasi & Pencapaian"
+                                    description="Prestasi dan pencapaian perusahaan"
+                                    icon={<Award className="h-5 w-5" />}
+                                >
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label>Prestasi Perusahaan</Label>
+                                            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                                                Tambahkan prestasi dan pencapaian perusahaan
+                                            </p>
+                                        </div>
                                         <div className="space-y-3">
                                             {[1, 2, 3].map((index) => (
                                                 <div key={index} className="space-y-3 rounded-lg border p-4">
@@ -1056,7 +1336,13 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                 onChange={(e) => {
                                                                     const achievements = [...(data.achievements || [])];
                                                                     if (!achievements[index - 1])
-                                                                        achievements[index - 1] = { title: '', date: '', description: '', image: '' };
+                                                                        achievements[index - 1] = {
+                                                                            title: '',
+                                                                            date: '',
+                                                                            description: '',
+                                                                            image: '',
+                                                                            is_show: true,
+                                                                        };
                                                                     achievements[index - 1].title = e.target.value;
                                                                     setData('achievements', achievements);
                                                                 }}
@@ -1072,7 +1358,13 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                                 onChange={(e) => {
                                                                     const achievements = [...(data.achievements || [])];
                                                                     if (!achievements[index - 1])
-                                                                        achievements[index - 1] = { title: '', date: '', description: '', image: '' };
+                                                                        achievements[index - 1] = {
+                                                                            title: '',
+                                                                            date: '',
+                                                                            description: '',
+                                                                            image: '',
+                                                                            is_show: true,
+                                                                        };
                                                                     achievements[index - 1].date = e.target.value;
                                                                     setData('achievements', achievements);
                                                                 }}
@@ -1087,7 +1379,13 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                                             onChange={(e) => {
                                                                 const achievements = [...(data.achievements || [])];
                                                                 if (!achievements[index - 1])
-                                                                    achievements[index - 1] = { title: '', date: '', description: '', image: '' };
+                                                                    achievements[index - 1] = {
+                                                                        title: '',
+                                                                        date: '',
+                                                                        description: '',
+                                                                        image: '',
+                                                                        is_show: true,
+                                                                    };
                                                                 achievements[index - 1].description = e.target.value;
                                                                 setData('achievements', achievements);
                                                             }}
@@ -1099,8 +1397,8 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                             ))}
                                         </div>
                                     </div>
-                                </div>
-                            </FormSection>
+                                </FormSection>
+                            )}
                         </TabsContent>
 
                         {/* Contact Tab */}
@@ -1206,13 +1504,29 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                         </TabsContent>
                     </Tabs>
 
-                    <div className="flex justify-end space-x-3">
-                        <Button type="button" variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
-                            <a href={route('admin.business-units.index')}>Batal</a>
-                        </Button>
-                        <LoadingButton type="submit" loading={processing} loadingText="Menyimpan..." icon="save" className="cta-button">
-                            Perbarui Unit Bisnis
-                        </LoadingButton>
+                    <div className="sticky bottom-0 z-10 -mx-6 border-t border-zinc-200 bg-white/80 px-6 py-4 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/80">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                asChild
+                                className="border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                            >
+                                <a href={route('admin.business-units.index')}>Batal</a>
+                            </Button>
+                            <LoadingButton
+                                type="submit"
+                                loading={processing}
+                                loadingText="Menyimpan..."
+                                icon="save"
+                                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:from-blue-700 hover:to-purple-700 focus:ring-blue-500 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600"
+                            >
+                                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                                Perbarui Unit Bisnis
+                            </LoadingButton>
+                        </div>
                     </div>
                 </form>
             </div>

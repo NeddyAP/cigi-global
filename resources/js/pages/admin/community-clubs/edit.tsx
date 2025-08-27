@@ -221,9 +221,22 @@ export default function EditCommunityClub({ communityClub }: EditCommunityClubPr
 
     const activitiesArray = parseActivities(data.activities);
 
-    const handleActivitiesChange = (activities: Array<{ title: string }>) => {
-        // Convert back to string format for backward compatibility
-        const activitiesString = activities.map((activity) => activity.title).join('\n');
+    const handleActivitiesChange = (
+        activities: Array<{
+            id: string;
+            title: string;
+            description: string;
+            image?: string | number;
+            duration?: string;
+            max_participants?: number;
+            requirements?: string;
+            benefits?: string[];
+            featured?: boolean;
+            active?: boolean;
+        }>,
+    ) => {
+        // Convert back to JSON string format for storage
+        const activitiesString = JSON.stringify(activities);
         setData('activities', activitiesString);
     };
 
@@ -282,14 +295,59 @@ export default function EditCommunityClub({ communityClub }: EditCommunityClubPr
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                        <TabsList className="grid w-full grid-cols-6">
-                            <TabsTrigger value="basic">Dasar</TabsTrigger>
-                            <TabsTrigger value="activities">Aktivitas</TabsTrigger>
-                            <TabsTrigger value="media">Media</TabsTrigger>
-                            <TabsTrigger value="social">Sosial</TabsTrigger>
-                            <TabsTrigger value="contact">Kontak</TabsTrigger>
-                            <TabsTrigger value="settings">Pengaturan</TabsTrigger>
+                    {/* Welcome Header */}
+                    <div className="mb-8 rounded-2xl bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 p-8 text-center dark:from-green-900/20 dark:via-emerald-900/20 dark:to-teal-900/20">
+                        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-lg">
+                            <Users className="h-8 w-8" />
+                        </div>
+                        <h2 className="mb-2 text-2xl font-bold text-zinc-900 dark:text-white">✏️ Edit Komunitas</h2>
+                        <p className="text-zinc-600 dark:text-zinc-400">Edit informasi komunitas {communityClub.name}</p>
+                    </div>
+
+                    <Tabs value={activeTab} onValueChange={setActiveTab}>
+                        <TabsList className="mb-5 grid h-fit w-full grid-cols-6 rounded-xl bg-gradient-to-r from-zinc-100 via-zinc-50 to-zinc-100 p-2 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-800">
+                            <TabsTrigger
+                                value="basic"
+                                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg dark:data-[state=active]:from-blue-600 dark:data-[state=active]:to-purple-700"
+                            >
+                                <Users className="h-4 w-4" />
+                                Dasar
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="activities"
+                                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg dark:data-[state=active]:from-green-600 dark:data-[state=active]:to-emerald-700"
+                            >
+                                <Calendar className="h-4 w-4" />
+                                Aktivitas
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="media"
+                                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg dark:data-[state=active]:from-orange-600 dark:data-[state=active]:to-red-700"
+                            >
+                                <Image className="h-4 w-4" />
+                                Media
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="social"
+                                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-rose-600 data-[state=active]:text-white data-[state=active]:shadow-lg dark:data-[state=active]:from-pink-600 dark:data-[state=active]:to-rose-700"
+                            >
+                                <Globe className="h-4 w-4" />
+                                Sosial
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="contact"
+                                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg dark:data-[state=active]:from-indigo-600 dark:data-[state=active]:to-blue-700"
+                            >
+                                <Phone className="h-4 w-4" />
+                                Kontak
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="settings"
+                                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all data-[state=active]:bg-gradient-to-r data-[state=active]:from-slate-500 data-[state=active]:to-gray-600 data-[state=active]:text-white data-[state=active]:shadow-lg dark:data-[state=active]:from-slate-600 dark:data-[state=active]:to-gray-700"
+                            >
+                                <Settings className="h-4 w-4" />
+                                Pengaturan
+                            </TabsTrigger>
                         </TabsList>
 
                         {/* Basic Information Tab */}
@@ -832,11 +890,22 @@ export default function EditCommunityClub({ communityClub }: EditCommunityClubPr
                         </TabsContent>
                     </Tabs>
 
-                    <div className="flex justify-end space-x-3">
-                        <Button type="button" variant="outline" asChild className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700">
+                    <div className="flex justify-end space-x-4 border-t border-zinc-200 pt-6 dark:border-zinc-700">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            asChild
+                            className="border-zinc-300 bg-white text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                        >
                             <a href={route('admin.community-clubs.show', communityClub.slug)}>Batal</a>
                         </Button>
-                        <LoadingButton type="submit" loading={processing} loadingText="Menyimpan..." icon="save" className="cta-button">
+                        <LoadingButton
+                            type="submit"
+                            loading={processing}
+                            loadingText="Menyimpan..."
+                            icon="save"
+                            className="transform bg-blue-600 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-blue-700 hover:shadow-xl"
+                        >
                             Simpan Perubahan
                         </LoadingButton>
                     </div>

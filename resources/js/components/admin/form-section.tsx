@@ -14,25 +14,34 @@ export function FormSection({ title, description, children, className = '', coll
     const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
 
     return (
-        <div className={`rounded-lg border border-zinc-200 bg-white shadow dark:border-zinc-700 dark:bg-zinc-800 ${className}`}>
+        <div
+            className={`overflow-hidden rounded-xl border border-zinc-200 bg-gradient-to-br from-white to-zinc-50 shadow-sm transition-all hover:shadow-md dark:border-zinc-700 dark:from-zinc-800 dark:to-zinc-900 ${className}`}
+        >
             <div
-                className={`border-b border-zinc-200 px-6 py-4 dark:border-zinc-700 ${
-                    collapsible ? 'cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-700/50' : ''
+                className={`border-b border-zinc-200/60 bg-gradient-to-r from-zinc-50 to-white px-6 py-5 dark:border-zinc-600/60 dark:from-zinc-800/50 dark:to-zinc-700/50 ${
+                    collapsible ? 'cursor-pointer hover:from-zinc-100 hover:to-zinc-50 dark:hover:from-zinc-700/70 dark:hover:to-zinc-600/70' : ''
                 }`}
                 onClick={collapsible ? () => setIsCollapsed(!isCollapsed) : undefined}
             >
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        {icon && <span className="text-zinc-400">{icon}</span>}
+                    <div className="flex items-center gap-3">
+                        {icon && (
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-sm">
+                                {icon}
+                            </div>
+                        )}
                         <div>
-                            <h3 className="text-lg font-medium text-zinc-900 dark:text-white">{title}</h3>
+                            <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
                             {description && <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{description}</p>}
                         </div>
                     </div>
                     {collapsible && (
-                        <button type="button" className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300">
+                        <button
+                            type="button"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-400 transition-all hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-600 dark:border-zinc-600 dark:bg-zinc-700 dark:hover:border-zinc-500 dark:hover:bg-zinc-600 dark:hover:text-zinc-300"
+                        >
                             <svg
-                                className={`h-5 w-5 transition-transform ${isCollapsed ? '' : 'rotate-180'}`}
+                                className={`h-4 w-4 transition-transform duration-200 ${isCollapsed ? '' : 'rotate-180'}`}
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -43,7 +52,7 @@ export function FormSection({ title, description, children, className = '', coll
                     )}
                 </div>
             </div>
-            {!isCollapsed && <div className="space-y-4 px-6 py-4">{children}</div>}
+            {!isCollapsed && <div className="space-y-6 px-6 py-6">{children}</div>}
         </div>
     );
 }

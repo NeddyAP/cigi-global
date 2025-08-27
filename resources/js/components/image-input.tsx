@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Media } from '@/types';
-import { Image, Trash2 } from 'lucide-react';
+import { Image, Trash2, Upload } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 interface ImageInputProps {
@@ -84,35 +84,43 @@ export default function ImageInput({
     };
 
     return (
-        <div className={cn('space-y-2', className)}>
+        <div className={cn('space-y-4', className)}>
             {label && (
-                <Label htmlFor={name}>
+                <Label htmlFor={name} className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                     {label}
                     {required && <span className="ml-1 text-red-500">*</span>}
                 </Label>
             )}
 
-            <div className="space-y-2">
+            <div className="space-y-4">
                 {/* Preview */}
-                {showPreview && currentPreviewUrl && (
-                    <div className="relative inline-block">
-                        <img src={currentPreviewUrl} alt="Preview" className="h-32 w-32 rounded-lg border object-cover" />
+                {showPreview && currentPreviewUrl ? (
+                    <div className="relative inline-block overflow-hidden rounded-xl border-2 border-zinc-200 shadow-lg transition-all hover:shadow-xl dark:border-zinc-600">
+                        <img src={currentPreviewUrl} alt="Preview" className="h-40 w-40 object-cover" />
                         {!disabled && (
                             <Button
                                 type="button"
                                 size="sm"
                                 variant="destructive"
-                                className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
+                                className="absolute -top-2 -right-2 h-8 w-8 rounded-full border-2 border-white p-0 shadow-lg transition-all hover:scale-110 dark:border-zinc-800"
                                 onClick={clearSelection}
                             >
-                                <Trash2 className="h-3 w-3" />
+                                <Trash2 className="h-4 w-4" />
                             </Button>
                         )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity hover:opacity-100" />
+                    </div>
+                ) : (
+                    <div className="flex h-40 w-full items-center justify-center rounded-xl border-2 border-dashed border-zinc-300 bg-gradient-to-br from-zinc-50 to-zinc-100 transition-all hover:border-zinc-400 hover:from-zinc-100 hover:to-zinc-200 dark:border-zinc-600 dark:from-zinc-800/50 dark:to-zinc-700/50 dark:hover:border-zinc-500 dark:hover:from-zinc-700/50 dark:hover:to-zinc-600/50">
+                        <div className="text-center">
+                            <Upload className="mx-auto h-12 w-12 text-zinc-400" />
+                            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Belum ada gambar dipilih</p>
+                        </div>
                     </div>
                 )}
 
                 {/* Input Actions */}
-                <div className="flex space-x-2">
+                <div className="flex space-x-3">
                     <Button
                         type="button"
                         variant="outline"
@@ -124,9 +132,9 @@ export default function ImageInput({
                             }
                         }}
                         disabled={disabled}
-                        className="w-full"
+                        className="group flex-1 border-zinc-300 bg-white text-zinc-700 transition-all hover:border-blue-500 hover:bg-blue-50 hover:text-blue-700 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:border-blue-500 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
                     >
-                        <Image className="mr-2 h-4 w-4" />
+                        <Image className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
                         {multiple ? 'Pilih dari Galeri' : 'Pilih Gambar'}
                     </Button>
                 </div>
@@ -135,7 +143,7 @@ export default function ImageInput({
                 <Input type="hidden" name={name} value={value || ''} />
             </div>
 
-            {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
             {/* Media Picker Modal for multiple images */}
             {showMediaPicker && (

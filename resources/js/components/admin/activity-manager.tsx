@@ -177,7 +177,7 @@ export default function ActivityManager({
             {canAddMore && (
                 <Button type="button" variant="outline" size="sm" onClick={addActivity} disabled={disabled}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Add Activity
+                    Tambah Aktivitas
                 </Button>
             )}
 
@@ -208,16 +208,16 @@ export default function ActivityManager({
                                         <div className="flex items-center space-x-2">
                                             {!disabled && <GripVertical className="h-4 w-4 text-gray-400" />}
                                             <CardTitle className="text-sm">
-                                                {activity.title || `Activity ${index + 1}`}
+                                                {activity.title || `Aktivitas ${index + 1}`}
                                                 <div className="mt-1 flex space-x-2">
                                                     {activity.featured && (
                                                         <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                                            Featured
+                                                            Unggulan
                                                         </span>
                                                     )}
                                                     {activity.active === false && (
                                                         <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-800 dark:bg-gray-900 dark:text-gray-200">
-                                                            Inactive
+                                                            Tidak Aktif
                                                         </span>
                                                     )}
                                                 </div>
@@ -225,7 +225,7 @@ export default function ActivityManager({
                                         </div>
                                         <div className="flex items-center space-x-2">
                                             <Button type="button" variant="ghost" size="sm" onClick={() => toggleExpanded(index)}>
-                                                {isExpanded ? 'Collapse' : 'Edit'}
+                                                {isExpanded ? 'Sembunyikan' : 'Edit'}
                                             </Button>
                                             {!disabled && (
                                                 <Button
@@ -246,8 +246,8 @@ export default function ActivityManager({
                                         <div className="mt-2">
                                             <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">{activity.description}</p>
                                             <div className="mt-1 flex space-x-4 text-xs text-gray-500">
-                                                {activity.duration && <span>Duration: {activity.duration}</span>}
-                                                {activity.max_participants && <span>Max: {activity.max_participants} participants</span>}
+                                                {activity.duration && <span>Durasi: {activity.duration}</span>}
+                                                {activity.max_participants && <span>Maks: {activity.max_participants} peserta</span>}
                                             </div>
                                         </div>
                                     )}
@@ -259,13 +259,13 @@ export default function ActivityManager({
                                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                             {/* Title */}
                                             <div>
-                                                <Label htmlFor={`${name}_title_${index}`}>Activity Title *</Label>
+                                                <Label htmlFor={`${name}_title_${index}`}>Judul Aktivitas *</Label>
                                                 <Input
                                                     id={`${name}_title_${index}`}
                                                     type="text"
                                                     value={activity.title}
                                                     onChange={(e) => updateActivity(index, 'title', e.target.value)}
-                                                    placeholder="Activity name"
+                                                    placeholder="Nama aktivitas"
                                                     disabled={disabled}
                                                     required
                                                 />
@@ -273,20 +273,20 @@ export default function ActivityManager({
 
                                             {/* Duration */}
                                             <div>
-                                                <Label htmlFor={`${name}_duration_${index}`}>Duration</Label>
+                                                <Label htmlFor={`${name}_duration_${index}`}>Durasi</Label>
                                                 <Input
                                                     id={`${name}_duration_${index}`}
                                                     type="text"
                                                     value={activity.duration || ''}
                                                     onChange={(e) => updateActivity(index, 'duration', e.target.value)}
-                                                    placeholder="e.g., 2 hours, Weekly, Monthly"
+                                                    placeholder="contoh: 2 jam, Mingguan, Bulanan"
                                                     disabled={disabled}
                                                 />
                                             </div>
 
                                             {/* Max Participants */}
                                             <div>
-                                                <Label htmlFor={`${name}_max_participants_${index}`}>Max Participants</Label>
+                                                <Label htmlFor={`${name}_max_participants_${index}`}>Jumlah Peserta Maksimal</Label>
                                                 <Input
                                                     id={`${name}_max_participants_${index}`}
                                                     type="number"
@@ -298,7 +298,7 @@ export default function ActivityManager({
                                                             e.target.value ? parseInt(e.target.value) : undefined,
                                                         )
                                                     }
-                                                    placeholder="Leave empty for unlimited"
+                                                    placeholder="Kosongkan untuk tidak terbatas"
                                                     disabled={disabled}
                                                     min="1"
                                                 />
@@ -307,12 +307,12 @@ export default function ActivityManager({
 
                                         {/* Description */}
                                         <div>
-                                            <Label htmlFor={`${name}_description_${index}`}>Description *</Label>
+                                            <Label htmlFor={`${name}_description_${index}`}>Deskripsi *</Label>
                                             <Textarea
                                                 id={`${name}_description_${index}`}
                                                 value={activity.description}
                                                 onChange={(e) => updateActivity(index, 'description', e.target.value)}
-                                                placeholder="Describe what this activity involves"
+                                                placeholder="Jelaskan apa yang melibatkan aktivitas ini"
                                                 disabled={disabled}
                                                 rows={4}
                                                 required
@@ -321,12 +321,12 @@ export default function ActivityManager({
 
                                         {/* Requirements */}
                                         <div>
-                                            <Label htmlFor={`${name}_requirements_${index}`}>Requirements</Label>
+                                            <Label htmlFor={`${name}_requirements_${index}`}>Persyaratan</Label>
                                             <Textarea
                                                 id={`${name}_requirements_${index}`}
                                                 value={activity.requirements || ''}
                                                 onChange={(e) => updateActivity(index, 'requirements', e.target.value)}
-                                                placeholder="Any prerequisites or requirements for participation"
+                                                placeholder="Persyaratan atau prasyarat untuk berpartisipasi"
                                                 disabled={disabled}
                                                 rows={2}
                                             />
@@ -335,7 +335,7 @@ export default function ActivityManager({
                                         {/* Benefits */}
                                         <div>
                                             <div className="flex items-center justify-between">
-                                                <Label>Benefits</Label>
+                                                <Label>Manfaat</Label>
                                                 <Button
                                                     type="button"
                                                     variant="outline"
@@ -344,7 +344,7 @@ export default function ActivityManager({
                                                     disabled={disabled}
                                                 >
                                                     <Plus className="mr-1 h-3 w-3" />
-                                                    Add Benefit
+                                                    Tambah Manfaat
                                                 </Button>
                                             </div>
 
@@ -356,7 +356,7 @@ export default function ActivityManager({
                                                                 type="text"
                                                                 value={benefit}
                                                                 onChange={(e) => updateBenefit(index, benefitIndex, e.target.value)}
-                                                                placeholder="Benefit or outcome"
+                                                                placeholder="Manfaat atau hasil yang didapat"
                                                                 disabled={disabled}
                                                                 className="flex-1"
                                                             />
@@ -379,12 +379,14 @@ export default function ActivityManager({
                                         {/* Image */}
                                         <div>
                                             <ImageInput
-                                                label="Activity Image"
+                                                label="Gambar Aktivitas"
                                                 name={`${name}_image_${index}`}
                                                 value={activity.image}
                                                 onChange={(value) => updateActivity(index, 'image', value)}
-                                                disabled={disabled}
+                                                error={undefined}
                                                 showPreview={true}
+                                                multiple={false}
+                                                disabled={disabled}
                                             />
                                         </div>
 
@@ -400,7 +402,7 @@ export default function ActivityManager({
                                                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                 />
                                                 <Label htmlFor={`${name}_featured_${index}`} className="text-sm">
-                                                    Featured activity
+                                                    Aktivitas unggulan
                                                 </Label>
                                             </div>
 
@@ -414,7 +416,7 @@ export default function ActivityManager({
                                                     className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                                                 />
                                                 <Label htmlFor={`${name}_active_${index}`} className="text-sm">
-                                                    Active (visible to users)
+                                                    Aktif (terlihat oleh pengguna)
                                                 </Label>
                                             </div>
                                         </div>
@@ -430,8 +432,8 @@ export default function ActivityManager({
             {value.length === 0 && (
                 <div className="rounded-lg border-2 border-dashed border-gray-300 p-8 text-center dark:border-gray-700">
                     <Activity className="mx-auto h-12 w-12 text-gray-400" />
-                    <p className="mt-2 text-sm text-gray-500">No activities added yet</p>
-                    <p className="text-xs text-gray-400">Add activities to showcase what your community offers</p>
+                    <p className="mt-2 text-sm text-gray-500">Belum ada aktivitas yang ditambahkan</p>
+                    <p className="text-xs text-gray-400">Tambahkan aktivitas untuk menampilkan apa yang ditawarkan komunitas Anda</p>
                 </div>
             )}
 

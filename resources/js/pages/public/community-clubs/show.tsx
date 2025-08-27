@@ -59,13 +59,46 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [], gl
         });
     };
 
-    const getClubActivities = (): string[] => {
+    const getClubActivities = (): Array<{
+        id: string;
+        title: string;
+        description: string;
+        image?: string | number;
+        duration?: string;
+        max_participants?: number;
+        requirements?: string;
+        benefits?: string[];
+        featured?: boolean;
+        active?: boolean;
+    }> => {
         if (!communityClub.activities) return [];
         try {
             const activities = JSON.parse(communityClub.activities);
-            return Array.isArray(activities) ? activities : [];
+            if (Array.isArray(activities)) {
+                // Filter hanya aktivitas yang aktif
+                return activities.filter((activity) => activity.active !== false);
+            }
+            return [];
         } catch {
-            return communityClub.activities.split(',').map((a) => a.trim());
+            // Fallback untuk format lama (string dengan line breaks)
+            if (typeof communityClub.activities === 'string' && communityClub.activities.trim()) {
+                return communityClub.activities
+                    .split('\n')
+                    .filter((line) => line.trim())
+                    .map((line, index) => ({
+                        id: `activity_${index}`,
+                        title: line.trim(),
+                        description: '',
+                        image: '',
+                        duration: '',
+                        max_participants: undefined,
+                        requirements: '',
+                        benefits: [],
+                        featured: false,
+                        active: true,
+                    }));
+            }
+            return [];
         }
     };
 
@@ -262,17 +295,103 @@ export default function CommunityClubShow({ communityClub, relatedClubs = [], gl
 
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {activities.map((activity, index) => (
-                                <div key={index} className="section-card">
-                                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-amber-500/20">
-                                        <Activity className="h-6 w-6 text-amber-400" />
+                                <div
+                                    key={activity.id || index}
+                                    className="section-card group overflow-hidden transition-all duration-300 hover:-translate-y-1"
+                                >
+                                    {/* Activity Image */}
+                                    {activity.image && (
+                                        <div className="relative h-48 overflow-hidden">
+                                            <img
+                                                src={typeof activity.image === 'string' ? activity.image : `/storage/${activity.image}`}
+                                                alt={activity.title}
+                                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                            />
+                                            {activity.featured && (
+                                                <div className="absolute top-3 right-3">
+                                                    <Badge className="bg-amber-500 text-black">Unggulan</Badge>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                    <div className="p-6">
+                                        {/* Activity Header */}
+                                        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-amber-500/20">
+                                            <Activity className="h-6 w-6 text-amber-400" />
+                                        </div>
+                                        <h3 className="mb-3 text-xl font-bold text-white transition-colors group-hover:text-amber-400">
+                                            {activity.title}
+                                        </h3>
+
+                                        {/* Activity Description */}
+                                        {activity.description && <p className="mb-4 line-clamp-3 text-sm text-zinc-300">{activity.description}</p>}
+
+                                        {/* Activity Details */}
+                                        <div className="space-y-2 text-xs text-zinc-400">
+                                            {activity.duration && (
+                                                <div className="flex items-center gap-2">
+                                                    <Clock className="h-3 w-3" />
+                                                    <span>{activity.duration}</span>
+                                                </div>
+                                            )}
+                                            {activity.max_participants && (
+                                                <div className="flex items-center gap-2">
+                                                    <Users className="h-3 w-3" />
+                                                    <span>Maksimal {activity.max_participants} peserta</span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Activity Benefits */}
+                                        {activity.benefits && activity.benefits.length > 0 && (
+                                            <div className="mt-4">
+                                                <h4 className="mb-2 text-sm font-semibold text-amber-400">Manfaat:</h4>
+                                                <ul className="space-y-1">
+                                                    {activity.benefits.slice(0, 3).map((benefit, benefitIndex) => (
+                                                        <li key={benefitIndex} className="flex items-start gap-2 text-xs text-zinc-300">
+                                                            <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                                                            {benefit}
+                                                        </li>
+                                                    ))}
+                                                    {activity.benefits.length > 3 && (
+                                                        <li className="text-xs text-zinc-500">+{activity.benefits.length - 3} manfaat lainnya</li>
+                                                    )}
+                                                </ul>
+                                            </div>
+                                        )}
+
+                                        {/* Activity Requirements */}
+                                        {activity.requirements && (
+                                            <div className="mt-4">
+                                                <h4 className="mb-2 text-sm font-semibold text-zinc-400">Persyaratan:</h4>
+                                                <p className="line-clamp-2 text-xs text-zinc-300">{activity.requirements}</p>
+                                            </div>
+                                        )}
+
+                                        {/* Call to Action */}
+                                        <div className="mt-6">
+                                            <Button
+                                                className="w-full transform bg-gradient-to-r from-amber-500 to-amber-600 text-black transition-all duration-300 hover:scale-105 hover:from-amber-600 hover:to-amber-700"
+                                                onClick={() => {
+                                                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                                                }}
+                                            >
+                                                Bergabung Sekarang
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <h3 className="mb-2 text-lg font-semibold text-white">{activity}</h3>
-                                    <p className="text-sm text-zinc-300">
-                                        Join our community members in this engaging activity designed to foster connections and learning.
-                                    </p>
                                 </div>
                             ))}
                         </div>
+
+                        {/* Show More Activities Button */}
+                        {activities.length > 6 && (
+                            <div className="mt-8 text-center">
+                                <Button variant="outline" className="border-amber-500 text-amber-400 hover:bg-amber-500 hover:text-black">
+                                    Lihat Semua Aktivitas ({activities.length})
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 </section>
             )}

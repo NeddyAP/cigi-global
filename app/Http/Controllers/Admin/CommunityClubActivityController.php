@@ -74,10 +74,15 @@ class CommunityClubActivityController extends Controller
     {
         $validated = $request->validate(CommunityClubActivity::validationRules());
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('community-club-activities', 'public');
+        // Handle image - now expects a media ID or URL string
+        if ($request->filled('image')) {
+            $validated['image'] = $request->input('image');
         }
+
+        // Set default values for new fields
+        $validated['status'] = $validated['status'] ?? 'active';
+        $validated['featured'] = $validated['featured'] ?? false;
+        $validated['is_active'] = $validated['is_active'] ?? true;
 
         CommunityClubActivity::create($validated);
 
@@ -109,14 +114,18 @@ class CommunityClubActivityController extends Controller
     {
         $validated = $request->validate(CommunityClubActivity::updateValidationRules($communityClubActivity->id));
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($communityClubActivity->image && Storage::disk('public')->exists($communityClubActivity->image)) {
-                Storage::disk('public')->delete($communityClubActivity->image);
-            }
-            $validated['image'] = $request->file('image')->store('community-club-activities', 'public');
+        // Handle image - now expects a media ID or URL string
+        if ($request->filled('image')) {
+            $validated['image'] = $request->input('image');
+        } elseif (isset($communityClubActivity->image)) {
+            // Keep existing image if no new one provided
+            $validated['image'] = $communityClubActivity->image;
         }
+
+        // Set default values for new fields if not provided
+        $validated['status'] = $validated['status'] ?? $communityClubActivity->status ?? 'active';
+        $validated['featured'] = $validated['featured'] ?? $communityClubActivity->featured ?? false;
+        $validated['is_active'] = $validated['is_active'] ?? $communityClubActivity->is_active ?? true;
 
         $communityClubActivity->update($validated);
 
