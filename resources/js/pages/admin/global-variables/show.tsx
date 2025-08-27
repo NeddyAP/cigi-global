@@ -1,3 +1,4 @@
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, GlobalVariable } from '@/types';
@@ -12,6 +13,7 @@ interface ShowGlobalVariableProps {
 export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps) {
     const [showValue, setShowValue] = useState(variable.type !== 'json');
     const [copied, setCopied] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dasbor', href: '/admin' },
@@ -20,9 +22,15 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
     ];
 
     const handleDelete = () => {
-        if (confirm(`Apakah Anda yakin ingin menghapus variabel ${variable.key}?`)) {
-            router.delete(route('admin.global-variables.destroy', variable.id));
-        }
+        setShowDeleteDialog(true);
+    };
+
+    const confirmDelete = () => {
+        router.delete(route('admin.global-variables.destroy', variable.id), {
+            onSuccess: () => {
+                setShowDeleteDialog(false);
+            },
+        });
     };
 
     const copyToClipboard = async (text: string) => {
@@ -418,6 +426,17 @@ export default function ShowGlobalVariable({ variable }: ShowGlobalVariableProps
                         </div>
                     </div>
                 </div>
+
+                {/* Delete Confirmation Dialog */}
+                <DeleteConfirmationDialog
+                    isOpen={showDeleteDialog}
+                    onClose={() => setShowDeleteDialog(false)}
+                    onConfirm={confirmDelete}
+                    title="Hapus Variabel Global"
+                    description={`Apakah Anda yakin ingin menghapus variabel "${variable.key}"? Tindakan ini tidak dapat dibatalkan.`}
+                    confirmText="Ya, Hapus Variabel"
+                    itemName={variable.key}
+                />
             </div>
         </AppLayout>
     );

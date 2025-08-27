@@ -2,6 +2,7 @@ import { FormSection } from '@/components/admin/form-section';
 import { InfoGrid, InfoItem } from '@/components/admin/info-display';
 import { LoadingButton } from '@/components/admin/loading-button';
 import { StatusBadge } from '@/components/admin/status-badge';
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, CommunityClub } from '@/types';
@@ -15,6 +16,7 @@ interface ShowCommunityClubProps {
 
 export default function ShowCommunityClub({ communityClub }: ShowCommunityClubProps) {
     const [deleting, setDeleting] = React.useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin' },
@@ -23,12 +25,17 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
     ];
 
     const handleDelete = () => {
-        if (confirm(`Apakah Anda yakin ingin menghapus ${communityClub.name}?`)) {
-            setDeleting(true);
-            router.delete(route('admin.community-clubs.destroy', communityClub.slug), {
-                onFinish: () => setDeleting(false),
-            });
-        }
+        setShowDeleteDialog(true);
+    };
+
+    const confirmDelete = () => {
+        setDeleting(true);
+        router.delete(route('admin.community-clubs.destroy', communityClub.slug), {
+            onFinish: () => {
+                setDeleting(false);
+                setShowDeleteDialog(false);
+            },
+        });
     };
 
     const formatActivities = (activities: string) => {
@@ -207,6 +214,17 @@ export default function ShowCommunityClub({ communityClub }: ShowCommunityClubPr
                         </FormSection>
                     </div>
                 </div>
+
+                {/* Delete Confirmation Dialog */}
+                <DeleteConfirmationDialog
+                    isOpen={showDeleteDialog}
+                    onClose={() => setShowDeleteDialog(false)}
+                    onConfirm={confirmDelete}
+                    title="Hapus Komunitas"
+                    description={`Apakah Anda yakin ingin menghapus "${communityClub.name}"? Tindakan ini tidak dapat dibatalkan.`}
+                    confirmText="Ya, Hapus Komunitas"
+                    itemName={communityClub.name}
+                />
             </div>
         </AppLayout>
     );

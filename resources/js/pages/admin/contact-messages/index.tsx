@@ -1,3 +1,4 @@
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -42,6 +43,8 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [searchTerm, setSearchTerm] = useState(filters.search || '');
     const [statusFilter, setStatusFilter] = useState(filters.status || 'all');
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<ContactMessage | null>(null);
 
     const handleSelectAll = (checked: boolean) => {
         if (checked) {
@@ -71,6 +74,22 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                 replace: true,
             },
         );
+    };
+
+    const handleDeleteIndividual = (message: ContactMessage) => {
+        setItemToDelete(message);
+        setShowDeleteDialog(true);
+    };
+
+    const confirmDeleteIndividual = () => {
+        if (itemToDelete) {
+            router.delete(route('admin.contact-messages.destroy', itemToDelete.id), {
+                onSuccess: () => {
+                    setShowDeleteDialog(false);
+                    setItemToDelete(null);
+                },
+            });
+        }
     };
 
     const handleBulkAction = (action: string) => {
@@ -390,11 +409,7 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                                                 size="sm"
                                                 variant="outline"
                                                 className="border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20"
-                                                onClick={() => {
-                                                    if (confirm('Hapus pesan ini?')) {
-                                                        router.delete(route('admin.contact-messages.destroy', message.id));
-                                                    }
-                                                }}
+                                                onClick={() => handleDeleteIndividual(message)}
                                             >
                                                 <Trash2 className="h-3 w-3" />
                                             </Button>
@@ -439,6 +454,17 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                             </div>
                         </div>
                     )}
+
+                    {/* Delete Confirmation Dialog */}
+                    <DeleteConfirmationDialog
+                        isOpen={showDeleteDialog}
+                        onClose={() => setShowDeleteDialog(false)}
+                        onConfirm={confirmDeleteIndividual}
+                        title="Hapus Pesan Kontak"
+                        description={`Apakah Anda yakin ingin menghapus pesan dari "${itemToDelete?.name}"? Tindakan ini tidak dapat dibatalkan.`}
+                        confirmText="Ya, Hapus Pesan"
+                        itemName={itemToDelete?.name}
+                    />
                 </div>
             </div>
         </AppLayout>

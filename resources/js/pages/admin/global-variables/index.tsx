@@ -1,8 +1,10 @@
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, GlobalVariable } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { Edit, Eye, Globe, Lock, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 interface AdminGlobalVariablesIndexProps {
     variables: Record<string, GlobalVariable[]>;
@@ -14,9 +16,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVariablesIndexProps) {
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<GlobalVariable | null>(null);
+
     const handleDelete = (variable: GlobalVariable) => {
-        if (confirm(`Apakah Anda yakin ingin menghapus variabel ${variable.key}?`)) {
-            router.delete(route('admin.global-variables.destroy', variable.id));
+        setItemToDelete(variable);
+        setShowDeleteDialog(true);
+    };
+
+    const confirmDelete = () => {
+        if (itemToDelete) {
+            router.delete(route('admin.global-variables.destroy', itemToDelete.id), {
+                onSuccess: () => {
+                    setShowDeleteDialog(false);
+                    setItemToDelete(null);
+                },
+            });
         }
     };
 
@@ -190,6 +205,17 @@ export default function AdminGlobalVariablesIndex({ variables }: AdminGlobalVari
                         ))}
                     </div>
                 )}
+
+                {/* Delete Confirmation Dialog */}
+                <DeleteConfirmationDialog
+                    isOpen={showDeleteDialog}
+                    onClose={() => setShowDeleteDialog(false)}
+                    onConfirm={confirmDelete}
+                    title="Hapus Variabel Global"
+                    description={`Apakah Anda yakin ingin menghapus variabel "${itemToDelete?.key}"? Tindakan ini tidak dapat dibatalkan.`}
+                    confirmText="Ya, Hapus Variabel"
+                    itemName={itemToDelete?.key}
+                />
             </div>
         </AppLayout>
     );

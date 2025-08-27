@@ -1,14 +1,5 @@
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import MediaGrid from '@/components/media-grid';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -538,29 +529,15 @@ export default function MediaIndex({ media, allTags, filters }: MediaPageProps) 
                 )}
 
                 {/* Delete Confirmation Dialog */}
-                <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-                    <AlertDialogContent className="border-0 bg-white shadow-2xl dark:bg-zinc-900">
-                        <AlertDialogHeader>
-                            <AlertDialogTitle className="text-xl font-semibold text-zinc-900 dark:text-white">Hapus Gambar Media</AlertDialogTitle>
-                            <AlertDialogDescription className="text-base text-zinc-600 dark:text-zinc-400">
-                                Apakah Anda yakin ingin menghapus{' '}
-                                <span className="font-medium">"{itemToDelete?.alt_text || itemToDelete?.original_filename}"</span>?
-                                <br />
-                                <span className="text-sm text-red-600 dark:text-red-400">
-                                    Tindakan ini tidak dapat dibatalkan dan gambar akan dihapus secara permanen.
-                                </span>
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter className="gap-3">
-                            <AlertDialogCancel className="border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700">
-                                Batal
-                            </AlertDialogCancel>
-                            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-500">
-                                Ya, Hapus Gambar
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                <DeleteConfirmationDialog
+                    isOpen={showDeleteDialog}
+                    onClose={() => setShowDeleteDialog(false)}
+                    onConfirm={confirmDelete}
+                    title="Hapus Gambar Media"
+                    description={`Apakah Anda yakin ingin menghapus "${itemToDelete?.alt_text || itemToDelete?.original_filename}"? Tindakan ini tidak dapat dibatalkan dan gambar akan dihapus secara permanen.`}
+                    confirmText="Ya, Hapus Gambar"
+                    itemName={itemToDelete?.alt_text || itemToDelete?.original_filename}
+                />
             </div>
         </AppLayout>
     );

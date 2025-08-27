@@ -1,3 +1,4 @@
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -14,6 +15,7 @@ interface ContactMessageShowProps {
 export default function ContactMessageShow({ contactMessage }: ContactMessageShowProps) {
     const { flash } = usePage().props as { flash?: { success?: string } };
     const [status, setStatus] = useState(contactMessage.status);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     const handleStatusChange = (newStatus: string) => {
         const typedStatus = newStatus as 'unread' | 'read' | 'archived';
@@ -30,10 +32,15 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
     };
 
     const handleDelete = () => {
-        if (confirm('Hapus pesan ini? Tindakan ini tidak dapat dibatalkan.')) {
-            // This string was already translated in the original file. No change needed.
-            router.delete(route('admin.contact-messages.destroy', contactMessage.id));
-        }
+        setShowDeleteDialog(true);
+    };
+
+    const confirmDelete = () => {
+        router.delete(route('admin.contact-messages.destroy', contactMessage.id), {
+            onSuccess: () => {
+                setShowDeleteDialog(false);
+            },
+        });
     };
 
     const getStatusBadge = (messageStatus: string) => {
@@ -355,6 +362,17 @@ export default function ContactMessageShow({ contactMessage }: ContactMessageSho
                         </div>
                     </div>
                 </div>
+
+                {/* Delete Confirmation Dialog */}
+                <DeleteConfirmationDialog
+                    isOpen={showDeleteDialog}
+                    onClose={() => setShowDeleteDialog(false)}
+                    onConfirm={confirmDelete}
+                    title="Hapus Pesan Kontak"
+                    description={`Apakah Anda yakin ingin menghapus pesan dari "${contactMessage.name}"? Tindakan ini tidak dapat dibatalkan.`}
+                    confirmText="Ya, Hapus Pesan"
+                    itemName={contactMessage.name}
+                />
             </div>
         </AppLayout>
     );

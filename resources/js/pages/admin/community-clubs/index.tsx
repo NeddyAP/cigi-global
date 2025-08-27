@@ -1,9 +1,11 @@
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import { Button } from '@/components/ui/button';
 import { DataTable, type ColumnDef } from '@/components/ui/data-table';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, CommunityClub } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { Edit, Eye, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 interface AdminCommunityClubsIndexProps {
     communityClubs: {
@@ -34,9 +36,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function AdminCommunityClubsIndex({ communityClubs, filters = {} }: AdminCommunityClubsIndexProps) {
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<CommunityClub | null>(null);
+
     const handleDelete = (club: CommunityClub) => {
-        if (confirm(`Apakah Anda yakin ingin menghapus ${club.name}?`)) {
-            router.delete(route('admin.community-clubs.destroy', club.slug));
+        setItemToDelete(club);
+        setShowDeleteDialog(true);
+    };
+
+    const confirmDelete = () => {
+        if (itemToDelete) {
+            router.delete(route('admin.community-clubs.destroy', itemToDelete.slug), {
+                onSuccess: () => {
+                    setShowDeleteDialog(false);
+                    setItemToDelete(null);
+                },
+            });
         }
     };
 
@@ -199,6 +214,17 @@ export default function AdminCommunityClubsIndex({ communityClubs, filters = {} 
                 searchPlaceholder="Cari komunitas..."
                 emptyState={emptyState}
                 routeName="admin.community-clubs.index"
+            />
+
+            {/* Delete Confirmation Dialog */}
+            <DeleteConfirmationDialog
+                isOpen={showDeleteDialog}
+                onClose={() => setShowDeleteDialog(false)}
+                onConfirm={confirmDelete}
+                title="Hapus Komunitas"
+                description={`Apakah Anda yakin ingin menghapus "${itemToDelete?.name}"? Tindakan ini tidak dapat dibatalkan.`}
+                confirmText="Ya, Hapus Komunitas"
+                itemName={itemToDelete?.name}
             />
         </AppLayout>
     );

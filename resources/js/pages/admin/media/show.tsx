@@ -1,13 +1,4 @@
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -89,9 +80,10 @@ export default function MediaShow({ media }: MediaShowProps) {
         });
     };
 
-    const handleDelete = () => {
+    const confirmDelete = () => {
         router.delete(route('admin.media.destroy', media.id), {
             onSuccess: () => {
+                setShowDeleteDialog(false);
                 router.visit(route('admin.media.index'));
             },
         });
@@ -408,21 +400,15 @@ export default function MediaShow({ media }: MediaShowProps) {
                 </div>
 
                 {/* Delete Confirmation Dialog */}
-                <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle className="text-zinc-900 dark:text-white">Delete Media File</AlertDialogTitle>
-                            <AlertDialogDescription className="text-zinc-600 dark:text-zinc-400">
-                                Are you sure you want to delete "{media.title || media.original_filename}"? This action cannot be undone and the file
-                                will be permanently removed from storage.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                <DeleteConfirmationDialog
+                    isOpen={showDeleteDialog}
+                    onClose={() => setShowDeleteDialog(false)}
+                    onConfirm={confirmDelete}
+                    title="Hapus File Media"
+                    description={`Apakah Anda yakin ingin menghapus "${media.title || media.original_filename}"? Tindakan ini tidak dapat dibatalkan dan file akan dihapus secara permanen dari penyimpanan.`}
+                    confirmText="Ya, Hapus File"
+                    itemName={media.title || media.original_filename}
+                />
             </div>
         </AppLayout>
     );

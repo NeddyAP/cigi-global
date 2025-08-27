@@ -1,11 +1,13 @@
 import { FormSection } from '@/components/admin/form-section';
 import { InfoGrid, InfoItem } from '@/components/admin/info-display';
 import { StatusBadge } from '@/components/admin/status-badge';
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, News } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, Calendar, Clock, Edit, Eye, Plus, Star, Tag, Trash2, User, Users } from 'lucide-react';
+import { useState } from 'react';
 
 interface ShowNewsProps {
     news: News;
@@ -17,11 +19,18 @@ export default function ShowNews({ news }: ShowNewsProps) {
         { title: 'Berita', href: '/admin/news' },
         { title: news.title, href: `/admin/news/${news.slug}` },
     ];
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     const handleDelete = () => {
-        if (confirm(`Apakah Anda yakin ingin menghapus artikel "${news.title}"?`)) {
-            router.delete(route('admin.news.destroy', news.slug));
-        }
+        setShowDeleteDialog(true);
+    };
+
+    const confirmDelete = () => {
+        router.delete(route('admin.news.destroy', news.slug), {
+            onSuccess: () => {
+                setShowDeleteDialog(false);
+            },
+        });
     };
 
     const formatTags = (tags: string | string[]): string[] => {
@@ -167,6 +176,17 @@ export default function ShowNews({ news }: ShowNewsProps) {
                         </FormSection>
                     </div>
                 </div>
+
+                {/* Delete Confirmation Dialog */}
+                <DeleteConfirmationDialog
+                    isOpen={showDeleteDialog}
+                    onClose={() => setShowDeleteDialog(false)}
+                    onConfirm={confirmDelete}
+                    title="Hapus Berita"
+                    description={`Apakah Anda yakin ingin menghapus artikel "${news.title}"? Tindakan ini tidak dapat dibatalkan.`}
+                    confirmText="Ya, Hapus Berita"
+                    itemName={news.title}
+                />
             </div>
         </AppLayout>
     );

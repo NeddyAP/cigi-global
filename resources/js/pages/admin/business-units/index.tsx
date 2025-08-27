@@ -1,9 +1,11 @@
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import { Button } from '@/components/ui/button';
 import { DataTable, type ColumnDef } from '@/components/ui/data-table';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, BusinessUnit } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { Edit, Eye, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 interface AdminBusinessUnitsIndexProps {
     businessUnits: {
@@ -34,9 +36,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function AdminBusinessUnitsIndex({ businessUnits, filters = {} }: AdminBusinessUnitsIndexProps) {
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<BusinessUnit | null>(null);
+
     const handleDelete = (businessUnit: BusinessUnit) => {
-        if (confirm(`Apakah Anda yakin ingin menghapus ${businessUnit.name}?`)) {
-            router.delete(route('admin.business-units.destroy', businessUnit.slug));
+        setItemToDelete(businessUnit);
+        setShowDeleteDialog(true);
+    };
+
+    const confirmDelete = () => {
+        if (itemToDelete) {
+            router.delete(route('admin.business-units.destroy', itemToDelete.slug), {
+                onSuccess: () => {
+                    setShowDeleteDialog(false);
+                    setItemToDelete(null);
+                },
+            });
         }
     };
 
@@ -183,6 +198,17 @@ export default function AdminBusinessUnitsIndex({ businessUnits, filters = {} }:
                 searchPlaceholder="Cari unit bisnis..."
                 emptyState={emptyState}
                 routeName="admin.business-units.index"
+            />
+
+            {/* Delete Confirmation Dialog */}
+            <DeleteConfirmationDialog
+                isOpen={showDeleteDialog}
+                onClose={() => setShowDeleteDialog(false)}
+                onConfirm={confirmDelete}
+                title="Hapus Unit Bisnis"
+                description={`Apakah Anda yakin ingin menghapus "${itemToDelete?.name}"? Tindakan ini tidak dapat dibatalkan.`}
+                confirmText="Ya, Hapus Unit Bisnis"
+                itemName={itemToDelete?.name}
             />
         </AppLayout>
     );

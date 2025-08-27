@@ -1,9 +1,11 @@
+import DeleteConfirmationDialog from '@/components/delete-confirmation-dialog';
 import { Button } from '@/components/ui/button';
 import { DataTable, type ColumnDef } from '@/components/ui/data-table';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, News } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { Clock, Edit, Eye, Plus, Star, Trash2, Users } from 'lucide-react';
+import { useState } from 'react';
 
 interface AdminNewsIndexProps {
     news: {
@@ -37,9 +39,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function AdminNewsIndex({ news, filters = {} }: AdminNewsIndexProps) {
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<News | null>(null);
+
     const handleDelete = (newsItem: News) => {
-        if (confirm(`Apakah Anda yakin ingin menghapus artikel "${newsItem.title}"?`)) {
-            router.delete(route('admin.news.destroy', newsItem.slug));
+        setItemToDelete(newsItem);
+        setShowDeleteDialog(true);
+    };
+
+    const confirmDelete = () => {
+        if (itemToDelete) {
+            router.delete(route('admin.news.destroy', itemToDelete.slug), {
+                onSuccess: () => {
+                    setShowDeleteDialog(false);
+                    setItemToDelete(null);
+                },
+            });
         }
     };
 
@@ -224,6 +239,17 @@ export default function AdminNewsIndex({ news, filters = {} }: AdminNewsIndexPro
                 filters={filters}
                 emptyState={emptyState}
                 routeName="admin.news.index"
+            />
+
+            {/* Delete Confirmation Dialog */}
+            <DeleteConfirmationDialog
+                isOpen={showDeleteDialog}
+                onClose={() => setShowDeleteDialog(false)}
+                onConfirm={confirmDelete}
+                title="Hapus Berita"
+                description={`Apakah Anda yakin ingin menghapus artikel "${itemToDelete?.title}"? Tindakan ini tidak dapat dibatalkan.`}
+                confirmText="Ya, Hapus Berita"
+                itemName={itemToDelete?.title}
             />
         </AppLayout>
     );
