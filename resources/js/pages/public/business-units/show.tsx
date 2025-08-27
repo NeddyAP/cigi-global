@@ -306,8 +306,8 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             {teamMembers.length > 0 ? (
                 <TeamSection
                     members={teamMembers}
-                    title="Meet Our Team"
-                    subtitle="Expert Professionals"
+                    title="Team Kami"
+                    subtitle="Profesional dan Berpengalaman"
                     layout="grid"
                     showSocialLinks={true}
                     showContactInfo={false}
@@ -336,8 +336,8 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [] }: Bu
             {testimonials.length > 0 ? (
                 <TestimonialsSection
                     testimonials={testimonials}
-                    title="What Our Clients Say"
-                    subtitle="Client Success Stories"
+                    title="Testimoni"
+                    subtitle="kepuasan klien"
                     autoRotate={true}
                     rotationInterval={6000}
                     showNavigation={true}
