@@ -99,7 +99,7 @@ export default function Home({
                                     asChild
                                     className="transform rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 px-8 py-3 font-semibold text-black transition-all duration-300 hover:scale-105 hover:from-amber-600 hover:to-amber-700"
                                 >
-                                    <Link href="#tentang-kami">
+                                    <Link href={route('about')}>
                                         <div className="flex items-center gap-2">
                                             <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20">
                                                 <div className="h-2 w-2 rounded-full bg-current"></div>
