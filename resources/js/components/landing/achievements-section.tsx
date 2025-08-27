@@ -45,8 +45,8 @@ interface AchievementsSectionProps {
 export default function AchievementsSection({
     achievements = [],
     statistics = [],
-    title = 'Achievements & Recognition',
-    subtitle = 'Celebrating Our Success',
+    title = 'Prestasi & Penghargaan',
+    subtitle = 'Merayakan Kesuksesan Kami',
     showStatistics = true,
     showCategories = true,
     maxVisible = 6,
@@ -166,7 +166,7 @@ export default function AchievementsSection({
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
                     <h2 className="section-heading">{title}</h2>
                     <p className="section-subheading">{subtitle}</p>
-                    <p className="text-zinc-400">No achievements or statistics available at the moment.</p>
+                    <p className="text-zinc-400">Tidak ada pencapaian atau statistik saat ini.</p>
                 </div>
             </section>
         );
@@ -252,7 +252,7 @@ export default function AchievementsSection({
                                         {achievement.isHighlighted && (
                                             <Badge className="absolute top-3 left-3 bg-amber-500 text-black hover:bg-amber-600">
                                                 <Star className="mr-1 h-3 w-3" />
-                                                Featured
+                                                Unggulan
                                             </Badge>
                                         )}
                                     </div>
@@ -293,7 +293,7 @@ export default function AchievementsSection({
                                         {achievement.issuer && (
                                             <div className="flex items-center space-x-2">
                                                 <Award className="h-4 w-4" />
-                                                <span>Issued by {achievement.issuer}</span>
+                                                <span>Diterbitkan oleh {achievement.issuer}</span>
                                             </div>
                                         )}
                                     </div>
@@ -306,7 +306,7 @@ export default function AchievementsSection({
                     {visibleAchievements < achievements.length && (
                         <div className="mt-8 text-center">
                             <Button variant="outline" onClick={loadMore} className="cta-button-outline px-8 py-3 text-lg font-semibold">
-                                Load More Achievements
+                                Tampilkan Lebih Banyak Prestasi
                                 <ArrowRight className="ml-2 h-5 w-5" />
                             </Button>
                         </div>

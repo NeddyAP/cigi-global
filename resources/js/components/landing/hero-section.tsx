@@ -25,7 +25,7 @@ export default function HeroSection({
     type,
     description,
     backgroundImage,
-    ctaText = 'Get Started',
+    ctaText = 'Mulai',
     ctaLink = '#',
     secondaryCtaText,
     secondaryCtaLink,
@@ -45,7 +45,7 @@ export default function HeroSection({
             {/* Background Image */}
             {backgroundImage && (
                 <div className="absolute inset-0 z-0">
-                    <img src={`${backgroundImage}`} alt="Hero background" className="h-full w-full object-cover" />
+                    <img src={`${backgroundImage}`} alt="Latar belakang hero" className="h-full w-full object-cover" />
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
                 </div>
@@ -100,7 +100,7 @@ export default function HeroSection({
                                 onClick={() => scrollToSection(contactSectionId)}
                                 className="rounded-full border-white/30 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/10"
                             >
-                                Contact Us
+                                Hubungi Kami
                             </Button>
                         )}
 

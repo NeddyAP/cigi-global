@@ -37,9 +37,9 @@ interface ContactCTASectionProps {
 }
 
 export default function ContactCTASection({
-    title = 'Get In Touch',
-    subtitle = 'Ready to get started?',
-    description = "We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+    title = 'Hubungi Kami',
+    subtitle = 'Siap untuk memulai?',
+    description = 'Kami senang mendengar dari Anda. Kirim pesan dan kami akan merespons sesegera mungkin.',
     contactInfo = {},
     ctaButtons = [],
     showMap = false,
@@ -63,12 +63,12 @@ export default function ContactCTASection({
     const [errors, setErrors] = useState<Partial<ContactFormData>>({});
 
     const interestOptions = [
-        'Business Services',
-        'Community Activities',
-        'Partnership Opportunities',
-        'General Inquiry',
-        'Support Request',
-        'Feedback',
+        'Layanan Bisnis',
+        'Kegiatan Komunitas',
+        'Peluang Kemitraan',
+        'Pertanyaan Umum',
+        'Permintaan Dukungan',
+        'Masukan',
     ];
 
     const handleInputChange = (field: keyof ContactFormData, value: string | string[]) => {
@@ -88,11 +88,11 @@ export default function ContactCTASection({
     const validateForm = (): boolean => {
         const newErrors: Partial<ContactFormData> = {};
 
-        if (!formData.name.trim()) newErrors.name = 'Name is required';
-        if (!formData.email.trim()) newErrors.email = 'Email is required';
-        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
-        if (!formData.subject.trim()) newErrors.subject = 'Subject is required';
-        if (!formData.message.trim()) newErrors.message = 'Message is required';
+        if (!formData.name.trim()) newErrors.name = 'Nama harus diisi';
+        if (!formData.email.trim()) newErrors.email = 'Email harus diisi';
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email tidak valid';
+        if (!formData.subject.trim()) newErrors.subject = 'Subjek harus diisi';
+        if (!formData.message.trim()) newErrors.message = 'Pesan harus diisi';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -159,8 +159,8 @@ export default function ContactCTASection({
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                     </svg>
                                 </div>
-                                <h3 className="mb-2 text-2xl font-semibold text-white">Message Sent Successfully!</h3>
-                                <p className="text-zinc-300">We'll get back to you as soon as possible.</p>
+                                <h3 className="mb-2 text-2xl font-semibold text-white">Pesan Berhasil Dikirim!</h3>
+                                <p className="text-zinc-300">Kami akan menghubungi Anda secepatnya.</p>
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-6">
@@ -269,7 +269,7 @@ export default function ContactCTASection({
                                 {/* Preferences */}
                                 <div className="grid gap-6 sm:grid-cols-2">
                                     <div>
-                                        <label className="mb-3 block text-sm font-medium text-zinc-300">Preferred Contact Method</label>
+                                        <label className="mb-3 block text-sm font-medium text-zinc-300">Metode Kontak yang Diinginkan</label>
                                         <div className="space-y-2">
                                             {(['email', 'phone', 'both'] as const).map((method) => (
                                                 <label key={method} className="flex items-center">
@@ -281,7 +281,7 @@ export default function ContactCTASection({
                                                         onChange={(e) => handleInputChange('preferredContact', e.target.value)}
                                                         className="h-4 w-4 border-zinc-600 text-amber-500 focus:ring-amber-500"
                                                     />
-                                                    <span className="ml-2 text-sm text-zinc-300 capitalize">{method}</span>
+                                                    <span className="ml-2 text-sm text-zinc-300">{method === 'email' ? 'Email' : method === 'phone' ? 'Telepon' : 'Keduanya'}</span>
                                                 </label>
                                             ))}
                                         </div>
@@ -290,7 +290,7 @@ export default function ContactCTASection({
 
                                 {/* Interests */}
                                 <div>
-                                    <label className="mb-3 block text-sm font-medium text-zinc-300">Areas of Interest</label>
+                                    <label className="mb-3 block text-sm font-medium text-zinc-300">Bidang Minat</label>
                                     <div className="grid gap-2 sm:grid-cols-2">
                                         {interestOptions.map((interest) => (
                                             <label key={interest} className="flex items-center">
@@ -433,8 +433,8 @@ export default function ContactCTASection({
                         {/* CTA Buttons */}
                         {ctaButtons.length > 0 && (
                             <div className="section-card bg-gradient-to-br from-zinc-900 to-zinc-800">
-                                <h3 className="mb-4 text-2xl font-semibold text-white">Ready to Get Started?</h3>
-                                <p className="mb-6 text-zinc-300">Take the next step towards achieving your goals with our expert team.</p>
+                                <h3 className="mb-4 text-2xl font-semibold text-white">Siap Memulai?</h3>
+                                <p className="mb-6 text-zinc-300">Ambil langkah selanjutnya untuk mencapai tujuan Anda bersama tim ahli kami.</p>
                                 <div className="space-y-3">
                                     {ctaButtons.map((button, index) => (
                                         <button

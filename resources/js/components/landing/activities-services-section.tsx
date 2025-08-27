@@ -39,8 +39,8 @@ interface ActivitiesServicesSectionProps {
 }
 
 export default function ActivitiesServicesSection({
-    title = 'Activities & Services',
-    subtitle = 'Discover what we offer',
+    title = 'Kegiatan & Layanan',
+    subtitle = 'Temukan apa yang kami tawarkan',
     activities = [],
     services = [],
     showViewAll = true,
@@ -55,7 +55,7 @@ export default function ActivitiesServicesSection({
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
                     <h2 className="mb-4 text-3xl font-bold text-gray-900">{title}</h2>
                     <p className="mb-8 text-lg text-gray-600">{subtitle}</p>
-                    <p className="text-gray-500">No activities or services available at the moment.</p>
+                    <p className="text-gray-500">Tidak ada kegiatan atau layanan saat ini.</p>
                 </div>
             </section>
         );
@@ -86,7 +86,7 @@ export default function ActivitiesServicesSection({
 
                                     {/* Type Badge */}
                                     <Badge variant="secondary" className="absolute top-4 left-4 bg-white/90 text-gray-900 hover:bg-white">
-                                        {item.type === 'activity' ? 'Activity' : 'Service'}
+                                        {item.type === 'activity' ? 'Kegiatan' : 'Layanan'}
                                     </Badge>
                                 </div>
                             )}
@@ -111,19 +111,19 @@ export default function ActivitiesServicesSection({
                                         {item.maxParticipants && (
                                             <div className="flex items-center space-x-2 text-sm text-gray-600">
                                                 <Users className="h-4 w-4" />
-                                                <span>Max {item.maxParticipants} participants</span>
+                                                <span>Maks {item.maxParticipants} peserta</span>
                                             </div>
                                         )}
 
                                         {item.requirements && (
                                             <div className="text-sm text-gray-600">
-                                                <span className="font-medium">Requirements:</span> {item.requirements}
+                                                <span className="font-medium">Persyaratan:</span> {item.requirements}
                                             </div>
                                         )}
 
                                         {item.benefits && item.benefits.length > 0 && (
                                             <div className="space-y-2">
-                                                <span className="text-sm font-medium text-gray-700">Benefits:</span>
+                                                <span className="text-sm font-medium text-gray-700">Manfaat:</span>
                                                 <div className="flex flex-wrap gap-2">
                                                     {item.benefits.slice(0, 3).map((benefit, index) => (
                                                         <Badge key={index} variant="outline" className="text-xs">
@@ -132,7 +132,7 @@ export default function ActivitiesServicesSection({
                                                     ))}
                                                     {item.benefits.length > 3 && (
                                                         <Badge variant="outline" className="text-xs">
-                                                            +{item.benefits.length - 3} more
+                                                            +{item.benefits.length - 3} lainnya
                                                         </Badge>
                                                     )}
                                                 </div>
@@ -157,7 +157,7 @@ export default function ActivitiesServicesSection({
 
                                         {item.features && item.features.length > 0 && (
                                             <div className="space-y-2">
-                                                <span className="text-sm font-medium text-gray-700">Features:</span>
+                                                <span className="text-sm font-medium text-gray-700">Fitur:</span>
                                                 <div className="flex flex-wrap gap-2">
                                                     {item.features.slice(0, 3).map((feature, index) => (
                                                         <Badge key={index} variant="outline" className="text-xs">
@@ -166,7 +166,7 @@ export default function ActivitiesServicesSection({
                                                     ))}
                                                     {item.features.length > 3 && (
                                                         <Badge variant="outline" className="text-xs">
-                                                            +{item.features.length - 3} more
+                                                            +{item.features.length - 3} lainnya
                                                         </Badge>
                                                     )}
                                                 </div>
@@ -175,7 +175,7 @@ export default function ActivitiesServicesSection({
 
                                         {item.technologies && item.technologies.length > 0 && (
                                             <div className="space-y-2">
-                                                <span className="text-sm font-medium text-gray-700">Technologies:</span>
+                                                <span className="text-sm font-medium text-gray-700">Teknologi:</span>
                                                 <div className="flex flex-wrap gap-2">
                                                     {item.technologies.slice(0, 3).map((tech, index) => (
                                                         <Badge key={index} variant="secondary" className="bg-blue-100 text-xs text-blue-800">
@@ -184,7 +184,7 @@ export default function ActivitiesServicesSection({
                                                     ))}
                                                     {item.technologies.length > 3 && (
                                                         <Badge variant="secondary" className="bg-blue-100 text-xs text-blue-800">
-                                                            +{item.technologies.length - 3} more
+                                                            +{item.technologies.length - 3} lainnya
                                                         </Badge>
                                                     )}
                                                 </div>
@@ -200,7 +200,7 @@ export default function ActivitiesServicesSection({
                                     variant="outline"
                                     className="w-full transition-all duration-300 group-hover:border-blue-600 group-hover:bg-blue-600 group-hover:text-white"
                                 >
-                                    Learn More
+                                    Pelajari Lebih Lanjut
                                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                                 </Button>
                             </CardFooter>
@@ -217,7 +217,7 @@ export default function ActivitiesServicesSection({
                                 variant="outline"
                                 className="px-8 py-3 text-lg font-semibold transition-all duration-300 hover:border-blue-600 hover:bg-blue-600 hover:text-white"
                             >
-                                View All {title}
+                                Lihat Semua {title}
                                 <ArrowRight className="ml-2 h-5 w-5" />
                             </Button>
                         </Link>

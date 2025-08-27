@@ -27,8 +27,8 @@ interface GallerySectionProps {
 }
 
 export default function GallerySection({
-    title = 'Photo Gallery',
-    subtitle = 'Explore our visual journey',
+    title = 'Galeri Foto',
+    subtitle = 'Jelajahi perjalanan visual kami',
     images,
     layout = 'grid',
     columns = 3,
@@ -115,8 +115,8 @@ export default function GallerySection({
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: image.caption || 'Check out this image',
-                    text: image.caption || 'Amazing photo from our gallery',
+                    title: image.caption || 'Lihat gambar ini',
+                    text: image.caption || 'Foto menakjubkan dari galeri kami',
                     url: image.url,
                 });
             } catch (error) {
@@ -149,7 +149,7 @@ export default function GallerySection({
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
                     <h2 className="section-heading">{title}</h2>
                     <p className="section-subheading">{subtitle}</p>
-                    <p className="text-zinc-400">No images available in the gallery.</p>
+                    <p className="text-zinc-400">Tidak ada gambar di galeri.</p>
                 </div>
             </section>
         );
@@ -387,7 +387,7 @@ export default function GallerySection({
                     <h2 className="section-heading">{title}</h2>
                     {subtitle && <p className="section-subheading">{subtitle}</p>}
                 </div>
-                <p className="text-center text-zinc-400">Masonry layout coming soon!</p>
+                <p className="text-center text-zinc-400">Tata letak masonry segera hadir!</p>
             </div>
         </section>
     );

@@ -63,8 +63,8 @@ interface EventsPortfolioSectionProps {
 }
 
 export default function EventsPortfolioSection({
-    title = 'Events & Portfolio',
-    subtitle = 'Discover our upcoming events and successful projects',
+    title = 'Acara & Portofolio',
+    subtitle = 'Temukan acara mendatang dan proyek sukses kami',
     events = [],
     portfolioItems = [],
     showEvents = true,
@@ -132,15 +132,15 @@ export default function EventsPortfolioSection({
     const getStatusText = useCallback((status: string) => {
         switch (status) {
             case 'featured':
-                return 'Featured';
+                return 'Unggulan';
             case 'upcoming':
-                return 'Upcoming';
+                return 'Akan Datang';
             case 'past':
-                return 'Past';
+                return 'Selesai';
             case 'ongoing':
-                return 'Ongoing';
+                return 'Sedang Berlangsung';
             default:
-                return 'Unknown';
+                return 'Tidak Diketahui';
         }
     }, []);
 
@@ -183,7 +183,7 @@ export default function EventsPortfolioSection({
                             <div className="absolute top-3 right-3">
                                 <Badge className="bg-amber-500 text-black">
                                     <Star className="mr-1 h-3 w-3" />
-                                    Featured
+                                    Unggulan
                                 </Badge>
                             </div>
                         )}
@@ -192,7 +192,7 @@ export default function EventsPortfolioSection({
                         {isUpcoming && event.maxParticipants && event.currentParticipants && (
                             <div className="absolute right-3 bottom-3">
                                 <Badge variant="secondary" className="bg-zinc-800/90 text-white">
-                                    {event.currentParticipants}/{event.maxParticipants} spots
+                                    {event.currentParticipants}/{event.maxParticipants} kuota
                                 </Badge>
                             </div>
                         )}
@@ -243,7 +243,7 @@ export default function EventsPortfolioSection({
                         {event.maxParticipants && (
                             <div className="flex items-center space-x-2">
                                 <Users className="h-4 w-4" />
-                                <span>Max {event.maxParticipants} participants</span>
+                                <span>Maks {event.maxParticipants} peserta</span>
                             </div>
                         )}
                     </div>
@@ -269,7 +269,7 @@ export default function EventsPortfolioSection({
                         {isUpcoming && event.registrationUrl && (
                             <Button size="sm" className="cta-button flex-1" asChild>
                                 <a href={event.registrationUrl} target="_blank" rel="noopener noreferrer">
-                                    Register Now
+                                    Daftar Sekarang
                                     <ExternalLink className="ml-2 h-4 w-4" />
                                 </a>
                             </Button>
@@ -277,7 +277,7 @@ export default function EventsPortfolioSection({
 
                         {!isUpcoming && (
                             <Button variant="outline" size="sm" className="cta-button-outline flex-1">
-                                View Details
+                                Lihat Detail
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>
                         )}
@@ -309,7 +309,7 @@ export default function EventsPortfolioSection({
                         <div className="absolute top-3 left-3">
                             <Badge className="bg-amber-500 text-black">
                                 <Star className="mr-1 h-3 w-3" />
-                                Featured
+                                Unggulan
                             </Badge>
                         </div>
                     )}
@@ -330,7 +330,7 @@ export default function EventsPortfolioSection({
                 {item.client && (
                     <div className="mb-3 flex items-center space-x-2 text-sm text-zinc-400">
                         <User className="h-4 w-4" />
-                        <span>Client: {item.client}</span>
+                        <span>Klien: {item.client}</span>
                     </div>
                 )}
 
@@ -347,7 +347,7 @@ export default function EventsPortfolioSection({
                     <div className="mb-4">
                         <div className="mb-2 flex items-center space-x-2 text-sm font-medium text-zinc-300">
                             <Tag className="h-4 w-4" />
-                            <span>Technologies</span>
+                            <span>Teknologi</span>
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {item.technologies.slice(0, 4).map((tech, index) => (
@@ -369,7 +369,7 @@ export default function EventsPortfolioSection({
                     <div className="mb-4">
                         <div className="mb-2 flex items-center space-x-2 text-sm font-medium text-zinc-300">
                             <TrendingUp className="h-4 w-4" />
-                            <span>Key Results</span>
+                            <span>Hasil Utama</span>
                         </div>
                         <ul className="space-y-1">
                             {item.results.slice(0, 2).map((result, index) => (
@@ -387,7 +387,7 @@ export default function EventsPortfolioSection({
                     {item.caseStudyUrl && (
                         <Button variant="outline" size="sm" className="cta-button-outline flex-1" asChild>
                             <a href={item.caseStudyUrl} target="_blank" rel="noopener noreferrer">
-                                Case Study
+                                Studi Kasus
                                 <ExternalLink className="ml-2 h-4 w-4" />
                             </a>
                         </Button>
@@ -396,7 +396,7 @@ export default function EventsPortfolioSection({
                     {item.projectUrl && (
                         <Button size="sm" className="cta-button flex-1" asChild>
                             <a href={item.projectUrl} target="_blank" rel="noopener noreferrer">
-                                View Project
+                                Lihat Proyek
                                 <ExternalLink className="ml-2 h-4 w-4" />
                             </a>
                         </Button>
@@ -404,7 +404,7 @@ export default function EventsPortfolioSection({
 
                     {!item.caseStudyUrl && !item.projectUrl && (
                         <Button variant="outline" size="sm" className="cta-button-outline w-full">
-                            View Details
+                            Lihat Detail
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     )}
@@ -419,7 +419,7 @@ export default function EventsPortfolioSection({
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
                     <h2 className="section-heading">{title}</h2>
                     <p className="section-subheading">{subtitle}</p>
-                    <p className="text-zinc-400">No content available at the moment.</p>
+                    <p className="text-zinc-400">Tidak ada konten saat ini.</p>
                 </div>
             </section>
         );
@@ -429,17 +429,12 @@ export default function EventsPortfolioSection({
     if (!showTabs || (showEvents && !showPortfolio) || (!showEvents && showPortfolio)) {
         const content = showEvents ? (
             <div>
-                <div className="mb-8 text-center">
-                    <h3 className="mb-4 text-2xl font-bold text-white">Upcoming Events</h3>
-                    <p className="text-zinc-300">Join us for these exciting community events</p>
-                </div>
-
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">{events.slice(0, visibleEvents).map(renderEventCard)}</div>
 
                 {visibleEvents < events.length && (
                     <div className="mt-8 text-center">
                         <Button variant="outline" className="cta-button-outline" onClick={loadMoreEvents}>
-                            Load More Events
+                            Tampilkan Lebih Banyak Acara
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     </div>
@@ -454,7 +449,7 @@ export default function EventsPortfolioSection({
                 {visiblePortfolio < portfolioItems.length && (
                     <div className="mt-8 text-center">
                         <Button variant="outline" className="cta-button-outline" onClick={loadMorePortfolio}>
-                            Load More Projects
+                            Tampilkan Lebih Banyak Proyek
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     </div>
@@ -491,11 +486,11 @@ export default function EventsPortfolioSection({
                     <TabsList className="mb-8 grid w-full grid-cols-2">
                         <TabsTrigger value="events" className="text-lg">
                             <Calendar className="mr-2 h-5 w-5" />
-                            Events ({events.length})
+                            Acara ({events.length})
                         </TabsTrigger>
                         <TabsTrigger value="portfolio" className="text-lg">
                             <Building className="mr-2 h-5 w-5" />
-                            Portfolio ({portfolioItems.length})
+                            Portofolio ({portfolioItems.length})
                         </TabsTrigger>
                     </TabsList>
 

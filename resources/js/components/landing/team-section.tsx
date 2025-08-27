@@ -50,8 +50,8 @@ interface TeamSectionProps {
 }
 
 export default function TeamSection({
-    title = 'Our Team',
-    subtitle = 'Meet the amazing people behind our success',
+    title = 'Tim Kami',
+    subtitle = 'Kenali orang-orang hebat di balik kesuksesan kami',
     members,
     layout = 'grid',
     columns = 3,
@@ -73,7 +73,7 @@ export default function TeamSection({
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
                     <h2 className="section-heading">{title}</h2>
                     <p className="section-subheading">{subtitle}</p>
-                    <p className="text-zinc-400">No team members available at the moment.</p>
+                    <p className="text-zinc-400">Tidak ada anggota tim saat ini.</p>
                 </div>
             </section>
         );
@@ -146,7 +146,7 @@ export default function TeamSection({
                     {showFeatured && member.isFeatured && (
                         <Badge className="absolute top-3 right-3 bg-amber-500 text-black hover:bg-amber-600">
                             <Star className="mr-1 h-3 w-3" />
-                            Featured
+                            Unggulan
                         </Badge>
                     )}
 
@@ -176,7 +176,7 @@ export default function TeamSection({
                         {showJoinDate && member.joinDate && (
                             <div className="flex items-center space-x-1">
                                 <Calendar className="h-4 w-4" />
-                                <span>Joined {new Date(member.joinDate).getFullYear()}</span>
+                                <span>Bergabung sejak {new Date(member.joinDate).getFullYear()}</span>
                             </div>
                         )}
                     </div>
@@ -209,7 +209,7 @@ export default function TeamSection({
                                     size="sm"
                                     className="w-full border-zinc-600 text-zinc-300 transition-all duration-300 hover:border-amber-500 hover:text-amber-400"
                                 >
-                                    View Details
+                                    Lihat Detail
                                 </Button>
                             </DialogTrigger>
                             <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto bg-zinc-900 text-white">
@@ -242,7 +242,7 @@ export default function TeamSection({
                                             {member.joinDate && (
                                                 <p className="flex items-center space-x-1 text-zinc-300">
                                                     <Calendar className="h-4 w-4" />
-                                                    <span>Member since {new Date(member.joinDate).toLocaleDateString()}</span>
+                                                    <span>Bergabung sejak {new Date(member.joinDate).toLocaleDateString()}</span>
                                                 </p>
                                             )}
                                         </div>
@@ -250,7 +250,7 @@ export default function TeamSection({
 
                                     {/* Bio */}
                                     <div>
-                                        <h4 className="mb-2 font-semibold text-white">About</h4>
+                                        <h4 className="mb-2 font-semibold text-white">Tentang</h4>
                                         <p className="leading-relaxed text-zinc-300">{member.bio}</p>
                                     </div>
 
@@ -282,7 +282,7 @@ export default function TeamSection({
                                     {/* Expertise */}
                                     {showExpertise && member.expertise && member.expertise.length > 0 && (
                                         <div>
-                                            <h4 className="mb-2 font-semibold text-white">Areas of Expertise</h4>
+                                            <h4 className="mb-2 font-semibold text-white">Bidang Keahlian</h4>
                                             <div className="flex flex-wrap gap-2">
                                                 {member.expertise.map((skill, index) => (
                                                     <Badge key={index} variant="secondary" className="bg-amber-500/20 text-amber-400">
@@ -298,7 +298,7 @@ export default function TeamSection({
                                         <div>
                                             <h4 className="mb-2 flex items-center space-x-2 font-semibold text-white">
                                                 <Award className="h-5 w-5 text-amber-400" />
-                                                <span>Achievements & Awards</span>
+                                                <span>Prestasi & Penghargaan</span>
                                             </h4>
                                             <ul className="space-y-2">
                                                 {member.achievements.map((achievement, index) => (
@@ -316,7 +316,7 @@ export default function TeamSection({
                                         <div>
                                             <h4 className="mb-2 flex items-center space-x-2 font-semibold text-white">
                                                 <BookOpen className="h-5 w-5 text-amber-400" />
-                                                <span>Education</span>
+                                                <span>Pendidikan</span>
                                             </h4>
                                             <ul className="space-y-2">
                                                 {member.education.map((edu, index) => (
@@ -334,7 +334,7 @@ export default function TeamSection({
                                         <div>
                                             <h4 className="mb-2 flex items-center space-x-2 font-semibold text-white">
                                                 <Users className="h-5 w-5 text-amber-400" />
-                                                <span>Professional Experience</span>
+                                                <span>Pengalaman Kerja</span>
                                             </h4>
                                             <ul className="space-y-2">
                                                 {member.experience.map((exp, index) => (
@@ -350,7 +350,7 @@ export default function TeamSection({
                                     {/* Social Links */}
                                     {showSocialLinks && member.socialLinks && member.socialLinks.length > 0 && (
                                         <div>
-                                            <h4 className="mb-2 font-semibold text-white">Connect</h4>
+                                            <h4 className="mb-2 font-semibold text-white">Terhubung</h4>
                                             <div className="flex space-x-3">
                                                 {member.socialLinks.map((social, index) => (
                                                     <a
@@ -429,7 +429,7 @@ export default function TeamSection({
                                                 {showFeatured && member.isFeatured && (
                                                     <Badge className="bg-amber-500 text-black">
                                                         <Star className="mr-1 h-3 w-3" />
-                                                        Featured
+                                                        Unggulan
                                                     </Badge>
                                                 )}
                                             </div>
@@ -447,7 +447,7 @@ export default function TeamSection({
                                                 {showJoinDate && member.joinDate && (
                                                     <div className="flex items-center space-x-1">
                                                         <Calendar className="h-4 w-4" />
-                                                        <span>Joined {new Date(member.joinDate).getFullYear()}</span>
+                                                        <span>Bergabung sejak {new Date(member.joinDate).getFullYear()}</span>
                                                     </div>
                                                 )}
                                             </div>
@@ -462,7 +462,7 @@ export default function TeamSection({
                                                             variant="outline"
                                                             className="border-zinc-600 text-zinc-300 hover:border-amber-500 hover:text-amber-400"
                                                         >
-                                                            View Details
+                                                            Lihat Detail
                                                         </Button>
                                                     </DialogTrigger>
                                                     <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto bg-zinc-900 text-white">
@@ -487,7 +487,7 @@ export default function TeamSection({
             <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
                 <h2 className="section-heading">{title}</h2>
                 {subtitle && <p className="section-subheading">{subtitle}</p>}
-                <p className="mt-8 text-zinc-400">Masonry layout coming soon!</p>
+                <p className="mt-8 text-zinc-400">Tata letak masonry segera hadir!</p>
             </div>
         </section>
     );

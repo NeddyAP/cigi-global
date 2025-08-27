@@ -33,8 +33,8 @@ interface TestimonialsSectionProps {
 }
 
 export default function TestimonialsSection({
-    title = 'What People Say',
-    subtitle = 'Testimonials from our community',
+    title = 'Apa Kata Mereka',
+    subtitle = 'Testimonial dari komunitas kami',
     testimonials,
     autoRotate = true,
     rotationInterval = 5000,
@@ -92,7 +92,7 @@ export default function TestimonialsSection({
                 <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
                     <h2 className="section-heading">{title}</h2>
                     <p className="section-subheading">{subtitle}</p>
-                    <p className="text-zinc-400">No testimonials available at the moment.</p>
+                    <p className="text-zinc-400">Tidak ada testimonial saat ini.</p>
                 </div>
             </section>
         );
@@ -160,7 +160,7 @@ export default function TestimonialsSection({
                                                 <h4 className="truncate font-semibold text-white">{testimonial.name}</h4>
                                                 {showVerified && testimonial.verified && (
                                                     <Badge variant="secondary" className="bg-amber-500/20 text-xs text-amber-400">
-                                                        ✓ Verified
+                                                        ✓ Terverifikasi
                                                     </Badge>
                                                 )}
                                             </div>
