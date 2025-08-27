@@ -164,7 +164,7 @@ export default function ContactMessagesIndex({ contactMessages, stats, filters }
                         <span className="text-sm font-medium text-amber-400">Kotak Masuk - CIGI Global</span>
                     </div>
 
-                    <h1 className="mb-4 text-4xl font-bold">
+                    <h1 className="flex-rows mb-4 flex space-x-1 text-4xl font-bold">
                         <span className="block text-amber-400">Pesan</span>
                         <span className="block text-white">Kontak</span>
                     </h1>
