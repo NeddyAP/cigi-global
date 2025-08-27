@@ -22,6 +22,7 @@ class Media extends Model
         'title',
         'description',
         'tags',
+        'show_homepage',
         'uploaded_by',
         'metadata',
     ];
@@ -30,6 +31,7 @@ class Media extends Model
         'metadata' => 'array',
         'tags' => 'array',
         'size' => 'integer',
+        'show_homepage' => 'boolean',
     ];
 
     protected $appends = [
@@ -175,6 +177,22 @@ class Media extends Model
     public function scopeWithTag($query, string $tag)
     {
         return $query->whereJsonContains('tags', $tag);
+    }
+
+    /**
+     * Scope to filter by homepage status.
+     */
+    public function scopeShowOnHomepage($query)
+    {
+        return $query->where('show_homepage', true);
+    }
+
+    /**
+     * Scope to filter by non-homepage status.
+     */
+    public function scopeNotShowOnHomepage($query)
+    {
+        return $query->where('show_homepage', false);
     }
 
     /**

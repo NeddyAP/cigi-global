@@ -43,13 +43,16 @@ export default function Home({
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+    // Filter media yang diizinkan di homepage
+    const homepageMedia = galleryMedia.filter((media) => media.show_homepage);
+
     const openLightbox = (index: number) => {
         setCurrentImageIndex(index);
         setLightboxOpen(true);
     };
 
     const nextImage = () => {
-        setCurrentImageIndex((prev) => (prev < galleryMedia.length - 1 ? prev + 1 : prev));
+        setCurrentImageIndex((prev) => (prev < homepageMedia.length - 1 ? prev + 1 : prev));
     };
 
     const previousImage = () => {
@@ -371,7 +374,7 @@ export default function Home({
             </section>
 
             {/* 6. Galeri Section */}
-            {galleryMedia.length > 0 && (
+            {homepageMedia.length > 0 && (
                 <section className="section-dark py-20">
                     <div className="container mx-auto px-4">
                         <div className="mb-16 text-center">
@@ -380,7 +383,7 @@ export default function Home({
                         </div>
 
                         <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                            {galleryMedia.map((media, index) => (
+                            {homepageMedia.map((media, index) => (
                                 <div key={media.id} className="gallery-item group cursor-pointer" onClick={() => openLightbox(index)}>
                                     <div className="aspect-square overflow-hidden">
                                         <img
@@ -504,7 +507,7 @@ export default function Home({
 
             {/* Lightbox */}
             <Lightbox
-                images={galleryMedia}
+                images={homepageMedia}
                 currentIndex={currentImageIndex}
                 isOpen={lightboxOpen}
                 onClose={() => setLightboxOpen(false)}

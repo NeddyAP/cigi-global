@@ -229,6 +229,7 @@ export interface Media {
         width: number;
         height: number;
     };
+    show_homepage?: boolean;
     created_at: string;
     updated_at: string;
     uploader?: User;

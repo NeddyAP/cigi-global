@@ -30,6 +30,7 @@ export default function MediaEdit({ media, businessUnits, communityClubs }: Medi
         alt_text: media.alt_text || '',
         description: media.description || '',
         tags: media.tags || [],
+        show_homepage: media.show_homepage || false,
     });
 
     const handleTagToggle = (tag: string) => {
@@ -122,6 +123,13 @@ export default function MediaEdit({ media, businessUnits, communityClubs }: Medi
                                     <span className="font-medium text-amber-400">{media.human_size}</span>
                                 </div>
 
+                                <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
+                                    <span className="text-zinc-400">Status Homepage:</span>
+                                    <span className={`font-medium ${media.show_homepage ? 'text-green-400' : 'text-red-400'}`}>
+                                        {media.show_homepage ? 'Ditampilkan' : 'Tidak Ditampilkan'}
+                                    </span>
+                                </div>
+
                                 {media.url && (
                                     <div className="flex items-center justify-between rounded-lg bg-zinc-800 p-3">
                                         <span className="text-zinc-400">URL:</span>
@@ -196,6 +204,25 @@ export default function MediaEdit({ media, businessUnits, communityClubs }: Medi
                                     />
                                     {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
                                     <p className="mt-1 text-xs text-zinc-500">Deskripsi detail opsional dari konten media</p>
+                                </div>
+
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id="show_homepage"
+                                        checked={data.show_homepage}
+                                        onCheckedChange={(checked) => setData('show_homepage', !!checked)}
+                                        className="border-zinc-600 bg-zinc-800 text-amber-400"
+                                    />
+                                    <Label htmlFor="show_homepage" className="text-zinc-500">
+                                        Tampilkan di Halaman Home
+                                    </Label>
+                                </div>
+                                <p className="text-xs text-zinc-500">Jika dicentang, gambar ini akan ditampilkan di galeri halaman home</p>
+                                <div className="mt-2 rounded-lg border border-amber-500/20 bg-amber-500/10 p-3">
+                                    <p className="text-xs text-amber-400">
+                                        💡 <strong>Tips:</strong> Gunakan fitur ini untuk menampilkan gambar terbaik dan representatif di halaman
+                                        utama website
+                                    </p>
                                 </div>
 
                                 {/* Tag Selection */}

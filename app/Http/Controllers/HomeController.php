@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BusinessUnit;
 use App\Models\CommunityClub;
+use App\Models\Media;
 use App\Models\News;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -29,11 +30,17 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
+        // Get media for homepage gallery
+        $galleryMedia = Media::showOnHomepage()
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return Inertia::render('home', [
             'businessUnits' => $businessUnits,
             'communityClubs' => $communityClubs,
             'featuredNews' => $featuredNews,
             'latestNews' => $latestNews,
+            'galleryMedia' => $galleryMedia,
         ]);
     }
 }

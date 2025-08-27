@@ -10,7 +10,7 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, BusinessUnit, CommunityClub } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { ArrowLeft, FileText, FolderOpen, Tags, Upload } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dasbor', href: '/admin' },
@@ -25,17 +25,41 @@ interface MediaUploadProps {
 
 export default function MediaUpload({ businessUnits, communityClubs }: MediaUploadProps) {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const MAX_FILES = 20;
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [title, setTitle] = useState('');
     const [altText, setAltText] = useState('');
     const [description, setDescription] = useState('');
+    const [showHomepage, setShowHomepage] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const handleFilesSelected = (files: File[]) => {
-        setSelectedFiles(files);
+        // Append new files but enforce a global maximum
         setError(null); // Clear any previous errors
+        setSelectedFiles((prev) => {
+            const remaining = MAX_FILES - prev.length;
+            if (remaining <= 0) {
+                setError(`Maksimal ${MAX_FILES} berkas dapat diunggah.`);
+                return prev;
+            }
+
+            if (files.length > remaining) {
+                setError(`Hanya ${remaining} dari ${files.length} berkas yang akan tersimpan. batas maksimum berkas yang dapat diunggah adalah ${MAX_FILES}.`);
+                return [...prev, ...files.slice(0, remaining)];
+            }
+
+            return [...prev, ...files];
+        });
     };
+
+    // Clear any limit-related error once the selected files are strictly below the allowed limit
+    // (keep the warning visible when a batch add is truncated to exactly MAX_FILES)
+    useEffect(() => {
+        if (selectedFiles.length < MAX_FILES) {
+            setError(null);
+        }
+    }, [selectedFiles]);
 
     const handleTagToggle = (tag: string) => {
         const newTags = selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag];
@@ -51,6 +75,11 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
             return;
         }
 
+        if (selectedFiles.length > MAX_FILES) {
+            setError(`Maksimal ${MAX_FILES} berkas yang dapat diunggah.`);
+            return;
+        }
+
         setProcessing(true);
         setError(null);
 
@@ -60,6 +89,7 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
             altText,
             description,
             tags: selectedTags,
+            showHomepage,
         });
 
         // Create FormData to properly handle file uploads
@@ -74,6 +104,7 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
         formData.append('title', title);
         formData.append('alt_text', altText);
         formData.append('description', description);
+        formData.append('show_homepage', showHomepage ? '1' : '0');
 
         // Add tags
         selectedTags.forEach((tag) => {
@@ -140,15 +171,18 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                         {/* Upload Zone */}
                         <div className="lg:col-span-2">
+                            <div className="mb-3">
+
                             <FormSection title="Pilih Berkas" description="Pilih berkas untuk diunggah" icon={<Upload className="h-5 w-5" />}>
                                 <MediaUploadZone
                                     onUpload={handleFilesSelected}
-                                    acceptedTypes={['image/*', 'application/pdf', 'text/plain']}
+                                    acceptedTypes={['image/*']}
                                     maxFileSize={10}
                                     multiple={true}
                                     disabled={processing}
                                 />
                             </FormSection>
+                                    </div>
 
                             {/* File Preview */}
                             {selectedFiles.length > 0 && (
@@ -171,7 +205,13 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
                                                 </div>
                                                 <button
                                                     type="button"
-                                                    onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== index))}
+                                                    onClick={() =>
+                                                        setSelectedFiles((prev) => {
+                                                            const next = prev.filter((_, i) => i !== index);
+                                                            if (next.length < MAX_FILES) setError(null);
+                                                            return next;
+                                                        })
+                                                    }
                                                     className="absolute -top-2 -right-2 rounded-full bg-red-500 p-1 text-white opacity-0 transition-opacity group-hover:opacity-100"
                                                 >
                                                     <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
@@ -239,6 +279,25 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
                                             rows={3}
                                             className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-400"
                                         />
+                                    </div>
+
+                                    <div className="flex items-center space-x-2">
+                                        <Checkbox
+                                            id="show_homepage"
+                                            checked={showHomepage}
+                                            onCheckedChange={(checked) => setShowHomepage(!!checked)}
+                                            className="border-zinc-600 bg-zinc-800 text-amber-400"
+                                        />
+                                        <Label htmlFor="show_homepage" className="text-zinc-300">
+                                            Tampilkan di Halaman Home
+                                        </Label>
+                                    </div>
+                                    <p className="text-xs text-zinc-500">Jika dicentang, gambar ini akan ditampilkan di galeri halaman home</p>
+                                    <div className="mt-2 rounded-lg border border-amber-500/20 bg-amber-500/10 p-3">
+                                        <p className="text-xs text-amber-400">
+                                            💡 <strong>Tips:</strong> Gunakan fitur ini untuk menampilkan gambar terbaik dan representatif di halaman
+                                            utama website
+                                        </p>
                                     </div>
                                 </div>
                             </FormSection>
@@ -321,7 +380,7 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
                             <div className="space-y-2">
                                 <div className="flex items-center text-sm text-zinc-300">
                                     <span className="mr-2 h-2 w-2 rounded-full bg-amber-400"></span>
-                                    Didukung: Gambar, PDF, Berkas Teks
+                                    Didukung: Gambar, JPG, JPEG, PNG, Webp
                                 </div>
                                 <div className="flex items-center text-sm text-zinc-300">
                                     <span className="mr-2 h-2 w-2 rounded-full bg-amber-400"></span>

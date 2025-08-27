@@ -54,6 +54,7 @@ class MediaService
             'alt_text' => $options['alt_text'] ?? null,
             'description' => $options['description'] ?? null,
             'tags' => is_array($options['tags']) ? array_values(array_filter($options['tags'])) : [],
+            'show_homepage' => $options['show_homepage'] ?? false,
         ]);
 
         // Process image if it's an image file
