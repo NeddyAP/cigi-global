@@ -431,13 +431,19 @@ export default function MediaIndex({ media, allTags, filters }: MediaPageProps) 
                                     variant="ghost"
                                     size="sm"
                                     onClick={() =>
-                                        router.visit(
-                                            route('admin.media.index', {
+                                        router.get(
+                                            route('admin.media.index'),
+                                            {
                                                 page: media.current_page - 1,
                                                 search: searchQuery,
                                                 tags: selectedTags,
                                                 show_homepage: homepageFilter,
-                                            }),
+                                            },
+                                            {
+                                                preserveState: true,
+                                                preserveScroll: true,
+                                                replace: true,
+                                            },
                                         )
                                     }
                                     className="h-8 px-3 text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-700"
@@ -467,13 +473,19 @@ export default function MediaIndex({ media, allTags, filters }: MediaPageProps) 
                                         variant={pageNum === media.current_page ? 'default' : 'ghost'}
                                         size="sm"
                                         onClick={() =>
-                                            router.visit(
-                                                route('admin.media.index', {
+                                            router.get(
+                                                route('admin.media.index'),
+                                                {
                                                     page: pageNum,
                                                     search: searchQuery,
                                                     tags: selectedTags,
                                                     show_homepage: homepageFilter,
-                                                }),
+                                                },
+                                                {
+                                                    preserveState: true,
+                                                    preserveScroll: true,
+                                                    replace: true,
+                                                },
                                             )
                                         }
                                         className={cn(
@@ -494,13 +506,19 @@ export default function MediaIndex({ media, allTags, filters }: MediaPageProps) 
                                     variant="ghost"
                                     size="sm"
                                     onClick={() =>
-                                        router.visit(
-                                            route('admin.media.index', {
+                                        router.get(
+                                            route('admin.media.index'),
+                                            {
                                                 page: media.current_page + 1,
                                                 search: searchQuery,
                                                 tags: selectedTags,
                                                 show_homepage: homepageFilter,
-                                            }),
+                                            },
+                                            {
+                                                preserveState: true,
+                                                preserveScroll: true,
+                                                replace: true,
+                                            },
                                         )
                                     }
                                     className="h-8 px-3 text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-700"
