@@ -9,6 +9,7 @@ import { type BusinessUnit } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, Building2, CheckCircle, Clock, Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitter } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface BusinessUnitShowProps {
     businessUnit: BusinessUnit;
@@ -81,8 +82,7 @@ export default function BusinessUnitShow({ businessUnit, relatedUnits = [], glob
                 }));
             }
         } catch {
-            // Fallback to old format (comma-separated)
-            console.log('Services not in JSON format, using fallback parsing');
+            toast.error('Gagal memuat layanan');
         }
 
         // Fallback: treat as comma-separated string

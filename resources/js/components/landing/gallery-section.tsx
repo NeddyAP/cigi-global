@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight, Download, Maximize2, Share2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { showToastNotification } from '../ui/toast-notification';
 
 interface GalleryImage {
     id: string | number;
@@ -120,15 +121,27 @@ export default function GallerySection({
                     url: image.url,
                 });
             } catch (error) {
-                console.log('Error sharing:', error);
+                showToastNotification({
+                    type: 'error',
+                    title: 'Gagal',
+                    message: 'Gagal membagikan gambar' + error,
+                });
             }
         } else {
             // Fallback: copy to clipboard
             try {
                 await navigator.clipboard.writeText(image.url);
-                // You could add a toast notification here
+                showToastNotification({
+                    type: 'success',
+                    title: 'Berhasil',
+                    message: 'URL berhasil disalin ke clipboard',
+                });
             } catch (error) {
-                console.log('Error copying to clipboard:', error);
+                showToastNotification({
+                    type: 'error',
+                    title: 'Gagal',
+                    message: 'Gagal menyalin URL ke clipboard' + error,
+                });
             }
         }
     }, []);

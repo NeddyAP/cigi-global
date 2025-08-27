@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
+use App\Traits\FlashMessages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,6 +12,8 @@ use Inertia\Response;
 
 class NewsController extends Controller
 {
+    use FlashMessages;
+
     public function index(Request $request): Response
     {
         $query = News::with('author');
@@ -101,8 +104,7 @@ class NewsController extends Controller
 
         News::create($validated);
 
-        return redirect()->route('admin.news.index')
-            ->with('success', 'Artikel berhasil disimpan.');
+        return $this->success('Artikel berhasil disimpan.', 'admin.news.index');
     }
 
     public function show(News $news): Response
@@ -156,15 +158,13 @@ class NewsController extends Controller
 
         $news->update($validated);
 
-        return redirect()->route('admin.news.index')
-            ->with('success', 'Artikel berhasil diperbarui.');
+        return $this->success('Artikel berhasil diperbarui.', 'admin.news.index');
     }
 
     public function destroy(News $news): RedirectResponse
     {
         $news->delete();
 
-        return redirect()->route('admin.news.index')
-            ->with('success', 'Artikel berhasil dihapus.');
+        return $this->success('Artikel berhasil dihapus.', 'admin.news.index');
     }
 }

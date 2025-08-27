@@ -11,6 +11,7 @@ import { useDebounce } from '@/hooks/use-debounce';
 import { type Media } from '@/types';
 import { Search, Upload } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 interface MediaPickerModalProps {
     isOpen: boolean;
@@ -60,7 +61,7 @@ export default function MediaPickerModal({ isOpen, onClose, onSelect, multiple =
 
             setMedia(data.media);
         } catch (error) {
-            console.error('Failed to load media:', error);
+            toast.error('Gagal memuat media' + error);
         }
         setLoading(false);
     }, [currentPage, debouncedSearch, selectedType]);

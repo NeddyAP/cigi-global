@@ -180,9 +180,9 @@ class MediaController extends Controller
             $successful = collect($results)->where('success', true)->count();
             $failed = collect($results)->where('success', false)->count();
 
-            $message = "Uploaded {$successful} files successfully.";
+            $message = "Upload {$successful} file berhasil.";
             if ($failed > 0) {
-                $message .= " {$failed} files failed to upload.";
+                $message .= " {$failed} file gagal diupload.";
             }
 
             // Log successful upload
@@ -201,7 +201,7 @@ class MediaController extends Controller
                 'user_id' => auth()->id(),
             ]);
 
-            return back()->withErrors(['upload' => 'Upload failed: '.$e->getMessage()]);
+            return back()->withErrors(['upload' => 'Upload gagal: '.$e->getMessage()]);
         }
     }
 
@@ -250,9 +250,9 @@ class MediaController extends Controller
 
             $media->update($updateData);
 
-            return redirect()->route('admin.media.index')->with('success', 'Media updated successfully.');
+            return redirect()->route('admin.media.index')->with('success', 'Media berhasil diupdate.');
         } catch (\Exception $e) {
-            return back()->withErrors(['update' => 'Update failed: '.$e->getMessage()]);
+            return back()->withErrors(['update' => 'Update gagal: '.$e->getMessage()]);
         }
     }
 
@@ -264,9 +264,9 @@ class MediaController extends Controller
         try {
             $this->mediaService->deleteMedia($media);
 
-            return redirect()->route('admin.media.index')->with('success', 'Media deleted successfully.');
+            return redirect()->route('admin.media.index')->with('success', 'Media berhasil dihapus.');
         } catch (\Exception $e) {
-            return back()->withErrors(['delete' => 'Delete failed: '.$e->getMessage()]);
+            return back()->withErrors(['delete' => 'Gagal menghapus: '.$e->getMessage()]);
         }
     }
 
@@ -381,14 +381,14 @@ class MediaController extends Controller
                 }
             }
 
-            $message = "Deleted {$deleted} files.";
+            $message = "Hapus {$deleted} file berhasil.";
             if ($failed > 0) {
-                $message .= " {$failed} files failed to delete.";
+                $message .= " {$failed} file gagal dihapus.";
             }
 
             return redirect()->route('admin.media.index')->with('success', $message);
         } catch (\Exception $e) {
-            return back()->withErrors(['bulk_delete' => 'Bulk delete failed: '.$e->getMessage()]);
+            return back()->withErrors(['bulk_delete' => 'Gagal menghapus: '.$e->getMessage()]);
         }
     }
 

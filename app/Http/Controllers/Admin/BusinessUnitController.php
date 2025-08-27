@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BusinessUnit;
+use App\Traits\FlashMessages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,6 +12,8 @@ use Inertia\Response;
 
 class BusinessUnitController extends Controller
 {
+    use FlashMessages;
+
     public function index(Request $request): Response
     {
         $query = BusinessUnit::query();
@@ -119,8 +122,7 @@ class BusinessUnitController extends Controller
 
         BusinessUnit::create($validated);
 
-        return redirect()->route('admin.business-units.index')
-            ->with('success', 'Unit bisnis berhasil ditambahkan.');
+        return $this->success('Unit bisnis berhasil ditambahkan.', 'admin.business-units.index');
     }
 
     private function transformData(array $data): array
@@ -349,15 +351,13 @@ class BusinessUnitController extends Controller
 
         $businessUnit->update($validated);
 
-        return redirect()->route('admin.business-units.index')
-            ->with('success', 'Unit bisnis berhasil diperbarui.');
+        return $this->success('Unit bisnis berhasil diperbarui.', 'admin.business-units.index');
     }
 
     public function destroy(BusinessUnit $businessUnit): RedirectResponse
     {
         $businessUnit->delete();
 
-        return redirect()->route('admin.business-units.index')
-            ->with('success', 'Unit bisnis berhasil dihapus.');
+        return $this->success('Unit bisnis berhasil dihapus.', 'admin.business-units.index');
     }
 }

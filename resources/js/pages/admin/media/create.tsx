@@ -11,6 +11,7 @@ import type { BreadcrumbItem, BusinessUnit, CommunityClub } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { ArrowLeft, FileText, FolderOpen, Tags, Upload } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dasbor', href: '/admin' },
@@ -85,15 +86,6 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
         setProcessing(true);
         setError(null);
 
-        console.log('Starting upload with:', {
-            files: selectedFiles,
-            title,
-            altText,
-            description,
-            tags: selectedTags,
-            showHomepage,
-        });
-
         // Create FormData to properly handle file uploads
         const formData = new FormData();
 
@@ -113,16 +105,14 @@ export default function MediaUpload({ businessUnits, communityClubs }: MediaUplo
             formData.append('tags[]', tag);
         });
 
-        console.log('FormData created, posting to:', route('admin.media.store'));
-
         // Use router to post the form data
         router.post(route('admin.media.store'), formData, {
             onSuccess: () => {
-                console.log('Upload successful');
+                toast.success('Unggah berhasil');
                 setProcessing(false);
             },
             onError: (errors) => {
-                console.error('Gagal mengunggah:', errors);
+                toast.error('Gagal mengunggah' + errors);
                 setProcessing(false);
                 setError('Gagal mengunggah. Mohon periksa konsol untuk detail.');
             },

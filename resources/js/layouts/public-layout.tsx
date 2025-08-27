@@ -1,3 +1,4 @@
+import { ToastHandler } from '@/components/providers/toast-handler';
 import PublicFooter from '@/components/public-footer';
 import PublicHeader from '@/components/public-header';
 import { Head } from '@inertiajs/react';
@@ -15,6 +16,7 @@ export default function PublicLayout({ children, title, description }: PublicLay
     return (
         <>
             <Head title={pageTitle}>{description && <meta name="description" content={description} />}</Head>
+            <ToastHandler />
 
             <div className="flex min-h-screen flex-col bg-black">
                 <PublicHeader />

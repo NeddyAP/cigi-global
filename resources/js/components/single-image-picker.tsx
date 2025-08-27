@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { Media } from '@/types';
 import { Upload } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 interface SingleImagePickerProps {
     isOpen: boolean;
@@ -85,26 +86,11 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
         [controllerData.communityClubs, navCommunityClubs],
     );
 
-    // Debug global data access
-    useEffect(() => {
-        console.log('SingleImagePicker - Global data access:');
-        console.log('- window.initialPage?.props:', (window as { initialPage?: { props?: unknown } }).initialPage?.props);
-        console.log('- window.__INERTIA__?.props:', (window as { __INERTIA__?: { props?: unknown } }).__INERTIA__?.props);
-        console.log('- window.page?.props:', (window as { page?: { props?: unknown } }).page?.props);
-        console.log('- Global Business Units:', navBusinessUnits);
-        console.log('- Global Community Clubs:', navCommunityClubs);
-        console.log('- Final businessUnits:', businessUnits);
-        console.log('- Final communityClubs:', communityClubs);
-    }, [businessUnits, communityClubs, navBusinessUnits, navCommunityClubs]);
-
     // Load media from the server
     const loadMedia = useCallback(async () => {
         setLoading(true);
         try {
-            console.log('Fetching media from /admin/media-picker...');
             const response = await fetch('/admin/media-picker');
-            console.log('Response status:', response.status);
-            console.log('Response headers:', response.headers);
 
             if (response.ok) {
                 const data = (await response.json()) as {
@@ -112,17 +98,6 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
                     businessUnits?: Array<{ id: number; name: string; slug: string; type?: string }>;
                     communityClubs?: Array<{ id: number; name: string; slug: string; type?: string }>;
                 };
-                console.log('Media data received:', data);
-                console.log('Media array structure:', data.media);
-                console.log('Media data array:', data.media?.data);
-                console.log('Business Units from controller:', data.businessUnits);
-                console.log('Community Clubs from controller:', data.communityClubs);
-
-                if (data.media?.data && data.media.data.length > 0) {
-                    console.log('First media item:', data.media.data[0]);
-                    console.log('First media item path:', data.media.data[0].path);
-                    console.log('First media item url:', data.media.data[0].url);
-                }
 
                 setMedia(data.media?.data || []);
 
@@ -134,12 +109,10 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
                     });
                 }
             } else {
-                console.error('Media fetch failed with status:', response.status);
-                const text = await response.text();
-                console.error('Response text:', text);
+                toast.error('Gagal memuat media' + response.status);
             }
         } catch (error) {
-            console.error('Failed to load media:', error);
+            toast.error('Gagal memuat media' + error);
         } finally {
             setLoading(false);
         }
@@ -190,12 +163,6 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
             // Debug CSRF token
             const csrfToken =
                 (window as { csrfToken?: string }).csrfToken || document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-            console.log('CSRF Token sources:');
-            console.log('- window.csrfToken:', (window as { csrfToken?: string }).csrfToken);
-            console.log('- meta[name="csrf-token"] content:', document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'));
-            console.log('- Final CSRF Token:', csrfToken);
-            console.log('Uploading file:', uploadFile.file.name);
-            console.log('Upload metadata:', uploadMetadata);
 
             try {
                 const response = await fetch('/admin/media/ajax-upload', {
@@ -207,17 +174,13 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
                     body: formData,
                 });
 
-                console.log('Upload response status:', response.status);
-                console.log('Upload response headers:', response.headers);
-
                 if (!response.ok) {
                     const errorData = await response.json();
-                    console.error('Upload error response:', errorData);
+                    toast.error('Upload error' + errorData.message);
                     throw new Error(errorData.message || 'Upload failed');
                 }
 
                 const result = (await response.json()) as { success: boolean; media?: { id: number; path?: string; url?: string }; message?: string };
-                console.log('Upload success result:', result);
 
                 if (result.success && result.media) {
                     setUploadFiles((prev) =>
@@ -244,7 +207,7 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
                 }
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : 'Upload failed';
-                console.error('Upload error:', errorMessage);
+                toast.error('Upload error' + errorMessage);
                 setUploadFiles((prev) => prev.map((file) => (file.id === uploadFile.id ? { ...file, status: 'error', error: errorMessage } : file)));
             }
         },
@@ -308,8 +271,6 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
         [onImageSelect, onClose],
     );
 
-    console.log('data:media', media);
-
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-h-[90vh] max-w-[90vw] overflow-hidden" aria-describedby="single-image-picker-description">
@@ -353,8 +314,6 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
                                 {media.map((item) => {
                                     // Use thumbnail_url if available, otherwise fall back to url
                                     const imageSrc = item.thumbnail_url || item.url || '';
-                                    console.log('Image item:', item);
-                                    console.log('Image src:', imageSrc);
 
                                     return (
                                         <div
@@ -368,21 +327,9 @@ export default function SingleImagePicker({ isOpen, onClose, onImageSelect, titl
                                                 className="h-24 w-full rounded-lg object-cover"
                                                 crossOrigin="anonymous"
                                                 loading="lazy"
-                                                onLoad={() => {
-                                                    console.log('Image loaded successfully:', imageSrc);
-                                                }}
-                                                onError={(e) => {
-                                                    console.error('Image failed to load:', imageSrc);
-                                                    console.error('Image element:', e.target);
-                                                    console.error('Network response:', e);
-                                                    // Try to fetch the URL directly to check if it's accessible
-                                                    fetch(imageSrc)
-                                                        .then((response) => {
-                                                            console.log('Direct fetch response:', response.status, response.statusText);
-                                                        })
-                                                        .catch((fetchError) => {
-                                                            console.error('Direct fetch failed:', fetchError);
-                                                        });
+                                                onLoad={() => {}}
+                                                onError={() => {
+                                                    toast.error('Gagal memuat gambar');
                                                 }}
                                             />
                                             <div className="bg-opacity-0 group-hover:bg-opacity-20 absolute inset-0 flex items-center justify-center rounded-lg bg-black transition-all">

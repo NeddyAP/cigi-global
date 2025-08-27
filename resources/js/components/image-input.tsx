@@ -54,15 +54,13 @@ export default function ImageInput({
     }, [value, previewUrl]);
 
     const handleMediaSelect = (media: Media | Media[]) => {
-        console.log('Media selected (multiple):', media);
         if (Array.isArray(media) && media.length > 0) {
             const selectedMedia = media[0];
-            console.log('Setting media path (multiple):', selectedMedia.path || selectedMedia.url);
+
             // Store the full storage path for display purposes
             onChange(selectedMedia.path || selectedMedia.url || selectedMedia.id);
             setPreviewUrl(selectedMedia.path || selectedMedia.url || null);
         } else if (!Array.isArray(media) && media) {
-            console.log('Setting media path (multiple):', media.path || media.url);
             // Store the full storage path for display purposes
             onChange(media.path || media.url || media.id);
             setPreviewUrl(media.path || media.url || null);
@@ -71,7 +69,6 @@ export default function ImageInput({
     };
 
     const handleSingleImageSelect = (imagePath: string) => {
-        console.log('Single image selected:', imagePath);
         // Store the full storage path
         onChange(imagePath);
         setPreviewUrl(imagePath);

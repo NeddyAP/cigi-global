@@ -16,6 +16,7 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { AlertTriangle, ArrowLeft, Award, BarChart3, Building2, CheckCircle, Image, Phone, Settings, Star, Target, Users } from 'lucide-react';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/admin' },
@@ -113,8 +114,6 @@ export default function CreateBusinessUnit() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        console.log('Form data before submission:', data);
-
         // Transform data before submission if needed
         transform((data) => ({
             ...data,
@@ -194,16 +193,12 @@ export default function CreateBusinessUnit() {
             ],
         }));
 
-        console.log('Form data after transform:', data);
-
         post(route('admin.business-units.store'), {
             onSuccess: () => {
-                // Form was successful, could show success message
-                console.log('Form submitted successfully');
+                toast.success('Unit bisnis berhasil dibuat');
             },
             onError: (errors) => {
-                // Handle errors if needed
-                console.error('Form submission errors:', errors);
+                toast.error('Gagal membuat unit bisnis' + errors);
             },
             preserveScroll: true,
         });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CommunityClub;
+use App\Traits\FlashMessages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,6 +12,8 @@ use Inertia\Response;
 
 class CommunityClubController extends Controller
 {
+    use FlashMessages;
+
     public function index(Request $request): Response
     {
         $query = CommunityClub::query();
@@ -97,8 +100,7 @@ class CommunityClubController extends Controller
 
         CommunityClub::create($validated);
 
-        return redirect()->route('admin.community-clubs.index')
-            ->with('success', 'Komunitas berhasil ditambahkan.');
+        return $this->success('Komunitas berhasil ditambahkan.', 'admin.community-clubs.index');
     }
 
     public function show(CommunityClub $communityClub): Response
@@ -171,16 +173,14 @@ class CommunityClubController extends Controller
 
         $communityClub->update($validated);
 
-        return redirect()->route('admin.community-clubs.index')
-            ->with('success', 'Komunitas berhasil diperbarui.');
+        return $this->success('Komunitas berhasil diperbarui.', 'admin.community-clubs.index');
     }
 
     public function destroy(CommunityClub $communityClub): RedirectResponse
     {
         $communityClub->delete();
 
-        return redirect()->route('admin.community-clubs.index')
-            ->with('success', 'Komunitas berhasil dihapus.');
+        return $this->success('Komunitas berhasil dihapus.', 'admin.community-clubs.index');
     }
 
     /**
