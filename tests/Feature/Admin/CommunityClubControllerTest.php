@@ -301,7 +301,7 @@ class CommunityClubControllerTest extends TestCase
         $response->assertSessionHasErrors(['name']);
     }
 
-    public function test_validation_requires_valid_type(): void
+    public function test_validation_accepts_any_type(): void
     {
         $data = [
             'name' => 'Test Club',
@@ -311,7 +311,11 @@ class CommunityClubControllerTest extends TestCase
 
         $response = $this->actingAs($this->admin)->post(route('admin.community-clubs.store'), $data);
 
-        $response->assertSessionHasErrors(['type']);
+        $response->assertRedirect();
+        $this->assertDatabaseHas('community_clubs', [
+            'name' => 'Test Club',
+            'type' => 'Invalid Type',
+        ]);
     }
 
     public function test_validation_requires_valid_email(): void

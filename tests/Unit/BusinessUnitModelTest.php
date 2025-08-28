@@ -80,7 +80,7 @@ class BusinessUnitModelTest extends TestCase
 
     public function test_services_array_accessor(): void
     {
-        $unit = BusinessUnit::factory()->create(['services' => 'Web Development, Mobile Apps, Consulting']);
+        $unit = BusinessUnit::factory()->create(['services' => "Web Development\nMobile Apps\nConsulting"]);
 
         $services = $unit->services_array;
 
@@ -150,14 +150,14 @@ class BusinessUnitModelTest extends TestCase
 
     public function test_get_services_count_method(): void
     {
-        $unit = BusinessUnit::factory()->create(['services' => 'Web Development, Mobile Apps, Consulting']);
+        $unit = BusinessUnit::factory()->create(['services' => "Web Development\nMobile Apps\nConsulting"]);
 
         $this->assertEquals(3, $unit->getServicesCount());
     }
 
     public function test_has_service_method(): void
     {
-        $unit = BusinessUnit::factory()->create(['services' => 'Web Development, Mobile Apps, Consulting']);
+        $unit = BusinessUnit::factory()->create(['services' => "Web Development\nMobile Apps\nConsulting"]);
 
         $this->assertTrue($unit->hasService('Web Development'));
         $this->assertTrue($unit->hasService('Mobile Apps'));
@@ -185,7 +185,7 @@ class BusinessUnitModelTest extends TestCase
             'name' => 'Test Unit',
             'slug' => 'test-unit',
             'description' => 'This is a long description that should be truncated when displayed in navigation',
-            'services' => 'Web Development, Mobile Apps',
+            'services' => "Web Development\nMobile Apps",
         ]);
 
         $navArray = $unit->toNavigationArray();

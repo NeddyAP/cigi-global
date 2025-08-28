@@ -49,6 +49,7 @@ it('transforms team members social links correctly', function () {
 it('transforms company stats correctly', function () {
     $data = [
         'name' => 'Test Unit',
+        'description' => 'Test description',
         'services' => 'Test service',
         'is_active' => true,
         'company_stats' => [
