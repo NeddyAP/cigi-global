@@ -56,6 +56,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('contact-messages/mark-as-archived', [\App\Http\Controllers\Admin\ContactMessageController::class, 'markAsArchived'])->name('contact-messages.mark-as-archived');
     Route::post('contact-messages/bulk-delete', [\App\Http\Controllers\Admin\ContactMessageController::class, 'bulkDelete'])->name('contact-messages.bulk-delete');
 
+    // Admin Users Management
+    Route::resource('users', \App\Http\Controllers\Admin\AdminUserController::class);
+
     // Media Manager routes
     Route::resource('media', \App\Http\Controllers\Admin\MediaController::class)->except(['show'])->parameters(['media' => 'media']);
     Route::post('media/ajax-upload', [\App\Http\Controllers\Admin\MediaController::class, 'ajaxUpload'])->name('media.ajax-upload');

@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             GlobalVariableSeeder::class,
             BusinessUnitSeeder::class,
             CommunityClubSeeder::class,
+            SuperAdminSeeder::class,
         ]);
     }
 }

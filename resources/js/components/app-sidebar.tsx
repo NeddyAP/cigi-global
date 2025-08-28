@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Building2, Globe, Image, LayoutGrid, Mail, Settings, Users } from 'lucide-react';
+import { BookOpen, Building2, Globe, Image, LayoutGrid, Mail, Settings, Users, UserSquare } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -37,6 +37,11 @@ const mainNavItems: NavItem[] = [
         title: 'Media Manager',
         href: '/admin/media',
         icon: Image,
+    },
+    {
+        title: 'Manajemen User',
+        href: '/admin/users',
+        icon: UserSquare,
     },
     {
         title: 'Global Variables',

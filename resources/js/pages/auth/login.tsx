@@ -1,5 +1,4 @@
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -10,10 +9,9 @@ import { LoaderCircle } from 'lucide-react';
 
 interface LoginProps {
     status?: string;
-    canResetPassword: boolean;
 }
 
-export default function Login({ status, canResetPassword }: LoginProps) {
+export default function Login({ status }: LoginProps) {
     return (
         <AuthLayout title="Masuk ke akun Anda" description="Masukkan email dan kata sandi Anda untuk masuk">
             <Head title="Masuk" />
@@ -40,11 +38,6 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             <div className="grid gap-2">
                                 <div className="flex items-center">
                                     <Label htmlFor="password">Kata sandi</Label>
-                                    {canResetPassword && (
-                                        <TextLink href={route('password.request')} className="ml-auto text-sm" tabIndex={5}>
-                                            Lupa kata sandi?
-                                        </TextLink>
-                                    )}
                                 </div>
                                 <Input
                                     id="password"
@@ -67,13 +60,6 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                                 Masuk
                             </Button>
-                        </div>
-
-                        <div className="text-center text-sm text-muted-foreground">
-                            Belum punya akun?{' '}
-                            <TextLink href={route('register')} tabIndex={5}>
-                                Daftar
-                            </TextLink>
                         </div>
                     </>
                 )}
