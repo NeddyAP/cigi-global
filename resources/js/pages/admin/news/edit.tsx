@@ -1,6 +1,6 @@
 import { FormSection } from '@/components/admin/form-section';
 import { LoadingButton } from '@/components/admin/loading-button';
-import ImageInput from '@/components/image-input';
+import ImagePicker from '@/components/image-picker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -44,7 +44,7 @@ export default function EditNews({ news, auth }: EditNewsProps) {
         category: news.category || 'umum',
         is_featured: news.is_featured ?? false,
         is_published: news.is_published ?? false,
-        published_at: news.published_at ? new Date(news.published_at).toISOString().slice(0, 16) : '',
+        published_at: news.published_at ? new Date(news.published_at).toISOString().slice(0, 10) : '',
         author_id: news.author_id || auth.user.id,
         tags: typeof news.tags === 'string' ? news.tags : Array.isArray(news.tags) ? news.tags.join(', ') : '',
     });
@@ -187,7 +187,7 @@ export default function EditNews({ news, auth }: EditNewsProps) {
                                         <Label htmlFor="published_at">Tanggal Publikasi</Label>
                                         <Input
                                             id="published_at"
-                                            type="datetime-local"
+                                            type="date"
                                             value={data.published_at}
                                             onChange={(e) => setData('published_at', e.target.value)}
                                             className={errors.published_at ? 'border-red-500' : ''}
@@ -232,7 +232,7 @@ export default function EditNews({ news, auth }: EditNewsProps) {
 
                             {/* Featured Image */}
                             <FormSection title="Gambar Unggulan" description="Gambar utama artikel" icon={<Image className="h-5 w-5" />}>
-                                <ImageInput
+                                <ImagePicker
                                     label="Gambar Unggulan"
                                     name="featured_image"
                                     value={data.featured_image}

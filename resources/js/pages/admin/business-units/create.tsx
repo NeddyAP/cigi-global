@@ -4,7 +4,7 @@ import { LoadingButton } from '@/components/admin/loading-button';
 import ServiceManager from '@/components/admin/service-manager';
 import TeamMemberManager from '@/components/admin/team-member-manager';
 import TestimonialManager from '@/components/admin/testimonial-manager';
-import ImageInput from '@/components/image-input';
+import ImagePicker from '@/components/image-picker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -640,14 +640,13 @@ export default function CreateBusinessUnit() {
                                 </div>
 
                                 <div>
-                                    <ImageInput
+                                    <ImagePicker
                                         label="Gambar Unit Bisnis"
                                         name="image"
                                         value={data.image}
                                         onChange={(value) => setData('image', value?.toString() || '')}
                                         error={errors.image}
                                         showPreview={true}
-                                        multiple={false}
                                     />
                                 </div>
                             </FormSection>

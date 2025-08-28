@@ -1,4 +1,4 @@
-import ImageInput from '@/components/image-input';
+import ImagePicker from '@/components/image-picker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -417,11 +417,11 @@ export default function TestimonialManager({
                                         {/* Image */}
                                         {showImages && (
                                             <div>
-                                                <ImageInput
+                                                <ImagePicker
                                                     label="Photo"
                                                     name={`${name}_image_${index}`}
                                                     value={testimonial.image}
-                                                    onChange={(value) => updateTestimonial(index, 'image', value)}
+                                                    onChange={(value) => updateTestimonial(index, 'image', value as string | number | null)}
                                                     disabled={disabled}
                                                     showPreview={true}
                                                 />

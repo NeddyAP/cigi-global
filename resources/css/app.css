@@ -1,10 +1,5 @@
 @import 'tailwindcss';
 
-@plugin 'tailwindcss-animate';
-
-@source '../views';
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-
 @theme {
     --default-font-feature-settings: normal;
     --default-font-variation-settings: normal;
@@ -561,4 +556,51 @@
             background-position: 0% 50%;
         }
     }
+}
+
+/* Custom styles for ImagePicker fullscreen - Maximum specificity */
+.image-picker-fullscreen,
+.image-picker-fullscreen[data-radix-dialog-content],
+.image-picker-fullscreen[role='dialog'],
+.image-picker-fullscreen[data-state='open'] {
+    width: 95vw !important;
+    height: 95vh !important;
+    max-width: 95vw !important;
+    max-height: 95vh !important;
+    min-width: 95vw !important;
+    min-height: 95vh !important;
+}
+
+/* Override any Radix UI Dialog styles */
+[data-radix-dialog-content].image-picker-fullscreen,
+[role='dialog'].image-picker-fullscreen {
+    width: 95vw !important;
+    height: 95vh !important;
+    max-width: 95vw !important;
+    max-height: 95vh !important;
+    min-width: 95vw !important;
+    min-height: 95vh !important;
+}
+
+/* Force override with highest specificity */
+body .image-picker-fullscreen,
+body [data-radix-dialog-content].image-picker-fullscreen,
+body [role='dialog'].image-picker-fullscreen {
+    width: 95vw !important;
+    height: 95vh !important;
+    max-width: 95vw !important;
+    max-height: 95vh !important;
+    min-width: 95vw !important;
+    min-height: 95vh !important;
+}
+
+/* Additional specificity for Radix UI */
+[data-radix-portal] .image-picker-fullscreen,
+[data-radix-portal] [data-radix-dialog-content].image-picker-fullscreen {
+    width: 95vw !important;
+    height: 95vh !important;
+    max-width: 95vw !important;
+    max-height: 95vh !important;
+    min-width: 95vw !important;
+    min-height: 95vh !important;
 }

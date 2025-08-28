@@ -1,3 +1,4 @@
+import SimpleImagePicker from '@/components/simple-image-picker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,13 +9,14 @@ import React, { useEffect, useState } from 'react';
 interface ImagePickerProps {
     label?: string;
     name: string;
-    value?: string | number;
-    onChange: (value: string | number | null) => void;
+    value?: string | number | string[];
+    onChange: (value: string | number | null | string[]) => void;
     error?: string;
     showPreview?: boolean;
     required?: boolean;
     disabled?: boolean;
     className?: string;
+    multiple?: boolean;
 }
 
 export default function ImagePicker({
@@ -27,7 +29,9 @@ export default function ImagePicker({
     required = false,
     disabled = false,
     className,
+    multiple = false,
 }: ImagePickerProps) {
+    const [showImagePicker, setShowImagePicker] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     // Set preview URL when component mounts with existing value
@@ -46,24 +50,16 @@ export default function ImagePicker({
         return null;
     }, [value, previewUrl]);
 
-    const openMediaManager = () => {
-        // Open media manager in a new window/tab
-        const mediaManagerUrl = '/admin/media';
-        window.open(mediaManagerUrl, '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
-
-        // Listen for messages from media manager
-        const handleMessage = (event: MessageEvent) => {
-            if (event.origin !== window.location.origin) return;
-
-            if (event.data.type === 'MEDIA_SELECTED' && event.data.media) {
-                const selectedMedia = event.data.media;
-                onChange(selectedMedia.path || selectedMedia.url || selectedMedia.id);
-                setPreviewUrl(selectedMedia.path || selectedMedia.url || null);
-                window.removeEventListener('message', handleMessage);
-            }
-        };
-
-        window.addEventListener('message', handleMessage);
+    const handleImageSelect = (imagePath: string | string[]) => {
+        if (multiple && Array.isArray(imagePath)) {
+            // Multiple selection mode
+            onChange(imagePath);
+            // For multiple, we don't set preview URL since it's an array
+        } else if (!multiple && typeof imagePath === 'string') {
+            // Single selection mode
+            onChange(imagePath);
+            setPreviewUrl(imagePath);
+        }
     };
 
     const clearSelection = () => {
@@ -112,7 +108,7 @@ export default function ImagePicker({
                     <Button
                         type="button"
                         variant="outline"
-                        onClick={openMediaManager}
+                        onClick={() => setShowImagePicker(true)}
                         disabled={disabled}
                         className="group flex-1 border-zinc-300 bg-white text-zinc-700 transition-all hover:border-blue-500 hover:bg-blue-50 hover:text-blue-700 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:border-blue-500 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
                     >
@@ -126,6 +122,15 @@ export default function ImagePicker({
             </div>
 
             {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+
+            {/* Simple Image Picker Modal */}
+            <SimpleImagePicker
+                isOpen={showImagePicker}
+                onClose={() => setShowImagePicker(false)}
+                onImageSelect={handleImageSelect}
+                title="Pilih Gambar dari Galeri"
+                multiple={multiple}
+            />
         </div>
     );
 }

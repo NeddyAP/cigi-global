@@ -373,7 +373,7 @@ export default function MediaIndex({ media, allTags, filters }: MediaPageProps) 
 
                 {/* Bulk Actions */}
                 {selectedItems.length > 0 && (
-                    <div className="duration-300 animate-in slide-in-from-top-2">
+                    <div className="animate-in slide-in-from-top-2 duration-300">
                         <div className="flex items-center justify-between rounded-xl border border-amber-200 bg-gradient-to-r from-amber-50 to-yellow-50 p-4 shadow-sm dark:border-amber-800 dark:from-amber-900/20 dark:to-yellow-900/20">
                             <div className="flex items-center space-x-3">
                                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">

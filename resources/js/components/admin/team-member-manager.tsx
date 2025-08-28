@@ -1,4 +1,4 @@
-import ImageInput from '@/components/image-input';
+import ImagePicker from '@/components/image-picker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -437,7 +437,7 @@ export default function TeamMemberManager({
 
                                         {/* Photo */}
                                         <div>
-                                            <ImageInput
+                                            <ImagePicker
                                                 label="Photo"
                                                 name={`${name}_image_${index}`}
                                                 value={member.image}

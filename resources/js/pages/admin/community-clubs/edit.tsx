@@ -3,7 +3,7 @@ import { FormSection } from '@/components/admin/form-section';
 import ImageGalleryManager from '@/components/admin/image-gallery-manager';
 import { LoadingButton } from '@/components/admin/loading-button';
 import TestimonialManager from '@/components/admin/testimonial-manager';
-import ImageInput from '@/components/image-input';
+import ImagePicker from '@/components/image-picker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -398,14 +398,13 @@ export default function EditCommunityClub({ communityClub }: EditCommunityClubPr
                                         {errors.type && <p className="mt-1 text-sm text-red-600">{errors.type}</p>}
                                     </div>
 
-                                    <ImageInput
+                                    <ImagePicker
                                         label="Gambar Utama Komunitas"
                                         name="image"
                                         value={data.image}
                                         onChange={(value) => setData('image', value?.toString() || '')}
                                         error={errors.image}
                                         showPreview={true}
-                                        multiple={false}
                                     />
                                 </div>
 

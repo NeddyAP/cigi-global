@@ -60,7 +60,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href={route('admin.dashboard')} prefetch>
                                 <AppLogo />
                                 <div className="flex flex-col">
                                     <div className="text-sm font-medium">CIGI Global</div>

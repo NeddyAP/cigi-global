@@ -1,4 +1,4 @@
-import ImageInput from '@/components/image-input';
+import ImagePicker from '@/components/image-picker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -378,14 +378,13 @@ export default function ActivityManager({
 
                                         {/* Image */}
                                         <div>
-                                            <ImageInput
+                                            <ImagePicker
                                                 label="Gambar Aktivitas"
                                                 name={`${name}_image_${index}`}
                                                 value={activity.image}
                                                 onChange={(value) => updateActivity(index, 'image', value)}
                                                 error={undefined}
                                                 showPreview={true}
-                                                multiple={false}
                                                 disabled={disabled}
                                             />
                                         </div>

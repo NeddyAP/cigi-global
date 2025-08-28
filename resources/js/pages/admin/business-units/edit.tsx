@@ -4,7 +4,7 @@ import { LoadingButton } from '@/components/admin/loading-button';
 import ServiceManager from '@/components/admin/service-manager';
 import TeamMemberManager from '@/components/admin/team-member-manager';
 import TestimonialManager from '@/components/admin/testimonial-manager';
-import ImageInput from '@/components/image-input';
+import ImagePicker from '@/components/image-picker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -647,14 +647,13 @@ export default function EditBusinessUnit({ businessUnit }: EditBusinessUnitProps
                                     {errors.description && <p className="text-sm text-red-600 dark:text-red-400">{errors.description}</p>}
                                 </div>
 
-                                <ImageInput
+                                <ImagePicker
                                     label="Gambar Utama Unit Bisnis"
                                     name="image"
                                     value={data.image}
                                     onChange={(value) => setData('image', value ? String(value) : '')}
                                     error={errors.image}
                                     showPreview={true}
-                                    multiple={false}
                                 />
 
                                 <div className="rounded-xl border border-zinc-200 bg-gradient-to-r from-blue-50 to-purple-50 p-6 dark:border-zinc-700 dark:from-zinc-800 dark:to-zinc-800">

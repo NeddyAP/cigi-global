@@ -1,4 +1,4 @@
-import ImageInput from '@/components/image-input';
+import ImagePicker from '@/components/image-picker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -617,7 +617,7 @@ export default function ServiceManager({
 
                                         {/* Image */}
                                         <div>
-                                            <ImageInput
+                                            <ImagePicker
                                                 label="Service Image"
                                                 name={`${name}_image_${index}`}
                                                 value={service.image}

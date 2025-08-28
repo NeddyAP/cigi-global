@@ -1,6 +1,6 @@
 import { FormSection } from '@/components/admin/form-section';
 import { LoadingButton } from '@/components/admin/loading-button';
-import ImageInput from '@/components/image-input';
+import ImagePicker from '@/components/image-picker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -185,7 +185,7 @@ export default function CreateNews({ auth }: CreateNewsProps) {
                                         <Label htmlFor="published_at">Tanggal Publikasi</Label>
                                         <Input
                                             id="published_at"
-                                            type="datetime-local"
+                                            type="date"
                                             value={data.published_at}
                                             onChange={(e) => setData('published_at', e.target.value)}
                                             className={errors.published_at ? 'border-red-500' : ''}
@@ -230,7 +230,7 @@ export default function CreateNews({ auth }: CreateNewsProps) {
 
                             {/* Featured Image */}
                             <FormSection title="Gambar Unggulan" description="Gambar utama artikel" icon={<Image className="h-5 w-5" />}>
-                                <ImageInput
+                                <ImagePicker
                                     label="Gambar Unggulan"
                                     name="featured_image"
                                     value={data.featured_image}
