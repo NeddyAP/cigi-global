@@ -13,7 +13,7 @@ import { Search, Tag, Trash2, Upload, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dasbor', href: '/admin' },
+    { title: 'Dashboard', href: '/admin' },
     { title: 'Manajer Media', href: '/admin/media' },
 ];
 

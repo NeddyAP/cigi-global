@@ -45,7 +45,7 @@ export default function MediaShow({ media }: MediaShowProps) {
     const [copiedUrl, setCopiedUrl] = useState(false);
 
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dasbor', href: '/admin' },
+        { title: 'Dashboard', href: '/admin' },
         { title: 'Manajer Media', href: '/admin/media' },
         { title: media.title || media.original_filename, href: `/admin/media/${media.id}` },
     ];

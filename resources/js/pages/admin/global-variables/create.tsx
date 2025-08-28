@@ -11,7 +11,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { ArrowLeft, Database, Info, Settings } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dasbor', href: '/admin' },
+    { title: 'Dashboard', href: '/admin' },
     { title: 'Variabel Global', href: '/admin/global-variables' },
     { title: 'Tambah Baru', href: '/admin/global-variables/create' },
 ];

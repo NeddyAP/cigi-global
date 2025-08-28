@@ -14,27 +14,27 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Business',
+        title: 'Unit Usaha',
         href: '/admin/business-units',
         icon: Building2,
     },
     {
-        title: 'Community',
+        title: 'Komunitas',
         href: '/admin/community-clubs',
         icon: Users,
     },
     {
-        title: 'News',
+        title: 'Berita',
         href: '/admin/news',
         icon: BookOpen,
     },
     {
-        title: 'Contact Messages',
+        title: 'Pesan Kontak',
         href: '/admin/contact-messages',
         icon: Mail,
     },
     {
-        title: 'Media Manager',
+        title: 'Manajemen Media',
         href: '/admin/media',
         icon: Image,
     },
@@ -44,7 +44,7 @@ const mainNavItems: NavItem[] = [
         icon: UserSquare,
     },
     {
-        title: 'Global Variables',
+        title: 'Variabel Global',
         href: '/admin/global-variables',
         icon: Settings,
     },

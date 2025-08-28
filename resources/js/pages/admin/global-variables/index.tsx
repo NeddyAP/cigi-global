@@ -11,7 +11,7 @@ interface AdminGlobalVariablesIndexProps {
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dasbor', href: '/admin' },
+    { title: 'Dashboard', href: '/admin' },
     { title: 'Variabel Global', href: '/admin/global-variables' },
 ];
 

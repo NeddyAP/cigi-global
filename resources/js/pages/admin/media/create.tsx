@@ -14,7 +14,7 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dasbor', href: '/admin' },
+    { title: 'Dashboard', href: '/admin' },
     { title: 'Manajer Media', href: '/admin/media' },
     { title: 'Unggah Berkas', href: '/admin/media/create' },
 ];

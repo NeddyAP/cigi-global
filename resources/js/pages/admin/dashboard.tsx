@@ -5,7 +5,7 @@ import { BarChart3, Building2, Eye, FileText, Globe2, MessageSquare, Newspaper, 
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dasbor',
+        title: 'Dashboard',
         href: '/admin',
     },
 ];
@@ -13,7 +13,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Dashboard() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dasbor Admin" />
+            <Head title="Dashboard Admin" />
             {/* Hero Section */}
             <div className="relative mb-12 overflow-hidden rounded-2xl border border-amber-500/20 bg-gradient-to-br from-zinc-900 via-zinc-800 to-amber-900/20 p-8 md:p-12">
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent"></div>
@@ -24,7 +24,7 @@ export default function Dashboard() {
                     </div>
 
                     <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                        <span className="block text-amber-400">Dasbor</span>
+                        <span className="block text-amber-400">Dashboard</span>
                         <span className="block text-white">Kontrol Admin</span>
                     </h1>
 

@@ -17,7 +17,7 @@ interface MediaEditProps {
 
 export default function MediaEdit({ media, businessUnits, communityClubs }: MediaEditProps) {
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dasbor', href: '/admin' },
+        { title: 'Dashboard', href: '/admin' },
         { title: 'Manajer Media', href: '/admin/media' },
         { title: media.title || media.original_filename, href: `/admin/media/${media.id}` },
         { title: 'Ubah', href: `/admin/media/${media.id}/edit` },
