@@ -29,16 +29,16 @@ class SuperAdminSeeder extends Seeder
             $this->command->info('Super Admin already exists!');
         }
 
-        if (! User::where('email', 'neddy12898@gmail.com')->exists()) {
+        if (! User::where('email', 'neddy1298@gmail.com')->exists()) {
             User::create([
-                'name' => 'Neddy',
-                'email' => 'neddy12898@gmail.com',
+                'name' => 'Neddy', 
+                'email' => 'neddy1298@gmail.com',
                 'password' => Hash::make('password'),
                 'superadmin' => true,
             ]);
 
             $this->command->info('Neddy created successfully!');
-            $this->command->info('Email: neddy12898@gmail.com');
+            $this->command->info('Email: neddy1298@gmail.com');
             $this->command->info('Password: password');
         } else {
             $this->command->info('Neddy already exists!');
